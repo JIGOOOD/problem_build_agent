@@ -1,8 +1,15 @@
 # ArchGen
 
-시스템 디자인 면접 문제와 채점 루브릭을 생성하는 멀티 에이전트 도구.
+시스템 디자인 면접 문제와 채점 루브릭을 생성하는 터미널 우선 도구.
 심층 인터뷰로 요구사항을 좁히고, 4개 섹션 에이전트가 병렬로 루브릭을 쓰고,
 플러그인 하네스가 검증한 뒤, 고정 템플릿으로 `.md` 를 렌더링합니다.
+
+> 현재는 실행 가능한 TUI 골격 단계입니다. 인터뷰 입력은 동작하지만 LLM 생성,
+> 하네스, 렌더링은 후속 단계입니다.
+
+TUI의 `Ctrl+G`는 LangGraph 기본 워크플로를 실행합니다. 현재는
+`intake → research → author → validate → finalize` 상태 전이와 이벤트 기록만
+수행하며, 각 실제 에이전트와 하네스는 아직 연결되지 않았습니다.
 
 ## 설계 원칙
 
@@ -16,16 +23,15 @@
 ## 실행
 
 ```bash
-pip install -e ".[dev]"
-cp .env.example .env   # OPENAI_API_KEY 입력
+python -m pip install -e ".[dev]"
 archgen                # TUI 시작
-archgen harnesses      # 로드된 하네스 목록
-pytest
+archgen harnesses      # 현재는 골격 상태를 출력
+pytest                 # CLI 골격 검증
 ```
 
 TUI 에서 질문에 답하다가 `Ctrl+G` 또는 `/done` 으로 생성을 시작합니다.
 
-## 파이프라인 (LangGraph)
+## 목표 파이프라인 (LangGraph)
 
 인터뷰는 슬롯 채우기 루프(`agents/interviewer.py`)로 별도 진행하고, 인터뷰 종료 후
 본 생성 파이프라인은 `core/graph.py` 의 `StateGraph` 하나로 표현됩니다. 노드 =
@@ -50,7 +56,7 @@ LLM 호출은 `llm/client.py` 의 `LLM.parse()` / `LLM.text()` 로 통일되어 
 에이전트 코드는 이 인터페이스만 보므로 모델 교체·재시도 정책 변경이 `llm/client.py`
 한 곳에서 끝납니다.
 
-## 산출물
+## 목표 산출물
 
 `artifacts/<problem_id>/` 아래에:
 
@@ -79,7 +85,7 @@ LLM 호출은 `llm/client.py` 의 `LLM.parse()` / `LLM.text()` 로 통일되어 
 문자열, `None` 과 빈 컬렉션은 키 자체를 생략. `flatten`/`unflatten` 왕복은
 테스트로 고정되어 있습니다.
 
-## 채점 모델
+## 목표 채점 모델
 
 criterion 마다 0–3 레벨. 가중 합산 후 100점 정규화.
 
@@ -93,7 +99,7 @@ criterion 마다 역량 축(`TRADE_OFF`, `DATA_MANAGEMENT`, `FAILURE_RECOVERY`,
 `HIGH_TRAFFIC`, `COMPUTER_SCIENCE`)이 붙어 있어 섹션 점수와 별개로 축별 롤업
 점수가 같은 계산 한 번으로 나옵니다. `RubricSpec.score(awarded)` 참고.
 
-## 하네스 추가
+## 목표 하네스 추가
 
 `harnesses/` 에 파일 하나 떨어뜨리면 끝입니다. 등록 코드 수정 불필요.
 계약과 예시는 [docs/HARNESS.md](docs/HARNESS.md).
@@ -107,18 +113,16 @@ criterion 마다 역량 축(`TRADE_OFF`, `DATA_MANAGEMENT`, `FAILURE_RECOVERY`,
 | `core.nfr-measurable` | 모든 NFR 이 숫자+단위 포함 |
 | `core.cross-ref` | FR↔API, API↔Entity, Component↔NFR 참조 정합성 |
 
-## 디렉터리
+## 현재 디렉터리
 
 ```
 src/archgen/
-  schema/     common · requirement · problem · rubric · flatten
-  llm/        LangChain ChatOpenAI 래퍼 (structured output, LCEL)
-  agents/     interviewer · authors(4 섹션) · support(research/judge/solution)
-  harness/    types · registry · runner · builtin/
-  render/     renderer + templates/rubric.md.j2
-  core/       graph(LangGraph StateGraph) · orchestrator(래퍼) · session · difficulty
-  tui/        Textual 앱
-harnesses/    사용자 하네스 (자동 로드)
+  cli.py      `archgen` 명령 진입점
+  tui/        Textual 앱 골격
+  core/       향후 애플리케이션 서비스/워크플로 경계
+  domain/     향후 Pydantic 도메인 모델 경계
+  harness/    향후 검증 하네스 경계
+  render/     향후 결정론적 렌더링 경계
 ```
 
 ## 남은 작업
