@@ -9,10 +9,6 @@ from typing import Literal
 
 from dotenv import load_dotenv
 
-DEFAULT_BASE_URL = "https://openrouter.ai/api/v1"
-DEFAULT_MODEL_LARGE = "anthropic/claude-sonnet-4.5"
-DEFAULT_MODEL_SMALL = "anthropic/claude-haiku-4.5"
-
 Tier = Literal["large", "small"]
 
 
@@ -34,20 +30,31 @@ class Settings:
         raise ValueError(f"Unknown model tier: {tier!r}")
 
 
+REQUIRED_VARS = (
+    "OPENROUTER_API_KEY",
+    "OPENROUTER_BASE_URL",
+    "ARCHGEN_MODEL_LARGE",
+    "ARCHGEN_MODEL_SMALL",
+)
+
+
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
-    """Read settings once per process, failing loudly when the key is missing."""
+    """Read settings once per process, failing loudly when anything is missing."""
     load_dotenv()
-    api_key = os.getenv("OPENROUTER_API_KEY", "").strip()
-    if not api_key:
+    values = {name: os.getenv(name, "").strip() for name in REQUIRED_VARS}
+    missing = [name for name, value in values.items() if not value]
+    if missing:
         raise RuntimeError(
-            "OPENROUTER_API_KEY is not set. Copy .env.example to .env and add your key."
+            "Missing required environment variables: "
+            + ", ".join(missing)
+            + ". Copy .env.example to .env and fill in every entry."
         )
     return Settings(
-        api_key=api_key,
-        base_url=os.getenv("OPENROUTER_BASE_URL", DEFAULT_BASE_URL),
-        model_large=os.getenv("ARCHGEN_MODEL_LARGE", DEFAULT_MODEL_LARGE),
-        model_small=os.getenv("ARCHGEN_MODEL_SMALL", DEFAULT_MODEL_SMALL),
+        api_key=values["OPENROUTER_API_KEY"],
+        base_url=values["OPENROUTER_BASE_URL"],
+        model_large=values["ARCHGEN_MODEL_LARGE"],
+        model_small=values["ARCHGEN_MODEL_SMALL"],
     )
 
 
