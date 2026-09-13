@@ -102,16 +102,16 @@ def test_filled_answers_are_exposed_for_the_transcript() -> None:
     assert filler.filled == (
         ("대상 연차", "미들"),
         ("주제", "피드 랭킹"),
-        ("더 하고 싶은 말", "(없음)"),
+        ("중점 비기능적 요구사항", "(없음)"),
     )
 
 
 def test_brief_converts_to_the_graph_input() -> None:
     filler = SlotFiller()
-    fill(filler, "시니어", "주문/결제 시스템", "멱등성 중요")
+    fill(filler, "시니어", "주문/결제 시스템", "중복 결제 시 일관성 유지 로직 등")
 
     assert filler.build_brief().to_lines() == [
         "대상 연차: 시니어",
         "주제: 주문/결제 시스템",
-        "더 하고 싶은 말: 멱등성 중요",
+        "중점 비기능적 요구사항: 중복 결제 시 일관성 유지 로직 등",
     ]

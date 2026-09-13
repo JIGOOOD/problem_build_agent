@@ -69,9 +69,9 @@ SLOTS: tuple[Slot, ...] = (
     ),
     Slot(
         key="notes",
-        label="더 하고 싶은 말",
-        prompt="더 하고 싶은 말이 있으면 적어 주세요. 없으면 Enter.",
-        placeholder="예: 멱등성과 정합성을 깊게 보고 싶어요 (선택)",
+        label="중점 비기능적 요구사항",
+        prompt="비기능적 요구사항 중 주의깊게 평가할 요소가 있으면 작성해주세요. 없다면 Enter를 눌러주세요.",
+        placeholder="예: 중복 결제 시 일관성 유지 로직 등 (선택)",
         required=False,
     ),
 )

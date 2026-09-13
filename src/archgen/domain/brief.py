@@ -27,5 +27,5 @@ class InterviewBrief:
         """Render the brief as the line list the generation graph consumes."""
         lines = [f"대상 연차: {self.seniority}", f"주제: {self.topic}"]
         if self.notes:
-            lines.append(f"더 하고 싶은 말: {self.notes}")
+            lines.append(f"중점 비기능적 요구사항: {self.notes}")
         return lines
