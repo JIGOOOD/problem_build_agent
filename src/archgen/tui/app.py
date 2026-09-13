@@ -113,10 +113,6 @@ class ArchGenApp(App[None]):
         if slot:
             lines.append(slot.prompt)
         else:
-            lines.append("[b]저장된 브리프[/b]")
-            lines += [f"  {line}" for line in self.filler.build_brief().to_lines()]
-            lines.append(f"[dim]내부 값: {self.filler.values!r}[/dim]")
-            lines.append("")
             lines.append(READY_HINT)
 
         self.query_one("#transcript", Static).update("\n".join(lines))
