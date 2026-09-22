@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from pydantic import BaseModel
+from typing import Self
+
+from pydantic import BaseModel, Field, model_validator
 
 
 class NFRTarget(BaseModel):
@@ -24,6 +26,15 @@ class ConfirmedNFR(BaseModel):
     qualitative_target: str | None = None
     evidence_refs: list[str] = []
 
+    @model_validator(mode="after")
+    def _require_exactly_one_target(self) -> Self:
+        """목표가 없으면 채점할 수 없고, 둘 다 있으면 채점 기준이 갈린다."""
+        if bool(self.target) == bool(self.qualitative_target):
+            raise ValueError(
+                "target 또는 qualitative_target 중 정확히 하나만 있어야 한다"
+            )
+        return self
+
 
 class Tradeoff(BaseModel):
     """설계 선택 사이의 상충. 영향을 받는 NFR에 연결된다."""
@@ -37,7 +48,7 @@ class Tradeoff(BaseModel):
 class RubricLevel(BaseModel):
     """criterion의 0~3점 구간 하나."""
 
-    score: int
+    score: int = Field(ge=0, le=3)
     descriptor: str
 
 
