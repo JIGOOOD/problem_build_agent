@@ -1,0 +1,30 @@
+name: consistency
+
+category: DATA_GUARANTEES
+
+meaning: >-
+  데이터 변경이 여러 노드와 사용자에게 어떤 순서와 최신성으로 관찰되는지를
+  보장하는 정도.
+
+important_when:
+  - 같은 데이터를 여러 노드나 지역에 복제하는 구조
+  - 잔액, 재고, 순서처럼 어긋나면 결과 자체가 틀리는 데이터
+  - 같은 대상을 동시에 변경하는 요청이 발생할 수 있는 경우
+  - 쓴 직후 읽었을 때 반영되어 있기를 사용자가 기대하는 기능
+
+examples:
+  - 강한 일관성 (읽기가 항상 최신 쓰기 반영)
+  - 쓰기 후 자신의 읽기에서 그 변경을 확인 (read-your-writes)
+  - 최종 일관성, 수 초 내 수렴
+
+common_tradeoffs:
+  - with: latency
+    reason: >-
+      복제본 동기화나 정족수, 합의를 기다려야 해서 응답 시간이 늘어난다.
+  - with: availability
+    reason: >-
+      네트워크 분단이 발생했을 때 최신성을 지키려면 일부 요청을 거절하거나
+      대기시켜야 한다.
+  - with: throughput
+    reason: >-
+      쓰기 순서 보장, 잠금, 합의가 병렬 처리를 제한한다.

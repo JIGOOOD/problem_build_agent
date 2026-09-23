@@ -93,7 +93,7 @@ CORE NFR CATALOG
 ```yaml
 name: latency
 
-category: performance
+category: PERFORMANCE
 
 meaning:
   요청부터 응답까지 걸리는 시간
@@ -107,10 +107,23 @@ examples:
   - p99 < 2s
 
 common_tradeoffs:
-  - throughput
-  - consistency
-  - cost
+  - with: throughput
+    reason: >-
+      여러 요청을 모아 한 번에 처리하면 자원 효율은 오르지만,
+      모으는 동안 기다려야 해서 개별 요청의 응답이 늦어진다.
+  - with: consistency
+    reason: >-
+      최신 값을 보장하려고 여러 복제본의 확인을 기다리면
+      네트워크 왕복이 늘어 응답이 느려진다.
 ```
+
+> `common_tradeoffs`는 이 NFR을 달성할 때 발생하는 **대표적인 설계 trade-off 대상**이다.
+> Catalog의 NFR로 한정되지 않으며, `cost`처럼 NFR이 아닌 항목도 들어간다.
+> 따라서 로더는 `with` 값을 Catalog 항목명으로 검증하지 않는다.
+>
+> **자주 나타나는** 상충이지 항상 발생하는 관계가 아니다.
+> `reason`은 어떤 메커니즘 때문에 상충이 생기는지를 적어 Agent가 문서를 해석할 때
+> 참고하게 하려는 것이며, 근거 없이 그대로 옮겨 적으라는 뜻이 아니다.
 
 ## Source Policy
 
