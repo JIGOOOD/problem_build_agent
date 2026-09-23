@@ -1,12 +1,11 @@
-from pathlib import Path
-
 import pytest
 import yaml
 from pydantic import ValidationError
 
 from archgen.domain.nfr import ConfirmedNFR, NFRExport, RubricLevel
+from archgen.paths import GOLDEN_DIR
 
-GOLDEN = Path(__file__).resolve().parents[1] / "resources" / "golden" / "chat.yaml"
+GOLDEN = GOLDEN_DIR / "chat.yaml"
 
 # 골든셋 파일은 NFRExport의 상위집합이다. topic / target_level / documents는
 # 파이프라인 상태이지 LLM 출력이 아니라서 스키마에 들어가지 않는다.
