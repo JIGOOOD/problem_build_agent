@@ -1,5 +1,8 @@
 from pathlib import Path
 
+import pytest
+from pydantic import ValidationError
+
 from archgen.domain.catalog import NFRCatalog, load_catalog
 from archgen.paths import CATALOG_DIR
 
@@ -111,3 +114,81 @@ def test_prompt_block_keeps_one_line_per_field(tmp_path: Path) -> None:
     assert len(block.splitlines()) == 5, "헤더 1줄 + 필드 4줄이어야 한다"
     assert "여러 줄로 쓴 뜻 설명" in block
 
+
+def test_load_catalog_rejects_an_empty_directory(tmp_path: Path) -> None:
+    """카탈로그가 비면 프롬프트가 조용히 비므로, 로드 시점에 막는다."""
+    with pytest.raises(ValueError, match="비어"):
+        load_catalog(tmp_path)
+
+
+def test_load_catalog_rejects_duplicate_names(tmp_path: Path) -> None:
+    """kind는 어휘의 기준이라 같은 이름이 두 번 나오면 안 된다."""
+    for filename in ("a.yaml", "b.yaml"):
+        (tmp_path / filename).write_text(MULTILINE_ENTRY, encoding="utf-8")
+
+    with pytest.raises(ValueError, match="latency"):
+        load_catalog(tmp_path)
+
+
+ENTRY = """name: latency
+category: PERFORMANCE
+meaning: 뜻
+important_when: [조건]
+examples: [예]
+common_tradeoffs: [{against: cost, reason: 이유}]
+"""
+
+
+@pytest.mark.parametrize(
+    ("original", "emptied"),
+    [
+        ("name: latency", 'name: ""'),
+        ("category: PERFORMANCE", 'category: ""'),
+        ("meaning: 뜻", 'meaning: ""'),
+        ("important_when: [조건]", "important_when: []"),
+        ("examples: [예]", "examples: []"),
+        ("common_tradeoffs: [{against: cost, reason: 이유}]", "common_tradeoffs: []"),
+        ("{against: cost, reason: 이유}", '{against: "", reason: 이유}'),
+        ("{against: cost, reason: 이유}", '{against: cost, reason: ""}'),
+        ("name: latency", 'name: "   "'),
+        ("meaning: 뜻", 'meaning: "   "'),
+    ],
+)
+def test_load_catalog_rejects_an_empty_field(
+    tmp_path: Path, original: str, emptied: str
+) -> None:
+    """빈 값은 프롬프트에 빈 줄로 나가 조용히 품질만 떨어뜨린다."""
+    (tmp_path / "a.yaml").write_text(ENTRY.replace(original, emptied), encoding="utf-8")
+
+    with pytest.raises(ValidationError):
+        load_catalog(tmp_path)
+
+
+def test_load_catalog_rejects_an_unknown_field(tmp_path: Path) -> None:
+    """yaml 키 오타는 해당 필드를 조용히 비게 만든다."""
+    (tmp_path / "a.yaml").write_text(ENTRY + "exmaples: [오타]\n", encoding="utf-8")
+
+    with pytest.raises(ValidationError):
+        load_catalog(tmp_path)
+
+
+def test_load_catalog_rejects_a_missing_directory(tmp_path: Path) -> None:
+    """경로를 잘못 넘긴 것과 내용이 빈 것은 고쳐야 할 곳이 다르다."""
+    with pytest.raises(ValueError, match="디렉터리가 없다"):
+        load_catalog(tmp_path / "missing")
+
+
+def test_load_catalog_reads_yml_files_too(tmp_path: Path) -> None:
+    """확장자 하나 때문에 항목이 통째로 빠지면 아무도 알아채지 못한다."""
+    (tmp_path / "a.yaml").write_text(ENTRY, encoding="utf-8")
+    (tmp_path / "b.yml").write_text(ENTRY.replace("latency", "throughput"), encoding="utf-8")
+
+    catalog = load_catalog(tmp_path)
+
+    assert {entry.name for entry in catalog.entries} == {"latency", "throughput"}
+
+
+def test_nfr_catalog_rejects_having_no_entries() -> None:
+    """로더를 거치지 않고 만들어도 빈 카탈로그는 프롬프트를 조용히 비운다."""
+    with pytest.raises(ValidationError):
+        NFRCatalog(entries=[])

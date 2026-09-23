@@ -2,34 +2,43 @@
 
 from __future__ import annotations
 
+from collections import Counter
 from pathlib import Path
+from typing import Annotated
 
 import yaml
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints
+
+NonBlank = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+"""공백만 든 값도 프롬프트에서는 빈 값이므로 문자열 필드는 전부 이 타입을 쓴다."""
 
 
 class CatalogTradeoff(BaseModel):
     """이 NFR을 달성할 때 흔히 맞바꾸게 되는 대상과 그 이유."""
 
-    against: str
-    reason: str
+    model_config = ConfigDict(extra="forbid")
+
+    against: NonBlank
+    reason: NonBlank
 
 
 class CatalogEntry(BaseModel):
-    """Catalog 항목 하나."""
+    """Catalog 항목 하나. 빈 값은 프롬프트에 빈 줄로 나가므로 허용하지 않는다."""
 
-    name: str
-    category: str
-    meaning: str
-    important_when: list[str] = []
-    examples: list[str] = []
-    common_tradeoffs: list[CatalogTradeoff] = []
+    model_config = ConfigDict(extra="forbid")
+
+    name: NonBlank
+    category: NonBlank
+    meaning: NonBlank
+    important_when: list[NonBlank] = Field(min_length=1)
+    examples: list[NonBlank] = Field(min_length=1)
+    common_tradeoffs: list[CatalogTradeoff] = Field(min_length=1)
 
 
 class NFRCatalog(BaseModel):
     """Planner와 NFR Agent가 참고하는 Catalog 전체."""
 
-    entries: list[CatalogEntry] = []
+    entries: list[CatalogEntry] = Field(min_length=1)
 
     def to_prompt_block(self) -> str:
         """프롬프트에 끼워넣을 문자열. 같은 입력이면 같은 결과가 나와야 한다."""
@@ -58,9 +67,24 @@ def _join(items: list[str]) -> str:
 
 
 def load_catalog(directory: Path) -> NFRCatalog:
-    """디렉터리의 yaml을 전부 읽어 Catalog를 만든다."""
+    """디렉터리의 yaml을 전부 읽어 Catalog를 만든다.
+
+    Catalog가 비거나 이름이 겹치면 프롬프트가 조용히 망가지므로 여기서 막는다.
+    """
+    if not directory.is_dir():
+        raise ValueError(f"카탈로그 디렉터리가 없다: {directory}")
+
     entries = [
         CatalogEntry.model_validate(yaml.safe_load(path.read_text(encoding="utf-8")))
-        for path in sorted(directory.glob("*.yaml"))
+        for path in sorted(directory.iterdir())
+        if path.suffix in (".yaml", ".yml")
     ]
+    if not entries:
+        raise ValueError(f"카탈로그가 비어 있다: {directory}")
+
+    counted = Counter(entry.name for entry in entries)
+    duplicated = sorted(name for name, times in counted.items() if times > 1)
+    if duplicated:
+        raise ValueError(f"카탈로그 name이 겹친다: {', '.join(duplicated)}")
+
     return NFRCatalog(entries=entries)
