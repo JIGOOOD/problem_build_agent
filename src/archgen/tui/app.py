@@ -98,7 +98,7 @@ class ArchGenApp(App[None]):
         try:
             self.log_path.parent.mkdir(parents=True, exist_ok=True)
             with self.log_path.open("a", encoding="utf-8") as handle:
-                handle.write(f"{datetime.now():%H:%M:%S} {message}\n")
+                handle.write(f"{datetime.now().astimezone():%H:%M:%S} {message}\n")
         except OSError:
             pass
 
