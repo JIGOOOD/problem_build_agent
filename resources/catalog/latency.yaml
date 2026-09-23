@@ -18,15 +18,15 @@ examples:
   - 전송 후 1초 이내 수신자 도달
 
 common_tradeoffs:
-  - with: throughput
+  - against: throughput
     reason: >-
       여러 요청을 모아 한 번에 처리하면 자원 효율은 오르지만,
       모으는 동안 기다려야 해서 개별 요청의 응답이 늦어진다.
-  - with: consistency
+  - against: consistency
     reason: >-
       최신 값을 보장하려고 여러 복제본의 확인을 기다리면 네트워크 왕복이 늘어 응답이
       느려진다. 가까운 복제본이나 캐시에서 바로 읽으면 빠르지만 최신성을 보장하기 어렵다.
-  - with: cost
+  - against: cost
     reason: >-
       서버, 캐시, 엣지 로케이션을 늘리거나 여유 용량을 확보하면 지연을 줄일 수 있지만
       비용이 늘어난다.

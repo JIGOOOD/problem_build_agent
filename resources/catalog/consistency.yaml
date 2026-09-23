@@ -18,13 +18,13 @@ examples:
   - 최종 일관성, 수 초 내 수렴
 
 common_tradeoffs:
-  - with: latency
+  - against: latency
     reason: >-
       복제본 동기화나 정족수, 합의를 기다려야 해서 응답 시간이 늘어난다.
-  - with: availability
+  - against: availability
     reason: >-
       네트워크 분단이 발생했을 때 최신성을 지키려면 일부 요청을 거절하거나
       대기시켜야 한다.
-  - with: throughput
+  - against: throughput
     reason: >-
       쓰기 순서 보장, 잠금, 합의가 병렬 처리를 제한한다.

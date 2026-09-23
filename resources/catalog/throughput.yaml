@@ -18,14 +18,14 @@ examples:
   - 초당 5만 건 쓰기
 
 common_tradeoffs:
-  - with: latency
+  - against: latency
     reason: >-
       일괄 처리와 버퍼링은 처리 효율을 높이지만 개별 작업을 대기시켜
       응답 시간을 늘린다.
-  - with: consistency
+  - against: consistency
     reason: >-
       모든 쓰기를 순서대로 직렬화하거나 여러 복제본의 동의를 기다리면
       동시에 처리할 수 있는 양이 제한된다.
-  - with: cost
+  - against: cost
     reason: >-
       워커, 파티션, 샤드를 늘리면 처리량을 높일 수 있지만 비용이 늘어난다.

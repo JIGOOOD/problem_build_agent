@@ -19,11 +19,11 @@ examples:
   - 한 지역 전체 장애에도 서비스 지속
 
 common_tradeoffs:
-  - with: consistency
+  - against: consistency
     reason: >-
       네트워크 분단 중에 최신성을 지키려면 일부 요청을 거절하거나 대기시켜야 한다.
       계속 받아들이면 복제본끼리 잠시 다른 값을 가질 수 있다.
-  - with: cost
+  - against: cost
     reason: >-
       다중 가용영역과 리전, 대기 인스턴스, 여분 복제본을 유지할수록
       장애 중에도 서비스할 수 있지만 비용이 늘어난다.

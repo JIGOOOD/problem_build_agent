@@ -20,14 +20,14 @@ examples:
   - at-least-once 전달 + 수신 측 멱등 처리
 
 common_tradeoffs:
-  - with: latency
+  - against: latency
     reason: >-
       동기 복제나 디스크 기록, 정족수 확인을 마친 뒤 성공으로 처리하면
       장애에 강해지지만 응답 시간이 늘어난다.
-  - with: throughput
+  - against: throughput
     reason: >-
       복제, 체크포인트, 합의에 자원이 쓰여 같은 자원으로 처리할 수 있는
       실제 작업량이 줄어든다.
-  - with: cost
+  - against: cost
     reason: >-
       복제본, 백업, 대기 용량을 유지해야 하므로 비용이 늘어난다.

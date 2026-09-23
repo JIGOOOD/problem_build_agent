@@ -5,15 +5,13 @@ from __future__ import annotations
 from pathlib import Path
 
 import yaml
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel
 
 
 class CatalogTradeoff(BaseModel):
     """이 NFR을 달성할 때 흔히 맞바꾸게 되는 대상과 그 이유."""
 
-    model_config = ConfigDict(populate_by_name=True)
-
-    target: str = Field(alias="with")
+    against: str
     reason: str
 
 
@@ -45,7 +43,7 @@ class NFRCatalog(BaseModel):
             lines.append(f"  중요한 경우: {_join(entry.important_when)}")
             lines.append(f"  예: {_join(entry.examples)}")
             for tradeoff in entry.common_tradeoffs:
-                lines.append(f"  상충 {tradeoff.target}: {_one_line(tradeoff.reason)}")
+                lines.append(f"  상충 {tradeoff.against}: {_one_line(tradeoff.reason)}")
         return "\n".join(lines)
 
 

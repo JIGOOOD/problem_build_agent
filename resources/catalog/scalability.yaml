@@ -18,14 +18,14 @@ examples:
   - 샤드당 담당 범위를 나눠 부하 분산
 
 common_tradeoffs:
-  - with: consistency
+  - against: consistency
     reason: >-
       분할과 복제로 확장할수록 데이터가 여러 노드에 흩어져,
       모든 노드에서 같은 상태를 즉시 유지하기 위한 조정 비용이 커진다.
-  - with: latency
+  - against: latency
     reason: >-
       분할하면 용량은 늘지만 샤드 간 조회와 네트워크 홉이 생긴다.
       반대로 과부하가 풀려 지연이 줄기도 하므로 항상 상충하지는 않는다.
-  - with: cost
+  - against: cost
     reason: >-
       노드, 파티션, 복제본을 늘릴수록 처리 범위는 넓어지지만 비용이 늘어난다.

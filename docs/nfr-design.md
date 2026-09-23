@@ -107,11 +107,11 @@ examples:
   - p99 < 2s
 
 common_tradeoffs:
-  - with: throughput
+  - against: throughput
     reason: >-
       여러 요청을 모아 한 번에 처리하면 자원 효율은 오르지만,
       모으는 동안 기다려야 해서 개별 요청의 응답이 늦어진다.
-  - with: consistency
+  - against: consistency
     reason: >-
       최신 값을 보장하려고 여러 복제본의 확인을 기다리면
       네트워크 왕복이 늘어 응답이 느려진다.

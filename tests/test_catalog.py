@@ -29,7 +29,7 @@ def test_catalog_entry_keeps_every_field_from_the_yaml() -> None:
         assert entry.examples
         assert entry.common_tradeoffs
         for tradeoff in entry.common_tradeoffs:
-            assert tradeoff.target
+            assert tradeoff.against
             assert tradeoff.reason
 
 
@@ -67,7 +67,7 @@ def test_prompt_block_carries_every_field_of_each_entry() -> None:
         for example in entry.examples:
             assert one_line(example) in block
         for tradeoff in entry.common_tradeoffs:
-            assert tradeoff.target in block
+            assert tradeoff.against in block
             assert one_line(tradeoff.reason) in block
 
 
@@ -95,7 +95,7 @@ examples:
     여러 줄로 쓴
     예시
 common_tradeoffs:
-  - with: cost
+  - against: cost
     reason: |-
       여러 줄로 쓴
       이유
