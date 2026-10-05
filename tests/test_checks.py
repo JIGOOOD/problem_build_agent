@@ -5,16 +5,24 @@ from archgen.harness.checks import check_criteria_count, check_weight_sum
 from archgen.harness.findings import Severity
 
 
-def with_weights(export: NFRExport, weights: list[int]) -> NFRExport:
-    """골든 criterion을 본떠 weight만 다른 criterion 목록을 만든다.
+def with_criteria(export: NFRExport, count: int) -> NFRExport:
+    """골든 criterion을 돌아가며 복제해 criterion 개수만 바꾼다.
 
     스키마 검증을 거치므로 파싱 단계에서 막히는 입력은 만들 수 없다.
     """
     raw = export.model_dump()
-    base = raw["rubric"]["criteria"][0]
+    golden = raw["rubric"]["criteria"]
     raw["rubric"]["criteria"] = [
-        base | {"id": f"C{i}", "weight": w} for i, w in enumerate(weights, start=1)
+        golden[i % len(golden)] | {"id": f"C{i + 1}"} for i in range(count)
     ]
+    return NFRExport.model_validate(raw)
+
+
+def with_weights(export: NFRExport, weights: list[int]) -> NFRExport:
+    """criterion을 weights 개수만큼 두고 weight만 바꾼다."""
+    raw = with_criteria(export, len(weights)).model_dump()
+    for criterion, weight in zip(raw["rubric"]["criteria"], weights, strict=True):
+        criterion["weight"] = weight
     return NFRExport.model_validate(raw)
 
 
@@ -85,17 +93,13 @@ def test_weight_range_and_sum_are_both_reported_as_errors(
     assert len(findings) == 2
 
 
-def with_criterion_count(export: NFRExport, count: int) -> NFRExport:
-    return with_weights(export, [1] * count)
-
-
 def test_criteria_count_passes_the_golden_set(golden_export: NFRExport) -> None:
     assert check_criteria_count(golden_export) == []
 
 
 @pytest.mark.parametrize("count", [2, 4])
 def test_criteria_count_accepts_two_to_four(golden_export: NFRExport, count: int) -> None:
-    assert check_criteria_count(with_criterion_count(golden_export, count)) == []
+    assert check_criteria_count(with_criteria(golden_export, count)) == []
 
 
 @pytest.mark.parametrize("count", [0, 1, 5])
@@ -103,7 +107,7 @@ def test_criteria_count_flags_a_count_outside_two_to_four(
     golden_export: NFRExport, count: int
 ) -> None:
     """0개면 채점할 게 없고, 5개 이상이면 면접 10~15분 안에 못 다룬다."""
-    findings = check_criteria_count(with_criterion_count(golden_export, count))
+    findings = check_criteria_count(with_criteria(golden_export, count))
 
     assert [(f.code, f.path, f.severity) for f in findings] == [
         ("CRITERIA_COUNT_OUT_OF_RANGE", "rubric.criteria", Severity.ERROR)
