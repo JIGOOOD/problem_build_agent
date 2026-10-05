@@ -26,6 +26,13 @@ class FindingCode(StrEnum):
     WEIGHT_SUM_INVALID = "WEIGHT_SUM_INVALID"  # weight 합이 100이 아님
     # core.criteria-count
     CRITERIA_COUNT_OUT_OF_RANGE = "CRITERIA_COUNT_OUT_OF_RANGE"  # criterion이 2~4개 밖
+    # core.levels
+    LEVEL_MISSING = "LEVEL_MISSING"  # score 0~3 중 빠진 게 있음
+    LEVEL_DUPLICATED = "LEVEL_DUPLICATED"  # 같은 score가 두 번 이상
+    LEVEL_DESCRIPTOR_MISSING = "LEVEL_DESCRIPTOR_MISSING"  # descriptor가 비어 있음
+    LEVEL_DESCRIPTOR_DUPLICATED = (
+        "LEVEL_DESCRIPTOR_DUPLICATED"  # 한 criterion 안에서 서술이 겹침
+    )
 
 
 class Finding(BaseModel):

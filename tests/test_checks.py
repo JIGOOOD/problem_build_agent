@@ -1,7 +1,11 @@
 import pytest
 
 from archgen.domain.nfr import NFRExport
-from archgen.harness.checks import check_criteria_count, check_weight_sum
+from archgen.harness.checks import (
+    check_criteria_count,
+    check_levels,
+    check_weight_sum,
+)
 from archgen.harness.findings import Severity
 
 
@@ -112,3 +116,105 @@ def test_criteria_count_flags_a_count_outside_two_to_four(
     assert [(f.code, f.path, f.severity) for f in findings] == [
         ("CRITERIA_COUNT_OUT_OF_RANGE", "rubric.criteria", Severity.ERROR)
     ]
+
+
+def with_levels(
+    export: NFRExport, levels: list[tuple[int, str]], criterion: int = 0
+) -> NFRExport:
+    """골든 criterion 하나의 레벨만 (score, descriptor) 목록으로 바꾼다."""
+    raw = export.model_dump()
+    raw["rubric"]["criteria"][criterion]["levels"] = [
+        {"score": score, "descriptor": descriptor} for score, descriptor in levels
+    ]
+    return NFRExport.model_validate(raw)
+
+
+def scored(*scores: int) -> list[tuple[int, str]]:
+    """score마다 서로 다른 descriptor를 붙인다."""
+    return [(s, f"{s}점 수준의 답변을 설명하는 서술 {i}") for i, s in enumerate(scores)]
+
+
+def level_findings(export: NFRExport) -> list[tuple[str, str]]:
+    findings = check_levels(export)
+    assert all(f.severity is Severity.ERROR for f in findings)
+    return [(f.code, f.path) for f in findings]
+
+
+def test_levels_pass_the_golden_set(golden_export: NFRExport) -> None:
+    assert check_levels(golden_export) == []
+
+
+@pytest.mark.parametrize("scores", [(0, 1, 3), (1, 2, 3), (0, 1, 2), ()])
+def test_levels_flag_a_missing_score(
+    golden_export: NFRExport, scores: tuple[int, ...]
+) -> None:
+    """빠진 score가 몇 개든 criterion당 한 번만 낸다."""
+    export = with_levels(golden_export, scored(*scores))
+
+    assert level_findings(export) == [("LEVEL_MISSING", "rubric.criteria[0].levels")]
+
+
+def test_levels_flag_a_duplicated_score(golden_export: NFRExport) -> None:
+    export = with_levels(golden_export, scored(0, 1, 2, 2, 3))
+
+    assert level_findings(export) == [("LEVEL_DUPLICATED", "rubric.criteria[0].levels")]
+
+
+def test_levels_flag_a_duplicate_that_hides_a_missing_score(
+    golden_export: NFRExport,
+) -> None:
+    """레벨이 4개라 개수만 보면 멀쩡해 보인다."""
+    export = with_levels(golden_export, scored(0, 1, 1, 3))
+
+    assert set(level_findings(export)) == {
+        ("LEVEL_MISSING", "rubric.criteria[0].levels"),
+        ("LEVEL_DUPLICATED", "rubric.criteria[0].levels"),
+    }
+
+
+@pytest.mark.parametrize("blank", ["", "   "])
+def test_levels_flag_a_blank_descriptor(golden_export: NFRExport, blank: str) -> None:
+    levels = scored(0, 1, 2, 3)
+    levels[2] = (2, blank)
+
+    assert level_findings(with_levels(golden_export, levels)) == [
+        ("LEVEL_DESCRIPTOR_MISSING", "rubric.criteria[0].levels[2].descriptor")
+    ]
+
+
+@pytest.mark.parametrize(
+    ("first", "second"),
+    [
+        ("핵심 경로를 설명한다", "핵심 경로를 설명한다"),
+        ("핵심 경로를  설명한다", " 핵심 경로를 설명한다 "),  # 공백만 다르다
+    ],
+)
+def test_levels_flag_a_duplicated_descriptor(
+    golden_export: NFRExport, first: str, second: str
+) -> None:
+    levels = scored(0, 1, 2, 3)
+    levels[1] = (1, first)
+    levels[2] = (2, second)
+
+    assert level_findings(with_levels(golden_export, levels)) == [
+        ("LEVEL_DESCRIPTOR_DUPLICATED", "rubric.criteria[0].levels[2].descriptor")
+    ]
+
+
+def test_levels_do_not_count_blank_descriptors_as_duplicates(
+    golden_export: NFRExport,
+) -> None:
+    levels = scored(0, 1, 2, 3)
+    levels[1] = (1, "")
+    levels[2] = (2, "")
+
+    assert level_findings(with_levels(golden_export, levels)) == [
+        ("LEVEL_DESCRIPTOR_MISSING", "rubric.criteria[0].levels[1].descriptor"),
+        ("LEVEL_DESCRIPTOR_MISSING", "rubric.criteria[0].levels[2].descriptor"),
+    ]
+
+
+def test_levels_point_at_the_criterion_that_broke(golden_export: NFRExport) -> None:
+    export = with_levels(golden_export, scored(0, 1, 2), criterion=2)
+
+    assert level_findings(export) == [("LEVEL_MISSING", "rubric.criteria[2].levels")]
