@@ -577,6 +577,18 @@ total         = Σ(section.weight × section_pct)      # section weight 합 = 10
 - sum(weight) == 100인지 확인한다.
     - WEIGHT_SUM_INVALID
 
+### core.criteria-count
+
+**목표**
+
+- Criterion 개수가 면접에서 다룰 수 있는 범위인지 검사한다.
+  NFR에 쓰는 10~15분 안에 제대로 다룰 수 있는 건 3개가 기본이다.
+
+**검사**
+
+- Criterion이 2~4개인지 확인한다.
+    - CRITERIA_COUNT_OUT_OF_RANGE
+
 ### core.levels
 
 **목표**
@@ -615,15 +627,27 @@ total         = Σ(section.weight × section_pct)      # section weight 합 = 10
 **목표**
 
 - 확정된 NFR과 Rubric Criterion의 연결이 정상인지 검사한다.
+- 인용(evidence_refs)이 실제로 크롤한 Document를 가리키는지 검사한다.
+  Document 목록은 LLM 출력이 아니므로 실행마다 그 id 목록으로 검사를 만든다.
 
 **검사**
 
-- Criterion이 존재하는 NFR ID만 참조하는지 확인한다.
+- NFR, trade-off, Criterion 각각의 안에서 id가 겹치지 않는지 확인한다.
+    - ID_DUPLICATED
+- Criterion과 trade-off가 존재하는 NFR ID만 참조하는지 확인한다.
     - NFR_REFERENCE_INVALID
-- 모든 확정 NFR이 최소 하나의 Criterion에서 평가되는지 확인한다.
-    - NFR_NOT_COVERED
-- Criterion이 최소 하나의 NFR과 연결되어 있는지 확인한다.
-    - CRITERION_NFR_REFERENCE_MISSING
+- trade-off가 최소 하나의 NFR에 연결되어 있는지 확인한다.
+    - TRADEOFF_NFR_REFERENCE_MISSING
+- Criterion이 정확히 하나의 NFR과 연결되어 있는지 확인한다.
+    - CRITERION_NFR_REFERENCE_MISSING (0개)
+    - CRITERION_MULTI_NFR (2개 이상)
+- 모든 확정 NFR이 정확히 하나의 Criterion에서 평가되는지 확인한다.
+    - NFR_NOT_COVERED (0개)
+    - NFR_MULTI_COVERED (2개 이상)
+- NFR과 trade-off에 근거 문서가 있는지 확인한다.
+    - EVIDENCE_REF_MISSING
+- NFR과 trade-off의 evidence_refs가 크롤한 Document ID만 가리키는지 확인한다.
+    - EVIDENCE_REF_UNKNOWN
 
 ### 실패
 
