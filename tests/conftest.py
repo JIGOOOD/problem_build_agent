@@ -11,8 +11,18 @@ GOLDEN = GOLDEN_DIR / "chat.yaml"
 EXPORT_KEYS = ("confirmed_nfrs", "tradeoffs", "rubric")
 
 
+def _golden_raw() -> dict:
+    return yaml.safe_load(GOLDEN.read_text(encoding="utf-8"))
+
+
 @pytest.fixture
 def golden_export() -> NFRExport:
     """골든셋 형식이 바뀌면 여기만 고친다. 테스트마다 새 객체를 받는다."""
-    raw = yaml.safe_load(GOLDEN.read_text(encoding="utf-8"))
+    raw = _golden_raw()
     return NFRExport.model_validate({key: raw[key] for key in EXPORT_KEYS})
+
+
+@pytest.fixture
+def golden_document_ids() -> set[str]:
+    """골든셋이 근거로 쓴 문서 id. 파이프라인에서는 크롤러가 만든 목록이다."""
+    return {document["id"] for document in _golden_raw()["documents"]}

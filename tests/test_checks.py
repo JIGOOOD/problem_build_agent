@@ -1,8 +1,11 @@
+from collections.abc import Callable
+
 import pytest
 
 from archgen.domain.nfr import NFRExport
 from archgen.harness.checks import (
     check_criteria_count,
+    check_cross_ref,
     check_levels,
     check_weight_sum,
 )
@@ -218,3 +221,220 @@ def test_levels_point_at_the_criterion_that_broke(golden_export: NFRExport) -> N
     export = with_levels(golden_export, scored(0, 1, 2), criterion=2)
 
     assert level_findings(export) == [("LEVEL_MISSING", "rubric.criteria[2].levels")]
+
+
+def edited(export: NFRExport, edit: Callable[[dict], None]) -> NFRExport:
+    """골든셋 dict를 직접 고친 뒤 스키마 검증을 거쳐 되돌린다."""
+    raw = export.model_dump()
+    edit(raw)
+    return NFRExport.model_validate(raw)
+
+
+def cross_ref_findings(export: NFRExport, document_ids: set[str]) -> set[tuple[str, str]]:
+    findings = check_cross_ref(document_ids)(export)
+    assert all(f.severity is Severity.ERROR for f in findings)
+    assert len(findings) == len({(f.code, f.path) for f in findings}), (
+        "같은 지적이 중복됐다"
+    )
+    return {(f.code, f.path) for f in findings}
+
+
+def test_cross_ref_passes_the_golden_set(
+    golden_export: NFRExport, golden_document_ids: set[str]
+) -> None:
+    assert check_cross_ref(golden_document_ids)(golden_export) == []
+
+
+def test_cross_ref_flags_a_criterion_without_an_nfr(
+    golden_export: NFRExport, golden_document_ids: set[str]
+) -> None:
+    """criterion이 NFR을 잃으면 그 NFR도 평가되지 않는다."""
+
+    def drop_nfr(raw: dict) -> None:
+        raw["rubric"]["criteria"][0]["related_nfr_ids"] = []
+
+    assert cross_ref_findings(edited(golden_export, drop_nfr), golden_document_ids) == {
+        ("CRITERION_NFR_REFERENCE_MISSING", "rubric.criteria[0].related_nfr_ids"),
+        ("NFR_NOT_COVERED", "confirmed_nfrs[0]"),
+    }
+
+
+def test_cross_ref_flags_a_criterion_with_two_nfrs(
+    golden_export: NFRExport, golden_document_ids: set[str]
+) -> None:
+    """점수 하나로 NFR 둘을 판정하면 채점이 갈린다. NFR-2는 C1·C2 두 곳에서 평가된다."""
+
+    def add_nfr(raw: dict) -> None:
+        raw["rubric"]["criteria"][0]["related_nfr_ids"] = ["NFR-1", "NFR-2"]
+
+    assert cross_ref_findings(edited(golden_export, add_nfr), golden_document_ids) == {
+        ("CRITERION_MULTI_NFR", "rubric.criteria[0].related_nfr_ids"),
+        ("NFR_MULTI_COVERED", "confirmed_nfrs[1]"),
+    }
+
+
+def test_cross_ref_flags_a_criterion_pointing_at_an_unknown_nfr(
+    golden_export: NFRExport, golden_document_ids: set[str]
+) -> None:
+    def point_elsewhere(raw: dict) -> None:
+        raw["rubric"]["criteria"][0]["related_nfr_ids"] = ["NFR-9"]
+
+    export = edited(golden_export, point_elsewhere)
+
+    assert cross_ref_findings(export, golden_document_ids) == {
+        ("NFR_REFERENCE_INVALID", "rubric.criteria[0].related_nfr_ids"),
+        ("NFR_NOT_COVERED", "confirmed_nfrs[0]"),
+    }
+
+
+def test_cross_ref_flags_a_tradeoff_pointing_at_an_unknown_nfr(
+    golden_export: NFRExport, golden_document_ids: set[str]
+) -> None:
+    def point_elsewhere(raw: dict) -> None:
+        raw["tradeoffs"][1]["related_nfr_ids"] = ["NFR-9"]
+
+    assert cross_ref_findings(
+        edited(golden_export, point_elsewhere), golden_document_ids
+    ) == {("NFR_REFERENCE_INVALID", "tradeoffs[1].related_nfr_ids")}
+
+
+def test_cross_ref_flags_an_nfr_scored_by_two_criteria(
+    golden_export: NFRExport, golden_document_ids: set[str]
+) -> None:
+    """빠진 NFR이 없어 NFR_NOT_COVERED로는 드러나지 않는 중복 평가."""
+    export = with_criteria(golden_export, 4)  # C4가 C1을 복제해 NFR-1을 또 평가한다
+
+    assert cross_ref_findings(export, golden_document_ids) == {
+        ("NFR_MULTI_COVERED", "confirmed_nfrs[0]")
+    }
+
+
+@pytest.mark.parametrize("section", ["confirmed_nfrs", "tradeoffs"])
+def test_cross_ref_flags_evidence_pointing_at_an_unknown_document(
+    golden_export: NFRExport, golden_document_ids: set[str], section: str
+) -> None:
+    """출처를 지어낸 인용."""
+
+    def cite_missing(raw: dict) -> None:
+        raw[section][0]["evidence_refs"].append("D99")
+
+    assert cross_ref_findings(
+        edited(golden_export, cite_missing), golden_document_ids
+    ) == {("EVIDENCE_REF_UNKNOWN", f"{section}[0].evidence_refs")}
+
+
+def test_cross_ref_flags_every_citation_when_no_document_was_crawled(
+    golden_export: NFRExport,
+) -> None:
+    """크롤이 전부 실패했는데 인용이 남아 있으면 모두 지어낸 것이다."""
+    cited = [
+        f"{section}[{i}].evidence_refs"
+        for section in ("confirmed_nfrs", "tradeoffs")
+        for i, item in enumerate(getattr(golden_export, section))
+        if item.evidence_refs
+    ]
+    findings = check_cross_ref(set())(golden_export)
+
+    assert {f.code for f in findings} == {"EVIDENCE_REF_UNKNOWN"}
+    assert sorted({f.path for f in findings}) == sorted(cited)
+
+
+def duplicate_nfr(raw: dict) -> None:
+    # NFR은 참조 대상이라 id만 바꾸면 연결이 깨진다. 같은 NFR을 하나 더 둔다.
+    raw["confirmed_nfrs"].append(raw["confirmed_nfrs"][0])
+
+
+def duplicate_tradeoff_id(raw: dict) -> None:
+    raw["tradeoffs"][1]["id"] = raw["tradeoffs"][0]["id"]
+
+
+def duplicate_criterion_id(raw: dict) -> None:
+    raw["rubric"]["criteria"][1]["id"] = raw["rubric"]["criteria"][0]["id"]
+
+
+@pytest.mark.parametrize(
+    ("edit", "path"),
+    [
+        (duplicate_nfr, "confirmed_nfrs[3].id"),
+        (duplicate_tradeoff_id, "tradeoffs[1].id"),
+        (duplicate_criterion_id, "rubric.criteria[1].id"),
+    ],
+)
+def test_cross_ref_flags_a_duplicated_id(
+    golden_export: NFRExport,
+    golden_document_ids: set[str],
+    edit: Callable[[dict], None],
+    path: str,
+) -> None:
+    """id가 겹치면 참조가 어느 쪽을 가리키는지 모호해진다. 두 번째 것을 지적한다."""
+    found = cross_ref_findings(edited(golden_export, edit), golden_document_ids)
+
+    assert found == {("ID_DUPLICATED", path)}
+
+
+def test_cross_ref_does_not_count_a_repeated_ref_as_two_criteria(
+    golden_export: NFRExport, golden_document_ids: set[str]
+) -> None:
+    """같은 criterion 안의 반복은 CRITERION_MULTI_NFR 하나로 충분하다."""
+
+    def repeat(raw: dict) -> None:
+        raw["rubric"]["criteria"][0]["related_nfr_ids"] = ["NFR-1", "NFR-1"]
+
+    assert cross_ref_findings(edited(golden_export, repeat), golden_document_ids) == {
+        ("CRITERION_MULTI_NFR", "rubric.criteria[0].related_nfr_ids")
+    }
+
+
+@pytest.mark.parametrize("section", ["confirmed_nfrs", "tradeoffs"])
+def test_cross_ref_flags_an_item_without_evidence(
+    golden_export: NFRExport, golden_document_ids: set[str], section: str
+) -> None:
+    """근거 없는 NFR·trade-off는 LLM 기억에서 나온 것이다."""
+
+    def drop_evidence(raw: dict) -> None:
+        raw[section][0]["evidence_refs"] = []
+
+    assert cross_ref_findings(
+        edited(golden_export, drop_evidence), golden_document_ids
+    ) == {("EVIDENCE_REF_MISSING", f"{section}[0].evidence_refs")}
+
+
+def test_cross_ref_flags_a_tradeoff_without_an_nfr(
+    golden_export: NFRExport, golden_document_ids: set[str]
+) -> None:
+    """어느 NFR에도 붙지 않은 trade-off는 렌더에서 조용히 빠진다."""
+
+    def detach(raw: dict) -> None:
+        raw["tradeoffs"][0]["related_nfr_ids"] = []
+
+    assert cross_ref_findings(edited(golden_export, detach), golden_document_ids) == {
+        ("TRADEOFF_NFR_REFERENCE_MISSING", "tradeoffs[0].related_nfr_ids")
+    }
+
+
+def test_cross_ref_rejects_document_ids_given_as_a_string() -> None:
+    """문자열이면 "D1" in "D1 D2"가 부분 문자열로 참이 되어 조용히 통과한다."""
+    with pytest.raises(TypeError):
+        check_cross_ref("D1 D2 D3")
+
+
+def test_cross_ref_keeps_the_document_ids_it_was_built_with(
+    golden_export: NFRExport, golden_document_ids: set[str]
+) -> None:
+    """검사를 만든 뒤 호출한 쪽이 집합을 비워도 결과가 바뀌지 않는다."""
+    check = check_cross_ref(golden_document_ids)
+    golden_document_ids.clear()
+
+    assert check(golden_export) == []
+
+
+def test_cross_ref_ignores_whitespace_the_llm_added_to_an_id(
+    golden_export: NFRExport, golden_document_ids: set[str]
+) -> None:
+    """id에만 공백이 붙고 참조는 깨끗해도 연결은 맞다."""
+
+    def pad(raw: dict) -> None:
+        raw["confirmed_nfrs"][0]["id"] = " NFR-1 "
+        raw["confirmed_nfrs"][0]["evidence_refs"] = [" D2", "D3 "]
+
+    assert check_cross_ref(golden_document_ids)(edited(golden_export, pad)) == []
