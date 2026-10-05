@@ -17,11 +17,10 @@ def check_weight_sum(export: NFRExport) -> list[Finding]:
     """core.weight-sum — 각 weight가 1~100이고 합이 정확히 100인가."""
     criteria = export.rubric.criteria
     findings = [
-        Finding(
-            code=FindingCode.WEIGHT_OUT_OF_RANGE,
-            severity=Severity.ERROR,
-            path=f"rubric.criteria[{i}].weight",
-            message=f"{c.id}의 weight {c.weight}가 1~{WEIGHT_TOTAL} 밖이다.",
+        _error(
+            FindingCode.WEIGHT_OUT_OF_RANGE,
+            f"rubric.criteria[{i}].weight",
+            f"{c.id}의 weight {c.weight}가 1~{WEIGHT_TOTAL} 밖이다.",
         )
         for i, c in enumerate(criteria)
         if not 1 <= c.weight <= WEIGHT_TOTAL
@@ -30,11 +29,10 @@ def check_weight_sum(export: NFRExport) -> list[Finding]:
     total = sum(c.weight for c in criteria)
     if total != WEIGHT_TOTAL:
         findings.append(
-            Finding(
-                code=FindingCode.WEIGHT_SUM_INVALID,
-                severity=Severity.ERROR,
-                path="rubric.criteria",
-                message=f"criterion weight 합이 {total}이다. {WEIGHT_TOTAL}이어야 한다.",
+            _error(
+                FindingCode.WEIGHT_SUM_INVALID,
+                "rubric.criteria",
+                f"criterion weight 합이 {total}이다. {WEIGHT_TOTAL}이어야 한다.",
             )
         )
     return findings
@@ -46,13 +44,10 @@ def check_criteria_count(export: NFRExport) -> list[Finding]:
     if CRITERIA_MIN <= count <= CRITERIA_MAX:
         return []
     return [
-        Finding(
-            code=FindingCode.CRITERIA_COUNT_OUT_OF_RANGE,
-            severity=Severity.ERROR,
-            path="rubric.criteria",
-            message=(
-                f"criterion이 {count}개다. {CRITERIA_MIN}~{CRITERIA_MAX}개여야 한다."
-            ),
+        _error(
+            FindingCode.CRITERIA_COUNT_OUT_OF_RANGE,
+            "rubric.criteria",
+            f"criterion이 {count}개다. {CRITERIA_MIN}~{CRITERIA_MAX}개여야 한다.",
         )
     ]
 
