@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from archgen.domain.nfr import ConfirmedNFR, NFRExport, RubricLevel
+from archgen.domain.nfr import ConfirmedNFR, NFRExport, RubricCriterion, RubricLevel
 
 
 def test_golden_set_loads_without_losing_fields(golden_export: NFRExport) -> None:
@@ -79,3 +79,19 @@ def test_rubric_level_rejects_a_score_outside_zero_to_three() -> None:
         with pytest.raises(ValidationError):
             RubricLevel(score=score, descriptor="레벨 서술이 여기에 들어간다.")
 
+
+def a_criterion(weight: object) -> dict:
+    return {"id": "C1", "title": "제목", "description": "설명", "weight": weight}
+
+
+@pytest.mark.parametrize("weight", [45, 45.0, "45"])
+def test_rubric_criterion_takes_a_whole_number_weight(weight: object) -> None:
+    """LLM이 45.0으로 내도 값은 정수라 받는다."""
+    assert RubricCriterion.model_validate(a_criterion(weight)).weight == 45
+
+
+@pytest.mark.parametrize("weight", [45.5, float("nan"), float("inf"), "45점", True])
+def test_rubric_criterion_rejects_a_non_whole_number_weight(weight: object) -> None:
+    """true가 1점으로 바뀌어 들어오면 조용히 잘못된 배점이 된다."""
+    with pytest.raises(ValidationError):
+        RubricCriterion.model_validate(a_criterion(weight))

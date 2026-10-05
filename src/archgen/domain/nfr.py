@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Self
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 class NFRTarget(BaseModel):
@@ -59,8 +59,17 @@ class RubricCriterion(BaseModel):
     title: str
     description: str
     related_nfr_ids: list[str] = []
-    weight: float
+    weight: int  # 자연수 배점. 범위와 합은 하네스 core.weight-sum이 본다.
     levels: list[RubricLevel] = []
+
+    @field_validator("weight", mode="before")
+    @classmethod
+    def _reject_bool_weight(cls, value: object) -> object:
+        """pydantic은 true를 1로 바꿔 받는다. 배점이 조용히 1점이 되는 걸 막는다."""
+        if isinstance(value, bool):
+            # TypeError는 ValidationError로 바뀌지 않고 그대로 새어 나간다.
+            raise ValueError("weight는 bool이 아니라 자연수여야 한다")  # noqa: TRY004
+        return value
 
 
 class Rubric(BaseModel):
