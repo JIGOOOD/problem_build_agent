@@ -18,6 +18,14 @@ class Severity(StrEnum):
     WARN = "WARN"
 
 
+class FindingCode(StrEnum):
+    """Finding code 전체 목록. 검사를 추가할 때 여기에 먼저 등록한다."""
+
+    # core.weight-sum
+    WEIGHT_OUT_OF_RANGE = "WEIGHT_OUT_OF_RANGE"  # criterion weight가 1~100 밖
+    WEIGHT_SUM_INVALID = "WEIGHT_SUM_INVALID"  # weight 합이 100이 아님
+
+
 class Finding(BaseModel):
     """어느 위치(path)에서 어떤 규칙(code)이 깨졌는지."""
 

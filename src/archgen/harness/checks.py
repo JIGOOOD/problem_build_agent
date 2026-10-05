@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from archgen.domain.nfr import NFRExport
-from archgen.harness.findings import Finding, Severity
+from archgen.harness.findings import Finding, FindingCode, Severity
 
 WEIGHT_TOTAL = 100
 
@@ -13,7 +13,7 @@ def check_weight_sum(export: NFRExport) -> list[Finding]:
     criteria = export.rubric.criteria
     findings = [
         Finding(
-            code="WEIGHT_OUT_OF_RANGE",
+            code=FindingCode.WEIGHT_OUT_OF_RANGE,
             severity=Severity.ERROR,
             path=f"rubric.criteria[{i}].weight",
             message=f"{c.id}의 weight {c.weight}가 1~{WEIGHT_TOTAL} 밖이다.",
@@ -26,7 +26,7 @@ def check_weight_sum(export: NFRExport) -> list[Finding]:
     if total != WEIGHT_TOTAL:
         findings.append(
             Finding(
-                code="WEIGHT_SUM_INVALID",
+                code=FindingCode.WEIGHT_SUM_INVALID,
                 severity=Severity.ERROR,
                 path="rubric.criteria",
                 message=f"criterion weight 합이 {total}이다. {WEIGHT_TOTAL}이어야 한다.",
