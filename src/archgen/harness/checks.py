@@ -6,6 +6,8 @@ from archgen.domain.nfr import NFRExport
 from archgen.harness.findings import Finding, FindingCode, Severity
 
 WEIGHT_TOTAL = 100
+# 면접에서 NFR에 쓰는 10~15분 안에 다룰 수 있는 개수. 기본은 3개.
+CRITERIA_MIN, CRITERIA_MAX = 2, 4
 
 
 def check_weight_sum(export: NFRExport) -> list[Finding]:
@@ -33,3 +35,20 @@ def check_weight_sum(export: NFRExport) -> list[Finding]:
             )
         )
     return findings
+
+
+def check_criteria_count(export: NFRExport) -> list[Finding]:
+    """core.criteria-count — criterion이 2~4개인가."""
+    count = len(export.rubric.criteria)
+    if CRITERIA_MIN <= count <= CRITERIA_MAX:
+        return []
+    return [
+        Finding(
+            code=FindingCode.CRITERIA_COUNT_OUT_OF_RANGE,
+            severity=Severity.ERROR,
+            path="rubric.criteria",
+            message=(
+                f"criterion이 {count}개다. {CRITERIA_MIN}~{CRITERIA_MAX}개여야 한다."
+            ),
+        )
+    ]

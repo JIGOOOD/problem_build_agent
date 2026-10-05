@@ -1,7 +1,7 @@
 import pytest
 
 from archgen.domain.nfr import NFRExport
-from archgen.harness.checks import check_weight_sum
+from archgen.harness.checks import check_criteria_count, check_weight_sum
 from archgen.harness.findings import Severity
 
 
@@ -83,3 +83,28 @@ def test_weight_range_and_sum_are_both_reported_as_errors(
         ("WEIGHT_SUM_INVALID", "rubric.criteria", Severity.ERROR),
     }
     assert len(findings) == 2
+
+
+def with_criterion_count(export: NFRExport, count: int) -> NFRExport:
+    return with_weights(export, [1] * count)
+
+
+def test_criteria_count_passes_the_golden_set(golden_export: NFRExport) -> None:
+    assert check_criteria_count(golden_export) == []
+
+
+@pytest.mark.parametrize("count", [2, 4])
+def test_criteria_count_accepts_two_to_four(golden_export: NFRExport, count: int) -> None:
+    assert check_criteria_count(with_criterion_count(golden_export, count)) == []
+
+
+@pytest.mark.parametrize("count", [0, 1, 5])
+def test_criteria_count_flags_a_count_outside_two_to_four(
+    golden_export: NFRExport, count: int
+) -> None:
+    """0개면 채점할 게 없고, 5개 이상이면 면접 10~15분 안에 못 다룬다."""
+    findings = check_criteria_count(with_criterion_count(golden_export, count))
+
+    assert [(f.code, f.path, f.severity) for f in findings] == [
+        ("CRITERIA_COUNT_OUT_OF_RANGE", "rubric.criteria", Severity.ERROR)
+    ]

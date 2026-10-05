@@ -24,6 +24,8 @@ class FindingCode(StrEnum):
     # core.weight-sum
     WEIGHT_OUT_OF_RANGE = "WEIGHT_OUT_OF_RANGE"  # criterion weight가 1~100 밖
     WEIGHT_SUM_INVALID = "WEIGHT_SUM_INVALID"  # weight 합이 100이 아님
+    # core.criteria-count
+    CRITERIA_COUNT_OUT_OF_RANGE = "CRITERIA_COUNT_OUT_OF_RANGE"  # criterion이 2~4개 밖
 
 
 class Finding(BaseModel):
