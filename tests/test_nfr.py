@@ -1,25 +1,12 @@
 import pytest
-import yaml
 from pydantic import ValidationError
 
 from archgen.domain.nfr import ConfirmedNFR, NFRExport, RubricLevel
-from archgen.paths import GOLDEN_DIR
-
-GOLDEN = GOLDEN_DIR / "chat.yaml"
-
-# 골든셋 파일은 NFRExport의 상위집합이다. topic / target_level / documents는
-# 파이프라인 상태이지 LLM 출력이 아니라서 스키마에 들어가지 않는다.
-EXPORT_KEYS = ("confirmed_nfrs", "tradeoffs", "rubric")
 
 
-def golden_export() -> NFRExport:
-    raw = yaml.safe_load(GOLDEN.read_text(encoding="utf-8"))
-    return NFRExport.model_validate({key: raw[key] for key in EXPORT_KEYS})
-
-
-def test_golden_set_loads_without_losing_fields() -> None:
+def test_golden_set_loads_without_losing_fields(golden_export: NFRExport) -> None:
     """골든셋 내용이 바뀌어도, 스키마가 필드를 흘리지 않는 한 통과한다."""
-    export = golden_export()
+    export = golden_export
 
     assert export.confirmed_nfrs, "확정 NFR이 하나도 안 들어왔다"
     assert export.tradeoffs, "trade-off가 하나도 안 들어왔다"
@@ -36,15 +23,17 @@ def test_golden_set_loads_without_losing_fields() -> None:
         assert all(lv.descriptor for lv in criterion.levels)
 
 
-def test_nfr_export_survives_a_dump_and_load_round_trip() -> None:
-    export = golden_export()
+def test_nfr_export_survives_a_dump_and_load_round_trip(
+    golden_export: NFRExport,
+) -> None:
+    export = golden_export
 
     assert NFRExport.model_validate(export.model_dump()) == export
 
 
-def test_nfr_export_survives_a_json_round_trip() -> None:
+def test_nfr_export_survives_a_json_round_trip(golden_export: NFRExport) -> None:
     """LLM 응답과 eval 저장은 dict가 아니라 JSON 문자열을 지난다."""
-    export = golden_export()
+    export = golden_export
 
     assert NFRExport.model_validate_json(export.model_dump_json()) == export
 
@@ -89,3 +78,4 @@ def test_rubric_level_rejects_a_score_outside_zero_to_three() -> None:
     for score in (-1, 4):
         with pytest.raises(ValidationError):
             RubricLevel(score=score, descriptor="레벨 서술이 여기에 들어간다.")
+
