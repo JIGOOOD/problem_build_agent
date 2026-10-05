@@ -51,7 +51,7 @@ NFRExport:
         title: string
         description: string
         related_nfr_ids: [string]       # 정확히 1개
-        weight: number                  # 섹션 내부 합 = 100
+        weight: integer                 # 자연수 1~100, 섹션 내부 합 = 100
         competency_axis: CompetencyAxis # ← 이번에 추가
         levels:
           - score: 0..3
@@ -155,7 +155,7 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 
 | check | 코드 | 이 형식 때문에 생긴 것 |
 |---|---|---|
-| `core.weight-sum` | `WEIGHT_MISSING` / `WEIGHT_OUT_OF_RANGE` / `WEIGHT_SUM_INVALID` | 합 == **100** 으로 확정 |
+| `core.weight-sum` | `WEIGHT_OUT_OF_RANGE` / `WEIGHT_SUM_INVALID` | 합 == **100**, 각 weight 1~100 자연수로 확정. 누락·소수는 스키마가 거부 |
 | `core.levels` | `LEVEL_MISSING` / `LEVEL_DUPLICATED` / `LEVEL_DESCRIPTOR_MISSING` / `LEVEL_DESCRIPTOR_DUPLICATED` / **`LEVEL_DESCRIPTOR_TOO_SHORT`** / **`LEVEL_DESCRIPTOR_TOO_LONG`** | ← 15~200자 |
 | `core.nfr-measurable` | `NFR_KIND_MISSING` / `NFR_VALUE_NOT_FOUND` / `NFR_UNIT_MISSING` / `NFR_COMPARATOR_MISSING` / `NFR_GUARANTEE_UNCLEAR` | |
 | `core.cross-ref` | `NFR_REFERENCE_INVALID` / `NFR_NOT_COVERED` / `CRITERION_NFR_REFERENCE_MISSING` / **`CRITERION_MULTI_NFR`** / **`EVIDENCE_REF_UNKNOWN`** | ← 인용이 실존 Document를 가리키는가 |

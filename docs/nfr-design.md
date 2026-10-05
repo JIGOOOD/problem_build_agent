@@ -530,8 +530,8 @@ NFRExport:
           - string
         # 어떤 NFR을 평가하는지 연결
 
-        weight: number
-        # 해당 Criterion의 중요도
+        weight: integer
+        # 해당 Criterion의 중요도. 1~100 자연수
 
         levels:
           - score: 0
@@ -567,16 +567,14 @@ total         = Σ(section.weight × section_pct)      # section weight 합 = 10
 
 **목표**
 
-- 모든 Criterion에 weight가 존재하는지 검사한다.
-- NFR Rubric의 총 배점이 미리 정해져 있다면 weight 합이 그 값을 만족하는지 검사한다.
+- 각 Criterion의 weight가 범위 안이고 합이 100인지 검사한다.
+- weight 누락과 자연수가 아닌 값(소수, bool)은 스키마가 파싱 단계에서 거부하므로 여기서 보지 않는다.
 
 **검사**
 
-- weight 필드가 존재하는지 확인한다.
-    - WEIGHT_MISSING
-- 0 ≤ weight ≤ NFR 배점인지 확인한다.
+- 1 ≤ weight ≤ 100인지 확인한다. 0점 criterion은 면접 시간만 쓰고 점수에 반영되지 않는다.
     - WEIGHT_OUT_OF_RANGE
-- sum(weight) == NFR 배점인지 확인한다.
+- sum(weight) == 100인지 확인한다.
     - WEIGHT_SUM_INVALID
 
 ### core.levels
