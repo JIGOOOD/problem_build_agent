@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Self
+from typing import Annotated, Self
 
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, Field, StringConstraints, field_validator, model_validator
+
+# id와 id를 가리키는 참조. LLM이 붙인 앞뒤 공백은 양쪽에서 똑같이 잘라내 서로 어긋나지
+# 않게 하고, 잘라낸 뒤 비면 거부한다. 빈 id끼리는 참조가 맞아 cross-ref를 조용히 통과한다.
+Id = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 
 
 class NFRTarget(BaseModel):
@@ -18,13 +22,13 @@ class NFRTarget(BaseModel):
 class ConfirmedNFR(BaseModel):
     """크롤한 근거로 확인을 마친 NFR."""
 
-    id: str
+    id: Id
     kind: str
     statement: str
     rationale: str
     target: NFRTarget | None = None
     qualitative_target: str | None = None
-    evidence_refs: list[str] = []
+    evidence_refs: list[Id] = []
 
     @model_validator(mode="after")
     def _require_exactly_one_target(self) -> Self:
@@ -39,10 +43,10 @@ class ConfirmedNFR(BaseModel):
 class Tradeoff(BaseModel):
     """설계 선택 사이의 상충. 영향을 받는 NFR에 연결된다."""
 
-    id: str
-    related_nfr_ids: list[str] = []
+    id: Id
+    related_nfr_ids: list[Id] = []
     description: str
-    evidence_refs: list[str] = []
+    evidence_refs: list[Id] = []
 
 
 class RubricLevel(BaseModel):
@@ -55,10 +59,10 @@ class RubricLevel(BaseModel):
 class RubricCriterion(BaseModel):
     """NFR 하나만 담당하는 채점 단위."""
 
-    id: str
+    id: Id
     title: str
     description: str
-    related_nfr_ids: list[str] = []
+    related_nfr_ids: list[Id] = []
     weight: int  # 자연수 배점. 범위와 합은 하네스 core.weight-sum이 본다.
     levels: list[RubricLevel] = []
 

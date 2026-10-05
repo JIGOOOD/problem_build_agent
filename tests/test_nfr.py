@@ -1,7 +1,15 @@
+from collections.abc import Callable
+
 import pytest
 from pydantic import ValidationError
 
-from archgen.domain.nfr import ConfirmedNFR, NFRExport, RubricCriterion, RubricLevel
+from archgen.domain.nfr import (
+    ConfirmedNFR,
+    NFRExport,
+    RubricCriterion,
+    RubricLevel,
+    Tradeoff,
+)
 
 
 def test_golden_set_loads_without_losing_fields(golden_export: NFRExport) -> None:
@@ -95,3 +103,57 @@ def test_rubric_criterion_rejects_a_non_whole_number_weight(weight: object) -> N
     """true가 1점으로 바뀌어 들어오면 조용히 잘못된 배점이 된다."""
     with pytest.raises(ValidationError):
         RubricCriterion.model_validate(a_criterion(weight))
+
+
+def a_tradeoff(**overrides: object) -> dict:
+    return {"id": "TO-1", "description": "설명"} | overrides
+
+
+ID_OWNERS = [
+    (ConfirmedNFR, a_confirmed_nfr),
+    (Tradeoff, a_tradeoff),
+    (RubricCriterion, lambda **o: a_criterion(45) | o),
+]
+
+
+@pytest.mark.parametrize(("model", "payload"), ID_OWNERS)
+@pytest.mark.parametrize("blank", ["", "   "])
+def test_ids_must_not_be_blank(model: type, payload: Callable, blank: str) -> None:
+    """빈 id끼리는 참조가 서로 맞아서 cross-ref를 조용히 통과한다."""
+    with pytest.raises(ValidationError):
+        model.model_validate(payload(id=blank))
+
+
+@pytest.mark.parametrize(("model", "payload"), ID_OWNERS)
+def test_ids_are_stripped_of_surrounding_whitespace(
+    model: type, payload: Callable
+) -> None:
+    """LLM이 붙인 공백 때문에 repair를 돌리지 않는다."""
+    assert model.model_validate(payload(id=" NFR-1 ")).id == "NFR-1"
+
+
+REF_FIELDS = [
+    (ConfirmedNFR, a_confirmed_nfr, "evidence_refs"),
+    (Tradeoff, a_tradeoff, "evidence_refs"),
+    (Tradeoff, a_tradeoff, "related_nfr_ids"),
+    (RubricCriterion, lambda **o: a_criterion(45) | o, "related_nfr_ids"),
+]
+
+
+@pytest.mark.parametrize(("model", "payload", "field"), REF_FIELDS)
+def test_refs_are_stripped_like_the_ids_they_point_at(
+    model: type, payload: Callable, field: str
+) -> None:
+    """id와 참조를 똑같이 정리해야 서로 어긋나지 않는다."""
+    parsed = model.model_validate(payload(**{field: [" A-1", "A-2 "]}))
+
+    assert getattr(parsed, field) == ["A-1", "A-2"]
+
+
+@pytest.mark.parametrize(("model", "payload", "field"), REF_FIELDS)
+@pytest.mark.parametrize("blank", ["", "   "])
+def test_refs_must_not_be_blank(
+    model: type, payload: Callable, field: str, blank: str
+) -> None:
+    with pytest.raises(ValidationError):
+        model.model_validate(payload(**{field: ["A-1", blank]}))
