@@ -9,8 +9,6 @@ from dataclasses import dataclass
 from decimal import Decimal
 from pathlib import Path
 
-from jinja2 import Environment, FileSystemLoader, StrictUndefined
-
 from archgen.domain.brief import InterviewBrief
 from archgen.domain.nfr import (
     ConfirmedNFR,
@@ -20,15 +18,9 @@ from archgen.domain.nfr import (
     RubricLevel,
     Tradeoff,
 )
+from archgen.templating import template_env
 
-_ENV = Environment(
-    loader=FileSystemLoader(Path(__file__).parent / "templates"),
-    trim_blocks=True,
-    lstrip_blocks=True,
-    keep_trailing_newline=True,
-    # 변수 이름을 틀리면 빈 문자열로 조용히 넘어가지 않고 실패한다.
-    undefined=StrictUndefined,
-)
+_ENV = template_env(Path(__file__).parent / "templates")
 
 
 def _cell(text: str) -> str:

@@ -4,20 +4,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from jinja2 import Environment, FileSystemLoader, StrictUndefined
-
 from archgen.domain.brief import InterviewBrief
 from archgen.domain.catalog import NFRCatalog
 from archgen.domain.research import CANDIDATES_MAX, CANDIDATES_MIN, MAX_QUERIES
+from archgen.templating import template_env
 
-_ENV = Environment(
-    loader=FileSystemLoader(Path(__file__).parent / "templates"),
-    trim_blocks=True,
-    lstrip_blocks=True,
-    keep_trailing_newline=True,
-    # 변수 이름을 틀리면 빈 문자열로 조용히 넘어가지 않고 실패한다.
-    undefined=StrictUndefined,
-)
+_ENV = template_env(Path(__file__).parent / "templates")
 # 입력 목록의 한 항목이 한 줄을 차지하도록 줄바꿈·연속 공백을 접는다.
 _ENV.filters["one_line"] = lambda text: " ".join(text.split())
 
