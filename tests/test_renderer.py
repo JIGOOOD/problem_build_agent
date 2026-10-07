@@ -1,18 +1,11 @@
-from collections.abc import Callable
-
 import pytest
+from helpers import edited
 
 from archgen.domain.brief import InterviewBrief, Seniority
 from archgen.domain.nfr import NFRExport
 from archgen.render.renderer import render_rubric
 
 BRIEF = InterviewBrief(seniority=Seniority.MIDDLE, topic="실시간 채팅 시스템 설계")
-
-
-def edited(export: NFRExport, edit: Callable[[dict], None]) -> NFRExport:
-    raw = export.model_dump()
-    edit(raw)
-    return NFRExport.model_validate(raw)
 
 
 def criterion_sections(md: str) -> dict[str, str]:

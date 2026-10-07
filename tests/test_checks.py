@@ -1,6 +1,7 @@
 from collections.abc import Callable
 
 import pytest
+from helpers import edited
 
 from archgen.domain.nfr import NFRExport
 from archgen.harness.checks import (
@@ -221,13 +222,6 @@ def test_levels_point_at_the_criterion_that_broke(golden_export: NFRExport) -> N
     export = with_levels(golden_export, scored(0, 1, 2), criterion=2)
 
     assert level_findings(export) == [("LEVEL_MISSING", "rubric.criteria[2].levels")]
-
-
-def edited(export: NFRExport, edit: Callable[[dict], None]) -> NFRExport:
-    """골든셋 dict를 직접 고친 뒤 스키마 검증을 거쳐 되돌린다."""
-    raw = export.model_dump()
-    edit(raw)
-    return NFRExport.model_validate(raw)
 
 
 def cross_ref_findings(export: NFRExport, document_ids: set[str]) -> set[tuple[str, str]]:
