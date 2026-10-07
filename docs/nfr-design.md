@@ -152,7 +152,19 @@ common_tradeoffs:
 
 ## Research Planner
 
-템플릿: `src/archgen/research/templates/planner.md.j2`. 개수 제약은 `ResearchPlan` 스키마와 같은 상수를 쓴다.
+템플릿: `src/archgen/research/templates/planner_system.md.j2`(지시·Catalog — brief와 무관해 캐시 대상),
+`planner_user.md.j2`(주제·대상 연차·중점 요구사항). 개수 제약은 `ResearchPlan` 스키마와 같은 상수를 쓴다.
+응답은 `ResearchPlan`으로 검증한다. 재시도는 LLM 비용이 드므로 **코드로 고칠 수 있는 것은 고친다.**
+
+| 응답 | 처리 |
+|---|---|
+| kind 표기 흔들림 (`Fault Tolerance`, `fault-tolerance`, `fault__tolerance_`) | 소문자, 공백·하이픈·밑줄 덩어리 → 밑줄 하나, 앞뒤 밑줄 제거 |
+| 겹친 후보 kind | 먼저 나온 것만 남김. 걸러낸 **뒤** 3~5개 밖이면 재시도 (스키마에는 3~5개를 그대로 실어 생성 단계에서 묶음) |
+| 겹친 검색어 (대소문자·공백 차이 포함), 한 검색어 안의 겹친 참조 | 먼저 나온 것만 남김 |
+| 후보에 없는 kind를 가리키는 `related_nfrs` | 그 참조만 지우고 검색어는 유지 |
+| 빈 값, 깨진 JSON, 서로 다른 후보 6개 이상, 정리해도 snake_case가 아닌 kind | 위치와 이유를 알려주고 1회 재시도. 또 어기면 1·2차 이유를 모두 담아 `PlannerError` |
+
+LLM 호출 자체의 예외(네트워크 등)와 문자열이 아닌 응답(연결부 버그)은 재시도하지 않는다.
 
 **목표**
 
