@@ -1,3 +1,5 @@
+import re
+
 import pytest
 from helpers import edited
 
@@ -207,7 +209,12 @@ def read_back(md: str) -> dict:
         return chunk.split(f"**{label}**\n", 1)[1].split("\n\n", 1)[0].splitlines()
 
     def cells(row: str) -> list[str]:
-        return [cell.strip() for cell in row.strip().strip("|").split("|")]
+        # 이스케이프된 \|에서는 칸을 나누지 않고, 나눈 뒤 \|와 <br>을 원래 문자로 되돌린다.
+        inner = row.strip().removeprefix("|").removesuffix("|")
+        return [
+            cell.strip().replace("\\|", "|").replace("<br>", "\n")
+            for cell in re.split(r"(?<!\\)\|", inner)
+        ]
 
     lines = md.splitlines()
     summary = [cells(line)[:3] for line in lines if line.endswith("☐0 ☐1 ☐2 ☐3 |")]
@@ -258,3 +265,55 @@ def test_rendered_rubric_reads_back_to_the_export(golden_export: NFRExport) -> N
         assert got["levels"] == [
             (str(level.score), level.descriptor) for level in criterion.levels
         ]
+
+
+def test_pipes_in_table_cells_do_not_split_the_row(golden_export: NFRExport) -> None:
+    """`|`가 그대로 들어가면 칸이 하나 더 생겨 표가 어긋난다."""
+
+    def add_pipes(raw: dict) -> None:
+        criterion = raw["rubric"]["criteria"][0]
+        criterion["title"] = "읽기 | 쓰기 경로"
+        criterion["levels"][1]["descriptor"] = "A | B 중 하나만 고려한다."
+
+    export = edited(golden_export, add_pipes)
+    rendered = read_back(render_rubric(export, BRIEF))
+    criterion = export.rubric.criteria[0]
+
+    assert rendered["summary"][0][1] == criterion.title
+    assert rendered["criteria"][0]["levels"] == [
+        (str(level.score), level.descriptor) for level in criterion.levels
+    ]
+
+
+def test_newlines_in_table_cells_stay_inside_the_row(golden_export: NFRExport) -> None:
+    """줄바꿈이 그대로 들어가면 표 행이 끊긴다. <br>로 칸 안에서 줄을 바꾼다."""
+
+    def add_newlines(raw: dict) -> None:
+        criterion = raw["rubric"]["criteria"][0]
+        criterion["title"] = "읽기 경로\n쓰기 경로"
+        criterion["levels"][2]["descriptor"] = (
+            "첫째 조건을 설명한다.\n둘째 조건도 설명한다."
+        )
+
+    export = edited(golden_export, add_newlines)
+    rendered = read_back(render_rubric(export, BRIEF))
+    criterion = export.rubric.criteria[0]
+
+    assert rendered["summary"][0][1] == criterion.title
+    assert rendered["criteria"][0]["levels"] == [
+        (str(level.score), level.descriptor) for level in criterion.levels
+    ]
+
+
+def test_newlines_in_headings_become_spaces(golden_export: NFRExport) -> None:
+    """헤딩은 한 줄이어야 한다. 줄바꿈과 연속 공백을 공백 하나로 접는다."""
+
+    def add_newline(raw: dict) -> None:
+        raw["rubric"]["criteria"][0]["title"] = "읽기 경로\n  쓰기 경로"
+
+    export = edited(golden_export, add_newline)
+    brief = InterviewBrief(seniority=Seniority.MIDDLE, topic="실시간\n채팅")
+    md = render_rubric(export, brief)
+
+    assert md.startswith("# 실시간 채팅\n")
+    assert read_back(md)["criteria"][0]["title"] == "읽기 경로 쓰기 경로"

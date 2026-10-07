@@ -1,4 +1,4 @@
-# {{ brief.topic }}
+# {{ brief.topic | heading }}
 
 **대상 연차** {{ brief.seniority }}\
 **배점** {{ total_weight }}
@@ -11,13 +11,13 @@
 | # | 평가 항목 | 배점 | 획득 |
 |---|---|---|---|
 {% for s in sections %}
-| {{ s.criterion.id }} | {{ s.criterion.title }} | {{ s.criterion.weight }} | ☐0 ☐1 ☐2 ☐3 |
+| {{ s.criterion.id }} | {{ s.criterion.title | cell }} | {{ s.criterion.weight }} | ☐0 ☐1 ☐2 ☐3 |
 {% endfor %}
 {% for s in sections %}
 
 ---
 
-### {{ s.criterion.id }}. {{ s.criterion.title }} · {{ s.criterion.weight }}점
+### {{ s.criterion.id }}. {{ s.criterion.title | heading }} · {{ s.criterion.weight }}점
 
 **평가 항목**
 {{ s.criterion.description }}
@@ -40,6 +40,6 @@
 | Level | 기준 |
 |---|---|
 {% for level in s.levels %}
-| {{ level.score }} | {{ level.descriptor }} |
+| {{ level.score }} | {{ level.descriptor | cell }} |
 {% endfor %}
 {% endfor %}

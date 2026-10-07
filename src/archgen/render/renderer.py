@@ -31,6 +31,20 @@ _ENV = Environment(
 )
 
 
+def _cell(text: str) -> str:
+    """표 칸에 넣는다. `|`는 칸을 나누고 줄바꿈은 행을 끊으므로 바꿔 쓴다."""
+    return "<br>".join(text.replace("|", "\\|").splitlines())
+
+
+def _heading(text: str) -> str:
+    """헤딩에 넣는다. 헤딩은 한 줄이어야 해서 줄바꿈·연속 공백을 공백 하나로 접는다."""
+    return " ".join(text.split())
+
+
+_ENV.filters["cell"] = _cell
+_ENV.filters["heading"] = _heading
+
+
 @dataclass(frozen=True)
 class _Section:
     """criterion 하나를 렌더하는 데 필요한 것을 id 참조를 풀어 모아 둔다."""
