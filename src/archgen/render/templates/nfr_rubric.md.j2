@@ -1,0 +1,45 @@
+# {{ brief.topic }}
+
+**대상 연차** {{ brief.seniority }}\
+**배점** {{ total_weight }}
+
+## NFR
+
+> **채점 규칙**: 상위 점수는 하위 점수의 요건을 포함한다. 2점 설계 없이 3점 조건만
+> 만족한 답변은 3점이 아니다.
+
+| # | 평가 항목 | 배점 | 획득 |
+|---|---|---|---|
+{% for s in sections %}
+| {{ s.criterion.id }} | {{ s.criterion.title }} | {{ s.criterion.weight }} | ☐0 ☐1 ☐2 ☐3 |
+{% endfor %}
+{% for s in sections %}
+
+---
+
+### {{ s.criterion.id }}. {{ s.criterion.title }} · {{ s.criterion.weight }}점
+
+**평가 항목**
+{{ s.criterion.description }}
+
+**요구 수준**
+{% if s.target %}
+`{{ s.nfr.kind }}` — {{ s.target }}
+{{ s.nfr.statement }}
+{% else %}
+`{{ s.nfr.kind }}` — {{ s.nfr.statement }}
+{% endif %}
+{% if s.tradeoffs %}
+
+**관련 trade-off**
+{% for t in s.tradeoffs %}
+- {{ t.description }}
+{% endfor %}
+{% endif %}
+
+| Level | 기준 |
+|---|---|
+{% for level in s.levels %}
+| {{ level.score }} | {{ level.descriptor }} |
+{% endfor %}
+{% endfor %}
