@@ -7,7 +7,7 @@
 
 | 항목 | 결정 | 근거 |
 |---|---|---|
-| 출력 형식 | **B안** — 요약표 + criterion 상세 + 근거 표 | 근거가 md에 남아야 Judge의 `NFR_NOT_GROUNDED`를 사람이 검증할 수 있다 |
+| 출력 형식 | 요약표 + criterion 상세. **출처 표시(인용·근거 표)는 넣지 않는다** | 채점표는 면접관이 쓰는 문서다. 근거는 `evidence_refs`로 데이터에 남고 하네스(`EVIDENCE_REF_*`)가 검사한다. 사람이 출처를 검토할 기록은 M7 finalize에서 별도 파일로 검토 |
 | NFR의 위치 | 전체 루브릭의 **한 섹션** | README `rubric.sections[]` 구조 |
 | NFR 내부 배점 합 | **100 고정** | 채점식이 `Σw`로 나누므로 섹션 내부 합은 자유 → 읽기 쉬운 값으로 고정 |
 | 역량 축 | **criterion마다 부착** | README에 이미 있는 설계. 지금 넣어야 4섹션 합칠 때 스키마를 다시 안 연다 |
@@ -22,7 +22,8 @@
 
 LLM이 만드는 것은 `NFRExport`뿐이다. 근거 문서 목록(`Document[]`)은 파이프라인
 상태이지 LLM 출력이 아니다 — **LLM이 출처를 지어내지 못하게 하려는 의도적 분리.**
-렌더러는 `(NFRExport, Document[], InterviewBrief)` 셋을 받는다.
+하네스(`core.cross-ref`)가 이 목록으로 `evidence_refs`를 검사한다.
+렌더러는 `(NFRExport, InterviewBrief)`를 받는다 — md에 출처를 쓰지 않으므로 문서 목록이 필요 없다.
 
 ```yaml
 NFRExport:
@@ -113,10 +114,10 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 
 **요구 수준**
 `latency` — p99 500 ms
-메시지는 전송 후 p99 500ms 이내에 수신자에게 도달해야 한다. <sup>[D1]</sup>
+메시지는 전송 후 p99 500ms 이내에 수신자에게 도달해야 한다.
 
 **관련 trade-off**
-순서 보장을 강하게 걸수록 전달 지연이 증가한다. <sup>[D1][D3]</sup>
+- 순서 보장을 강하게 걸수록 전달 지연이 증가한다.
 
 | Level | 기준 |
 |---|---|
@@ -130,20 +131,11 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 ### NFR-C2. 메시지 순서 보장 · 25점 · `DATA_MANAGEMENT`
 
 ... (동일 구조 반복)
-
----
-
-### 근거
-
-| ID | 출처 | 링크 |
-|---|---|---|
-| D1 | Discord — How Discord Stores Billions of Messages | https://discord.com/... |
-| D3 | Slack Engineering — Real-time Messaging Architecture | https://slack.engineering/... |
 ````
 
 ### 렌더 규칙
 
-- 헤딩 단계: `# 주제` → `## NFR` → `### NFR-C{n}` (criterion) / `### 근거`
+- 헤딩 단계: `# 주제` → `## NFR` → `### NFR-C{n}` (criterion)
 - 주제 바로 아래에 **대상 연차**와 **배점**(criterion weight 합, 고정 문구 아님)을 한 줄씩
 - 4섹션을 합칠 때는 `# 주제`와 대상 연차를 합치는 쪽에서 한 번만 내고,
   각 섹션은 `## NFR`부터 끼워 넣는다
@@ -154,9 +146,8 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
   (`p99 500 ms`, `peak 10,000 msg/s`, `99.9%`)
 - 레벨표는 데이터 순서와 상관없이 score 0 → 3 순으로 쓴다
 - 역량 축 열·헤딩 표기(`HIGH_TRAFFIC` 등)는 `core.axis` 구현 후. 현재 렌더에는 없다
-- criterion id는 `NFR-C{n}`, 문서 id는 `D{n}` — 섹션 prefix로 충돌 방지
-- 인용은 `<sup>[D1]</sup>` — 표 안에서도 깨지지 않고, 근거 표로 역추적 가능
-- **근거 표에는 실제로 인용된 문서만** 넣는다 (크롤한 10개 전부가 아니라)
+- criterion id는 `NFR-C{n}` — 섹션 prefix로 다른 섹션과 충돌 방지
+- **출처 표시(`[D1]` 인용, 근거 표)는 넣지 않는다.** 문서 id(`D{n}`)는 데이터와 하네스 안에서만 쓴다
 - descriptor 안의 `|`는 `\|`로 이스케이프
 - trade-off가 없는 criterion은 해당 블록 자체를 생략 (빈 섹션을 남기지 않는다)
 
@@ -175,7 +166,7 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 | **`core.criteria-count`** | **`CRITERIA_COUNT_OUT_OF_RANGE`** | ← criterion 2~4개 |
 | **`core.axis`** | **`AXIS_MISSING`** / **`AXIS_INVALID`** | ← 역량 축 신설. 2순위·미구현 |
 
-### Post-Render (M5) — B안이라 3개 → 6개
+### Post-Render (M2)
 
 | 검사 | 코드 |
 |---|---|
@@ -183,8 +174,6 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 | 모든 confirmed NFR statement가 등장 | `RENDER_NFR_MISSING` |
 | criterion당 level 행이 정확히 4개 | `RENDER_LEVEL_ROW_COUNT` |
 | **요약표 행 수 == criterion 수, 배점이 본문과 일치** | **`RENDER_SUMMARY_MISMATCH`** |
-| **본문의 모든 `[Dn]` 인용이 근거 표에 존재** | **`RENDER_CITATION_DANGLING`** |
-| **근거 표의 모든 항목이 본문에서 인용됨** | **`RENDER_CITATION_ORPHAN`** |
 
 ### Judge (M6) — 형식과 무관하게 의미만
 
