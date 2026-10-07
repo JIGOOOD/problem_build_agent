@@ -152,6 +152,8 @@ common_tradeoffs:
 
 ## Research Planner
 
+템플릿: `src/archgen/research/templates/planner.md.j2`. 개수 제약은 `ResearchPlan` 스키마와 같은 상수를 쓴다.
+
 **목표**
 
 - 주제를 먼저 분석해 중요한 NFR 후보를 생성한다. Catalog에서 고르는 것이 아니다.
@@ -191,9 +193,9 @@ LLM1 Prompt Spec
 - Research Planner
 
 입력
-- target_level
-- domain
-- subject
+- target_level          (InterviewBrief.seniority)
+- subject               (InterviewBrief.topic — domain은 주제에 포함되어 따로 받지 않는다)
+- 사용자 중점 요구사항    (InterviewBrief.notes, 있을 때만 — 우선 검토하되 다른 후보와 똑같이 검증)
 - NFR Catalog
 - Source Policy
 - max_queries
