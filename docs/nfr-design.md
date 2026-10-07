@@ -681,10 +681,11 @@ total         = Σ(section.weight × section_pct)      # section weight 합 = 10
 
 **목표**
 
-- 최종 Markdown이 NFRExport 내용을 빠짐없이 반영했는지 확인한다.
+- 최종 Markdown이 NFRExport 내용을 빠짐없이, 그대로 반영했는지 확인한다.
+- 렌더된 md를 되읽어 원본과 값 단위로 비교한다. 검사 목록은 `docs/rubric-format.md`의 Post-Render 표.
 
 **실패**
 
-- Finding을 생성한다.
+- Finding을 생성한다. 렌더러 코드 버그라 NFR Agent를 재실행해도 고쳐지지 않으므로 repair하지 않는다.
 
 ## LLM Judge

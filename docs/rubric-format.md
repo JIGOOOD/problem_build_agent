@@ -168,12 +168,26 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 
 ### Post-Render (M2)
 
-| 검사 | 코드 |
-|---|---|
-| 모든 criterion id가 본문에 등장 | `RENDER_CRITERION_MISSING` |
-| 모든 confirmed NFR statement가 등장 | `RENDER_NFR_MISSING` |
-| criterion당 level 행이 정확히 4개 | `RENDER_LEVEL_ROW_COUNT` |
-| **요약표 행 수 == criterion 수, 배점이 본문과 일치** | **`RENDER_SUMMARY_MISMATCH`** |
+렌더된 md를 되읽어(`render/post_render.py`의 `read_back`) 원본 `NFRExport`·`InterviewBrief`와 값 단위로 비교한다.
+`check_rendered(md, export, brief)`.
+렌더러가 일부러 바꾸는 것(표 칸 이스케이프, 헤딩 공백 접기, 목표 수치 표기, 레벨 정렬)은
+되돌리거나 같은 규칙을 적용한 뒤 비교한다.
+
+| md 부분 | 검사 | 코드 | path |
+|---|---|---|---|
+| 머리말 | 주제(공백 접기)·대상 연차가 brief와, 배점이 weight 합과 같고, `## NFR` 헤딩·채점 규칙이 있음 | `RENDER_HEADER_MISMATCH` | `header` |
+| 요약표 | 행들이 원본 criterion들의 `[id, title, 배점]`과 같음 | `RENDER_SUMMARY_MISMATCH` | `rubric.criteria` |
+| criterion 섹션들 | `### id.` 섹션 id 목록이 원본 criterion id 목록과 같음 (누락·중복·순서) | `RENDER_SECTIONS_MISMATCH` | `rubric.criteria` |
+| 헤딩 | title(공백 접기 적용)·배점이 원본과 같음 | `RENDER_HEADING_MISMATCH` | `rubric.criteria[i].title` / `.weight` |
+| 평가 항목 | 본문이 `description`과 같음 | `RENDER_DESCRIPTION_MISMATCH` | `rubric.criteria[i].description` |
+| 요구 수준 | `` `kind` — 목표/statement``와 같음 | `RENDER_REQUIREMENT_MISMATCH` | `confirmed_nfrs[k]` |
+| 관련 trade-off | bullet 목록이 그 NFR의 trade-off 설명들과 같음(개수·순서·내용) | `RENDER_TRADEOFF_MISMATCH` | `rubric.criteria[i].tradeoffs` |
+| 레벨표 | 행들이 원본 레벨(score 순)의 `(score, 서술)` 목록과 같음. 행 수 차이도 여기 | `RENDER_LEVELS_MISMATCH` | `rubric.criteria[i].levels` |
+
+code 하나가 md의 한 부분을 가리킨다 — 이름만 보고 고칠 템플릿 블록을 안다.
+레벨이 4개인지는 하네스 `core.levels`가 보장하므로, Post-Render는 옮기면서 달라졌는지만 본다.
+
+Post-Render Finding은 렌더러 코드 버그라 repair 루프를 돌리지 않는다 (M7에서 즉시 실패).
 
 ### Judge (M6) — 형식과 무관하게 의미만
 
