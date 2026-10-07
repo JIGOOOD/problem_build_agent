@@ -659,34 +659,22 @@ total         = Σ(section.weight × section_pct)      # section weight 합 = 10
 **목표**
 
 - Jinja2로 렌더링해 섹션 순서·헤딩 레벨·표 구조를 코드로 고정한다.
+- 템플릿: `src/archgen/render/templates/nfr_rubric.md.j2`
+- 출력 형식과 렌더 규칙: `docs/rubric-format.md`의 출력 샘플·렌더 규칙
 
 ```
-# NFR
+# {주제}
+**대상 연차** / **배점**(weight 합)
 
-{% for criterion in rubric.criteria %}
+## NFR
+> 채점 규칙
+| # | 평가 항목 | 배점 | 획득 |          ← criterion마다 한 행
 
-## {{ criterion.id }}. {{ criterion.title }}
-
-### 평가 항목
-{{ criterion.description }}
-
-### 관련 NFR
-{% for nfr in criterion.related_nfrs %}
-- {{ nfr.kind }}: {{ nfr.statement }}
-{% endfor %}
-
-### 배점
-{{ criterion.weight }}
-
-### 평가 기준
-
-| Level | 기준 |
-|---|---|
-{% for level in criterion.levels %}
-| {{ level.score }} | {{ level.descriptor }} |
-{% endfor %}
-
-{% endfor %}
+### {criterion.id}. {criterion.title} · {weight}점   ← criterion마다 반복
+**평가 항목**   criterion.description
+**요구 수준**   `kind` — 목표 + statement (정성 목표면 statement만)
+**관련 trade-off**   그 NFR에 연결된 trade-off (없으면 블록 생략)
+| Level | 기준 |   score 0~3
 ```
 
 ## Post-Render
