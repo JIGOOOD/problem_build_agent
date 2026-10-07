@@ -44,6 +44,19 @@ class FindingCode(StrEnum):
     EVIDENCE_REF_MISSING = "EVIDENCE_REF_MISSING"  # 근거 문서가 하나도 없음
     # trade-off가 어느 NFR에도 연결되지 않음
     TRADEOFF_NFR_REFERENCE_MISSING = "TRADEOFF_NFR_REFERENCE_MISSING"
+    # Post-Render — 렌더된 md를 되읽어 원본과 비교한다. 렌더러 코드 버그라 repair 대상이 아니다.
+    # code 하나가 md의 한 부분을 가리킨다.
+    # 머리말: 주제·대상 연차·배점 합·`## NFR` 헤딩·채점 규칙
+    RENDER_HEADER_MISMATCH = "RENDER_HEADER_MISMATCH"
+    # 요약표 행이 criterion [id, title, 배점] 목록과 다름
+    RENDER_SUMMARY_MISMATCH = "RENDER_SUMMARY_MISMATCH"
+    # criterion 섹션 id 목록이 다름 (누락·중복·순서)
+    RENDER_SECTIONS_MISMATCH = "RENDER_SECTIONS_MISMATCH"
+    RENDER_HEADING_MISMATCH = "RENDER_HEADING_MISMATCH"  # 헤딩의 title·배점이 다름
+    RENDER_DESCRIPTION_MISMATCH = "RENDER_DESCRIPTION_MISMATCH"  # 평가 항목이 다름
+    RENDER_REQUIREMENT_MISMATCH = "RENDER_REQUIREMENT_MISMATCH"  # 요구 수준이 NFR과 다름
+    RENDER_TRADEOFF_MISMATCH = "RENDER_TRADEOFF_MISMATCH"  # 관련 trade-off 목록이 다름
+    RENDER_LEVELS_MISMATCH = "RENDER_LEVELS_MISMATCH"  # 레벨표 (score, 서술) 목록이 다름
 
 
 class Finding(BaseModel):
