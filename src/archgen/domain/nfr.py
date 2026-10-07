@@ -9,12 +9,16 @@ from pydantic import BaseModel, Field, StringConstraints, field_validator, model
 # id와 id를 가리키는 참조. LLM이 붙인 앞뒤 공백은 양쪽에서 똑같이 잘라내 서로 어긋나지
 # 않게 하고, 잘라낸 뒤 비면 거부한다. 빈 id끼리는 참조가 맞아 cross-ref를 조용히 통과한다.
 Id = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+# 사람이 읽는 본문. 비어 있으면 하네스를 통과해 채점표에 빈칸으로 렌더되므로 여기서 거부한다.
+# 레벨 descriptor는 하네스 core.levels(LEVEL_DESCRIPTOR_MISSING)가 지적하므로 여기에 두지 않는다.
+Text = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
 
 
 class NFRTarget(BaseModel):
     """근거 문서에서 그대로 읽어낸 정량 목표."""
 
-    value: float | None = None
+    # NaN·무한대는 그대로 렌더되면 `NaN ms`가 된다.
+    value: float | None = Field(default=None, allow_inf_nan=False)
     unit: str | None = None
     condition: str | None = None
 
@@ -23,11 +27,11 @@ class ConfirmedNFR(BaseModel):
     """크롤한 근거로 확인을 마친 NFR."""
 
     id: Id
-    kind: str
-    statement: str
-    rationale: str
+    kind: Text
+    statement: Text
+    rationale: Text
     target: NFRTarget | None = None
-    qualitative_target: str | None = None
+    qualitative_target: Text | None = None
     evidence_refs: list[Id] = []
 
     @model_validator(mode="after")
@@ -45,7 +49,7 @@ class Tradeoff(BaseModel):
 
     id: Id
     related_nfr_ids: list[Id] = []
-    description: str
+    description: Text
     evidence_refs: list[Id] = []
 
 
@@ -60,8 +64,8 @@ class RubricCriterion(BaseModel):
     """NFR 하나만 담당하는 채점 단위."""
 
     id: Id
-    title: str
-    description: str
+    title: Text
+    description: Text
     related_nfr_ids: list[Id] = []
     weight: int  # 자연수 배점. 범위와 합은 하네스 core.weight-sum이 본다.
     levels: list[RubricLevel] = []

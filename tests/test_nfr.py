@@ -157,3 +157,43 @@ def test_refs_must_not_be_blank(
 ) -> None:
     with pytest.raises(ValidationError):
         model.model_validate(payload(**{field: ["A-1", blank]}))
+
+
+TEXT_FIELDS = [
+    (ConfirmedNFR, a_confirmed_nfr, "kind"),
+    (ConfirmedNFR, a_confirmed_nfr, "statement"),
+    (ConfirmedNFR, a_confirmed_nfr, "rationale"),
+    (ConfirmedNFR, a_confirmed_nfr, "qualitative_target"),
+    (Tradeoff, a_tradeoff, "description"),
+    (RubricCriterion, lambda **o: a_criterion(45) | o, "title"),
+    (RubricCriterion, lambda **o: a_criterion(45) | o, "description"),
+]
+
+
+@pytest.mark.parametrize(("model", "payload", "field"), TEXT_FIELDS)
+@pytest.mark.parametrize("blank", ["", "   "])
+def test_text_fields_must_not_be_blank(
+    model: type, payload: Callable, field: str, blank: str
+) -> None:
+    """빈 본문은 하네스를 통과해 채점표에 빈칸으로 렌더된다."""
+    with pytest.raises(ValidationError):
+        model.model_validate(payload(**{field: blank}))
+
+
+@pytest.mark.parametrize(("model", "payload", "field"), TEXT_FIELDS)
+def test_text_fields_are_stripped(model: type, payload: Callable, field: str) -> None:
+    """줄 끝 공백이 렌더된 md에 남지 않는다."""
+    parsed = model.model_validate(payload(**{field: "  본문  "}))
+
+    assert getattr(parsed, field) == "본문"
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), float("-inf")])
+def test_target_value_must_be_a_finite_number(value: float) -> None:
+    """NaN은 그대로 렌더되면 `NaN ms`가 된다."""
+    with pytest.raises(ValidationError):
+        ConfirmedNFR.model_validate(
+            a_confirmed_nfr(
+                qualitative_target=None, target={"value": value, "unit": "ms"}
+            )
+        )
