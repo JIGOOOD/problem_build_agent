@@ -6,6 +6,10 @@ from typing import Annotated
 
 from pydantic import BaseModel, Field
 
+# 프롬프트와 스키마가 같은 숫자를 쓰도록 한곳에 둔다.
+CANDIDATES_MIN, CANDIDATES_MAX = 3, 5
+MAX_QUERIES = 6
+
 
 class NFRCandidate(BaseModel):
     """문서로 검증하기 전의 NFR 가설."""
@@ -26,5 +30,7 @@ class ResearchPlan(BaseModel):
     """검색을 돌리기 전에 정하는 조사 범위."""
 
     topic_summary: str
-    nfr_candidates: Annotated[list[NFRCandidate], Field(min_length=3, max_length=5)]
-    search_queries: Annotated[list[SearchQuery], Field(max_length=6)]
+    nfr_candidates: Annotated[
+        list[NFRCandidate], Field(min_length=CANDIDATES_MIN, max_length=CANDIDATES_MAX)
+    ]
+    search_queries: Annotated[list[SearchQuery], Field(max_length=MAX_QUERIES)]
