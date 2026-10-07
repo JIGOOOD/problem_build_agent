@@ -6,7 +6,11 @@ from pathlib import Path
 
 from archgen.domain.brief import InterviewBrief
 from archgen.domain.catalog import NFRCatalog
-from archgen.domain.research import CANDIDATES_MAX, CANDIDATES_MIN, MAX_QUERIES
+from archgen.domain.research import (
+    CANDIDATES_MAX,
+    CANDIDATES_MIN,
+    MAX_QUERIES,
+)
 from archgen.templating import template_env
 
 _ENV = template_env(Path(__file__).parent / "templates")
@@ -14,12 +18,19 @@ _ENV = template_env(Path(__file__).parent / "templates")
 _ENV.filters["one_line"] = lambda text: " ".join(text.split())
 
 
-def build_planner_prompt(brief: InterviewBrief, catalog: NFRCatalog) -> str:
-    """같은 입력이면 같은 프롬프트를 낸다. 개수 제약은 ResearchPlan 스키마와 같은 상수를 쓴다."""
-    return _ENV.get_template("planner.md.j2").render(
-        brief=brief,
+Message = dict[str, str]
+
+
+def build_planner_messages(brief: InterviewBrief, catalog: NFRCatalog) -> list[Message]:
+    """system(바뀌지 않는 지시) + user(실행마다 바뀌는 입력).
+
+    system이 brief와 무관해야 API 프롬프트 캐시를 탄다. 개수 제약은 ResearchPlan과 같은 상수를 쓴다.
+    """
+    system = _ENV.get_template("planner_system.md.j2").render(
         catalog_block=catalog.to_prompt_block(),
         candidates_min=CANDIDATES_MIN,
         candidates_max=CANDIDATES_MAX,
         max_queries=MAX_QUERIES,
     )
+    user = _ENV.get_template("planner_user.md.j2").render(brief=brief)
+    return [{"role": "system", "content": system}, {"role": "user", "content": user}]
