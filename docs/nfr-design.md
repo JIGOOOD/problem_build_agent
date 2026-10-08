@@ -10,13 +10,11 @@
 ```
 TUI 입력
   ↓
-1. Research - 어떤 데이터를 바탕으로 해당 주제에서 어떤 NFR이 중요한지 정의
-  ↓
-2. Crawling - NFR 판단할 근거 수집
-  ↓
-3. Export - NFR 최종 확정 및 평가 기준 생성
-  ↓
-4. Make MD - 생성된 NFR이 올바른지 검증하고 문서로 변환
+1. Research Agent - NFR 후보 생성, search / fetch / keep으로 근거 수집·선별
+  ↓ ResearchResult (topic_summary, nfr_candidates, Document[])
+2. Export (NFR Agent) - NFR 최종 확정 및 평가 기준 생성
+  ↓ NFRExport
+3. Make MD - 생성된 NFR이 올바른지 검증하고 문서로 변환
   ↓
 nfr_rubric.md
 ```
@@ -26,7 +24,7 @@ nfr_rubric.md
 **목표**
 
 - 해당 주제에서 어떤 NFR이 중요한지 탐색한다.
-- 이를 검증하기 위해 어떤 기술 자료를 참고할지 결정한다.
+- 이를 검증할 기술 자료를 직접 검색하고, 본문에서 NFR 판단에 필요한 문단 원문을 수집한다.
 
 **필요성**
 
@@ -129,7 +127,9 @@ common_tradeoffs:
 
 **목표**
 
-- NFR을 정의할 때 신뢰할 수 있는 기술 자료를 우선적으로 활용하도록 검색 기준을 정한다.
+- NFR을 정의할 때 신뢰할 수 있는 기술 자료를 우선적으로 활용하도록 문서 선택 기준을 정한다.
+- 검색에서 제외할 차단 도메인 목록은 Tavily의 `exclude_domains`로 전달한다.
+  출처 우선순위(tier)는 코드가 매기지 않고 Research Agent가 문서를 판정할 때 적용한다.
 
 **필요성**
 
@@ -150,178 +150,220 @@ common_tradeoffs:
 - 시스템 디자인 면접 자료
 ```
 
-## Research Planner
+## Research Agent (tool calling)
 
-템플릿: `src/archgen/research/templates/planner_system.md.j2`(지시·Catalog — brief와 무관해 캐시 대상),
-`planner_user.md.j2`(주제·대상 연차·중점 요구사항). 개수 제약은 `ResearchPlan` 스키마와 같은 상수를 쓴다.
-응답은 `ResearchPlan`으로 검증한다. 재시도는 LLM 비용이 드므로 **코드로 고칠 수 있는 것은 고친다.**
+Research Agent는 기존 Research Planner, Search API, Crawling 세 단계를 대체한다.
+하나의 에이전트가 `search`, `fetch`, `keep`을 호출하며, 가져온 문서를 읽고
+근거가 부족한 쿼리만 다시 검색한다. 출력 `ResearchResult`의 `nfr_candidates`와
+`Document[]`는 Export 단계의 NFR Agent 입력으로 그대로 사용한다.
 
-| 응답 | 처리 |
-|---|---|
-| kind 표기 흔들림 (`Fault Tolerance`, `fault-tolerance`, `fault__tolerance_`) | 소문자, 공백·하이픈·밑줄 덩어리 → 밑줄 하나, 앞뒤 밑줄 제거 |
-| 겹친 후보 kind | 먼저 나온 것만 남김. 걸러낸 **뒤** 3~5개 밖이면 재시도 (스키마에는 3~5개를 그대로 실어 생성 단계에서 묶음) |
-| 겹친 검색어 (대소문자·공백 차이 포함), 한 검색어 안의 겹친 참조 | 먼저 나온 것만 남김 |
-| 후보에 없는 kind를 가리키는 `related_nfrs` | 그 참조만 지우고 검색어는 유지 |
-| 빈 값, 깨진 JSON, 서로 다른 후보 6개 이상, 정리해도 snake_case가 아닌 kind | 위치와 이유를 알려주고 1회 재시도. 또 어기면 1·2차 이유를 모두 담아 `PlannerError` |
+### 상수
 
-LLM 호출 자체의 예외(네트워크 등)와 문자열이 아닌 응답(연결부 버그)은 재시도하지 않는다.
+| 이름 | 값 | 비고 |
+| --- | --- | --- |
+| `CANDIDATES_MIN`, `CANDIDATES_MAX` | 3, 5 | 기존 `domain/research.py` 값 재사용. 최초 후보 생성에 적용 |
+| `MAX_QUERIES` | 6 | 기존 값 재사용. 주제용 1 + 후보당 1. 재생성은 기존 쿼리를 대체 |
+| `RESULTS_PER_QUERY` | 10 | search가 쿼리당 돌려주는 URL 수 |
+| `FETCH_BATCH` | 3 | 쿼리별로 한 번에 fetch하는 URL 수 |
+| `SUFFICIENT_DOCS` | 2 | NFR 쿼리 확정에 필요한 쓸만한 문서 수 |
+| `SUFFICIENT_DOCS_TOPIC` | 1 | 주제 쿼리 확정에 필요한 문서 수 |
+| `MAX_REQUERY` | 1 | 쿼리 하나당 재생성 횟수 |
+| `MAX_CONTENT_CHARS` | 12000 | 문단으로 나누기 전 원문 상한. fetch 결과가 대화 기록에 계속 쌓이므로 제한한다. 메뉴·푸터 같은 짧은 줄은 코드가 먼저 제거한다. 실험 후 조정 |
+| `MAX_AGENT_STEPS` | 20 | LLM 호출 상한. 병렬 호출로 보통 3~4번, 많아도 10번 안팎을 예상하며 무한 루프를 방지한다 |
 
-**목표**
+### 처리 흐름
 
-- 주제를 먼저 분석해 중요한 NFR 후보를 생성한다. Catalog에서 고르는 것이 아니다.
-- NFR 후보를 검증할 검색 Query를 생성한다.
-- Source Policy를 반영해 신뢰도 높은 자료를 우선 탐색한다.
+1. LLM이 주제를 분석해 `topic_summary`와 NFR 후보 `CANDIDATES_MIN`~`CANDIDATES_MAX`개를 만든다.
+2. LLM이 쿼리를 만든다. 주제용 1개 + 후보당 1개, 합계 `MAX_QUERIES` 이하.
+   각 쿼리는 `related_nfr`을 가지며 주제용은 `null`이다.
+3. 쿼리마다 아래를 반복한다.
+   1. `search(query)`로 URL 최대 `RESULTS_PER_QUERY`개를 받는다.
+   2. 아직 안 본 URL 중 순위가 높은 것부터 `FETCH_BATCH`개를 `fetch`한다.
+   3. LLM이 가져온 문서마다 쓸만한지 판정하고, 쓸만한 문서는 `keep`으로 남길 문단 번호를 기록한다.
+      `keep`하지 않은 문서는 버린다.
+   4. `keep`한 문서가 기준 수(`SUFFICIENT_DOCS`, 주제 쿼리는 `SUFFICIENT_DOCS_TOPIC`) 이상이면
+      그 쿼리를 확정한다.
+   5. 부족하고 안 본 URL이 남아 있으면 다음 순위 URL을 fetch한다.
+   6. URL을 다 봤는데 부족하고 재생성 횟수가 `MAX_REQUERY` 미만이면,
+      그 쿼리만 새로 만들어 search부터 다시 한다. 재생성 전후에 keep한 문서 수는 누적한다.
+   7. 재생성까지 했는데 부족하면 그 후보는 출력에서 빼고 시스템 로그에 남긴다.
+4. 모든 쿼리가 끝나면 `ResearchResult`를 출력한다.
 
-**필요성**
+위 반복은 쿼리별 상태 전이를 설명한다. 실제 도구 호출은 아래 규칙에 따라 같은 단계의 쿼리를
+모아 병렬로 실행한다. 코드는 쿼리별 URL 목록·확인 여부·keep한 문서·재생성 횟수를 추적한다.
+`query_id`는 코드가 관리하는 쿼리 식별자이며, 재생성 전후를 같은 후보 쿼리로 연결한다.
 
-- NFR을 바로 확정하면 LLM의 기존 지식에 의존할 수 있다.
-- 먼저 탐색 범위를 정해 필요한 자료만 검색하도록 한다.
+최초 후보 생성에는 3~5개 제약을 적용하지만, 근거가 부족한 후보를 제외한 최종
+`ResearchResult.nfr_candidates`에는 최소 3개를 강제하지 않는다. 수를 맞추려고 근거 없는
+후보를 채우지 않는다.
 
-### 제약
+### 도구 호출 묶기 (프롬프트에 넣음)
 
-```yaml
-llm1_policy:
-  max_queries: 6
-  # NFR별 검색 Query 1개 + 주제 전체 이해용 Query 1~2개
+같은 단계의 도구 호출은 한 응답에서 병렬로 묶어서 호출한다. LLM 호출 횟수를 줄이기 위해서다.
 
-  nfr_candidate_count:
-    min: 3
-    max: 5
+- 첫 search: 모든 쿼리를 한 번에 호출한다.
+- fetch: 모든 쿼리의 이번 배치 URL(쿼리당 `FETCH_BATCH`개)을 한 번에 호출한다.
+- keep: 이번에 판정한 문서를 한 번에 호출한다.
+- 추가 fetch, 쿼리 재생성 search도 해당되는 쿼리를 모아 한 번에 호출한다.
 
-  output_format:
-    type: json_schema
-    strict: true
+### LLM과 코드의 역할
 
-  # max_output_tokens, temperature는
-  # 구현 후 실험을 통해 결정
-```
+| 일 | 담당 |
+| --- | --- |
+| 후보 생성, 쿼리 생성, 쿼리 재생성 | LLM |
+| 문서가 쓸만한지 판정, 남길 문단 선택, 쿼리 확정 판단 | LLM |
+| 검색 호출, 중복 URL 제거, 순위 정렬 | 코드 (search) |
+| 본문 가져오기, 문서 저장과 id 부여, 재시도 | 코드 (fetch) |
+| 선택한 문단 원문으로 content 조립, 대화 기록 축소 | 코드 (keep 및 배치 판정 완료 처리) |
+| 쿼리별 URL 목록과 확인 여부, keep한 문서 수 추적 | 코드 |
+| 상수 한도 강제 (`MAX_QUERIES`, `RESULTS_PER_QUERY`, `FETCH_BATCH`, `MAX_CONTENT_CHARS`, `MAX_REQUERY`, `MAX_AGENT_STEPS`) | 코드 |
 
-### 입력 프롬프트
+### 판정 기준 (프롬프트에 넣음)
 
-```
-LLM1 Prompt Spec
+- 쓸만한 문서: 해당 NFR(주제 쿼리는 주제 자체)을 설계 관점에서 다루는 문서.
+  수치, 요구 수준, 설계 선택 중 하나 이상이 있다.
+- 버리는 문서: 광고성 글, 주제와 무관한 글, NFR 언급 없이 기능 소개만 있는 글,
+  본문을 못 가져온 문서.
+- 같은 조건이면 Source Policy 1순위 > 2순위 > 3순위 문서를 먼저 고른다.
 
-역할
-- Research Planner
+남길 문단을 고르는 기준은 해당 후보보다 넓게 잡는다.
+NFR Agent는 검색하지 않고 이 문단만 읽고 판단하기 때문이다.
 
-입력
-- target_level          (InterviewBrief.seniority)
-- subject               (InterviewBrief.topic — domain은 주제에 포함되어 따로 받지 않는다)
-- 사용자 중점 요구사항    (InterviewBrief.notes, 있을 때만 — 우선 검토하되 다른 후보와 똑같이 검증)
-- NFR Catalog
-- Source Policy
-- max_queries
+- 해당 후보 NFR을 다루는 문단
+- 다른 NFR을 다루는 문단 (NFR Agent가 놓친 NFR을 찾는 데 사용)
+- 수치, 단위, percentile 같은 목표 수준이 있는 문단
+- 설계 선택이나 trade-off를 설명하는 문단
 
-해야 할 일
-- 주제 이해
-- 주제 분석을 통한 NFR 후보 생성 (3~5개)
-- 생성 이유 작성
-- 검증용 Search Query 생성
+### 쿼리 재생성 규칙 (프롬프트에 넣음)
 
-Catalog 사용 규칙
-- Catalog는 자주 나타나는 NFR의 참고 목록이며, 후보를 고르는 메뉴가 아니다
-- 생성한 후보가 Catalog 항목에 대응하면 그 kind를 그대로 사용한다
-- Catalog에 없더라도 주제의 설계 결정을 바꾸는 요구사항이면 후보로 생성한다
-- Catalog 밖 후보는 전체 후보의 절반을 넘지 않는다
-- kind는 소문자 snake_case로 쓴다
+- 재생성 대상은 부족한 쿼리 하나뿐이다. 다른 쿼리는 건드리지 않는다.
+- 이전 쿼리와 같은 표현을 쓰지 않는다. 동의어, 영어, 관점 변경을 사용한다.
+  예: "응답 시간" → "API latency SLA".
+- 해당 NFR의 Catalog 항목(`meaning`, `important_when`)을 참고한다.
 
-제약
-- 검색 전 구체적 수치 확정 금지
-- 확인되지 않은 사실 단정 금지
-- Catalog 항목을 기계적으로 모두 선택하지 않음
+### 프롬프트 입력
 
-출력
-- ResearchPlan
-```
+- `topic` (`InterviewBrief.topic`): 후보와 쿼리의 기준. 모든 쿼리에 주제 맥락을 넣는다.
+- `seniority` (`InterviewBrief.seniority`): Research에서는 쓰지 않는다. NFR Agent로 넘긴다.
+- `notes` (`InterviewBrief.notes`, 있을 때만): 후보로 우선 검토하되 다른 후보와 똑같이 검증한다.
+- NFR Catalog: 후보를 고르는 메뉴가 아니라 kind 이름을 통일하는 기준.
+  대응 항목이 있으면 그 kind를 쓰고, Catalog 밖 후보는 전체의 절반 이하로 제한한다.
+- Source Policy: 문서 선택 우선순위와 검색에서 제외할 차단 도메인 목록.
 
-### 출력 스키마
+검색 전 구체적 수치를 확정하거나 확인되지 않은 사실을 단정하지 않는다.
+Catalog 항목을 기계적으로 모두 선택하지 않는다.
 
-```yaml
-ResearchPlan:
-  topic_summary: string
+### 도구
 
-  nfr_candidates:
-    - kind: string
-      reason: string
+#### search(query: str) -> list[SearchResult] | str
 
-  search_queries:
-    - query: string
-      purpose: string
-      related_nfrs:
-        - string
-```
-
-## Search API
-
-```
-Search API
-
-입력
-- ResearchPlan.search_queries
-
-처리
-- 각 Query 실제 검색
-
-출력
-- query_id
-- url
-- title
-- snippet
-- rank
-
-정책
-- results_per_query
-	- Query 하나당 가져올 결과 수
-	- 초기값만 두고 이후 테스트로 조정
-
-- failure_policy
-	- 특정 Query 검색 실패 시 해당 Query만 실패 처리
-	- 나머지 Query는 계속 진행
-```
-
-### 출력 스키마
+- Tavily로 검색한다. Source Policy 차단 도메인은 `exclude_domains`로 넘긴다.
+- 이번 실행에서 이미 나온 URL은 제거한다.
+- Tavily가 돌려준 순서(`score` 순)를 유지한 채 최대 `RESULTS_PER_QUERY`개를 반환한다.
+  `rank`는 중복 제거 후 반환 순위이며 1부터 시작한다.
+- Source Policy tier는 코드가 매기지 않고, LLM이 문서를 판정할 때 판단한다.
+- 실패하면 예외 대신 오류 문자열을 반환한다. 코드는 이 쿼리를 "URL 소진"으로 처리한다.
+  다른 쿼리는 계속 진행하며, 실패한 쿼리에도 남은 재생성 기회를 적용한다.
 
 ```yaml
 SearchResult:
   query_id: string
   url: string
   title: string
-  snippet: string
-  rank: integer
+  rank: integer        # 반환 순위, 1부터
 ```
 
-# Crawling
+#### fetch(url: str) -> FetchResult | str
 
+- 본문에서 메뉴·푸터 같은 짧은 줄을 제거하고 `MAX_CONTENT_CHARS` 상한을 적용한 뒤,
+  문단으로 나눠 번호(0부터)를 붙인다.
+- 문단 원문을 `documents` 저장소에 보관하고 `doc_id`를 부여한다. 요약하지 않는다.
+  이 저장소에는 판정 전 문서도 있으며, 최종 출력에는 keep한 문서만 포함한다.
+- LLM에게는 번호가 붙은 문단 목록을 반환한다.
+- 이미 가져온 URL이면 저장된 결과를 반환한다.
+- 실패, timeout이면 1회 재시도 후 오류 문자열을 반환한다. LLM은 다음 URL로 넘어간다.
+
+```yaml
+FetchResult:
+  doc_id: string
+  url: string
+  title: string
+  paragraphs:
+    - index: integer
+      text: string
 ```
-SearchResult[]
-  ↓
-Candidate Filtering
-- 중복 제거
-- 검색 rank 우선
-- max_docs 제한 (10개)
-  ↓
-SelectedURL[]
-  ↓
-Crawler
+
+#### keep(doc_id: str, paragraph_indices: list[int]) -> str
+
+- LLM이 쓸만하다고 판정한 문서에서 남길 문단 번호를 기록한다.
+  이번 배치의 문서 판정이 끝날 때까지 호출하지 않은 문서는 버린 것으로 본다.
+- 코드는 고른 문단 원문을 원래 순서대로 이어 붙여 그 문서의 `content`로 저장한다.
+- 토큰 누적을 막기 위해, 코드는 대화 기록에 남은 그 문서의 fetch 결과를
+  고른 문단만 남기도록 줄인다. 배치 판정이 끝나면 keep하지 않은 문서의 fetch 결과는
+  "버림" 한 줄로 바꾼다.
+- 반환: 이 쿼리에서 지금까지 keep한 문서 수를 담은 문자열.
+
+### 출력
+
+```yaml
+ResearchResult:
+  topic_summary: string
+
+  nfr_candidates:
+    - kind: string
+      reason: string
+      doc_ids: [string]          # LLM은 id만 고른다
+
+  documents:                     # 코드가 만든다. LLM이 다시 쓰지 않는다
+    - id: string
+      url: string
+      title: string
+      content: string            # 고른 문단 원문을 순서대로 이어 붙인 것 (코드)
 ```
 
-## Crawler
+- `documents`에는 keep한 문서만 들어간다. 버린 문서는 넣지 않는다.
+- 후보의 `doc_ids`는 그 후보 쿼리(재생성 쿼리 포함)에서 keep한 문서 id다.
+- 주제 쿼리에서 keep한 문서는 `documents`에만 넣고 어느 후보에도 연결하지 않는다.
+- `documents`를 LLM 출력으로 받지 않는 이유: Pre-Render `core.cross-ref`가
+  `evidence_refs`를 실제 크롤한 Document ID로 검사하기 때문이다.
+- NFR Agent는 후보별 `doc_ids`를 근거 탐색의 출발점으로 삼되, 전달된 모든 문서를 읽고
+  추가 NFR과 trade-off를 확인한다. `doc_ids`가 있다고 NFR을 최종 확정한 것은 아니다.
 
-```
-입력
-- SelectedURL[]
+### 후보 응답 정리와 재시도
 
-출력
-- Document[]
-  - id
-  - url
-  - title
-  - content
+기존 Planner의 후보 응답 정리 규칙을 유지한다.
+초기 생성의 후보 개수 제약과 근거 검증 후의 후보 제외는 구분한다.
 
-정책
-- max_docs = 10
-- 접근 실패/timeout 시 해당 URL만 1회 재시도
-```
+| 응답 | 처리 |
+| --- | --- |
+| kind 표기 흔들림 (`Fault Tolerance`, `fault-tolerance`, `fault__tolerance_`) | 소문자, 공백·하이픈·밑줄 덩어리 → 밑줄 하나, 앞뒤 밑줄 제거 |
+| 겹친 후보 kind | 먼저 나온 것만 남김. 최초 생성에서는 걸러낸 뒤 3~5개 밖이면 재시도 |
+| 빈 값, 깨진 JSON, 최초 생성의 후보 수 위반, 정리해도 snake_case가 아닌 kind | 위치와 이유를 알려주고 1회 재시도. 다시 위반하면 실패 사유를 기록 |
+
+이 재시도는 후보 응답 형식의 오류를 고치는 것이며, 근거가 부족한 쿼리를 바꾸는
+`MAX_REQUERY`와 별개다. 재시도 LLM 호출도 `MAX_AGENT_STEPS`에 포함한다.
+두 응답 모두 실패하면 1·2차 검증 사유를 함께 남긴다.
+LLM 호출 자체의 예외(네트워크 등)와 문자열이 아닌 응답(연결부 버그)은
+후보 응답 형식의 재시도 대상으로 취급하지 않는다.
+
+### 시스템 로그
+
+쿼리 재생성 기록은 `ResearchResult`에 넣지 않고 logger 또는 LangSmith trace에 남긴다.
+
+- `query_id`
+- `old_query`
+- `new_query`
+- `reason`
+
+재생성 후에도 문서 수가 부족해 제외한 후보와 제외 사유도 시스템 로그에 남긴다.
+
+### 구현 전에 확정할 경계 동작
+
+- 실행 전체의 URL 중복 제거로 여러 후보에 관련된 문서가 후속 쿼리에서 빠질 때,
+  기존 문서를 후속 쿼리에 연결하거나 문서 수에 포함할지.
+- 주제 쿼리가 재생성 후에도 기준 문서 수를 채우지 못했을 때의 종료 처리.
+- `MAX_AGENT_STEPS`에 도달했을 때, 미완료 쿼리를 제외한 부분 결과를 반환할지 실패할지.
+- 존재하지 않는 `doc_id`, 빈 문단 목록, 범위 밖 문단 번호, 중복 keep 호출의 처리.
 
 # Export
 
@@ -368,24 +410,27 @@ Criterion:
 NFR Agent
 
 목적
-- Planner가 만든 NFR 후보를 실제 Document로 검증한다.
-- Planner가 놓친 NFR도 추가로 발견한다.
+- Research Agent가 만든 NFR 후보를 실제 Document로 검증한다.
+- Research Agent가 놓친 NFR도 추가로 발견한다.
 - 해당 NFR과 관련된 Trade-off도 발견한다.
 - 최종 NFR을 확정하고 0~3 Rubric Criterion으로 변환한다.
 
 1. NFR 후보군 구성
 
 입력
-- Planner의 nfr_candidates
+- ResearchResult.topic_summary
+- ResearchResult.nfr_candidates
   - kind
   - reason
-- Document[]
+  - doc_ids
+- ResearchResult.documents (Document[])
+- target_level (InterviewBrief.seniority)
 
 처리
-- Planner가 선택한 NFR과 reason을 Document와 대조한다.
+- Research Agent가 선택한 NFR과 reason을 Document와 대조한다.
 - reason을 뒷받침하는 내용이 실제 문서에 있는지 의미적으로 확인한다.
-- Document 전체에서도 추가적인 NFR 관련 내용을 탐색한다.
-- Planner 후보에 없던 중요한 NFR이 발견되면 신규 후보로 추가한다.
+- 전달된 Document 전체에서도 추가적인 NFR 관련 내용을 탐색한다. NFR Agent는 직접 검색하지 않는다.
+- Research Agent 후보에 없던 중요한 NFR이 발견되면 신규 후보로 추가한다.
 
 후보가 하나도 없는 경우
 - Core NFR Catalog를 참고해 Document를 다시 확인한다. Catalog 항목을 정답으로 넣지 않는다.
@@ -419,8 +464,8 @@ NFR Agent
 4. Trade-off 확인
 
 처리
-- Planner가 예상한 trade-off가 있다면 Document에서 근거를 먼저 찾는다.
-- Planner가 놓쳤더라도 Document에 다른 핵심 trade-off가 나타나면 추가한다.
+- Research Agent가 남긴 문단에서 핵심 trade-off의 근거를 찾는다.
+- 후보의 doc_ids에 연결되지 않은 문서도 포함해, 전달된 Document 전체에서 trade-off를 확인한다.
 - 단순히 Catalog에 common_tradeoffs가 있다는 이유만으로 추가하지 않는다.
 
 근거가 없는 경우
@@ -484,7 +529,7 @@ NFRExport:
 
       rationale: string
       # 왜 이 NFR이 중요한지에 대한 설명
-      # Planner의 reason + Document 근거를 바탕으로 정리
+      # Research Agent 후보의 reason + Document 근거를 바탕으로 정리
 
       target:
         # 문서에 구체적인 목표 수준이 있는 경우 저장
@@ -642,7 +687,8 @@ total         = Σ(section.weight × section_pct)      # section weight 합 = 10
 
 - 확정된 NFR과 Rubric Criterion의 연결이 정상인지 검사한다.
 - 인용(evidence_refs)이 실제로 크롤한 Document를 가리키는지 검사한다.
-  Document 목록은 LLM 출력이 아니므로 실행마다 그 id 목록으로 검사를 만든다.
+  Document 목록은 코드가 조립한 `ResearchResult.documents`이며 LLM 출력이 아니다.
+  실행마다 keep한 문서의 id 목록으로 검사를 만든다.
 
 **검사**
 
@@ -660,7 +706,8 @@ total         = Σ(section.weight × section_pct)      # section weight 합 = 10
     - NFR_MULTI_COVERED (2개 이상)
 - NFR과 trade-off에 근거 문서가 있는지 확인한다.
     - EVIDENCE_REF_MISSING
-- NFR과 trade-off의 evidence_refs가 크롤한 Document ID만 가리키는지 확인한다.
+- NFR과 trade-off의 evidence_refs가 ResearchResult.documents의 Document ID만 가리키는지 확인한다.
+  fetch했어도 버린 문서는 인용할 수 없다.
     - EVIDENCE_REF_UNKNOWN
 
 ### 실패
