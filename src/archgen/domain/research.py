@@ -18,6 +18,8 @@ from pydantic import (
 CANDIDATES_MIN, CANDIDATES_MAX = 3, 5
 MAX_QUERIES = 6
 RESULTS_PER_QUERY = 10
+MAX_CONTENT_CHARS = 12000
+MAX_PARAGRAPH_CHARS = 1000
 
 # 코드로 고칠 수 있는 것은 고치고, 고칠 수 없는 것만 거부한다. 거부하면 LLM 재시도(비용)가 든다.
 Text = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
@@ -45,6 +47,25 @@ class SearchResult(BaseModel):
     url: str
     title: str
     rank: int
+
+
+class Paragraph(BaseModel):
+    index: int
+    text: str
+
+
+class FetchResult(BaseModel):
+    doc_id: str
+    url: str
+    title: str
+    paragraphs: list[Paragraph]
+
+
+class Document(BaseModel):
+    id: str
+    url: str
+    title: str
+    content: str
 
 
 class NFRCandidate(BaseModel):

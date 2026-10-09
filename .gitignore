@@ -12,3 +12,5 @@ mutants/
 .vscode/
 .archgen/
 .claude/settings.local.json
+survived.txt
+survived-ignored.txt
