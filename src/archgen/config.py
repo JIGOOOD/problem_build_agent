@@ -58,12 +58,12 @@ def get_settings() -> Settings:
     )
 
 
-def build_chat_model(tier: Tier = "large", **overrides):
+def build_chat_model(tier: Tier = "large", *, model_class=None, **overrides):
     """Return a ChatOpenAI client for one model tier, pointed at OpenRouter."""
     from langchain_openai import ChatOpenAI
 
     settings = get_settings()
-    return ChatOpenAI(
+    return (model_class or ChatOpenAI)(
         model=overrides.pop("model", settings.model_for(tier)),
         api_key=settings.api_key,
         base_url=settings.base_url,

@@ -33,3 +33,13 @@ def test_candidate_kind_that_cannot_be_normalized_is_rejected(kind: str) -> None
 def test_kind_underscores_are_collapsed(raw: str) -> None:
     """밑줄이 겹치거나 앞뒤에 남으면 Catalog 이름 fault_tolerance와 어긋난다."""
     assert NFRCandidate(kind=raw, reason="이유").kind == "fault_tolerance"
+
+
+def test_candidate_starts_with_independent_empty_document_ids() -> None:
+    first = NFRCandidate(kind="latency", reason="응답 시간")
+    second = NFRCandidate(kind="availability", reason="가용성")
+
+    assert first.doc_ids == []
+    assert second.doc_ids == []
+    first.doc_ids.append("doc-1")
+    assert second.doc_ids == []

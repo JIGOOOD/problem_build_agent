@@ -38,12 +38,13 @@ packages = ["src/archgen"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+pythonpath = ["."]
 
 [tool.ruff]
 line-length = 90
 
 [tool.mutmut]
 source_paths = ["src/"]
-only_mutate = ["src/archgen/research/keep.py"]
-pytest_add_cli_args_test_selection = ["tests/test_keep.py"]
-also_copy = ["resources/", "try_research.py"]
+only_mutate = ["src/archgen/research/runner.py"]
+pytest_add_cli_args_test_selection = ["tests/test_research_agent.py"]
+also_copy = ["resources/", "try_research.py", "try_research_agent.py"]

@@ -3,6 +3,7 @@ import logging
 import httpx
 import pytest
 
+from archgen.retrieval import crawler
 from archgen.retrieval.crawler import FetchTool, HttpFetcher
 
 
@@ -19,7 +20,70 @@ class FakeFetcher:
         return response
 
 
-def test_fetch_returns_document_metadata_and_numbered_original_paragraph() -> None:
+def test_http_fetch_sends_browser_headers():
+    requests = []
+
+    def respond(request):
+        requests.append(request)
+        return httpx.Response(200, text="<html><body>document</body></html>")
+
+    with crawler.create_fetch_client(transport=httpx.MockTransport(respond)) as client:
+        HttpFetcher(client)("https://docs.example/headers")
+
+    assert requests[0].headers["user-agent"] == (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+    )
+    assert requests[0].headers["accept"] == "text/html,application/xhtml+xml"
+    assert requests[0].headers["accept-language"] == "en-US,en;q=0.9,ko;q=0.8"
+
+
+@pytest.mark.parametrize(("status", "attempts"), [(403, 1), (503, 2)])
+def test_fetch_logs_final_http_failure_without_changing_retry_policy(
+    status, attempts, caplog
+):
+    url = "https://docs.example/blocked"
+    requests = []
+
+    def respond(request):
+        requests.append(request)
+        return httpx.Response(status)
+
+    with crawler.create_fetch_client(transport=httpx.MockTransport(respond)) as client:
+        result = FetchTool(HttpFetcher(client)).fetch(url)
+
+    assert len(requests) == attempts
+    assert isinstance(result, str) and f"실패({attempts}회 요청)" in result
+    records = [r for r in caplog.records if r.name == "archgen.retrieval.crawler"]
+    assert len(records) == 1
+    assert records[0].levelno == logging.WARNING
+    assert records[0].getMessage() == result
+    assert url in result and str(status) in result and "HTTPStatusError" in result
+
+
+def test_fetch_numbers_sentences_without_splitting_decimals_or_abbreviations():
+    content = (
+        "지연은 1.5ms다. 장애를 복구한다!\n\nUse e.g. retries. Keep p99 below 10.5ms."
+    )
+    tool = FetchTool(FakeFetcher({"title": "설계", "content": content}))
+
+    result = tool.fetch("https://docs.example/sentences")
+
+    assert [s.model_dump() for s in result.sentences] == [
+        {"index": i, "text": text}
+        for i, text in enumerate(
+            [
+                "지연은 1.5ms다.",
+                "장애를 복구한다!",
+                "Use e.g. retries.",
+                "Keep p99 below 10.5ms.",
+            ]
+        )
+    ]
+    assert tool.documents[result.doc_id].content == content
+
+
+def test_fetch_returns_document_metadata_and_numbered_original_sentence() -> None:
     url = "https://docs.example/chat"
     fetcher = FakeFetcher(
         {"title": "채팅 설계", "content": "메시지 전달 시간을 측정한다."}
@@ -34,7 +98,7 @@ def test_fetch_returns_document_metadata_and_numbered_original_paragraph() -> No
         "doc_id": result.doc_id,
         "url": url,
         "title": "채팅 설계",
-        "paragraphs": [{"index": 0, "text": "메시지 전달 시간을 측정한다."}],
+        "sentences": [{"index": 0, "text": "메시지 전달 시간을 측정한다."}],
     }
     assert tool.documents[result.doc_id].model_dump() == {
         "id": result.doc_id,
@@ -45,14 +109,14 @@ def test_fetch_returns_document_metadata_and_numbered_original_paragraph() -> No
     assert fetcher.calls == [url]
 
 
-def test_fetch_splits_on_blank_lines_and_numbers_only_nonempty_paragraphs() -> None:
+def test_fetch_splits_on_blank_lines_and_numbers_only_nonempty_sentences() -> None:
     content = "\n\n 첫 문단의 첫 줄\n첫 문단의 둘째 줄 \n \t\n\n\n둘째 문단\r\n\r\n\t\r\n\r\n셋째 문단\n\n"
     tool = FetchTool(FakeFetcher({"title": "설계", "content": content}))
 
     result = tool.fetch("https://docs.example/chat")
 
     assert not isinstance(result, str)
-    assert [paragraph.model_dump() for paragraph in result.paragraphs] == [
+    assert [sentence.model_dump() for sentence in result.sentences] == [
         {"index": 0, "text": "첫 문단의 첫 줄\n첫 문단의 둘째 줄"},
         {"index": 1, "text": "둘째 문단"},
         {"index": 2, "text": "셋째 문단"},
@@ -71,8 +135,8 @@ def test_fetch_caps_content_before_numbering_and_logs_only_when_truncated(size, 
 
     assert not isinstance(result, str)
     expected = [part.strip() for part in content[:12000].split("\n\n") if part.strip()]
-    assert [p.text for p in result.paragraphs] == expected
-    assert [p.index for p in result.paragraphs] == list(range(len(expected)))
+    assert [p.text for p in result.sentences] == expected
+    assert [p.index for p in result.sentences] == list(range(len(expected)))
     assert tool.documents[result.doc_id].content == content[:12000]
     records = [r for r in caplog.records if r.name == "archgen.retrieval.crawler"]
     if size > 12000:
@@ -135,7 +199,7 @@ def test_fetch_retries_once_and_returns_a_successful_second_response(error) -> N
 
     assert not isinstance(result, str)
     assert result.title == "복구된 문서"
-    assert [p.model_dump() for p in result.paragraphs] == [
+    assert [p.model_dump() for p in result.sentences] == [
         {"index": 0, "text": "복구된 원문"}
     ]
     assert fetcher.calls == [url, url]
@@ -158,7 +222,7 @@ def test_fetch_returns_error_after_exactly_two_failed_attempts(error) -> None:
     assert tool.documents == {}
 
 
-def test_http_fetch_extracts_title_and_paragraphs_without_navigation_or_footer() -> None:
+def test_http_fetch_extracts_title_and_sentences_without_navigation_or_footer() -> None:
     first = "채팅 서버는 WebSocket 연결을 유지하며 메시지 지연 시간을 측정한다. " * 6
     second = "장애 시 메시지를 재전송하고 중복 수신을 멱등 처리로 방지한다. " * 6
     html = (
@@ -179,8 +243,10 @@ def test_http_fetch_extracts_title_and_paragraphs_without_navigation_or_footer()
 
     assert not isinstance(result, str)
     assert result.title == "채팅 기술 문서"
-    assert [p.text for p in result.paragraphs] == [first.strip(), second.strip()]
-    assert [p.index for p in result.paragraphs] == [0, 1]
+    assert [p.text for p in result.sentences] == [
+        "채팅 서버는 WebSocket 연결을 유지하며 메시지 지연 시간을 측정한다."
+    ] * 6 + ["장애 시 메시지를 재전송하고 중복 수신을 멱등 처리로 방지한다."] * 6
+    assert [p.index for p in result.sentences] == list(range(12))
     assert len(requests) == 1
     assert str(requests[0].url) == "https://docs.example/chat"
     assert "제거할 메뉴" not in tool.documents[result.doc_id].content
@@ -191,29 +257,26 @@ def test_http_fetch_extracts_title_and_paragraphs_without_navigation_or_footer()
     ("content", "expected"),
     [
         ("가" * 1000, ["가" * 1000]),
-        ("가" * 1001, ["가" * 1000, "가"]),
+        ("가" * 2001, ["가" * 2001]),
         (
             "가" * 699 + ". " + "나" * 199 + "! " + "다" * 349 + "?",
-            ["가" * 699 + ". " + "나" * 199 + "!", "다" * 349 + "?"],
+            ["가" * 699 + ".", "나" * 199 + "!", "다" * 349 + "?"],
         ),
     ],
     ids=[
-        "exact-limit",
-        "one-over",
-        "sentence-packing",
+        "unpunctuated-1000",
+        "unpunctuated-over-keep-budget",
+        "separate-sentences",
     ],
 )
-def test_fetch_splits_long_paragraphs_at_sentences_with_1000_character_limit(
-    content, expected
-):
+def test_fetch_splits_only_at_sentence_boundaries_even_for_long_text(content, expected):
     tool = FetchTool(FakeFetcher({"title": "긴 문단", "content": content}))
 
-    result = tool.fetch("https://docs.example/long-paragraph")
+    result = tool.fetch("https://docs.example/long-sentence")
 
     assert not isinstance(result, str)
-    assert [p.text for p in result.paragraphs] == expected
-    assert [p.index for p in result.paragraphs] == list(range(len(expected)))
-    assert all(0 < len(p.text) <= 1000 for p in result.paragraphs)
+    assert [p.text for p in result.sentences] == expected
+    assert [p.index for p in result.sentences] == list(range(len(expected)))
     assert tool.documents[result.doc_id].content == content
 
 
@@ -278,7 +341,7 @@ def test_http_fetch_keeps_navigation_and_comments_out_of_a_short_article(tag, at
         result = tool.fetch("https://docs.example/short-article")
 
     assert not isinstance(result, str)
-    assert [p.model_dump() for p in result.paragraphs] == [{"index": 0, "text": body}]
+    assert [p.model_dump() for p in result.sentences] == [{"index": 0, "text": body}]
     assert tool.documents[result.doc_id].content == body
     assert noise.strip() not in tool.documents[result.doc_id].content
 
@@ -299,10 +362,12 @@ def test_http_fetch_preserves_heading_and_code_text_without_adding_markdown():
         result = tool.fetch("https://docs.example/plain-text")
 
     assert not isinstance(result, str)
-    expected = [heading, body.strip(), code]
-    assert [p.text for p in result.paragraphs] == expected
-    assert [p.index for p in result.paragraphs] == [0, 1, 2]
-    assert tool.documents[result.doc_id].content == "\n\n".join(expected)
+    expected = [heading] + ["채팅 메시지의 지연 시간을 p99로 측정한다."] * 15 + [code]
+    assert [p.text for p in result.sentences] == expected
+    assert [p.index for p in result.sentences] == list(range(17))
+    assert (
+        tool.documents[result.doc_id].content == f"{heading}\n\n{body.strip()}\n\n{code}"
+    )
 
 
 @pytest.mark.parametrize("status", [403, 404])
@@ -341,23 +406,21 @@ def test_fetch_does_not_retry_extraction_errors(error):
 @pytest.mark.parametrize(
     ("content", "expected"),
     [
-        ("가" * 299 + ". " + "나" * 699, ["가" * 299 + ". " + "나" * 699]),
+        ("가" * 299 + ". " + "나" * 699, ["가" * 299 + ".", "나" * 699]),
         (
             "가" * 299 + ". " + "나" * 299 + ". " + "다" * 397 + ". 다음 문장.",
-            ["가" * 299 + ". " + "나" * 299 + ". " + "다" * 397 + ".", "다음 문장."],
+            ["가" * 299 + ".", "나" * 299 + ".", "다" * 397 + ".", "다음 문장."],
         ),
     ],
-    ids=["exact-limit-with-earlier-sentence", "last-sentence-at-limit"],
+    ids=["unpunctuated-tail", "consecutive-sentences"],
 )
-def test_fetch_keeps_the_last_sentence_boundary_including_exactly_1000_characters(
-    content, expected
-):
+def test_fetch_preserves_each_sentence_and_unpunctuated_tail(content, expected):
     tool = FetchTool(FakeFetcher({"title": "문단 경계", "content": content}))
 
     result = tool.fetch("https://docs.example/boundary")
 
     assert not isinstance(result, str)
-    assert [p.model_dump() for p in result.paragraphs] == [
+    assert [p.model_dump() for p in result.sentences] == [
         {"index": index, "text": text} for index, text in enumerate(expected)
     ]
     assert tool.documents[result.doc_id].content == content
@@ -390,8 +453,9 @@ def test_http_fetch_follows_redirect_with_finite_timeouts_and_preserves_an_untit
             for value in request.extensions["timeout"].values()
         )
     assert result.title == ""
-    assert [p.model_dump() for p in result.paragraphs] == [
-        {"index": 0, "text": body.strip()}
+    assert [p.model_dump() for p in result.sentences] == [
+        {"index": i, "text": "메시지 전달 지연과 장애 복구 경로를 설계한다."}
+        for i in range(10)
     ]
     assert tool.documents[result.doc_id].model_dump() == {
         "id": result.doc_id,
@@ -419,8 +483,9 @@ def test_http_fetch_retries_status_500_and_stores_only_the_recovered_document():
     assert not isinstance(result, str)
     assert len(requests) == 2
     assert result.title == "복구된 문서"
-    assert [p.model_dump() for p in result.paragraphs] == [
-        {"index": 0, "text": body.strip()}
+    assert [p.model_dump() for p in result.sentences] == [
+        {"index": i, "text": "메시지 전달 지연과 장애 복구 경로를 설계한다."}
+        for i in range(10)
     ]
     assert list(tool.documents) == [result.doc_id]
     assert tool.documents[result.doc_id].content == body.strip()

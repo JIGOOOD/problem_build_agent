@@ -27,10 +27,14 @@ def run(
     fetch_path: Path, selections: list[list[int]], *, log_root: Path | None = None
 ) -> int:
     if not selections:
-        raise ValueError("선택할 문단 번호를 지정해 주세요.")
+        raise ValueError("선택할 문장 번호를 지정해 주세요.")
     data = json.loads(fetch_path.read_text(encoding="utf-8"))
     if data.get("status") != "completed":
         raise ValueError("성공한 fetch.json을 지정해 주세요.")
+    if "sentences" not in (data.get("result") or {}):
+        raise ValueError(
+            "이전 문단 형식입니다. try_fetch.py로 문장 번호를 새로 생성하세요."
+        )
     fetched = FetchResult.model_validate(data.get("result"))
     message = {
         "role": "tool",
@@ -58,13 +62,13 @@ def run(
                 "document": document.model_dump() if document is not None else None,
             }
         )
-        remaining = [p["index"] for p in json.loads(message["content"])["paragraphs"]]
+        remaining = [p["index"] for p in json.loads(message["content"])["sentences"]]
         print(f"\n호출 {number}: keep({fetched.doc_id!r}, {indices})")
         print(f"keep 반환값: {response}")
-        print(f"남은 문단: {remaining} / 대화 기록: {len(message['content'])}자")
+        print(f"남은 문장: {remaining} / 대화 기록: {len(message['content'])}자")
         if document is not None:
             print(f"저장된 본문:\n{document.content}")
-        if not response.isdecimal():
+        if isinstance(response, str):
             exit_code = 1
             break
     document = tool.documents.get(fetched.doc_id)
@@ -91,14 +95,14 @@ def run(
         encoding="utf-8",
     )
 
-    print(f"보관한 원본 문단 수: {len(fetched.paragraphs)}")
+    print(f"보관한 원본 문장 수: {len(fetched.sentences)}")
     print(f"\n선택 전후 기록·저장 문서: {output}")
     return exit_code
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="저장한 실제 fetch 결과에서 문단을 선택한다."
+        description="저장한 실제 fetch 결과에서 문장을 선택한다."
     )
     parser.add_argument(
         "--fetch", type=Path, help="fetch.json 경로 (기본: 최근 성공 결과)"
@@ -108,7 +112,7 @@ if __name__ == "__main__":
         type=int,
         nargs="+",
         action="append",
-        help="호출별 문단 번호. 여러 번 지정하면 같은 문서에 차례로 keep한다.",
+        help="추가할 문장 번호를 중요도순으로 지정한다. 재호출은 기존 선택에 누적한다.",
     )
     args = parser.parse_args()
     try:

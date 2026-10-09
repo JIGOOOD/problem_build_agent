@@ -73,7 +73,12 @@ def test_run_saves_raw_retry_responses_plan_and_searches(tmp_path, monkeypatch) 
     assert json.loads(second["content"]) == valid
     assert first["finish_reason"] == "stop"
     assert second["usage"]["output_tokens"] == 20
-    assert json.loads((run_dir / "plan.json").read_text()) == valid
+    assert json.loads((run_dir / "plan.json").read_text()) == {
+        **valid,
+        "nfr_candidates": [
+            {**candidate, "doc_ids": []} for candidate in valid["nfr_candidates"]
+        ],
+    }
     searches = json.loads((run_dir / "searches.json").read_text())
     assert len(searches) == 4
     assert searches[0]["results"][0]["url"] == "https://example.com/chat"

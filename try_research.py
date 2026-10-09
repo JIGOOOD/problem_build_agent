@@ -19,7 +19,7 @@ from archgen.config import build_chat_model
 from archgen.domain.brief import InterviewBrief, Seniority
 from archgen.domain.catalog import load_catalog
 from archgen.paths import CATALOG_DIR, PROJECT_ROOT
-from archgen.research.agent import plan_initial_research
+from archgen.research.agent import bind_initial_research_model, plan_initial_research
 from archgen.retrieval.search import SearchTool
 
 
@@ -53,8 +53,8 @@ def save_json(path: Path, value) -> None:
 
 
 def main(run_dir: Path) -> None:
-    model = build_chat_model("small", timeout=300, max_retries=0).bind(
-        response_format={"type": "json_object"}
+    model = bind_initial_research_model(
+        build_chat_model("small", timeout=300, max_retries=0)
     )
     tavily_key = os.getenv("TAVILY_API_KEY", "").strip()
     if not tavily_key:

@@ -24,7 +24,7 @@ nfr_rubric.md
 **목표**
 
 - 해당 주제에서 어떤 NFR이 중요한지 탐색한다.
-- 이를 검증할 기술 자료를 직접 검색하고, 본문에서 NFR 판단에 필요한 문단 원문을 수집한다.
+- 이를 검증할 기술 자료를 직접 검색하고, 본문에서 NFR 판단에 필요한 문장 원문을 수집한다.
 
 **필요성**
 
@@ -167,8 +167,8 @@ Research Agent는 기존 Research Planner, Search API, Crawling 세 단계를 �
 | `SUFFICIENT_DOCS` | 2 | NFR 쿼리 확정에 필요한 쓸만한 문서 수 |
 | `SUFFICIENT_DOCS_TOPIC` | 1 | 주제 쿼리 확정에 필요한 문서 수 |
 | `MAX_REQUERY` | 1 | 쿼리 하나당 재생성 횟수 |
-| `MAX_CONTENT_CHARS` | 12000 | 문단으로 나누기 전 원문 상한. fetch 결과가 대화 기록에 계속 쌓이므로 제한한다. HTML 본문 추출에서 메뉴·푸터를 먼저 제외한다. 실험 후 조정 |
-| `MAX_PARAGRAPH_CHARS` | 1000 | 긴 문단은 문장 경계에서 분리한다. 문장 하나가 상한을 넘으면 문자 수로 분리한다 |
+| `MAX_CONTENT_CHARS` | 12000 | 문장으로 나누기 전 원문 상한. 판정 전 LLM 입력량을 제한한다. HTML 본문 추출에서 메뉴·푸터를 먼저 제외한다. 실험 후 조정 |
+| `MAX_KEEP_CHARS` | 2000 | 문서별 누적 선택 본문 한도. 문장 사이 구분 문자 포함 |
 | `MAX_AGENT_STEPS` | 20 | LLM 호출 상한. 병렬 호출로 보통 3~4번, 많아도 10번 안팎을 예상하며 무한 루프를 방지한다 |
 
 ### 처리 흐름
@@ -177,9 +177,9 @@ Research Agent는 기존 Research Planner, Search API, Crawling 세 단계를 �
 2. LLM이 쿼리를 만든다. 주제용 1개 + 후보당 1개, 합계 `MAX_QUERIES` 이하.
    각 쿼리는 `related_nfr`을 가지며 주제용은 `null`이다.
 3. 쿼리마다 아래를 반복한다.
-   1. `search(query)`로 URL 최대 `RESULTS_PER_QUERY`개를 받는다.
+   1. `search(query_id)`로 URL 최대 `RESULTS_PER_QUERY`개를 받는다.
    2. 아직 안 본 URL 중 순위가 높은 것부터 `FETCH_BATCH`개를 `fetch`한다.
-   3. LLM이 가져온 문서마다 쓸만한지 판정하고, 쓸만한 문서는 `keep`으로 남길 문단 번호를 기록한다.
+   3. LLM이 가져온 문서마다 쓸만한지 판정하고, 쓸만한 문서는 `keep`으로 남길 문장 번호를 기록한다.
       `keep`하지 않은 문서는 버린다.
    4. `keep`한 문서가 기준 수(`SUFFICIENT_DOCS`, 주제 쿼리는 `SUFFICIENT_DOCS_TOPIC`) 이상이면
       그 쿼리를 확정한다.
@@ -211,10 +211,10 @@ Research Agent는 기존 Research Planner, Search API, Crawling 세 단계를 �
 | 일 | 담당 |
 | --- | --- |
 | 후보 생성, 쿼리 생성, 쿼리 재생성 | LLM |
-| 문서가 쓸만한지 판정, 남길 문단 선택, 쿼리 확정 판단 | LLM |
+| 문서가 쓸만한지 판정, 남길 문장 선택, 쿼리 확정 판단 | LLM |
 | 검색 호출, 중복 URL 제거, 순위 정렬 | 코드 (search) |
 | 본문 가져오기, 문서 저장과 id 부여, 재시도 | 코드 (fetch) |
-| 선택한 문단 원문으로 content 조립, 대화 기록 축소 | 코드 (keep 및 배치 판정 완료 처리) |
+| 선택한 문장 원문으로 content 조립, 대화 기록 축소 | 코드 (keep 및 배치 판정 완료 처리) |
 | 쿼리별 URL 목록과 확인 여부, keep한 문서 수 추적 | 코드 |
 | 상수 한도 강제 (`MAX_QUERIES`, `RESULTS_PER_QUERY`, `FETCH_BATCH`, `MAX_CONTENT_CHARS`, `MAX_REQUERY`, `MAX_AGENT_STEPS`) | 코드 |
 
@@ -226,13 +226,13 @@ Research Agent는 기존 Research Planner, Search API, Crawling 세 단계를 �
   본문을 못 가져온 문서.
 - 같은 조건이면 Source Policy 1순위 > 2순위 > 3순위 문서를 먼저 고른다.
 
-남길 문단을 고르는 기준은 해당 후보보다 넓게 잡는다.
-NFR Agent는 검색하지 않고 이 문단만 읽고 판단하기 때문이다.
+남길 문장을 고르는 기준은 해당 후보보다 넓게 잡는다.
+NFR Agent는 검색하지 않고 이 문장만 읽고 판단하기 때문이다.
 
-- 해당 후보 NFR을 다루는 문단
-- 다른 NFR을 다루는 문단 (NFR Agent가 놓친 NFR을 찾는 데 사용)
-- 수치, 단위, percentile 같은 목표 수준이 있는 문단
-- 설계 선택이나 trade-off를 설명하는 문단
+- 해당 후보 NFR을 다루는 문장
+- 다른 NFR을 다루는 문장 (NFR Agent가 놓친 NFR을 찾는 데 사용)
+- 수치, 단위, percentile 같은 목표 수준이 있는 문장
+- 설계 선택이나 trade-off를 설명하는 문장
 
 ### 쿼리 재생성 규칙 (프롬프트에 넣음)
 
@@ -263,7 +263,9 @@ Catalog 항목을 기계적으로 모두 선택하지 않는다.
 
 ### 도구
 
-#### search(query: str) -> list[SearchResult] | str
+#### search(query_id: str) -> list[SearchResult] | str
+
+- LLM은 `query_id`만 전달한다. 코드는 해당 ID의 계획 검색어를 사용하며, 없는 ID는 오류 문자열을 반환한다. 검색어 문자열 비교는 하지 않는다.
 
 - Tavily로 검색한다. 차단 도메인은 구현하지 않는다.
 - 이번 실행에서 이미 나온 URL은 제거한다.
@@ -285,12 +287,10 @@ SearchResult:
 
 - HTTP로 HTML을 가져오고, 본문 추출에서 메뉴·푸터와 댓글을 제외한다.
 - 정리한 본문에 `MAX_CONTENT_CHARS` 상한을 적용한다. 초과분은 버리고 URL·원문 길이·상한을 로그에 남긴다.
-- 빈 줄을 기준으로 문단을 나누고 빈 문단은 제외한다.
-  `MAX_PARAGRAPH_CHARS`를 넘는 문단은 문장 경계에서 상한 이하로 나눈다.
-  상한 안에 문장 경계가 없으면 문자 수로 나눈다. 최종 문단에 0부터 연속 번호를 붙인다.
-- 문단 원문을 `documents` 저장소에 보관하고 `doc_id`를 부여한다. 요약하지 않는다.
+- 빈 줄로 나눈 본문을 문장부호 경계에서 문장으로 분리하고 0부터 연속 번호를 붙인다. 소수점과 흔한 약어는 경계에서 제외한다. 긴 문장을 임의로 잘라 나누지 않는다.
+- 상한을 적용한 본문 문자열을 `documents` 저장소에 보관하고 `doc_id`를 부여한다. 요약하지 않는다.
   이 저장소에는 판정 전 문서도 있으며, 최종 출력에는 keep한 문서만 포함한다.
-- LLM에게는 번호가 붙은 문단 목록을 반환한다.
+- LLM에게는 번호가 붙은 문장 목록을 반환한다.
 - 이미 가져온 URL이면 저장된 결과를 반환한다.
 - 본문이 비어 있으면 문서로 저장하지 않고 오류 문자열을 반환한다.
 - timeout, 연결 오류, HTTP 429·5xx처럼 일시적인 요청 실패만 같은 URL로 1회 재시도한다. 429를 제외한 HTTP 4xx, 본문 추출 오류, 빈 본문은 재시도하지 않는다. 실패하면 오류 문자열을 반환하고 LLM은 다음 URL로 넘어간다.
@@ -300,20 +300,20 @@ FetchResult:
   doc_id: string
   url: string
   title: string
-  paragraphs:
+  sentences:
     - index: integer
       text: string
 ```
 
-#### keep(doc_id: str, paragraph_indices: list[int]) -> str
+#### keep(doc_id: str, sentence_indices: list[int]) -> dict | str
 
-- LLM이 쓸만하다고 판정한 문서에서 남길 문단 번호를 기록한다.
-  이번 배치의 문서 판정이 끝날 때까지 호출하지 않은 문서는 버린 것으로 본다.
-- 코드는 고른 문단 원문을 원래 순서대로 이어 붙여 그 문서의 `content`로 저장한다.
-- 토큰 누적을 막기 위해, 코드는 대화 기록에 남은 그 문서의 fetch 결과를
-  고른 문단만 남기도록 줄인다. 배치 판정이 끝나면 keep하지 않은 문서의 fetch 결과는
-  "버림" 한 줄로 바꾼다.
-- 반환: 이 쿼리에서 지금까지 keep한 문서 수를 담은 문자열.
+- LLM은 추가할 문장 번호를 중요도순으로 전달한다. 이번 배치의 판정이 끝날 때까지 keep하지 않은 문서는 버린 것으로 본다.
+- 재호출은 기존 선택을 유지하고 새 문장을 누적한다. 기존 번호는 다시 보낼 필요가 없으며 중복 번호는 한 번만 반영한다.
+- 문서당 `MAX_KEEP_CHARS = 2000`자 한도를 적용하며 문장 사이 구분 문자(`\n\n`)도 포함한다. 기존 선택을 우선 보존하고 남은 예산에서 새 문장을 전달 순서대로 선택한다. 넘치는 문장은 통째로 건너뛰고 다음 문장을 확인한다.
+- 코드는 누적 선택한 문장을 원문 순서대로 연결해 `content`에 저장한다. 추가 문장이 모두 제외되어도 기존 선택을 지우지 않는다. 재호출로 쿼리의 보존 문서 수가 늘어나지 않는다.
+- fetch 대화 기록도 누적 선택한 문장만 남도록 갱신한다. 판정이 끝난 배치에서 keep하지 않은 문서는 "버림"으로 줄인다.
+- 없는 문서 ID, 빈 목록, 정수가 아니거나 범위 밖인 문장 번호는 오류 문자열을 반환하고 기존 상태를 바꾸지 않는다.
+- 반환: `selected_indices`(누적 선택, 원문 순서), `skipped_indices`(이번 호출에서 예산 초과로 제외), `content_chars`(누적 본문 길이), `kept_documents`(해당 쿼리의 보존 문서 수).
 
 ### 출력
 
@@ -330,7 +330,7 @@ ResearchResult:
     - id: string
       url: string
       title: string
-      content: string            # 고른 문단 원문을 순서대로 이어 붙인 것 (코드)
+      content: string            # 고른 문장 원문을 순서대로 이어 붙인 것 (코드)
 ```
 
 - `documents`에는 keep한 문서만 들어간다. 버린 문서는 넣지 않는다.
@@ -344,6 +344,12 @@ ResearchResult:
 ### 후보 응답 정리와 재시도
 
 기존 Planner의 후보 응답 정리 규칙을 유지한다.
+
+후보·쿼리 중복 정리 후, 후보에 없는 `related_nfr`은 검색어 순서대로 후보에 추가한다.
+reason은 `계획 검색어에서 추가된 후보: {query}`로 채운다. 이미 후보가 `CANDIDATES_MAX`개이면
+그 kind는 추가하지 않고 해당 쿼리를 제거한다. 추가·제거는 경고 로그에 남기며,
+후보 개수·후보별 쿼리 수·전체 쿼리 수 검사는 이 보완 처리 후 수행한다.
+재시도 후에도 검증에 실패하면 `ResearchPlanError`를 발생시키기 전에 1차·2차 LLM 응답 원문을 오류 로그에 남긴다.
 초기 생성의 후보 개수 제약과 근거 검증 후의 후보 제외는 구분한다.
 
 | 응답 | 처리 |
@@ -375,7 +381,7 @@ LLM 호출 자체의 예외(네트워크 등)와 문자열이 아닌 응답(연�
   기존 문서를 후속 쿼리에 연결하거나 문서 수에 포함할지.
 - 주제 쿼리가 재생성 후에도 기준 문서 수를 채우지 못했을 때의 종료 처리.
 - `MAX_AGENT_STEPS`에 도달했을 때, 미완료 쿼리를 제외한 부분 결과를 반환할지 실패할지.
-- 존재하지 않는 `doc_id`, 빈 문단 목록, 범위 밖 문단 번호, 중복 keep 호출의 처리.
+- 확정: 잘못된 keep 입력은 오류 문자열을 반환하고 상태를 유지한다. 재호출은 2,000자 한도에서 기존 선택에 새 문장을 누적하며 문서 수를 중복 집계하지 않는다.
 
 # Export
 
@@ -476,7 +482,7 @@ NFR Agent
 4. Trade-off 확인
 
 처리
-- Research Agent가 남긴 문단에서 핵심 trade-off의 근거를 찾는다.
+- Research Agent가 남긴 문장에서 핵심 trade-off의 근거를 찾는다.
 - 후보의 doc_ids에 연결되지 않은 문서도 포함해, 전달된 Document 전체에서 trade-off를 확인한다.
 - 단순히 Catalog에 common_tradeoffs가 있다는 이유만으로 추가하지 않는다.
 

@@ -9,10 +9,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from threading import Event, Thread
 
-import httpx
-
 from archgen.paths import PROJECT_ROOT
-from archgen.retrieval.crawler import FetchTool, HttpFetcher
+from archgen.retrieval.crawler import FetchTool, HttpFetcher, create_fetch_client
 
 
 def run(url: str, *, log_root: Path | None = None) -> int:
@@ -53,7 +51,7 @@ def run(url: str, *, log_root: Path | None = None) -> int:
         show(f"M4-3: 본문 수집 중... {url}")
         save_record()
         progress.start()
-        with httpx.Client() as client:
+        with create_fetch_client() as client:
             tool = FetchTool(HttpFetcher(client))
             result = tool.fetch(url)
         if isinstance(result, str):
@@ -68,10 +66,10 @@ def run(url: str, *, log_root: Path | None = None) -> int:
         )
         show(f"제목: {result.title or '(없음)'}")
         show(f"문서 ID: {result.doc_id}")
-        show(f"저장된 본문: {len(document.content)}자 / 문단: {len(result.paragraphs)}개")
-        for paragraph in result.paragraphs[:3]:
-            show(f"\n[{paragraph.index}] {paragraph.text[:300]}")
-        show(f"\n전체 문단·저장 문서: {result_path}")
+        show(f"저장된 본문: {len(document.content)}자 / 문장: {len(result.sentences)}개")
+        for sentence in result.sentences[:3]:
+            show(f"\n[{sentence.index}] {sentence.text[:300]}")
+        show(f"\n전체 문장·저장 문서: {result_path}")
         return 0
     except BaseException as error:
         record.update(status="error", error_type=type(error).__name__, error=str(error))

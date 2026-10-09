@@ -5,6 +5,7 @@ import logging
 from collections.abc import Callable
 from pathlib import Path
 
+from langchain_core.utils.function_calling import convert_to_json_schema
 from pydantic import ValidationError
 
 from archgen.domain.brief import InterviewBrief
@@ -30,10 +31,26 @@ class ResearchPlanError(RuntimeError):
     """재시도 후에도 초기 조사 계획이 검증을 통과하지 못했다."""
 
 
+def bind_initial_research_model(model):
+    """초기 계획의 필드 구조를 API에 전달하고 지원 제공자만 사용한다."""
+    return model.bind(
+        response_format={
+            "type": "json_schema",
+            "json_schema": {
+                "name": "InitialResearchPlan",
+                "strict": True,
+                "schema": convert_to_json_schema(InitialResearchPlan, strict=True),
+            },
+        },
+        extra_body={"provider": {"require_parameters": True}},
+    )
+
+
 def build_initial_research_messages(
     brief: InterviewBrief, catalog: NFRCatalog
 ) -> list[Message]:
     system = _ENV.get_template("initial_system.md.j2").render(
+        topic=brief.topic,
         catalog_block=catalog.to_research_prompt_block(),
         candidates_min=CANDIDATES_MIN,
         candidates_max=CANDIDATES_MAX,
@@ -75,6 +92,11 @@ def plan_initial_research(
     try:
         return InitialResearchPlan.model_validate_json(second)
     except ValidationError as error:
+        _LOGGER.error(
+            "초기 조사 계획 재시도 실패. LLM 응답 원문:\n[1차]\n%s\n[2차]\n%s",
+            first,
+            second,
+        )
         raise ResearchPlanError(
             "재시도 후에도 InitialResearchPlan 규칙을 어겼다.\n"
             f"[1차]\n{_feedback(first_error)}\n[2차]\n{_feedback(error)}"

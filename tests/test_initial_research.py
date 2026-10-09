@@ -30,7 +30,7 @@ def initial_response(candidate_count: int = 3) -> dict:
     return {
         "topic_summary": "채팅 서비스의 메시지 전달 경로를 조사한다.",
         "nfr_candidates": [
-            {"kind": kind, "reason": f"채팅 서비스에서 {kind}가 중요하다."}
+            {"kind": kind, "reason": f"채팅 서비스에서 {kind}가 중요하다.", "doc_ids": []}
             for kind in kinds
         ],
         "search_queries": [
@@ -53,6 +53,18 @@ class FakeLLM:
 @pytest.fixture
 def catalog() -> NFRCatalog:
     return load_catalog(CATALOG_DIR)
+
+
+def test_initial_prompt_requires_real_queries_for_every_candidate(catalog):
+    system = build_initial_research_messages(BRIEF, catalog)[0]["content"]
+
+    assert f"이번 조사 주제: {BRIEF.topic}" in system
+    assert "주제용 1개 + 중복 없는 후보 수만큼의 후보별 검색어" in system
+    assert (
+        '"검색어", "주제 요약", "NFR 후보별 검색어" 같은 자리표시자를 쓰지 않는다'
+        in system
+    )
+    assert "모든 후보 kind가 related_nfr에 정확히 한 번씩 나타나는지 확인한다" in system
 
 
 @pytest.mark.parametrize("notes", [None, "", " \n ", "메시지 유실 최소화"])
@@ -413,22 +425,53 @@ def test_initial_plan_logs_violation_reason_when_retrying(
     ) in message.splitlines()
 
 
-@pytest.mark.parametrize("candidate_count", [3, 5])
-def test_initial_plan_retries_instead_of_returning_extra_unlinked_queries(
-    catalog: NFRCatalog, candidate_count: int
-) -> None:
-    invalid = initial_response(candidate_count)
-    invalid["search_queries"].append(
-        {"query": "chat service cost optimization", "related_nfr": "cost"}
+def test_initial_plan_logs_both_raw_responses_after_retry_fails(catalog, caplog):
+    first = '  {"topic_summary": "첫 응답"}\n'
+    second = '{"topic_summary":"둘째 응답"}  '
+    responses = iter([first, second])
+
+    with pytest.raises(ResearchPlanError):
+        agent.plan_initial_research(BRIEF, catalog, lambda messages: next(responses))
+
+    errors = [
+        record
+        for record in caplog.records
+        if record.name == "archgen.research.agent" and record.levelname == "ERROR"
+    ]
+    assert len(errors) == 1
+    assert errors[0].getMessage() == (
+        f"초기 조사 계획 재시도 실패. LLM 응답 원문:\n[1차]\n{first}\n[2차]\n{second}"
     )
-    valid = initial_response(candidate_count)
-    llm = FakeLLM(invalid, valid)
+
+
+@pytest.mark.parametrize("candidate_count", [3, 5])
+def test_initial_plan_repairs_unlinked_queries_without_retry(
+    catalog: NFRCatalog, candidate_count: int, caplog: pytest.LogCaptureFixture
+) -> None:
+    response = initial_response(candidate_count)
+    query = {"query": "chat service cost optimization", "related_nfr": "cost"}
+    response["search_queries"].append(query)
+    llm = FakeLLM(response)
 
     plan = agent.plan_initial_research(BRIEF, catalog, llm)
 
-    assert plan.model_dump() == valid
-    assert len(llm.calls) == 2
-    assert "search_queries" in llm.calls[1][-1]["content"]
+    expected = initial_response(candidate_count)
+    if candidate_count == 3:
+        expected["nfr_candidates"].append(
+            {
+                "kind": "cost",
+                "reason": "계획 검색어에서 추가된 후보: chat service cost optimization",
+                "doc_ids": [],
+            }
+        )
+        expected["search_queries"].append(query)
+    assert plan.model_dump() == expected
+    assert len(llm.calls) == 1
+    warnings = [r for r in caplog.records if r.name == "archgen.domain.research"]
+    assert len(warnings) == 1
+    assert warnings[0].levelname == "WARNING"
+    assert "cost" in warnings[0].getMessage()
+    assert ("추가" if candidate_count == 3 else "제거") in warnings[0].getMessage()
 
 
 @pytest.mark.parametrize("blank", ["", " \n \t"])
