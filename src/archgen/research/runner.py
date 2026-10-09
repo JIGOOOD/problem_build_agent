@@ -1,8 +1,9 @@
-"""초기 조사 계획과 search/fetch/keep 도구 호출을 연결한다."""
+"""초기 조사 계획과 search/requery/fetch/keep 도구 호출을 연결한다."""
 
 from __future__ import annotations
 
 import json
+import logging
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -18,6 +19,7 @@ from archgen.domain.research import (
     FETCH_BATCH,
     MAX_AGENT_STEPS,
     MAX_KEEP_CHARS,
+    MAX_REQUERY,
     SUFFICIENT_DOCS,
     SUFFICIENT_DOCS_TOPIC,
     FetchResult,
@@ -31,6 +33,8 @@ from archgen.research.keep import KeepTool
 from archgen.retrieval.crawler import FetchTool
 from archgen.retrieval.search import SearchTool
 from archgen.templating import template_env
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class ResearchLLM(Protocol):
@@ -64,6 +68,15 @@ TOOLS = [
         "query_id만 전달한다. 해당 ID의 초기 계획 검색어를 코드가 찾아 검색한다.",
         {
             "query_id": {"type": "string"},
+        },
+    ),
+    _tool(
+        "requery",
+        f"URL을 모두 확인해도 근거가 부족한 쿼리만 새 검색어로 {MAX_REQUERY}회 재검색한다.",
+        {
+            "query_id": {"type": "string"},
+            "new_query": {"type": "string"},
+            "reason": {"type": "string"},
         },
     ),
     _tool(
@@ -110,6 +123,7 @@ class _Query:
     text: str
     kind: str | None
     searched: bool = False
+    requery_count: int = 0
     results: list[SearchResult] = field(default_factory=list)
     seen: set[str] = field(default_factory=set)
 
@@ -136,6 +150,44 @@ class _Session:
                 return "search 오류: 이미 검색한 쿼리다."
             query.searched = True
         return self.search.search(query.text, query_id=query_id)
+
+    def _requery(self, args: dict) -> list[SearchResult] | str:
+        query_id = args["query_id"]
+        query = self.queries[query_id]
+        with self.lock:
+            kept = sum(
+                self.doc_queries[doc_id] == query_id for doc_id in self.keep.documents
+            )
+            required = SUFFICIENT_DOCS_TOPIC if query.kind is None else SUFFICIENT_DOCS
+            if not query.searched:
+                return "requery 오류: 먼저 초기 검색을 수행해야 한다."
+            if kept >= required:
+                return "requery 오류: 이미 충분한 근거를 확보했다."
+            if any(result.url not in query.seen for result in query.results):
+                return "requery 오류: 미확인 URL을 먼저 가져와야 한다."
+            if query.requery_count >= MAX_REQUERY:
+                return "requery 오류: 재검색 횟수 상한에 도달했다."
+            new_query = args["new_query"].strip()
+            if new_query.casefold().split() == query.text.casefold().split():
+                return "requery 오류: 이전과 다른 검색어를 사용해야 한다."
+            old_query = query.text
+            query.text = new_query
+            query.requery_count += 1
+            query.results = []
+        _LOGGER.warning(
+            "쿼리 재검색: %s | %s → %s | %s",
+            query_id,
+            old_query,
+            new_query,
+            args["reason"],
+            extra={
+                "query_id": query_id,
+                "old_query": old_query,
+                "new_query": new_query,
+                "reason": args["reason"],
+            },
+        )
+        return self.search.search(new_query, query_id=query_id)
 
     def _fetch(self, args: dict, allowed: dict[str, set[str]]) -> list[dict] | str:
         query_id = args["query_id"]
@@ -175,6 +227,8 @@ class _Session:
                 return self._search(args)
             if name == "fetch":
                 return self._fetch(args, allowed)
+            if name == "requery":
+                return self._requery(args)
             return self.keep.keep(**args)
         except (KeyError, TypeError, ValueError) as error:
             return f"{name} 오류: {error}"
@@ -185,7 +239,7 @@ class _Session:
         result: list[SearchResult] | list[dict] | dict | str,
         message: dict,
     ) -> None:
-        if isinstance(result, list) and call["name"] == "search":
+        if isinstance(result, list) and call["name"] in ("search", "requery"):
             query_id = call["args"]["query_id"]
             self.queries[query_id].results = sorted(result, key=lambda item: item.rank)
             message["content"] = json.dumps(
@@ -215,7 +269,7 @@ class _Session:
             {"role": "tool", "tool_call_id": call["id"], "content": "알 수 없는 도구다."}
             for call in calls
         ]
-        for name in ("search", "fetch", "keep"):
+        for name in ("search", "fetch", "keep", "requery"):
             indices = [i for i, call in enumerate(calls) if call["name"] == name]
             if not indices:
                 continue
@@ -285,6 +339,21 @@ class _Session:
                         kind=candidate.kind, reason=candidate.reason, doc_ids=doc_ids
                     )
                 )
+            else:
+                _LOGGER.warning(
+                    "근거 부족 후보 제외: %s | %s | %d/%d개",
+                    query_id,
+                    candidate.kind,
+                    len(doc_ids),
+                    SUFFICIENT_DOCS,
+                    extra={
+                        "query_id": query_id,
+                        "kind": candidate.kind,
+                        "kept_documents": len(doc_ids),
+                        "required_documents": SUFFICIENT_DOCS,
+                        "reason": "근거 문서 수가 기준에 미달한다.",
+                    },
+                )
         return ResearchResult(
             topic_summary=self.plan.topic_summary,
             nfr_candidates=candidates,
@@ -304,6 +373,7 @@ def _build_messages(brief: InterviewBrief, session: _Session) -> list[dict]:
         sufficient_docs_topic=SUFFICIENT_DOCS_TOPIC,
         max_agent_steps=MAX_AGENT_STEPS,
         max_keep_chars=MAX_KEEP_CHARS,
+        max_requery=MAX_REQUERY,
     )
     return [
         {"role": "system", "content": system},
@@ -340,6 +410,10 @@ def run_research(
     while calls < MAX_AGENT_STEPS:
         messages[0]["content"] = (
             system
+            + "\n\n# 재검색 횟수\n"
+            + json.dumps(
+                {qid: query.requery_count for qid, query in session.queries.items()}
+            )
             + "\n\n# 현재 조사 상태\n"
             + json.dumps(session.progress(), ensure_ascii=False, indent=2)
         )

@@ -10,7 +10,7 @@
 ```
 TUI 입력
   ↓
-1. Research Agent - NFR 후보 생성, search / fetch / keep으로 근거 수집·선별
+1. Research Agent - NFR 후보 생성, search / requery / fetch / keep으로 근거 수집·선별
   ↓ ResearchResult (topic_summary, nfr_candidates, Document[])
 2. Export (NFR Agent) - NFR 최종 확정 및 평가 기준 생성
   ↓ NFRExport
@@ -152,7 +152,7 @@ common_tradeoffs:
 ## Research Agent (tool calling)
 
 Research Agent는 기존 Research Planner, Search API, Crawling 세 단계를 대체한다.
-하나의 에이전트가 `search`, `fetch`, `keep`을 호출하며, 가져온 문서를 읽고
+하나의 에이전트가 `search`, `requery`, `fetch`, `keep`을 호출하며, 가져온 문서를 읽고
 근거가 부족한 쿼리만 다시 검색한다. 출력 `ResearchResult`의 `nfr_candidates`와
 `Document[]`는 Export 단계의 NFR Agent 입력으로 그대로 사용한다.
 
@@ -282,6 +282,15 @@ SearchResult:
   title: string
   rank: integer        # 반환 순위, 1부터
 ```
+
+#### requery(query_id: str, new_query: str, reason: str) -> list[SearchResult] | str
+
+- 초기 검색을 마치고 미확인 URL을 모두 확인했으며 keep 문서 수가 기준 미달인 쿼리만 허용한다.
+- 쿼리당 최대 `MAX_REQUERY`회다. 같은 검색어(대소문자·공백만 바뀐 경우 포함)는 거부한다.
+- 같은 `query_id`의 검색어와 검색 결과를 교체하고 검색한다. 기존 keep 문서와 확인한 URL은 유지한다.
+- 검색 실패도 재검색 기회를 사용한 것으로 처리한다. 실패는 다른 쿼리 진행을 막지 않는다.
+- `query_id`, `old_query`, `new_query`, `reason`을 경고 로그의 필드로 남긴다.
+- LLM에는 매 회차 쿼리별 재검색 횟수를 전달한다. 기준 미달 후보는 최종 결과에서 제외하고 문서 수·제외 사유를 로그에 남긴다.
 
 #### fetch(query_id: str) -> list[FetchBatchItem] | str
 

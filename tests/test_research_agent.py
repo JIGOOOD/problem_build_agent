@@ -450,7 +450,7 @@ def test_tool_arguments_are_validated_before_execution(name, args):
     assert not session.queries["query-1"].seen
 
 
-def test_research_passes_search_fetch_and_keep_definitions_to_bind_tools(monkeypatch):
+def test_research_passes_all_tool_definitions_to_bind_tools(monkeypatch):
     registered = []
 
     def bind_tools(self, tools):
@@ -464,6 +464,7 @@ def test_research_passes_search_fetch_and_keep_definitions_to_bind_tools(monkeyp
     assert registered == [runner.TOOLS]
     assert [tool["function"]["name"] for tool in registered[0]] == [
         "search",
+        "requery",
         "fetch",
         "keep",
     ]
@@ -750,3 +751,195 @@ def test_research_prompt_tells_the_llm_the_per_document_keep_budget():
     scenario = planned(FINISH)
 
     assert "문서당 2000자 이내에서 선택한다" in scenario.llm.calls[-1][0]["content"]
+
+
+def test_research_requeries_only_exhausted_query_and_accumulates_evidence(
+    monkeypatch, caplog
+):
+    from archgen.domain.research import SearchResult
+
+    original_url = URLS["latency"][0]
+    new_url = "https://docs.example/latency/new"
+    new_query = "chat response time design"
+    searches = []
+
+    def search(self, query, *, query_id):
+        searches.append((query_id, query))
+        urls = {
+            "chat architecture": URLS["topic"],
+            "chat latency": [original_url],
+            "chat availability": URLS["availability"],
+            "chat consistency": [],
+            new_query: [new_url],
+        }[query]
+        return [
+            SearchResult(query_id=query_id, url=url, title=url, rank=i)
+            for i, url in enumerate(urls, start=1)
+        ]
+
+    monkeypatch.setattr(SearchTool, "search", search)
+    scenario = planned(
+        SEARCH,
+        FETCH,
+        keep_fetched,
+        tool_response(
+            "requery",
+            [
+                {
+                    "query_id": "query-2",
+                    "new_query": new_query,
+                    "reason": "기존 URL을 모두 확인했지만 근거가 하나뿐이다.",
+                }
+            ],
+        ),
+        tool_response("fetch", [{"query_id": "query-2"}]),
+        keep_fetched,
+        FINISH,
+    )
+
+    assert searches.count(("query-2", new_query)) == 1
+    assert len(searches) == 5
+    assert [c.kind for c in scenario.result.nfr_candidates] == ["latency"]
+    candidate = scenario.result.nfr_candidates[0]
+    assert candidate.doc_ids == [
+        doc.id for doc in scenario.result.documents if doc.url in [original_url, new_url]
+    ]
+    assert len(candidate.doc_ids) == 2
+    system = scenario.llm.calls[-1][0]["content"]
+    counts = json.loads(system.split("# 재검색 횟수\n", 1)[1].split("\n\n", 1)[0])
+    assert counts == {"query-1": 0, "query-2": 1, "query-3": 0, "query-4": 0}
+    records = [r for r in caplog.records if hasattr(r, "new_query")]
+    assert len(records) == 1
+    assert (records[0].query_id, records[0].old_query, records[0].new_query) == (
+        "query-2",
+        "chat latency",
+        new_query,
+    )
+    assert records[0].reason == "기존 URL을 모두 확인했지만 근거가 하나뿐이다."
+
+
+@pytest.mark.parametrize("condition", ["unseen", "sufficient", "repeated", "same-query"])
+def test_requery_rejects_requests_without_changing_state_or_searching(condition):
+    from archgen.domain.research import SearchResult
+
+    search = Mock()
+    search.search.return_value = [
+        SearchResult(query_id="query-2", url=url, title=url, rank=i)
+        for i, url in enumerate(URLS["latency"], start=1)
+    ]
+    session = runner._Session(
+        runner.InitialResearchPlan.model_validate(PLAN),
+        search,
+        FetchTool(lambda url: {"title": url, "content": "지연 설계 근거"}),
+    )
+
+    def execute(name, **args):
+        return session.execute(tool_response(name, [args]).tool_calls)[0]["content"]
+
+    execute("search", query_id="query-2")
+    if condition != "unseen":
+        execute("fetch", query_id="query-2")
+    if condition == "sufficient":
+        for doc_id in list(session.pending):
+            execute("keep", doc_id=doc_id, sentence_indices=[0])
+    if condition == "repeated":
+        search.search.return_value = []
+        execute(
+            "requery", query_id="query-2", new_query="chat p99 design", reason="근거 부족"
+        )
+    session.execute([])  # 이번 fetch 배치의 판정을 마친 상태다.
+    search.search.reset_mock()
+    query = session.queries["query-2"]
+    before = (query.text, query.requery_count, session.progress())
+
+    result = execute(
+        "requery",
+        query_id="query-2",
+        new_query="  CHAT   LATENCY "
+        if condition == "same-query"
+        else "chat latency SLO",
+        reason="근거 부족",
+    )
+
+    assert result.startswith("requery 오류:")
+    search.search.assert_not_called()
+    assert (query.text, query.requery_count, session.progress()) == before
+
+
+def test_research_logs_exclusion_when_requery_still_has_no_evidence(caplog):
+    llm = FakeLLM(
+        AIMessage(content=json.dumps(PLAN)),
+        tool_response("search", [{"query_id": "query-2"}]),
+        tool_response(
+            "requery",
+            [
+                {
+                    "query_id": "query-2",
+                    "new_query": "chat p99 design",
+                    "reason": "검색 결과 없음",
+                }
+            ],
+        ),
+        FINISH,
+    )
+    search = Mock()
+    search.search.return_value = []
+
+    result = run_research(
+        InterviewBrief(topic="실시간 채팅 서비스", seniority=Seniority.MIDDLE),
+        load_catalog(CATALOG_DIR),
+        llm,
+        search,
+        Mock(),
+    )
+
+    assert result.nfr_candidates == []
+    assert result.documents == []
+    assert search.search.call_count == 2
+    excluded = [r for r in caplog.records if getattr(r, "kind", None) == "latency"]
+    assert len(excluded) == 1
+    assert excluded[0].query_id == "query-2"
+    assert excluded[0].kept_documents == 0
+    assert excluded[0].required_documents == 2
+    assert excluded[0].reason
+
+
+@pytest.mark.parametrize("stage", ["search", "fetch"])
+def test_research_tool_failure_does_not_block_another_query(stage):
+    from archgen.domain.research import SearchResult
+
+    search = Mock()
+
+    def search_result(query, *, query_id):
+        if stage == "search" and query_id == "query-3":
+            return "search 실패"
+        return [
+            SearchResult(
+                query_id=query_id,
+                url=f"https://docs.example/{query_id}",
+                title=query,
+                rank=1,
+            )
+        ]
+
+    search.search.side_effect = search_result
+
+    def fetch(url):
+        if stage == "fetch" and url.endswith("query-3"):
+            raise ValueError("본문 추출 실패")
+        return {"title": url, "content": "채팅 지연 설계 근거"}
+
+    session = runner._Session(
+        runner.InitialResearchPlan.model_validate(PLAN),
+        search,
+        FetchTool(fetch),
+    )
+    calls = [{"query_id": qid} for qid in ["query-2", "query-3"]]
+    results = session.execute(tool_response("search", calls).tool_calls)
+    if stage == "fetch":
+        results = session.execute(tool_response("fetch", calls).tool_calls)
+        assert isinstance(json.loads(results[1]["content"])[0]["result"], str)
+        assert json.loads(results[0]["content"])[0]["result"]["sentences"]
+    else:
+        assert results[1]["content"] == "search 실패"
+        assert json.loads(results[0]["content"])[0]["query_id"] == "query-2"

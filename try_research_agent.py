@@ -70,7 +70,9 @@ class TraceDisplay:
 
     def context(self, call):
         args = call["args"]
-        if call["name"] == "search" or (call["name"] == "fetch" and "query_id" in args):
+        if call["name"] in ("search", "requery") or (
+            call["name"] == "fetch" and "query_id" in args
+        ):
             source = {"query_id": args.get("query_id")}
         elif call["name"] == "fetch":
             source = self.urls.get(args.get("url"), {"url": args.get("url")})
@@ -88,7 +90,11 @@ class TraceDisplay:
             value = json.loads(content)
         except (ValueError, TypeError):
             return
-        if call["name"] == "search" and isinstance(value, list):
+        if call["name"] in ("search", "requery") and isinstance(value, list):
+            if call["name"] == "requery":
+                self.queries[call["args"]["query_id"]]["query"] = call["args"][
+                    "new_query"
+                ].strip()
             for result in value:
                 self.urls.setdefault(
                     result["url"],
@@ -220,7 +226,7 @@ class TraceLLM:
     def bind_tools(self, tools):
         self.model = self.model.bind_tools(tools)
         self.tools_bound = True
-        print("\n[도구 등록] search, fetch, keep", flush=True)
+        print("\n[도구 등록] search, requery, fetch, keep", flush=True)
         return self
 
     def show_tool_results(self):
@@ -450,7 +456,7 @@ def run(
                 "  도구 요청: "
                 + " | ".join(
                     f"{name.upper()} {llm.counts[name]}회"
-                    for name in ("search", "fetch", "keep")
+                    for name in ("search", "requery", "fetch", "keep")
                 ),
                 flush=True,
             )

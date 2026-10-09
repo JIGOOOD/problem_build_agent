@@ -467,3 +467,26 @@ def test_trace_saves_full_input_messages_only_in_debug_mode(tmp_path, debug):
     assert record["response"]["content"] == "{}"
     assert record["status"] == "completed"
     assert record["first_chunk_seconds"] is not None
+
+
+def test_display_labels_requery_with_its_query_and_new_search_text(capsys):
+    display = manual.TraceDisplay()
+    display.set_plan(
+        {"search_queries": [{"query": "chat latency", "related_nfr": "latency"}]}
+    )
+    call = {
+        "name": "requery",
+        "args": {
+            "query_id": "query-1",
+            "new_query": "chat p99 design",
+            "reason": "근거 부족",
+        },
+    }
+
+    display.remember(call, "[]")
+    display.batch([call], ["[]"])
+
+    output = capsys.readouterr().out
+    assert "[REQUERY 결과]" in output
+    assert "query-1 · latency" in output
+    assert "검색어: chat p99 design" in output
