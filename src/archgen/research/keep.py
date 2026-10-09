@@ -1,5 +1,7 @@
 """가져온 문서에서 선택한 근거 문장의 원문을 남긴다."""
 
+import json
+
 from archgen.domain.research import MAX_KEEP_CHARS, Document, FetchResult
 
 
@@ -50,8 +52,7 @@ class KeepTool:
         else:
             self.documents.pop(doc_id, None)
         selected = result.model_copy(update={"sentences": sentences})
-        for message in self._messages[doc_id]:
-            message["content"] = selected.model_dump_json()
+        self._update_messages(doc_id, selected.model_dump())
         query_id = self._queries[doc_id]
         return {
             "selected_indices": sorted(selected_indices),
@@ -62,8 +63,28 @@ class KeepTool:
             ),
         }
 
+    def _update_messages(self, doc_id: str, replacement: dict | str) -> None:
+        for message in self._messages[doc_id]:
+            content = message["content"]
+            payload = json.loads(content) if content != "버림" else None
+            if isinstance(payload, list):
+                for item in payload:
+                    result = item["result"]
+                    if isinstance(result, dict) and result.get("doc_id") == doc_id:
+                        item["result"] = (
+                            replacement
+                            if isinstance(replacement, dict)
+                            else {"doc_id": doc_id, "status": replacement}
+                        )
+                message["content"] = json.dumps(payload, ensure_ascii=False)
+            else:
+                message["content"] = (
+                    json.dumps(replacement, ensure_ascii=False)
+                    if isinstance(replacement, dict)
+                    else replacement
+                )
+
     def finish_batch(self, doc_ids: list[str]) -> None:
         for doc_id in doc_ids:
             if doc_id not in self.documents:
-                for message in self._messages[doc_id]:
-                    message["content"] = "버림"
+                self._update_messages(doc_id, "버림")

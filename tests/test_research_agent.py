@@ -71,19 +71,25 @@ SEARCH = tool_response(
     "search",
     [{"query_id": f"query-{i}"} for i, _ in enumerate(PLAN["search_queries"], start=1)],
 )
-FETCH = tool_response("fetch", [{"url": url} for url in ALL_URLS])
+FETCH = tool_response("fetch", [{"query_id": f"query-{i}"} for i in [1, 2, 3]])
 FINISH = AIMessage(content="조사 완료")
+
+
+def fetched_documents(messages):
+    return [
+        item["result"]
+        for message in latest_tools(messages)
+        for item in json.loads(message["content"])
+        if isinstance(item["result"], dict)
+    ]
 
 
 def keep_fetched(messages):
     return tool_response(
         "keep",
         [
-            {
-                "doc_id": json.loads(message["content"])["doc_id"],
-                "sentence_indices": [3, 1],
-            }
-            for message in latest_tools(messages)
+            {"doc_id": document["doc_id"], "sentence_indices": [3, 1]}
+            for document in fetched_documents(messages)
         ],
     )
 
@@ -175,7 +181,7 @@ def test_research_executes_fetch_calls_in_parallel():
         fetch_barrier=Barrier(len(ALL_URLS)),
     )
 
-    assert len(latest_tools(scenario.llm.calls[-1])) == len(ALL_URLS)
+    assert len(fetched_documents(scenario.llm.calls[-1])) == len(ALL_URLS)
 
 
 def test_research_passes_tool_results_with_matching_ids_in_call_order():
@@ -193,10 +199,7 @@ def test_research_passes_tool_results_with_matching_ids_in_call_order():
             result["query_id"] == f"query-{query_id}"
             for result in json.loads(message["content"])
         )
-    fetch_results = latest_tools(scenario.llm.calls[3])
-    assert [
-        json.loads(message["content"])["url"] for message in fetch_results
-    ] == ALL_URLS
+    assert [doc["url"] for doc in fetched_documents(scenario.llm.calls[3])] == ALL_URLS
     keep_results = latest_tools(scenario.llm.calls[4])
     assert [message["tool_call_id"] for message in keep_results] == [
         f"keep-{i}" for i in range(1, 5)
@@ -212,13 +215,13 @@ def test_research_returns_selected_sentences_in_original_order():
     assert scenario.result.topic_summary == PLAN["topic_summary"]
     assert [document.model_dump() for document in scenario.result.documents] == [
         {
-            "id": json.loads(message["content"])["doc_id"],
+            "id": document["doc_id"],
             "url": url,
             "title": url,
             "content": f"{url} p99 100ms\n\n{url} trade-off",
         }
-        for url, message in zip(
-            ALL_URLS, latest_tools(scenario.llm.calls[3]), strict=True
+        for url, document in zip(
+            ALL_URLS, fetched_documents(scenario.llm.calls[3]), strict=True
         )
     ]
 
@@ -266,7 +269,7 @@ def test_research_keeps_excluded_candidate_documents_without_linking_them():
 
 def test_research_excludes_unselected_documents_from_result():
     def keep_only_topic(messages):
-        first = json.loads(latest_tools(messages)[0]["content"])
+        first = fetched_documents(messages)[0]
         return tool_response(
             "keep", [{"doc_id": first["doc_id"], "sentence_indices": [1]}]
         )
@@ -310,7 +313,7 @@ def test_research_stops_at_20_calls_including_initial_plan_retry():
 
 def test_research_returns_partial_evidence_when_topic_documents_are_missing():
     search_latency = tool_response("search", [{"query_id": "query-2"}])
-    fetch_latency = tool_response("fetch", [{"url": url} for url in URLS["latency"]])
+    fetch_latency = tool_response("fetch", [{"query_id": "query-2"}])
 
     scenario = planned(search_latency, fetch_latency, keep_fetched, FINISH)
 
@@ -325,21 +328,54 @@ def test_research_returns_partial_evidence_when_topic_documents_are_missing():
 def test_research_fetches_only_top_three_unseen_urls_per_query(monkeypatch):
     urls = [f"https://docs.example/latency/{i}" for i in range(1, 6)]
     monkeypatch.setitem(URLS, "latency", urls)
-    first_batch = tool_response("fetch", [{"url": url} for url in [urls[3], *urls[:3]]])
-    next_batch = tool_response("fetch", [{"url": url} for url in [urls[0], *urls[3:]]])
+    batch = tool_response("fetch", [{"query_id": "query-2"}])
 
-    scenario = planned(SEARCH, first_batch, next_batch, FINISH)
+    scenario = planned(SEARCH, batch, batch, FINISH)
 
-    first_results = latest_tools(scenario.llm.calls[3])
-    assert first_results[0]["content"].startswith("fetch 오류:")
-    assert [
-        json.loads(message["content"])["url"] for message in first_results[1:]
-    ] == urls[:3]
-    next_results = latest_tools(scenario.llm.calls[4])
-    assert next_results[0]["content"].startswith("fetch 오류:")
-    assert [
-        json.loads(message["content"])["url"] for message in next_results[1:]
-    ] == urls[3:]
+    first_results = json.loads(latest_tools(scenario.llm.calls[3])[0]["content"])
+    assert [item["url"] for item in first_results] == urls[:3]
+    assert [item["rank"] for item in first_results] == [1, 2, 3]
+    assert all(item["result"]["sentences"] for item in first_results)
+    next_results = json.loads(latest_tools(scenario.llm.calls[4])[0]["content"])
+    assert [item["url"] for item in next_results] == urls[3:]
+    assert [item["rank"] for item in next_results] == [4, 5]
+
+
+def test_fetch_failure_counts_toward_batch_size_and_next_call_moves_on(monkeypatch):
+    urls = [f"https://docs.example/latency/{i}" for i in range(1, 5)]
+    monkeypatch.setitem(URLS, "latency", urls)
+    original = FetchTool.fetch
+    attempted = []
+
+    def fetch(self, url):
+        attempted.append(url)
+        return "fetch 실패: HTTP 403" if url == urls[0] else original(self, url)
+
+    monkeypatch.setattr(FetchTool, "fetch", fetch)
+    batch = tool_response("fetch", [{"query_id": "query-2"}])
+    scenario = planned(SEARCH, batch, batch, FINISH)
+
+    first = json.loads(latest_tools(scenario.llm.calls[3])[0]["content"])
+    assert [item["url"] for item in first] == urls[:3]
+    assert first[0]["result"] == "fetch 실패: HTTP 403"
+    assert all(item["result"]["sentences"] for item in first[1:])
+    second = json.loads(latest_tools(scenario.llm.calls[4])[0]["content"])
+    assert [item["url"] for item in second] == urls[3:]
+    assert sorted(attempted) == urls
+
+
+def test_duplicate_fetch_calls_in_one_response_do_not_exceed_three_urls(monkeypatch):
+    urls = [f"https://docs.example/latency/{i}" for i in range(1, 7)]
+    monkeypatch.setitem(URLS, "latency", urls)
+    calls = tool_response("fetch", [{"query_id": "query-2"}] * 2)
+
+    scenario = planned(SEARCH, calls, FINISH)
+
+    results = latest_tools(scenario.llm.calls[3])
+    batches = [json.loads(m["content"]) for m in results if m["content"].startswith("[")]
+    assert len(batches) == 1
+    assert [item["url"] for item in batches[0]] == urls[:3]
+    assert sum(m["content"].startswith("fetch 오류:") for m in results) == 1
 
 
 def test_research_system_prompt_includes_source_policy_and_document_criteria():
@@ -389,8 +425,8 @@ def test_tool_schema_uses_exact_api_keys_and_required_arguments():
         ("search", {"query_id": "query-1", "extra": 1}),
         ("search", {"QUERY_ID": "query-1"}),
         ("search", {"query_id": 12}),
-        ("fetch", {"url": URLS["topic"][0], "extra": 1}),
-        ("fetch", {"url": [URLS["topic"][0]]}),
+        ("fetch", {"query_id": "query-1", "extra": 1}),
+        ("fetch", {"query_id": ["query-1"]}),
         ("keep", {"doc_id": "doc-a", "sentence_indices": [True]}),
         ("keep", {"doc_id": "doc-a", "sentence_indices": "1"}),
     ],
@@ -401,7 +437,6 @@ def test_tool_arguments_are_validated_before_execution(name, args):
         runner.InitialResearchPlan.model_validate(PLAN), search, fetch
     )
     session.keep = Mock()
-    session.url_queries[URLS["topic"][0]] = "query-1"
 
     result = session._call_tool(
         {"name": name, "args": args}, {"query-1": {URLS["topic"][0]}}
@@ -567,7 +602,7 @@ def test_research_serializes_keep_updates_to_the_same_document(monkeypatch):
                 active -= 1
 
     def keep_twice(messages):
-        doc_id = json.loads(latest_tools(messages)[0]["content"])["doc_id"]
+        doc_id = fetched_documents(messages)[0]["doc_id"]
         return tool_response(
             "keep",
             [
@@ -612,6 +647,7 @@ def test_research_parallel_calls_return_successful_payloads(stage):
     if stage == "search":
         assert [len(results) for results in payloads] == [1, 2, 1, 0]
     else:
+        payloads = fetched_documents(scenario.llm.calls[-1])
         assert [document["url"] for document in payloads] == ALL_URLS
         assert all(document["sentences"] for document in payloads)
 
@@ -628,9 +664,7 @@ def test_research_reports_pending_documents_and_remaining_urls_to_llm():
         {"rank": i, "url": url} for i, url in enumerate(URLS["latency"], start=1)
     ]
     before_keep = state_at(3)
-    fetched = [
-        json.loads(message["content"]) for message in latest_tools(scenario.llm.calls[3])
-    ]
+    fetched = fetched_documents(scenario.llm.calls[3])
     assert before_keep["pending_documents"] == [
         {"doc_id": document["doc_id"], "query_id": query_id}
         for document, query_id in zip(
@@ -647,9 +681,9 @@ def test_research_drops_processed_history_but_preserves_evidence():
     scenario = planned(SEARCH, FETCH, keep_fetched, FINISH)
 
     before_keep = scenario.llm.calls[3]
-    assert all("sentences" in json.loads(m["content"]) for m in latest_tools(before_keep))
+    assert all("sentences" in doc for doc in fetched_documents(before_keep))
     after_keep = scenario.llm.calls[4]
-    assert len(after_keep) == 3 + 1 + len(FETCH.tool_calls)
+    assert len(after_keep) == 3 + 1 + len(ALL_URLS)
     assert [m["tool_call_id"] for m in after_keep if m["role"] == "tool"] == [
         f"keep-{i}" for i in range(1, 5)
     ]

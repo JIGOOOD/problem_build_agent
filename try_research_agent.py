@@ -70,7 +70,7 @@ class TraceDisplay:
 
     def context(self, call):
         args = call["args"]
-        if call["name"] == "search":
+        if call["name"] == "search" or (call["name"] == "fetch" and "query_id" in args):
             source = {"query_id": args.get("query_id")}
         elif call["name"] == "fetch":
             source = self.urls.get(args.get("url"), {"url": args.get("url")})
@@ -94,8 +94,11 @@ class TraceDisplay:
                     result["url"],
                     {key: result[key] for key in ("query_id", "rank", "url")},
                 )
-        elif call["name"] == "fetch" and isinstance(value, dict):
-            self.documents[value["doc_id"]] = self.urls.get(value["url"], {})
+        elif call["name"] == "fetch" and isinstance(value, list):
+            for item in value:
+                result = item["result"]
+                if isinstance(result, dict) and "doc_id" in result:
+                    self.documents[result["doc_id"]] = self.urls.get(item["url"], {})
 
     def detail(self, call, content):
         args = call["args"]
@@ -123,14 +126,30 @@ class TraceDisplay:
         """단계 → 쿼리 → URL 순위 순으로 묶고, 긴 원문은 JSON 기록에 둔다."""
         if contents is None:
             for name, count in Counter(call["name"] for call in calls).items():
-                print(f"\n[{name.upper()} 시작] {count}건", flush=True)
+                unit = "개 쿼리" if name == "fetch" else "건"
+                print(f"\n[{name.upper()} 시작] {count}{unit}", flush=True)
             return
+        rows = []
+        for call, content in zip(calls, contents, strict=True):
+            if call["name"] == "fetch" and content.startswith("["):
+                for item in json.loads(content):
+                    result = item["result"]
+                    rows.append(
+                        (
+                            {"name": "fetch", "args": {"url": item["url"]}},
+                            json.dumps(result, ensure_ascii=False)
+                            if isinstance(result, dict)
+                            else result,
+                        )
+                    )
+            else:
+                rows.append((call, content))
         groups = defaultdict(lambda: defaultdict(list))
-        for i, call in enumerate(calls):
+        for call, content in rows:
             context = self.context(call)
             query_id = context.get("query_id") or "소속 미확인"
             kind = context["related_nfr"] or ("주제" if context.get("query_id") else "-")
-            status, detail = self.detail(call, contents[i])
+            status, detail = self.detail(call, content)
             rank = f"#{context['rank']}" if "rank" in context else "-"
             line = f"    {rank} | {status} | {' '.join(detail.split())}"
             groups[call["name"]][(query_id, kind)].append(

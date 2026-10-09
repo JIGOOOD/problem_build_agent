@@ -68,9 +68,9 @@ TOOLS = [
     ),
     _tool(
         "fetch",
-        "검색 결과에서 순위가 높은 미확인 URL의 본문을 가져온다.",
+        f"query_id만 전달한다. 코드가 해당 쿼리의 순위가 높은 미확인 URL을 {FETCH_BATCH}개씩 가져온다. 남은 URL이 적으면 남은 만큼 가져온다.",
         {
-            "url": {"type": "string"},
+            "query_id": {"type": "string"},
         },
     ),
     _tool(
@@ -124,7 +124,6 @@ class _Session:
             f"query-{i}": _Query(query.query, query.related_nfr)
             for i, query in enumerate(plan.search_queries, start=1)
         }
-        self.url_queries: dict[str, str] = {}
         self.doc_queries: dict[str, str] = {}
         self.pending: list[str] = []
         self.lock = Lock()
@@ -138,15 +137,24 @@ class _Session:
             query.searched = True
         return self.search.search(query.text, query_id=query_id)
 
-    def _fetch(self, args: dict, allowed: dict[str, set[str]]) -> FetchResult | str:
-        url = args["url"]
-        query_id = self.url_queries[url]
+    def _fetch(self, args: dict, allowed: dict[str, set[str]]) -> list[dict] | str:
+        query_id = args["query_id"]
         query = self.queries[query_id]
         with self.lock:
-            if url not in allowed[query_id] or url in query.seen:
-                return "fetch 오류: 순위가 높은 미확인 배치 URL을 선택해야 한다."
-            query.seen.add(url)
-        return self.fetch.fetch(url)
+            batch = [
+                result
+                for result in query.results
+                if result.url in allowed[query_id] and result.url not in query.seen
+            ]
+            if not batch:
+                return "fetch 오류: 이번 배치에서 가져올 미확인 URL이 없다."
+            query.seen.update(result.url for result in batch)
+        with ThreadPoolExecutor(max_workers=len(batch)) as pool:
+            results = list(pool.map(self.fetch.fetch, [item.url for item in batch]))
+        return [
+            {"url": item.url, "rank": item.rank, "result": result}
+            for item, result in zip(batch, results, strict=True)
+        ]
 
     def _fetch_batch_urls(self) -> dict[str, set[str]]:
         allowed = {}
@@ -159,7 +167,7 @@ class _Session:
 
     def _call_tool(
         self, call: dict, allowed: dict[str, set[str]]
-    ) -> list[SearchResult] | FetchResult | dict | str:
+    ) -> list[SearchResult] | list[dict] | dict | str:
         name, args = call["name"], call["args"]
         try:
             _validate_tool_args(name, args)
@@ -174,23 +182,27 @@ class _Session:
     def _record_result(
         self,
         call: dict,
-        result: list[SearchResult] | FetchResult | dict | str,
+        result: list[SearchResult] | list[dict] | dict | str,
         message: dict,
     ) -> None:
-        if isinstance(result, list):
+        if isinstance(result, list) and call["name"] == "search":
             query_id = call["args"]["query_id"]
             self.queries[query_id].results = sorted(result, key=lambda item: item.rank)
-            for item in result:
-                self.url_queries.setdefault(item.url, query_id)
             message["content"] = json.dumps(
                 [item.model_dump() for item in result], ensure_ascii=False
             )
-        elif isinstance(result, FetchResult):
-            message["content"] = result.model_dump_json()
-            query_id = self.url_queries[result.url]
-            self.doc_queries.setdefault(result.doc_id, query_id)
-            self.keep.register(query_id, result, message)
-            self.pending.append(result.doc_id)
+        elif isinstance(result, list):
+            query_id = call["args"]["query_id"]
+            payload = []
+            for item in result:
+                fetched = item["result"]
+                if isinstance(fetched, FetchResult):
+                    self.doc_queries.setdefault(fetched.doc_id, query_id)
+                    self.keep.register(query_id, fetched, message)
+                    self.pending.append(fetched.doc_id)
+                    fetched = fetched.model_dump()
+                payload.append({**item, "result": fetched})
+            message["content"] = json.dumps(payload, ensure_ascii=False)
         elif isinstance(result, dict):
             message["content"] = json.dumps(result, ensure_ascii=False)
         else:

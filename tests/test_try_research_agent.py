@@ -167,10 +167,11 @@ def test_manual_runner_labels_query_and_search_rank_and_saves_context(
             "keep",
             [
                 {
-                    "doc_id": json.loads(message["content"])["doc_id"],
+                    "doc_id": item["result"]["doc_id"],
                     "sentence_indices": [1],
                 }
-                for message in messages[-3:]
+                for message in messages[-2:]
+                for item in json.loads(message["content"])
             ],
         )
 
@@ -183,9 +184,7 @@ def test_manual_runner_labels_query_and_search_rank_and_saves_context(
                 for i, _ in enumerate(plan["search_queries"], start=1)
             ],
         ),
-        tool_call(
-            "fetch", [{"url": url} for url in [topic_url, *reversed(latency_urls)]]
-        ),
+        tool_call("fetch", [{"query_id": "query-1"}, {"query_id": "query-2"}]),
         keep_fetched,
         AIMessage(content="조사 완료"),
     )
@@ -219,7 +218,7 @@ def test_manual_runner_labels_query_and_search_rank_and_saves_context(
     assert "[SEARCH 시작] 4건" in output
     assert "query-2 · latency" in output
     assert "검색어: chat latency" in output
-    assert "[FETCH 시작] 3건" in output
+    assert "[FETCH 시작] 2개 쿼리" in output
     assert f"#2 | 성공 | 본문 2문장 · {latency_urls[1]}" in output
     assert "[KEEP 시작] 3건" in output
     assert "문장: [1]" in output
@@ -230,9 +229,11 @@ def test_manual_runner_labels_query_and_search_rank_and_saves_context(
     assert fetches[1]["context"] == {
         "query_id": "query-2",
         "related_nfr": "latency",
-        "rank": 2,
-        "url": latency_urls[1],
     }
+    batch = json.loads(fetches[1]["result"]["content"])
+    assert [(item["rank"], item["url"]) for item in batch] == list(
+        enumerate(latency_urls, start=1)
+    )
     assert len(json.loads((run_dir / "result.json").read_text())["documents"]) == 3
     assert not (run_dir / "messages.json").exists()
     assert "offline-test-key" not in "".join(p.read_text() for p in run_dir.iterdir())
@@ -259,19 +260,27 @@ def test_display_groups_fetch_results_by_query_and_shortens_long_urls(capsys):
             ),
         )
     capsys.readouterr()
-    calls = [{"name": "fetch", "args": {"url": url}} for url in urls]
+    calls = [{"name": "fetch", "args": {"query_id": f"query-{i}"}} for i in [1, 2]]
 
     display.batch(
         calls,
         [
             json.dumps(
-                {
-                    "doc_id": "doc-a",
-                    "url": urls[0],
-                    "sentences": [{"index": 0, "text": "本文"}],
-                }
+                [
+                    {
+                        "url": urls[0],
+                        "rank": 1,
+                        "result": {
+                            "doc_id": "doc-a",
+                            "url": urls[0],
+                            "sentences": [{"index": 0, "text": "本文"}],
+                        },
+                    }
+                ]
             ),
-            "fetch 실패: HTTP 403 Forbidden",
+            json.dumps(
+                [{"url": urls[1], "rank": 2, "result": "fetch 실패: HTTP 403 Forbidden"}]
+            ),
         ],
     )
 

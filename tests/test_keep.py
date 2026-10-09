@@ -233,3 +233,40 @@ def test_keep_keeps_sentence_selections_separate_for_each_document():
     assert json.loads(second_message["content"])["sentences"] == [
         sentence.model_dump() for sentence in second.sentences
     ]
+
+
+def test_keep_and_discard_update_only_their_document_in_a_fetch_batch():
+    tool = KeepTool()
+    first, _ = register_document(tool, "doc-a")
+    second, _ = register_document(tool, "doc-b")
+    message = {
+        "role": "tool",
+        "tool_call_id": "fetch-batch",
+        "content": json.dumps(
+            [
+                {"url": doc.url, "rank": rank, "result": doc.model_dump()}
+                for rank, doc in enumerate([first, second], start=1)
+            ]
+        ),
+    }
+    for doc in [first, second]:
+        tool.register("query-latency", doc, message)
+
+    tool.keep("doc-a", [3, 1])
+    payload = json.loads(message["content"])
+    assert payload[0]["result"]["sentences"] == [
+        first.sentences[i].model_dump() for i in [1, 3]
+    ]
+    assert payload[1]["result"] == second.model_dump()
+
+    tool.finish_batch(["doc-a", "doc-b"])
+    tool.keep("doc-a", [0])
+    payload = json.loads(message["content"])
+    assert payload[0]["result"]["sentences"] == [
+        first.sentences[i].model_dump() for i in [0, 1, 3]
+    ]
+    assert payload[1] == {
+        "url": second.url,
+        "rank": 2,
+        "result": {"doc_id": "doc-b", "status": "버림"},
+    }

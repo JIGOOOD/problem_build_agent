@@ -202,7 +202,7 @@ Research Agent는 기존 Research Planner, Search API, Crawling 세 단계를 �
 같은 단계의 도구 호출은 한 응답에서 병렬로 묶어서 호출한다. LLM 호출 횟수를 줄이기 위해서다.
 
 - 첫 search: 모든 쿼리를 한 번에 호출한다.
-- fetch: 모든 쿼리의 이번 배치 URL(쿼리당 `FETCH_BATCH`개)을 한 번에 호출한다.
+- fetch: 필요한 쿼리의 `query_id`를 각각 전달해 함께 호출한다. 코드가 쿼리별 미확인 URL을 순위대로 `FETCH_BATCH`개씩 가져온다.
 - keep: 이번에 판정한 문서를 한 번에 호출한다.
 - 추가 fetch, 쿼리 재생성 search도 해당되는 쿼리를 모아 한 번에 호출한다.
 
@@ -283,7 +283,14 @@ SearchResult:
   rank: integer        # 반환 순위, 1부터
 ```
 
-#### fetch(url: str) -> FetchResult | str
+#### fetch(query_id: str) -> list[FetchBatchItem] | str
+
+- LLM은 `query_id`만 전달한다. 코드가 해당 쿼리의 순위가 높은 미확인 URL 3개를 선택한다. 남은 URL이 1~2개면 남은 것만 가져온다.
+- URL별 성공·실패와 무관하게 선택한 URL 모두 확인한 것으로 처리한다. 다음 호출은 다음 순위부터 진행한다.
+- 같은 응답에 같은 쿼리를 여러 번 호출해도 배치는 최대 3개다. 없는 쿼리나 가져올 URL이 없으면 오류 문자열을 반환한다.
+- 쿼리 간 및 배치 내 URL 요청은 병렬로 실행하고 결과는 검색 순위대로 반환한다.
+- 배치 항목은 `{url, rank, result}`이며 `result`는 `FetchResult` 또는 오류 문자열이다. 성공한 각 문서를 개별 keep 판정한다.
+- 실제 HTTP·본문 추출은 내부 `FetchTool.fetch(url)`이 담당하며 아래 동작을 유지한다.
 
 - HTTP로 HTML을 가져오고, 본문 추출에서 메뉴·푸터와 댓글을 제외한다.
 - 정리한 본문에 `MAX_CONTENT_CHARS` 상한을 적용한다. 초과분은 버리고 URL·원문 길이·상한을 로그에 남긴다.
