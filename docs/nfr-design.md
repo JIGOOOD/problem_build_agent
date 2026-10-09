@@ -128,8 +128,7 @@ common_tradeoffs:
 **목표**
 
 - NFR을 정의할 때 신뢰할 수 있는 기술 자료를 우선적으로 활용하도록 문서 선택 기준을 정한다.
-- 검색에서 제외할 차단 도메인 목록은 Tavily의 `exclude_domains`로 전달한다.
-  출처 우선순위(tier)는 코드가 매기지 않고 Research Agent가 문서를 판정할 때 적용한다.
+- 출처 우선순위(tier)는 코드가 매기지 않고 Research Agent가 문서를 판정할 때 적용한다.
 
 **필요성**
 

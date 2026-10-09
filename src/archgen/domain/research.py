@@ -5,7 +5,14 @@ from __future__ import annotations
 import re
 from typing import Annotated, Self
 
-from pydantic import BaseModel, BeforeValidator, Field, StringConstraints, model_validator
+from pydantic import (
+    BaseModel,
+    BeforeValidator,
+    Field,
+    StringConstraints,
+    field_validator,
+    model_validator,
+)
 
 # 프롬프트와 스키마가 같은 숫자를 쓰도록 한곳에 둔다.
 CANDIDATES_MIN, CANDIDATES_MAX = 3, 5
@@ -43,6 +50,71 @@ class SearchQuery(BaseModel):
     query: Text
     purpose: Text
     related_nfrs: list[Kind] = []
+
+
+class InitialSearchQuery(BaseModel):
+    """Research Agent가 주제 또는 후보 하나를 검증할 검색어."""
+
+    query: Text
+    related_nfr: Kind | None
+
+
+class InitialResearchPlan(BaseModel):
+    """Research Agent가 검색을 시작하기 전에 만드는 초기 계획."""
+
+    topic_summary: Text
+    nfr_candidates: list[NFRCandidate]
+    search_queries: list[InitialSearchQuery]
+
+    @field_validator("search_queries", mode="before")
+    @classmethod
+    def _remove_blank_queries(cls, value: object) -> object:
+        if not isinstance(value, list):
+            return value
+        return [
+            item
+            for item in value
+            if not (
+                isinstance(item, dict)
+                and isinstance(item.get("query"), str)
+                and not item["query"].strip()
+            )
+        ]
+
+    @model_validator(mode="after")
+    def _tidy_and_validate(self) -> Self:
+        candidates: dict[str, NFRCandidate] = {}
+        for candidate in self.nfr_candidates:
+            candidates.setdefault(candidate.kind, candidate)
+        self.nfr_candidates = list(candidates.values())
+        if not CANDIDATES_MIN <= len(self.nfr_candidates) <= CANDIDATES_MAX:
+            raise ValueError(
+                f"nfr_candidates: 후보는 {CANDIDATES_MIN}~{CANDIDATES_MAX}개여야 한다. "
+                f"현재 {len(self.nfr_candidates)}개다."
+            )
+        queries: dict[str, InitialSearchQuery] = {}
+        for query in self.search_queries:
+            queries.setdefault(" ".join(query.query.casefold().split()), query)
+        self.search_queries = list(queries.values())
+        topic_count = sum(query.related_nfr is None for query in self.search_queries)
+        if topic_count != 1:
+            raise ValueError(
+                f"search_queries: 주제 쿼리는 정확히 1개여야 한다. 현재 {topic_count}개다."
+            )
+        for kind in candidates:
+            count = sum(query.related_nfr == kind for query in self.search_queries)
+            if count != 1:
+                raise ValueError(
+                    f"search_queries: 후보 {kind}의 쿼리는 1개여야 한다. 현재 {count}개다."
+                )
+        if len(self.search_queries) > MAX_QUERIES:
+            raise ValueError(f"search_queries: 쿼리는 {MAX_QUERIES}개 이하여야 한다.")
+        for query in self.search_queries:
+            if query.related_nfr is not None and query.related_nfr not in candidates:
+                raise ValueError(
+                    f"search_queries: 후보에 없는 kind를 참조한다: {query.related_nfr}"
+                )
+        return self
 
 
 class ResearchPlan(BaseModel):
