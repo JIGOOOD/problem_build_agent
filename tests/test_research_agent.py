@@ -147,6 +147,14 @@ def test_initial_plan_uses_schema_bound_model_and_loop_uses_original_model():
     tools.invoke.assert_called_once()
 
 
+def test_loop_prompt_requires_immediate_keep_decision_for_fetch_results():
+    scenario = planned(FINISH)
+    system = scenario.llm.calls[-1][0]["content"]
+    assert "fetch 결과는 다음 회차에만 보이므로" in system
+    assert "받은 즉시 같은 응답에서 keep 여부를 판정한다" in system
+    assert "미루지 않는다" in system
+
+
 def test_research_executes_search_calls_in_parallel():
     scenario = run_scenario(
         AIMessage(content=json.dumps(PLAN)),
