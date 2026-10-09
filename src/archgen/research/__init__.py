@@ -1,1 +1,1 @@
-"""검색 전에 조사 범위를 정하는 Research Planner."""
+"""검색·크롤링·근거 선택 도구를 사용하는 Research Agent."""

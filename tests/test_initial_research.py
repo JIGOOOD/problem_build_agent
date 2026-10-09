@@ -13,8 +13,7 @@ from archgen.domain.research import (
 )
 from archgen.paths import CATALOG_DIR
 from archgen.research import agent
-from archgen.research.agent import build_initial_research_messages
-from archgen.research.planner import PlannerError
+from archgen.research.agent import ResearchPlanError, build_initial_research_messages
 
 BRIEF = InterviewBrief(topic="실시간 채팅 서비스", seniority=Seniority.MIDDLE)
 
@@ -356,7 +355,7 @@ def test_initial_plan_retries_when_candidate_has_no_query_after_cleanup(
         ),
     ],
 )
-def test_initial_plan_raises_planner_error_after_only_one_retry(
+def test_initial_plan_raises_research_plan_error_after_only_one_retry(
     catalog: NFRCatalog, second_violation: str, expected_second_reason: str
 ) -> None:
     first = initial_response()
@@ -372,7 +371,7 @@ def test_initial_plan_raises_planner_error_after_only_one_retry(
         second["search_queries"].pop()
     llm = FakeLLM(first, second, initial_response())
 
-    with pytest.raises(PlannerError) as raised:
+    with pytest.raises(ResearchPlanError) as raised:
         agent.plan_initial_research(BRIEF, catalog, llm)
 
     assert len(llm.calls) == 2
@@ -450,3 +449,24 @@ def test_initial_plan_removes_blank_queries_before_validation(
 
     assert [query.model_dump() for query in plan.search_queries] == expected_queries
     assert len(llm.calls) == 1
+
+
+@pytest.mark.parametrize(
+    "response", [TimeoutError("응답 없음"), None, [{"type": "text", "text": "{}"}]]
+)
+def test_initial_plan_does_not_retry_connection_failures_or_non_text_responses(
+    catalog: NFRCatalog, response: object
+) -> None:
+    """기존 Planner의 연결부 오류 검증을 새 Agent로 옮긴다."""
+    calls = []
+
+    def llm(messages):
+        calls.append(messages)
+        if isinstance(response, Exception):
+            raise response
+        return response
+
+    expected_error = TimeoutError if isinstance(response, Exception) else TypeError
+    with pytest.raises(expected_error):
+        agent.plan_initial_research(BRIEF, catalog, llm)
+    assert len(calls) == 1

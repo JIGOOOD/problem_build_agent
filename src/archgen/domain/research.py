@@ -1,4 +1,4 @@
-"""Planner가 내놓는 조사 계획. 스키마는 docs/nfr-design.md를 따른다."""
+"""Research Agent의 초기 조사 계획과 도구 결과."""
 
 from __future__ import annotations
 
@@ -8,7 +8,6 @@ from typing import Annotated, Self
 from pydantic import (
     BaseModel,
     BeforeValidator,
-    Field,
     StringConstraints,
     field_validator,
     model_validator,
@@ -75,14 +74,6 @@ class NFRCandidate(BaseModel):
     reason: Text
 
 
-class SearchQuery(BaseModel):
-    """후보를 확인할 자료를 찾기 위한 검색어."""
-
-    query: Text
-    purpose: Text
-    related_nfrs: list[Kind] = []
-
-
 class InitialSearchQuery(BaseModel):
     """Research Agent가 주제 또는 후보 하나를 검증할 검색어."""
 
@@ -145,45 +136,4 @@ class InitialResearchPlan(BaseModel):
                 raise ValueError(
                     f"search_queries: 후보에 없는 kind를 참조한다: {query.related_nfr}"
                 )
-        return self
-
-
-class ResearchPlan(BaseModel):
-    """검색을 돌리기 전에 정하는 조사 범위."""
-
-    topic_summary: Text
-    # 개수는 중복을 걸러낸 뒤 검사한다(아래 검증기). 스키마에는 그대로 실어
-    # 구조화 출력이 생성 단계에서 모델을 3~5개로 묶게 한다.
-    nfr_candidates: Annotated[
-        list[NFRCandidate],
-        Field(json_schema_extra={"minItems": CANDIDATES_MIN, "maxItems": CANDIDATES_MAX}),
-    ]
-    search_queries: Annotated[list[SearchQuery], Field(max_length=MAX_QUERIES)]
-
-    @model_validator(mode="after")
-    def _tidy_candidate_references(self) -> Self:
-        """겹친 후보·검색어는 먼저 나온 것만 남기고, 후보에 없는 kind 참조는 지운다.
-
-        걸러낸 뒤 후보 수가 3~5개 밖이면 코드로 맞출 수 없으니 거부한다(재시도 대상).
-        """
-        unique: dict[str, NFRCandidate] = {}
-        for candidate in self.nfr_candidates:
-            unique.setdefault(candidate.kind, candidate)
-        if not CANDIDATES_MIN <= len(unique) <= CANDIDATES_MAX:
-            raise ValueError(
-                f"nfr_candidates: 서로 다른 후보가 {len(unique)}개다. "
-                f"후보는 서로 다른 kind로 {CANDIDATES_MIN}~{CANDIDATES_MAX}개여야 한다."
-            )
-        self.nfr_candidates = list(unique.values())
-
-        # 같은 검색을 두 번 돌리지 않는다. 대소문자·공백 차이는 같은 검색어로 본다.
-        queries: dict[str, SearchQuery] = {}
-        for query in self.search_queries:
-            queries.setdefault(" ".join(query.query.casefold().split()), query)
-        self.search_queries = list(queries.values())
-
-        # 검색어는 남긴다. 참조만 틀렸을 뿐 가져온 문서는 NFR Agent가 판단한다.
-        for query in self.search_queries:
-            refs = [ref for ref in query.related_nfrs if ref in unique]
-            query.related_nfrs = list(dict.fromkeys(refs))
         return self

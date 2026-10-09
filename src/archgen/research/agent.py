@@ -2,6 +2,7 @@
 
 import json
 import logging
+from collections.abc import Callable
 from pathlib import Path
 
 from pydantic import ValidationError
@@ -14,12 +15,19 @@ from archgen.domain.research import (
     MAX_QUERIES,
     InitialResearchPlan,
 )
-from archgen.research.planner import Message, PlannerError, PlannerLLM, _feedback, _text
 from archgen.templating import template_env
 
 _ENV = template_env(Path(__file__).parent / "templates")
 _ENV.filters["one_line"] = lambda text: " ".join(text.split())
 _LOGGER = logging.getLogger(__name__)
+
+
+Message = dict[str, str]
+InitialPlanLLM = Callable[[list[Message]], str]
+
+
+class ResearchPlanError(RuntimeError):
+    """재시도 후에도 초기 조사 계획이 검증을 통과하지 못했다."""
 
 
 def build_initial_research_messages(
@@ -38,7 +46,7 @@ def build_initial_research_messages(
     return [{"role": "system", "content": system}, {"role": "user", "content": user}]
 
 
-def _call_llm(llm: PlannerLLM, messages: list[Message]) -> str:
+def _call_llm(llm: InitialPlanLLM, messages: list[Message]) -> str:
     for index, message in enumerate(messages):
         if set(message) != {"role", "content"}:
             raise ValueError(f"messages.{index}: 키는 정확히 role, content여야 한다.")
@@ -46,7 +54,7 @@ def _call_llm(llm: PlannerLLM, messages: list[Message]) -> str:
 
 
 def plan_initial_research(
-    brief: InterviewBrief, catalog: NFRCatalog, llm: PlannerLLM
+    brief: InterviewBrief, catalog: NFRCatalog, llm: InitialPlanLLM
 ) -> InitialResearchPlan:
     """응답을 정리해 검증하고, 위반 이유를 알려 한 번만 재시도한다."""
     messages = build_initial_research_messages(brief, catalog)
@@ -67,7 +75,27 @@ def plan_initial_research(
     try:
         return InitialResearchPlan.model_validate_json(second)
     except ValidationError as error:
-        raise PlannerError(
+        raise ResearchPlanError(
             "재시도 후에도 InitialResearchPlan 규칙을 어겼다.\n"
             f"[1차]\n{_feedback(first_error)}\n[2차]\n{_feedback(error)}"
         ) from error
+
+
+def _text(response: object) -> str:
+    """응답 원문은 문자열이어야 한다. 아니면 모델 실수가 아니라 연결부 버그라 재시도하지 않는다."""
+    if not isinstance(response, str):
+        raise TypeError(f"LLM 응답 원문은 문자열이어야 한다: {type(response).__name__}")
+    return response
+
+
+def _feedback(error: ValidationError) -> str:
+    """무엇이 어디서 틀렸는지. 모델이 고칠 수 있도록 위치와 이유를 함께 준다."""
+    lines = [
+        f"- {'.'.join(str(part) for part in item['loc']) or '(전체)'}: {item['msg']}"
+        for item in error.errors()
+    ]
+    return (
+        "직전 응답이 ResearchPlan 규칙을 어겼다.\n"
+        + "\n".join(lines)
+        + "\n위 문제를 고쳐 같은 형식의 JSON 전체를 다시 출력하라."
+    )
