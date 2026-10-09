@@ -1,5 +1,6 @@
 """Research Agent의 초기 조사 계획을 생성하고 검증한다."""
 
+import json
 import logging
 from pathlib import Path
 
@@ -25,10 +26,13 @@ def build_initial_research_messages(
     brief: InterviewBrief, catalog: NFRCatalog
 ) -> list[Message]:
     system = _ENV.get_template("initial_system.md.j2").render(
-        catalog_block=catalog.to_prompt_block(),
+        catalog_block=catalog.to_research_prompt_block(),
         candidates_min=CANDIDATES_MIN,
         candidates_max=CANDIDATES_MAX,
         max_queries=MAX_QUERIES,
+        initial_plan_schema=json.dumps(
+            InitialResearchPlan.model_json_schema(), ensure_ascii=False, indent=2
+        ),
     )
     user = _ENV.get_template("initial_user.md.j2").render(brief=brief)
     return [{"role": "system", "content": system}, {"role": "user", "content": user}]

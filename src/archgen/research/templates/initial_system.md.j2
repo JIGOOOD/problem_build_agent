@@ -32,6 +32,12 @@
 2순위: 논문, 기술 Conference 발표
 3순위: 신뢰할 수 있는 제3자 기술 블로그, 시스템 디자인 면접 자료
 
+# 검색어의 출처 방향
+
+- 검색어는 공식 기술 문서와 공식 Engineering / Technical Blog를 우선 찾도록 만든다.
+- "official documentation", "engineering blog" 같은 표현을 주제와 NFR에 맞게 넣는다.
+- 출처 검색 표현을 넣어도 주제 맥락과 해당 NFR을 유지한다.
+
 # NFR Catalog
 
 {{ catalog_block }}
@@ -41,3 +47,10 @@
 - topic_summary: 주제 요약
 - nfr_candidates: {{ candidates_min }}~{{ candidates_max }}개, 각 항목은 kind와 reason
 - search_queries: {{ max_queries }}개 이하, 각 항목은 query와 related_nfr
+
+반드시 아래 스키마를 따르는 JSON 객체 하나만 출력한다. 설명이나 Markdown 코드 블록을 붙이지 않는다.
+필수 필드를 생략하지 않는다. 주제 쿼리에도 related_nfr을 반드시 넣고 null로 쓴다.
+
+# 출력 JSON Schema
+
+{{ initial_plan_schema }}

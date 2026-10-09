@@ -40,6 +40,14 @@ class NFRCatalog(BaseModel):
 
     entries: list[CatalogEntry] = Field(min_length=1)
 
+    def to_research_prompt_block(self) -> str:
+        """초기 후보·쿼리 생성에 필요한 이름·의미·중요한 경우만 전달한다."""
+        lines: list[str] = []
+        for entry in sorted(self.entries, key=lambda e: e.name):
+            lines.append(f"- {entry.name}: {_one_line(entry.meaning)}")
+            lines.append(f"  중요한 경우: {_join(entry.important_when)}")
+        return "\n".join(lines)
+
     def to_prompt_block(self) -> str:
         """프롬프트에 끼워넣을 문자열. 같은 입력이면 같은 결과가 나와야 한다."""
         lines: list[str] = []

@@ -17,6 +17,7 @@ from pydantic import (
 # 프롬프트와 스키마가 같은 숫자를 쓰도록 한곳에 둔다.
 CANDIDATES_MIN, CANDIDATES_MAX = 3, 5
 MAX_QUERIES = 6
+RESULTS_PER_QUERY = 10
 
 # 코드로 고칠 수 있는 것은 고치고, 고칠 수 없는 것만 거부한다. 거부하면 LLM 재시도(비용)가 든다.
 Text = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
@@ -35,6 +36,15 @@ Kind = Annotated[
     BeforeValidator(_to_snake_case),
     StringConstraints(pattern=r"^[a-z][a-z0-9_]*$"),
 ]
+
+
+class SearchResult(BaseModel):
+    """검색 순서대로 선택한 URL과 그 URL을 찾은 쿼리."""
+
+    query_id: str
+    url: str
+    title: str
+    rank: int
 
 
 class NFRCandidate(BaseModel):

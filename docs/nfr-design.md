@@ -247,16 +247,24 @@ NFR Agent는 검색하지 않고 이 문단만 읽고 판단하기 때문이다.
 - `notes` (`InterviewBrief.notes`, 있을 때만): 후보로 우선 검토하되 다른 후보와 똑같이 검증한다.
 - NFR Catalog: 후보를 고르는 메뉴가 아니라 kind 이름을 통일하는 기준.
   대응 항목이 있으면 그 kind를 쓰고, Catalog 밖 후보는 전체의 절반 이하로 제한한다.
-- Source Policy: 문서 선택 우선순위와 검색에서 제외할 차단 도메인 목록.
+  Research 입력에는 `name`, `meaning`, `important_when`만 전달한다.
+  `examples`, `common_tradeoffs`는 NFR Agent가 사용하는 전체 Catalog에 유지한다.
+- Source Policy: 문서 선택 우선순위.
+  쿼리 생성 시에도 공식 기술 문서와 공식 Engineering / Technical Blog를 우선 찾도록
+  `official documentation`, `engineering blog` 같은 검색 표현을 주제와 NFR에 맞게 넣는다.
+  출처 검색 표현을 넣어도 주제 맥락과 해당 NFR을 유지한다.
 
 검색 전 구체적 수치를 확정하거나 확인되지 않은 사실을 단정하지 않는다.
 Catalog 항목을 기계적으로 모두 선택하지 않는다.
+초기 계획 프롬프트에는 `InitialResearchPlan`의 JSON Schema도 포함한다.
+응답은 코드 블록 없는 JSON 객체 하나이며, 주제 쿼리의 `related_nfr: null`을 포함한
+모든 필수 필드를 명시하도록 지시한다. 응답 검증과 1회 재시도는 코드가 수행한다.
 
 ### 도구
 
 #### search(query: str) -> list[SearchResult] | str
 
-- Tavily로 검색한다. Source Policy 차단 도메인은 `exclude_domains`로 넘긴다.
+- Tavily로 검색한다. 차단 도메인은 구현하지 않는다.
 - 이번 실행에서 이미 나온 URL은 제거한다.
 - Tavily가 돌려준 순서(`score` 순)를 유지한 채 최대 `RESULTS_PER_QUERY`개를 반환한다.
   `rank`는 중복 제거 후 반환 순위이며 1부터 시작한다.

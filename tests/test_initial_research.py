@@ -5,7 +5,12 @@ from pydantic import ValidationError
 
 from archgen.domain.brief import InterviewBrief, Seniority
 from archgen.domain.catalog import NFRCatalog, load_catalog
-from archgen.domain.research import CANDIDATES_MAX, CANDIDATES_MIN, MAX_QUERIES
+from archgen.domain.research import (
+    CANDIDATES_MAX,
+    CANDIDATES_MIN,
+    MAX_QUERIES,
+    InitialResearchPlan,
+)
 from archgen.paths import CATALOG_DIR
 from archgen.research import agent
 from archgen.research.agent import build_initial_research_messages
@@ -69,6 +74,34 @@ def test_initial_prompt_includes_notes_only_when_provided(
         assert "사용자 중점 요구사항" not in content
 
 
+def test_initial_prompt_prioritizes_official_sources_when_generating_queries(
+    catalog: NFRCatalog,
+) -> None:
+    messages = build_initial_research_messages(BRIEF, catalog)
+
+    system = messages[0]["content"]
+    assert (
+        "검색어는 공식 기술 문서와 공식 Engineering / Technical Blog를 우선 찾도록 만든다."
+        in system
+    )
+    assert '"official documentation", "engineering blog"' in system
+    assert "출처 검색 표현을 넣어도 주제 맥락과 해당 NFR을 유지한다." in system
+
+
+def test_initial_prompt_provides_json_schema_with_required_plan_and_query_fields(
+    catalog: NFRCatalog,
+) -> None:
+    messages = build_initial_research_messages(BRIEF, catalog)
+
+    system = messages[0]["content"]
+    _, marker, schema_text = system.partition("# 출력 JSON Schema\n\n")
+    assert marker
+    schema = json.loads(schema_text)
+    assert schema == InitialResearchPlan.model_json_schema()
+    assert schema["required"] == ["topic_summary", "nfr_candidates", "search_queries"]
+    assert schema["$defs"]["InitialSearchQuery"]["required"] == ["query", "related_nfr"]
+
+
 def test_initial_prompt_excludes_seniority(catalog: NFRCatalog) -> None:
     brief = InterviewBrief(topic="실시간 채팅 서비스", seniority=Seniority.SENIOR)
 
@@ -87,9 +120,44 @@ def test_initial_prompt_carries_topic_catalog_and_count_limits(
 
     system, user = (message["content"] for message in messages)
     assert brief.topic in user
-    assert catalog.to_prompt_block() in system
+    for entry in catalog.entries:
+        assert f"- {entry.name}: {' '.join(entry.meaning.split())}" in system
+        for condition in entry.important_when:
+            assert " ".join(condition.split()) in system
     assert f"{CANDIDATES_MIN}~{CANDIDATES_MAX}개" in system
     assert f"{MAX_QUERIES}개 이하" in system
+
+
+def test_initial_prompt_catalog_contains_only_name_meaning_and_important_when() -> None:
+    catalog = NFRCatalog.model_validate(
+        {
+            "entries": [
+                {
+                    "name": "latency",
+                    "category": "UNIQUE_CATEGORY",
+                    "meaning": "고유한 뜻\n여러 줄",
+                    "important_when": ["고유한 조건\n첫 번째", "고유한 조건 두 번째"],
+                    "examples": ["제외할 고유한 예시"],
+                    "common_tradeoffs": [
+                        {
+                            "against": "unique_tradeoff",
+                            "reason": "제외할 고유한 상충 이유",
+                        }
+                    ],
+                }
+            ]
+        }
+    )
+
+    system = build_initial_research_messages(BRIEF, catalog)[0]["content"]
+    catalog_section = system.split("# NFR Catalog\n\n", 1)[1].split("\n\n# 출력", 1)[0]
+
+    assert catalog_section == (
+        "- latency: 고유한 뜻 여러 줄\n"
+        "  중요한 경우: 고유한 조건 첫 번째; 고유한 조건 두 번째"
+    )
+    assert "제외할 고유한 예시" not in system
+    assert "제외할 고유한 상충 이유" not in system
 
 
 @pytest.mark.parametrize("candidate_count", [3, 4, 5])

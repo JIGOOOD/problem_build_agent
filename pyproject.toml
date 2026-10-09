@@ -12,6 +12,7 @@ dependencies = [
     "textual>=0.60",
     "python-dotenv>=1.0",
     "pyyaml>=6.0",
+    "tavily-python>=0.8.5",
 ]
 
 [project.optional-dependencies]
@@ -46,4 +47,4 @@ only_mutate = [
     "src/archgen/domain/research.py",
 ]
 pytest_add_cli_args_test_selection = ["tests/"]
-also_copy = ["resources/"]
+also_copy = ["resources/", "try_research.py"]
