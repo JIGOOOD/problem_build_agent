@@ -45,6 +45,16 @@ line-length = 90
 
 [tool.mutmut]
 source_paths = ["src/"]
-only_mutate = ["src/archgen/research/runner.py"]
-pytest_add_cli_args_test_selection = ["tests/test_research_agent.py"]
+only_mutate = [
+    "src/archgen/research/runner.py",
+    "src/archgen/research/keep.py",
+    "src/archgen/retrieval/crawler.py",
+    "src/archgen/retrieval/search.py",
+]
+pytest_add_cli_args_test_selection = [
+    "tests/test_research_agent.py",
+    "tests/test_keep.py",
+    "tests/test_crawler.py",
+    "tests/test_search.py",
+]
 also_copy = ["resources/", "try_research.py", "try_research_agent.py"]

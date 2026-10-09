@@ -520,3 +520,13 @@ def test_http_fetch_passes_the_final_response_url_to_the_extractor(monkeypatch):
     assert result.url == original_url
     assert tool.documents[result.doc_id].url == original_url
     assert tool.documents[result.doc_id].content == body.strip()
+
+
+def test_fetch_preserves_the_failed_url_in_a_non_retryable_error():
+    url = "https://docs.example/extraction-failure"
+    tool = FetchTool(FakeFetcher(ValueError("본문 추출 실패")))
+
+    result = tool.fetch(url)
+
+    assert isinstance(result, str)
+    assert f"fetch[{url}]" in result

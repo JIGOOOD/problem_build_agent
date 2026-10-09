@@ -692,3 +692,61 @@ def test_research_drops_processed_history_but_preserves_evidence():
     kept_ids = [doc_id for q in state["queries"].values() for doc_id in q["kept_doc_ids"]]
     assert set(kept_ids) == {doc.id for doc in scenario.result.documents}
     assert all("p99 100ms" in doc.content for doc in scenario.result.documents)
+
+
+def test_research_reports_each_querys_own_evidence_and_completion_threshold():
+    scenario = planned(SEARCH, FETCH, keep_fetched, FINISH)
+    system = scenario.llm.calls[-1][0]["content"]
+    state = json.loads(system.split("# 현재 조사 상태\n", 1)[1])
+
+    expected = {}
+    for i, kind in enumerate([None, *KINDS], start=1):
+        doc_ids = [
+            doc.id
+            for doc in scenario.result.documents
+            if doc.url in URLS.get(kind or "topic", [])
+        ]
+        expected[f"query-{i}"] = {
+            "related_nfr": kind,
+            "searched": True,
+            "kept_documents": len(doc_ids),
+            "kept_doc_ids": doc_ids,
+            "required_documents": 1 if kind is None else 2,
+            "next_fetch_urls": [],
+        }
+    assert state == {"pending_documents": [], "queries": expected}
+
+
+def test_research_hides_remaining_urls_when_exactly_enough_documents_are_kept(
+    monkeypatch,
+):
+    monkeypatch.setitem(
+        URLS, "latency", [f"https://docs.example/latency/{i}" for i in range(1, 5)]
+    )
+
+    def keep_two(messages):
+        return tool_response(
+            "keep",
+            [
+                {"doc_id": doc["doc_id"], "sentence_indices": [1]}
+                for doc in fetched_documents(messages)[:2]
+            ],
+        )
+
+    scenario = planned(
+        tool_response("search", [{"query_id": "query-2"}]),
+        tool_response("fetch", [{"query_id": "query-2"}]),
+        keep_two,
+        FINISH,
+    )
+
+    system = scenario.llm.calls[-1][0]["content"]
+    state = json.loads(system.split("# 현재 조사 상태\n", 1)[1])
+    assert state["queries"]["query-2"]["kept_documents"] == 2
+    assert state["queries"]["query-2"]["next_fetch_urls"] == []
+
+
+def test_research_prompt_tells_the_llm_the_per_document_keep_budget():
+    scenario = planned(FINISH)
+
+    assert "문서당 2000자 이내에서 선택한다" in scenario.llm.calls[-1][0]["content"]

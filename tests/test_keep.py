@@ -270,3 +270,26 @@ def test_keep_and_discard_update_only_their_document_in_a_fetch_batch():
         "rank": 2,
         "result": {"doc_id": "doc-b", "status": "버림"},
     }
+
+
+def test_keep_does_not_store_a_document_when_every_selected_sentence_exceeds_budget():
+    tool = KeepTool()
+    fetched = FetchResult(
+        doc_id="doc-oversize",
+        url="https://docs.example/oversize",
+        title="긴 문장",
+        sentences=[Sentence(index=0, text="가" * 2001)],
+    )
+    message = {"role": "tool", "content": fetched.model_dump_json()}
+    tool.register("query-1", fetched, message)
+
+    result = tool.keep(fetched.doc_id, [0])
+
+    assert result == {
+        "selected_indices": [],
+        "skipped_indices": [0],
+        "content_chars": 0,
+        "kept_documents": 0,
+    }
+    assert tool.documents == {}
+    assert json.loads(message["content"])["sentences"] == []
