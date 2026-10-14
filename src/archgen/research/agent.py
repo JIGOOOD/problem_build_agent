@@ -42,7 +42,6 @@ def bind_initial_research_model(model):
                 "schema": convert_to_json_schema(InitialResearchPlan, strict=True),
             },
         },
-        extra_body={"provider": {"require_parameters": True}},
     )
 
 

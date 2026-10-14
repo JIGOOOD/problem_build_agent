@@ -86,6 +86,13 @@ class Rubric(BaseModel):
     criteria: list[RubricCriterion] = []
 
 
+class NFRSelection(BaseModel):
+    """루브릭을 작성하기 전 선정한 NFR과 문서 기반 trade-off."""
+
+    confirmed_nfrs: list[ConfirmedNFR]
+    tradeoffs: list[Tradeoff]
+
+
 class NFRExport(BaseModel):
     """NFR Agent가 주제 하나에 대해 내놓는 전체 산출물."""
 

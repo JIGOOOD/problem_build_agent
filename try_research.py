@@ -15,7 +15,7 @@ from threading import Event, Thread
 
 from tavily import TavilyClient
 
-from archgen.config import build_chat_model
+from archgen.config import build_chat_model, response_text
 from archgen.domain.brief import InterviewBrief, Seniority
 from archgen.domain.catalog import load_catalog
 from archgen.paths import CATALOG_DIR, PROJECT_ROOT
@@ -101,7 +101,7 @@ def main(run_dir: Path) -> None:
                 f"usage={response.usage_metadata}",
                 flush=True,
             )
-        return response.content
+        return response_text(response)
 
     brief = InterviewBrief(
         topic="실시간 채팅 서비스",  # 원하는 주제로 변경한다.

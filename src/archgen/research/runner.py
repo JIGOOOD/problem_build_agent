@@ -13,6 +13,7 @@ from typing import Any, Protocol
 from langchain_core.messages import AIMessage
 from langchain_core.messages.utils import convert_to_openai_messages
 
+from archgen.config import response_text
 from archgen.domain.brief import InterviewBrief
 from archgen.domain.catalog import NFRCatalog
 from archgen.domain.research import (
@@ -401,7 +402,7 @@ def run_research(
 
     initial_model = bind_initial_research_model(llm)
     plan = plan_initial_research(
-        brief, catalog, lambda messages: invoke(initial_model, messages).content
+        brief, catalog, lambda messages: response_text(invoke(initial_model, messages))
     )
     session = _Session(plan, search, fetch)
     messages = _build_messages(brief, session)

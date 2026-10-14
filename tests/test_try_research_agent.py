@@ -132,7 +132,7 @@ def test_initial_plan_requests_strict_schema_but_tool_loop_does_not(tmp_path):
     assert queries["type"] == "array"
     assert queries["items"]["additionalProperties"] is False
     assert set(queries["items"]["required"]) == {"query", "related_nfr"}
-    assert options["extra_body"]["provider"]["require_parameters"] is True
+    assert "extra_body" not in options
 
     trace.bind_tools([])
     trace.invoke(
