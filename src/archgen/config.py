@@ -78,6 +78,22 @@ def build_chat_model(tier: Tier = "large", *, model_class=None, **overrides):
     )
 
 
+def bind_structured_model(model, schema):
+    """기존 Pydantic 모델의 구조를 API 응답에 강제한다."""
+    from langchain_core.utils.function_calling import convert_to_json_schema
+
+    return model.bind(
+        response_format={
+            "type": "json_schema",
+            "json_schema": {
+                "name": schema.__name__,
+                "strict": True,
+                "schema": convert_to_json_schema(schema, strict=True),
+            },
+        }
+    )
+
+
 def response_text(message) -> str:
     """문자열 또는 Responses의 텍스트 블록만 허용한다."""
     content = message.content

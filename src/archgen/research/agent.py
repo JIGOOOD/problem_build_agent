@@ -5,9 +5,9 @@ import logging
 from collections.abc import Callable
 from pathlib import Path
 
-from langchain_core.utils.function_calling import convert_to_json_schema
 from pydantic import ValidationError
 
+from archgen.config import bind_structured_model
 from archgen.domain.brief import InterviewBrief
 from archgen.domain.catalog import NFRCatalog
 from archgen.domain.research import (
@@ -33,16 +33,7 @@ class ResearchPlanError(RuntimeError):
 
 def bind_initial_research_model(model):
     """초기 계획의 필드 구조를 API에 전달하고 지원 제공자만 사용한다."""
-    return model.bind(
-        response_format={
-            "type": "json_schema",
-            "json_schema": {
-                "name": "InitialResearchPlan",
-                "strict": True,
-                "schema": convert_to_json_schema(InitialResearchPlan, strict=True),
-            },
-        },
-    )
+    return bind_structured_model(model, InitialResearchPlan)
 
 
 def build_initial_research_messages(

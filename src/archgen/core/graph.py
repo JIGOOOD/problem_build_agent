@@ -60,6 +60,7 @@ def build_generation_graph(
     count_tokens: Callable[[list[dict[str, str]]], int],
     catalog: NFRCatalog,
     output_dir: Path,
+    selection_llm: Callable[[list[dict[str, str]]], str] | None = None,
     judge_llm: Callable[[list[dict[str, str]]], str] | None = None,
     on_progress: Callable[[str], None] | None = None,
 ):
@@ -97,7 +98,7 @@ def build_generation_graph(
         selection = select_nfrs(
             state["brief"],
             state["research"],
-            llm,
+            selection_llm if selection_llm is not None else llm,
             catalog=catalog,
             count_tokens=count_tokens,
         )

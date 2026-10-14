@@ -35,6 +35,38 @@ def test_fake_generation_needs_no_keys_or_external_services(monkeypatch, tmp_pat
     assert "자료 조사 중" in progress and "평가 기준 작성 중" in progress
 
 
+def test_runtime_binds_each_stage_to_its_strict_schema(runtime, tmp_path):
+    small, large, _ = runtime
+    service.run_generation(BRIEF, output_root=tmp_path, judge_enabled=True)
+
+    specs = [
+        call.kwargs["response_format"]
+        for model in (small, large)
+        for call in model.bind.call_args_list
+    ]
+    assert all(spec["type"] == "json_schema" for spec in specs)
+    assert [spec["json_schema"]["name"] for spec in specs] == [
+        "Rubric",
+        "NFRSelection",
+        "JudgeResponse",
+    ]
+
+    def check_objects(schema):
+        if isinstance(schema, dict):
+            if schema.get("type") == "object":
+                assert schema["additionalProperties"] is False
+                assert set(schema["required"]) == set(schema["properties"])
+            for value in schema.values():
+                check_objects(value)
+        elif isinstance(schema, list):
+            for value in schema:
+                check_objects(value)
+
+    for spec in specs:
+        assert spec["json_schema"]["strict"] is True
+        check_objects(spec["json_schema"]["schema"])
+
+
 def test_runtime_reports_each_stage_before_work(runtime, monkeypatch, tmp_path):
     small, large, _ = runtime
     progress = []

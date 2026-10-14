@@ -19,9 +19,10 @@ from threading import Event, Thread
 
 from langchain_core.messages import convert_to_messages
 
-from archgen.config import build_chat_model, response_text
+from archgen.config import bind_structured_model, build_chat_model, response_text
 from archgen.domain.brief import InterviewBrief, Seniority
 from archgen.domain.catalog import load_catalog
+from archgen.domain.nfr import NFRSelection, Rubric
 from archgen.domain.research import ResearchResult
 from archgen.export.agent import generate_rubric, select_nfrs
 from archgen.harness.checks import (
@@ -121,7 +122,6 @@ def run(
         model = build_chat_model(
             "small", timeout=llm_timeout, max_retries=0, tiktoken_model_name="gpt-4o"
         )
-        json_model = model.bind(response_format={"type": "json_object"})
         _LOGGER.info(
             "모델: %s | 입력 제한: 10K | 토큰 수는 o200k_base 추정값", model.model_name
         )
@@ -133,7 +133,7 @@ def run(
             _LOGGER.info("LLM %02d 입력: %s 토큰(추정)", calls + 1, f"{count:,}")
             return count
 
-        def call_llm(messages):
+        def call_llm(messages, schema=Rubric):
             nonlocal calls
             calls += 1
             call = calls
@@ -151,7 +151,7 @@ def run(
             _LOGGER.info("LLM %02d 요청 시작 (상한 %g초)", call, llm_timeout)
             try:
                 with llm_deadline(llm_timeout):
-                    response = json_model.invoke(messages)
+                    response = bind_structured_model(model, schema).invoke(messages)
                 save_json(
                     run_dir / f"llm-{call:02d}-response.json",
                     response.model_dump(mode="json"),
@@ -171,7 +171,7 @@ def run(
         selected = select_nfrs(
             brief,
             research,
-            call_llm,
+            lambda messages: call_llm(messages, NFRSelection),
             catalog=load_catalog(CATALOG_DIR),
             count_tokens=count_tokens,
         )

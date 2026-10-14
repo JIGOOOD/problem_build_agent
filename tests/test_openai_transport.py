@@ -3,9 +3,12 @@
 import json
 
 import httpx
+import pytest
 from langchain_core.messages.utils import convert_to_openai_messages
 
 from archgen import config
+from archgen.domain.nfr import NFRSelection, Rubric
+from archgen.judge.judge import JudgeResponse
 from archgen.research.agent import bind_initial_research_model
 from archgen.research.runner import TOOLS
 
@@ -39,6 +42,40 @@ def text_output(text):
             "content": [{"type": "output_text", "text": text, "annotations": []}],
         }
     ]
+
+
+@pytest.mark.parametrize("schema", [NFRSelection, Rubric, JudgeResponse])
+def test_generation_schemas_reach_the_responses_api(monkeypatch, golden_export, schema):
+    monkeypatch.setattr(
+        config,
+        "get_settings",
+        lambda: config.Settings(
+            "fake-key", "https://api.openai.com/v1", "gpt-6.1-sol", "gpt-6.1-sol"
+        ),
+    )
+    outputs = {
+        NFRSelection: NFRSelection(**golden_export.model_dump(exclude={"rubric"})),
+        Rubric: golden_export.rubric,
+        JudgeResponse: JudgeResponse(findings=[]),
+    }
+    raw = outputs[schema].model_dump_json()
+
+    def handle(request):
+        assert request.url.path == "/v1/responses"
+        spec = json.loads(request.content)["text"]["format"]
+        assert spec["type"] == "json_schema"
+        assert spec["name"] == schema.__name__
+        assert spec["strict"] is True
+        assert spec["schema"]["additionalProperties"] is False
+        assert set(spec["schema"]["required"]) == set(schema.model_fields)
+        return httpx.Response(200, json=reply(text_output(raw)))
+
+    with httpx.Client(transport=httpx.MockTransport(handle)) as client:
+        model = config.build_chat_model("small", http_client=client, max_retries=0)
+        response = config.bind_structured_model(model, schema).invoke(
+            [{"role": "user", "content": "JSON 응답"}]
+        )
+    assert schema.model_validate_json(config.response_text(response)) == outputs[schema]
 
 
 def test_initial_schema_and_tool_roundtrip_use_responses_without_provider_options(

@@ -17,6 +17,16 @@ Research·NFR 선정·루브릭 생성은 `small`을 사용한다. Judge는 기�
 현재 OpenAI 설정은 `gpt-6.1-sol`이며 Responses API로 연결한다.
 변수 이름 `OPENROUTER_*`는 기존 코드와의 호환을 위해 유지한다.
 
+Research 초기 계획·NFR 선정·루브릭 생성 및 재생성·Judge는 각 Pydantic 모델에서 변환한
+JSON Schema를 `strict: true`로 API에 전달한다. 모든 키를 요구하고 추가 필드는 금지하며,
+목표가 없는 필드는 `null`, 빈 목록은 `[]`로 반환한다. 수동 실행 파일에도 동일하게 적용한다.
+응답은 기존 Pydantic·하네스·Judge로 계속 검증한다. 배점 합·참조 관계·한국어·채점 품질은
+스키마 강제만으로 보장되지 않는다. 생성 응답 파싱 실패는 중단하고 Judge 파싱 실패는 WARN을 남긴다.
+
+2026-10-14 실제 검증: 저장된 주문/결제 조사 결과를 재사용해 선정·생성·Judge·1회 수정·재검토를
+실제 API로 실행했다. `.archgen/structured-generation/20261014-073051-6j1vlo28/`에 기록했으며,
+최종 상태는 `complete`, 잔존 Finding은 0개다. 새 검색과 프롬프트 튜닝은 하지 않았다.
+
 `.archgen/generation/<실행>/`에 다음을 저장한다.
 
 - `run.log`, `llm-*-input.json`, `llm-*-response.json`: 진행과 LLM 입출력

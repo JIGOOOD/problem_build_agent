@@ -15,9 +15,11 @@ from langchain_core.callbacks import BaseCallbackHandler
 from langchain_core.messages import convert_to_messages
 from tavily import TavilyClient
 
-from archgen.config import build_chat_model, response_text
+from archgen.config import bind_structured_model, build_chat_model, response_text
 from archgen.domain.brief import InterviewBrief
 from archgen.domain.catalog import load_catalog
+from archgen.domain.nfr import NFRExport, NFRSelection, Rubric
+from archgen.judge.judge import JudgeResponse
 from archgen.paths import CATALOG_DIR, PROJECT_ROOT
 from archgen.research.runner import run_research
 from archgen.retrieval.crawler import FetchTool, HttpFetcher, create_fetch_client
@@ -97,7 +99,6 @@ def run_generation(
             from langchain_core.language_models.fake_chat_models import FakeListChatModel
             from langchain_core.messages.utils import count_tokens_approximately
 
-            from archgen.domain.nfr import NFRExport, NFRSelection
             from archgen.domain.research import Document, ResearchResult
             from archgen.paths import GOLDEN_DIR
 
@@ -155,8 +156,8 @@ def run_generation(
             raise RuntimeError(".env에 TAVILY_API_KEY를 설정해 주세요.")
         catalog = load_catalog(CATALOG_DIR)
 
-        def text_llm(model):
-            bound = model.bind(response_format={"type": "json_object"})
+        def text_llm(model, schema):
+            bound = bind_structured_model(model, schema)
 
             def invoke(messages):
                 response = bound.invoke(messages)
@@ -164,10 +165,12 @@ def run_generation(
 
             return invoke
 
-        llm = text_llm(model)
+        llm = text_llm(model, Rubric)
+        selection_llm = text_llm(model, NFRSelection)
         judge_llm = (
             text_llm(
-                build_chat_model("large", timeout=300, max_retries=0, callbacks=[trace])
+                build_chat_model("large", timeout=300, max_retries=0, callbacks=[trace]),
+                JudgeResponse,
             )
             if judge_enabled
             else None
@@ -178,6 +181,7 @@ def run_generation(
             graph = build_generation_graph(
                 research=lambda brief: run_research(brief, catalog, model, search, fetch),
                 llm=llm,
+                selection_llm=selection_llm,
                 count_tokens=lambda messages: model.get_num_tokens_from_messages(
                     convert_to_messages(messages)
                 ),

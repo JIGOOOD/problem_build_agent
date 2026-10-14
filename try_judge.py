@@ -12,11 +12,11 @@ from pathlib import Path
 
 import yaml
 
-from archgen.config import build_chat_model, response_text
+from archgen.config import bind_structured_model, build_chat_model, response_text
 from archgen.domain.brief import InterviewBrief, Seniority
 from archgen.domain.nfr import NFRExport
 from archgen.domain.research import Document, ResearchResult
-from archgen.judge.judge import judge_export
+from archgen.judge.judge import JudgeResponse, judge_export
 from archgen.paths import GOLDEN_DIR, PROJECT_ROOT
 from try_research import llm_deadline, save_json
 
@@ -66,7 +66,7 @@ def run(*, log_root=None):
             },
         )
         model = build_chat_model("large", timeout=300, max_retries=0)
-        bound = model.bind(response_format={"type": "json_object"})
+        bound = bind_structured_model(model, JudgeResponse)
 
         def llm(messages):
             save_json(run_dir / "llm-input.json", messages)

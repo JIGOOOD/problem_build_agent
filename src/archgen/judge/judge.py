@@ -30,7 +30,7 @@ class _JudgeFinding(Finding):
     source: Literal["judge"] = "judge"
 
 
-class _JudgeResponse(BaseModel):
+class JudgeResponse(BaseModel):
     findings: list[_JudgeFinding]
 
 
@@ -44,7 +44,7 @@ def judge_export(
         {
             "role": "system",
             "content": _ENV.get_template("system.md.j2").render(
-                schema=json.dumps(_JudgeResponse.model_json_schema(), ensure_ascii=False)
+                schema=json.dumps(JudgeResponse.model_json_schema(), ensure_ascii=False)
             ),
         },
         {
@@ -63,7 +63,7 @@ def judge_export(
     if not isinstance(raw, str):
         raise TypeError("Judge LLM 응답은 JSON 문자열이어야 한다.")
     try:
-        return _JudgeResponse.model_validate_json(raw).findings
+        return JudgeResponse.model_validate_json(raw).findings
     except ValidationError as error:
         message = "Judge 응답 스키마 위반으로 의미 검증을 건너뛰었다."
         _LOGGER.warning("%s %s", message, error)

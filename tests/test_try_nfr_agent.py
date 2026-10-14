@@ -106,6 +106,12 @@ def test_harness_repairs_are_bounded_and_record_previous_output(
         assert (run_dir / "error.json").exists()
         assert not (run_dir / "nfr_rubric.md").exists()
     assert saved_m4.invoke.call_count == (repair_at + 2 if repair_at else 4)
+    specs = [call.kwargs["response_format"] for call in saved_m4.bind.call_args_list]
+    assert [spec["json_schema"]["name"] for spec in specs] == [
+        "NFRSelection",
+        *["Rubric"] * (saved_m4.invoke.call_count - 1),
+    ]
+    assert all(spec["json_schema"]["strict"] is True for spec in specs)
     payload = json.loads(saved_m4.invoke.call_args_list[2].args[0][1]["content"])
     assert payload["previous"]["rubric"] == broken.model_dump(mode="json")
     assert payload["findings"][0]["code"] == "WEIGHT_SUM_INVALID"

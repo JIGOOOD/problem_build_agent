@@ -35,6 +35,10 @@ def test_golden_judge_saves_input_response_and_findings(
         root = next(tmp_path.iterdir())
 
     assert factory.call_args.args == ("large",)
+    spec = model.bind.call_args.kwargs["response_format"]
+    assert spec["type"] == "json_schema"
+    assert spec["json_schema"]["name"] == "JudgeResponse"
+    assert spec["json_schema"]["strict"] is True
     payload = json.loads(model.invoke.call_args.args[0][1]["content"])
     assert payload["export"] == golden_export.model_dump(mode="json")
     assert payload["research"]["documents"]
