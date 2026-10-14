@@ -39,6 +39,7 @@ packages = ["src/archgen"]
 asyncio_mode = "auto"
 testpaths = ["tests"]
 pythonpath = ["."]
+markers = ["slow: opt-in live API integration tests"]
 
 [tool.ruff]
 line-length = 90

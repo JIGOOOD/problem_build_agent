@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, StringConstraints
 
@@ -20,6 +20,14 @@ class Severity(StrEnum):
 
 class FindingCode(StrEnum):
     """Finding code 전체 목록. 검사를 추가할 때 여기에 먼저 등록한다."""
+
+    # Judge — 의미·문서 근거 검증
+    LEVEL_AMBIGUOUS = "LEVEL_AMBIGUOUS"
+    CRITERION_UNSCORABLE = "CRITERION_UNSCORABLE"
+    LEVEL_NOT_PROGRESSIVE = "LEVEL_NOT_PROGRESSIVE"
+    NFR_NOT_GROUNDED = "NFR_NOT_GROUNDED"
+    TARGET_VALUE_FABRICATED = "TARGET_VALUE_FABRICATED"
+    JUDGE_RESPONSE_INVALID = "JUDGE_RESPONSE_INVALID"
 
     # core.weight-sum
     WEIGHT_OUT_OF_RANGE = "WEIGHT_OUT_OF_RANGE"  # criterion weight가 1~100 밖
@@ -66,3 +74,4 @@ class Finding(BaseModel):
     severity: Severity
     path: NonBlank
     message: NonBlank
+    source: Literal["harness", "judge"] = "harness"
