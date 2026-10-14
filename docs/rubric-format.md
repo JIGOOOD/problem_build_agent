@@ -10,9 +10,9 @@
 | 출력 형식 | 요약표 + criterion 상세. **출처 표시(인용·근거 표)는 넣지 않는다** | 채점표는 면접관이 쓰는 문서다. 근거는 `evidence_refs`로 데이터에 남고 하네스(`EVIDENCE_REF_*`)가 검사한다. 사람이 출처를 검토할 기록은 M7 finalize에서 별도 파일로 검토 |
 | NFR의 위치 | 전체 루브릭의 **한 섹션** | README `rubric.sections[]` 구조 |
 | NFR 내부 배점 합 | **100 고정** | 채점식이 `Σw`로 나누므로 섹션 내부 합은 자유 → 읽기 쉬운 값으로 고정 |
-| 역량 축 | **criterion마다 부착** | README에 이미 있는 설계. 지금 넣어야 4섹션 합칠 때 스키마를 다시 안 연다 |
+| 역량 축 | **사용하지 않는다** | 스키마·요약표·항목 헤딩에 추가하지 않는다 |
 | criterion 개수 | **3개 기본 / 2~4개 허용** | 면접에서 NFR에 쓸 수 있는 시간이 10~15분 |
-| criterion:NFR | **1:1** | 점수 하나로 두 NFR을 판정하면 채점이 갈린다. `competency_axis`도 criterion당 하나뿐 |
+| criterion:NFR | **1:1** | 점수 하나로 두 NFR을 판정하면 채점이 갈린다. |
 | descriptor 길이 | **15~200자** | 하한은 "미고려" 같은 무의미한 서술을, 상한은 한 레벨이 두 가지를 평가하는 걸 막는다 |
 | md 작성 주체 | **Jinja2** (LLM 아님) | README 설계 원칙 1 |
 
@@ -27,12 +27,14 @@ LLM이 만드는 것은 `NFRExport`뿐이다. 근거 문서 목록(`Document[]`)
 
 ```yaml
 NFRExport:
+  scope: [string]           # 확정 요구·미확정 범위·조건부 가정. 이전 산출물은 []
+  excluded_nfrs: [string]   # 실제 검토 후 제외한 후보 이름과 이유. 이전 산출물은 []
   confirmed_nfrs:
     - id: string            # NFR-1
       kind: string          # latency | throughput | scalability |
                             # availability | fault_tolerance | consistency | ...
       statement: string     # 이번 주제에서 요구되는 NFR 문장
-      rationale: string     # 왜 중요한지
+      rationale: string     # 주제·근거·설계 영향과 다른 후보 대비 선정 이유
       target:               # 정량 목표. 없으면 null
         value: number | null
         unit: string | null
@@ -53,33 +55,39 @@ NFRExport:
         description: string
         related_nfr_ids: [string]       # 정확히 1개
         weight: integer                 # 자연수 1~100, 섹션 내부 합 = 100
-        competency_axis: CompetencyAxis # ← 이번에 추가
         levels:
           - score: 0..3
             descriptor: string          # 15~200자
 
-CompetencyAxis:
-  - TRADE_OFF
-  - DATA_MANAGEMENT
-  - FAILURE_RECOVERY
-  - HIGH_TRAFFIC
-  - COMPUTER_SCIENCE
 ```
 
 ### 채점 모델
 
-**상위 점수는 하위 점수의 요건을 모두 포함한다.** 3점은 2점 요건을 충족한 상태에서
-추가 조건까지 만족한 답변에만 준다. descriptor마다 반복해 쓰지 않고 **렌더된 문서
-머리말에 한 번 명시**한다 — descriptor 길이를 먹지 않으면서 채점자가 보게 하려는 것.
+**2점은 필수 요건을 모두 충족해야 한다.** 일부만 충족하면 최대 1점이며, 3점은
+2점 요건 전부와 추가 필수 요건을 충족한 답변이다. 예시는 대안이라 전부 요구하지 않는다.
+대상 연차의 기대 수준은 2점, 3점은 같은 연차의 우수한 답변이며 합격선은 별도로 정한다.
+항목 획득 배점은 `항목 배점 × 레벨 / 3`으로 환산한다. 채점표 머리말에는 설명 문구를 추가하지 않는다.
+항목별 반올림 없이 합산한 뒤 총점을 소수 둘째 자리까지 표시한다.
+
+2점은 확정 요구 수준을 충족하는 하나의 핵심 설계 기준, 3점은 추가 필수 요건 1개로 작성한다.
+같은 설계 선택이 여러 NFR에 기여해도 각 항목은 서로 다른 결과 속성을 평가한다.
+요구 수준과 무관한 독립 조건을 묶지 않으며, 항목 간 핵심 설계의 난이도를 맞춘다.
+2점은 해당 연차의 핵심 설계 능력을 평가하며, 선정된 요구보다 강한 조건이나 별도 설계 속성을 필수화하지 않는다.
+모든 항목의 3점은 같은 연차에서 대표 상황 하나의 영향·대응·비용을 설명하는 깊이로 맞춘다.
+
+`scope`는 brief에 명시된 요구와 미확정 기능·규모를 구분한다. 문서 사례는 추가 요구가 아니다.
+조건부 가정은 그 가정을 택하지 않은 합리적인 설계의 감점 사유가 될 수 없다.
+구현 대신 관찰할 결과와 보장 수준을 평가한다. 특정 기술·구현·상태 관리 위치를 강제하지 않고 요구 수준을 동등하게 충족하는 대안을 인정한다.
+3점은 설계 선택의 정당화만으로 부여하지 않는다. 대표 상황의 영향·대응·비용을 설명해야 한다.
+trade-off는 문서 근거가 있는 실제 NFR 간 충돌과 발생 조건을 설명한다.
+적용 범위·선정·제외 이유는 JSON의 `scope`·`rationale`·`excluded_nfrs`에 보존한다. 채점에 필요한 조건부 적용 범위는 해당 항목의 `description`에 명시한다.
 
 ```
 criterion_pct = level / 3
 section_pct   = Σ(w × criterion_pct) / Σw          # NFR 섹션 점수
-axis_pct(a)   = Σ(w × criterion_pct) / Σw          # axis == a 인 criterion만
 total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 ```
 
-축 롤업은 섹션 점수와 **같은 계산 한 번**에서 나온다 (필터만 다름).
 
 ---
 
@@ -95,19 +103,16 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 
 ## NFR
 
-> **채점 규칙**: 상위 점수는 하위 점수의 요건을 포함한다. 2점 설계 없이 3점 조건만
-> 만족한 답변은 3점이 아니다.
-
-| # | 평가 항목 | 역량 축 | 배점 | 획득 |
-|---|---|---|---|---|
-| NFR-C1 | 메시지 전달 지연 | HIGH_TRAFFIC | 30 | ☐0 ☐1 ☐2 ☐3 |
-| NFR-C2 | 메시지 순서 보장 | DATA_MANAGEMENT | 25 | ☐0 ☐1 ☐2 ☐3 |
-| NFR-C3 | 장애 시 가용성 | FAILURE_RECOVERY | 25 | ☐0 ☐1 ☐2 ☐3 |
-| NFR-C4 | 동시 접속 확장성 | HIGH_TRAFFIC | 20 | ☐0 ☐1 ☐2 ☐3 |
+| # | 평가 항목 | 배점 | 획득 |
+|---|---|---|---|
+| NFR-C1 | 메시지 전달 지연 | 30 | ☐0 ☐1 ☐2 ☐3 |
+| NFR-C2 | 메시지 순서 보장 | 25 | ☐0 ☐1 ☐2 ☐3 |
+| NFR-C3 | 장애 시 가용성 | 25 | ☐0 ☐1 ☐2 ☐3 |
+| NFR-C4 | 동시 접속 확장성 | 20 | ☐0 ☐1 ☐2 ☐3 |
 
 ---
 
-### NFR-C1. 메시지 전달 지연 · 30점 · `HIGH_TRAFFIC`
+### NFR-C1. 메시지 전달 지연 · 30점
 
 **평가 항목**
 메시지 전송부터 수신자 화면 도달까지의 지연을 요구 수준 내로 설계했는가
@@ -128,7 +133,7 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 
 ---
 
-### NFR-C2. 메시지 순서 보장 · 25점 · `DATA_MANAGEMENT`
+### NFR-C2. 메시지 순서 보장 · 25점
 
 ... (동일 구조 반복)
 ````
@@ -137,16 +142,17 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 
 - 헤딩 단계: `# 주제` → `## NFR` → `### NFR-C{n}` (criterion)
 - 주제 바로 아래에 **대상 연차**와 **배점**(criterion weight 합, 고정 문구 아님)을 한 줄씩
+- md는 요약표와 평가 항목·요구 수준·관련 trade-off·레벨표를 유지한다. 조사·선정 기록은 별도 섹션으로 추가하지 않는다.
 - 4섹션을 합칠 때는 `# 주제`와 대상 연차를 합치는 쪽에서 한 번만 내고,
   각 섹션은 `## NFR`부터 끼워 넣는다
-- `## NFR` 바로 아래에 **누적 채점 규칙**을 한 줄 넣는다 (템플릿 고정 문구)
+- `## NFR` 바로 아래에 출력 샘플의 요약표를 넣는다. 채점 규칙·환산 설명은 본문에 추가하지 않는다.
+- 공유 trade-off는 첫 번째 `related_nfr_ids`의 평가 항목에서 한 번만 표시한다. 원본의 NFR 연결은 유지한다.
 - **요구 수준**: 정량 목표면 `` `kind` — 목표`` 다음 줄에 statement,
   정성 목표면 `` `kind` — statement`` 한 줄 (정성 목표는 statement의 요약이라 반복하지 않는다)
 - 목표 수치는 천 단위 콤마, 지수 표기 없음, 숫자와 단위는 띄우되 `%`만 붙인다
   (`p99 500 ms`, `peak 10,000 msg/s`, `99.9%`)
 - 레벨표는 데이터 순서와 상관없이 score 0 → 3 순으로 쓴다
-- 역량 축 열·헤딩 표기(`HIGH_TRAFFIC` 등)는 `core.axis` 구현 후. 현재 렌더에는 없다
-- criterion id는 `NFR-C{n}` — 섹션 prefix로 다른 섹션과 충돌 방지
+- 표시 번호는 코드가 항목 순서대로 `NFR-C{n}`을 붙인다. JSON의 원본 id는 유지한다.
 - **출처 표시(`[D1]` 인용, 근거 표)는 넣지 않는다.** 문서 id(`D{n}`)는 데이터와 하네스 안에서만 쓴다
 - descriptor 안의 `|`는 `\|`로 이스케이프
 - trade-off가 없는 criterion은 해당 블록 자체를 생략 (빈 섹션을 남기지 않는다)
@@ -164,7 +170,6 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 | `core.nfr-measurable` | `NFR_KIND_MISSING` / `NFR_VALUE_NOT_FOUND` / `NFR_UNIT_MISSING` / `NFR_COMPARATOR_MISSING` / `NFR_GUARANTEE_UNCLEAR` | 2순위·미구현 |
 | `core.cross-ref` | **`ID_DUPLICATED`** / `NFR_REFERENCE_INVALID` / `NFR_NOT_COVERED` / **`NFR_MULTI_COVERED`** / `CRITERION_NFR_REFERENCE_MISSING` / **`CRITERION_MULTI_NFR`** / **`TRADEOFF_NFR_REFERENCE_MISSING`** / **`EVIDENCE_REF_MISSING`** / **`EVIDENCE_REF_UNKNOWN`** | ← 인용이 실존 Document를 가리키는가. NFR은 정확히 한 criterion에서 평가 |
 | **`core.criteria-count`** | **`CRITERIA_COUNT_OUT_OF_RANGE`** | ← criterion 2~4개 |
-| **`core.axis`** | **`AXIS_MISSING`** / **`AXIS_INVALID`** | ← 역량 축 신설. 2순위·미구현 |
 
 ### Post-Render (M2)
 
@@ -175,9 +180,9 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 
 | md 부분 | 검사 | 코드 | path |
 |---|---|---|---|
-| 머리말 | 주제(공백 접기)·대상 연차가 brief와, 배점이 weight 합과 같고, `## NFR` 헤딩·채점 규칙이 있음 | `RENDER_HEADER_MISMATCH` | `header` |
-| 요약표 | 행들이 원본 criterion들의 `[id, title, 배점]`과 같음 | `RENDER_SUMMARY_MISMATCH` | `rubric.criteria` |
-| criterion 섹션들 | `### id.` 섹션 id 목록이 원본 criterion id 목록과 같음 (누락·중복·순서) | `RENDER_SECTIONS_MISMATCH` | `rubric.criteria` |
+| 머리말 | 주제(공백 접기)·대상 연차가 brief와, 배점이 weight 합과 같고, `## NFR` 헤딩이 있음 | `RENDER_HEADER_MISMATCH` | `header` |
+| 요약표 | `[표시 번호, title, 배점]`이 항목 순서와 같음 | `RENDER_SUMMARY_MISMATCH` | `rubric.criteria` |
+| criterion 섹션들 | 표시 번호 목록이 `NFR-C1`부터 순서대로 있음 (누락·중복·순서) | `RENDER_SECTIONS_MISMATCH` | `rubric.criteria` |
 | 헤딩 | title(공백 접기 적용)·배점이 원본과 같음 | `RENDER_HEADING_MISMATCH` | `rubric.criteria[i].title` / `.weight` |
 | 평가 항목 | 본문이 `description`과 같음 | `RENDER_DESCRIPTION_MISMATCH` | `rubric.criteria[i].description` |
 | 요구 수준 | `` `kind` — 목표/statement``와 같음 | `RENDER_REQUIREMENT_MISMATCH` | `confirmed_nfrs[k]` |
@@ -191,15 +196,12 @@ Post-Render Finding은 렌더러 코드 버그라 repair 루프를 돌리지 않
 
 ### Judge (M6) — 형식과 무관하게 의미만
 
-`WEIGHT_IMBALANCED`는 축이 생기면서 판단 근거가 하나 늘었다 —
-한 축에 배점이 과도하게 몰려 있으면 지적 대상.
+Judge는 문서 근거·채점 가능성·점수 단계의 의미를 검증한다.
 
 ---
 
 ## 4. 열린 항목
 
-- 축 배정의 타당성(`HIGH_TRAFFIC`인가 `TRADE_OFF`인가)은 규칙으로 못 잡는다
-  → Judge에 `AXIS_MISASSIGNED`를 둘지 M6 구현 시 판단
 - descriptor 15~200자. 첫 골든셋(Pro)의 score 3이 228~248자였고 이를 줄이려고 잡은 값이다.
   Day 9 실측에서 `LEVEL_DESCRIPTOR_TOO_LONG` 발생률을 보고 조정
 - 200자 descriptor 4개가 든 레벨표의 가독성은 Day 3에 골든셋을 실제로 렌더해보고 판단한다.

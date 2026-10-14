@@ -69,7 +69,8 @@ def _section(
         criterion=criterion,
         nfr=nfr,
         target=_format_target(nfr.target),
-        tradeoffs=[t for t in export.tradeoffs if nfr.id in t.related_nfr_ids],
+        # 공유 trade-off는 첫 관련 NFR에서 한 번만 보여준다.
+        tradeoffs=[t for t in export.tradeoffs if nfr.id in t.related_nfr_ids[:1]],
         levels=sorted(criterion.levels, key=lambda level: level.score),
     )
 

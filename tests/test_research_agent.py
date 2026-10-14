@@ -393,6 +393,7 @@ def test_research_system_prompt_includes_source_policy_and_document_criteria():
     assert "수치·요구 수준·설계 선택 중 하나 이상" in system
     assert "광고성 글, 무관한 글, NFR 언급 없이 기능 소개만 있는 글" in system
     assert "같은 조건이면 Source Policy 상위 출처를 먼저 고른다." in system
+    assert "검색·재검색은 한국어·영어로 수행하고 중국어 문서는 보존하지 않는다" in system
 
 
 def test_tool_schema_uses_exact_api_keys_and_required_arguments():

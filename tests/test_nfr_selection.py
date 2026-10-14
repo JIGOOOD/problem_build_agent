@@ -91,6 +91,7 @@ def test_passes_all_evidence_and_selection_rules_and_parses_response(
     }
     system = messages[0]["content"]
     assert CATALOG.to_prompt_block() in system
+    assert "사람이 읽는 텍스트는 한국어로 작성한다" in system
     # 프롬프트 계약만 검사한다. 실제 선정 품질은 M5-4에서 사람이 검토한다.
     for rule in (
         "주제 적합성",
@@ -105,6 +106,8 @@ def test_passes_all_evidence_and_selection_rules_and_parses_response(
         "qualitative_target",
         "value가 null인 target",
         "대략적인 규모",
+        "다른 서비스의 실측",
+        "이번 설계의 확정 목표로 바꾸지 않는다",
         "trade-off",
         "evidence_refs",
     ):
@@ -123,7 +126,10 @@ def test_no_documents_stops_without_counting_or_calling_llm(research, caplog):
     result = select_nfrs(BRIEF, research, llm, catalog=CATALOG, count_tokens=counter)
 
     assert result.status == "candidate_not_found"
-    assert result.selection.model_dump() == {"confirmed_nfrs": [], "tradeoffs": []}
+    assert result.selection.confirmed_nfrs == []
+    assert result.selection.tradeoffs == []
+    assert result.selection.scope == []
+    assert result.selection.excluded_nfrs == []
     assert result.reason and result.reason in caplog.text
     llm.assert_not_called()
     counter.assert_not_called()

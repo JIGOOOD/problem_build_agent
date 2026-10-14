@@ -66,7 +66,9 @@ class ArchGenApp(App[None]):
 
         if not result.accepted:
             self.notify(result.error, severity="warning")
-            self._trace(f"거절 {slot.label if slot else '-'} <- {raw!r} :: {result.error}")
+            self._trace(
+                f"거절 {slot.label if slot else '-'} <- {raw!r} :: {result.error}"
+            )
         else:
             stored = self.filler.values.get(slot.key)
             self._trace(f"저장 {slot.label} <- {raw!r} => {stored!r}")
@@ -86,11 +88,16 @@ class ArchGenApp(App[None]):
     async def _start_generation(self) -> None:
         brief = self.filler.build_brief()
         self._trace(f"생성 시작 {brief.to_lines()}")
-        result = await self.generation.start(brief.to_lines())
-        self.notify("LangGraph workflow completed: agents are not configured yet.")
+        try:
+            result = await self.generation.start(brief)
+        except Exception as error:  # noqa: BLE001 — 생성 실패는 알림으로 표시하고 UI를 유지한다.
+            self._trace(f"생성 실패: {error}")
+            self.notify(f"생성 실패: {error}", severity="error")
+            return
+        self.notify(f"생성 결과: {result['status']}")
         events = "\n".join(f"• {event}" for event in result["events"])
         self.query_one("#transcript", Static).update(
-            f"[b]LangGraph workflow[/b]\n{events}"
+            f"[b]생성 결과: {result['status']}[/b]\n{events}\n{result['output_dir']}"
         )
 
     def _trace(self, message: str) -> None:
@@ -105,7 +112,9 @@ class ArchGenApp(App[None]):
     def _render_transcript(self, error: str | None = None) -> None:
         """Show the answers so far, then the current question (or the saved brief)."""
         slot = self.filler.current
-        lines = [f"[b]인터뷰 브리프[/b] ({len(self.filler.filled)}/{len(self.filler.slots)})"]
+        lines = [
+            f"[b]인터뷰 브리프[/b] ({len(self.filler.filled)}/{len(self.filler.slots)})"
+        ]
         lines += [f"• {label}: {value}" for label, value in self.filler.filled]
         lines.append("")
         if error:

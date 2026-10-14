@@ -1,3 +1,5 @@
+from unittest.mock import AsyncMock
+
 import pytest
 from textual.widgets import Input, Static
 
@@ -23,7 +25,9 @@ async def test_tui_opens_on_the_seniority_slot() -> None:
     async with app.run_test():
         assert app.filler.current.key == "seniority"
         assert "대상 연차" in transcript_of(app)
-        assert app.query_one("#brief", Input).placeholder == app.filler.current.placeholder
+        assert (
+            app.query_one("#brief", Input).placeholder == app.filler.current.placeholder
+        )
 
 
 @pytest.mark.asyncio
@@ -68,8 +72,15 @@ async def test_generate_is_refused_while_slots_are_unfilled() -> None:
 
 
 @pytest.mark.asyncio
-async def test_generate_runs_the_langgraph_scaffold_once_filled() -> None:
+async def test_generate_starts_generation_once_filled() -> None:
     app = ArchGenApp()
+    app.generation.start = AsyncMock(
+        return_value={
+            "status": "complete",
+            "events": ["finalize: completed"],
+            "output_dir": "/tmp/result",
+        }
+    )
 
     async with app.run_test() as pilot:
         await answer(pilot, "시니어")
@@ -79,4 +90,25 @@ async def test_generate_runs_the_langgraph_scaffold_once_filled() -> None:
         app.action_generate()
         await pilot.pause()
 
-        assert "workflow scaffold completed" in transcript_of(app)
+        assert "finalize: completed" in transcript_of(app)
+        brief = app.generation.start.call_args.args[0]
+        assert brief.seniority is Seniority.SENIOR
+        assert brief.topic == "주문/결제 시스템"
+        assert brief.notes == "멱등성 중요"
+
+
+@pytest.mark.asyncio
+async def test_generation_failure_is_reported_without_crashing_app(tmp_path):
+    app = ArchGenApp(log_path=tmp_path / "input.log")
+    app.generation.start = AsyncMock(side_effect=TimeoutError("LLM timeout"))
+
+    async with app.run_test() as pilot:
+        await answer(pilot, "미들")
+        await answer(pilot, "채팅 서비스")
+        await answer(pilot, "")
+        app.action_generate()
+        await pilot.pause()
+
+        app.generation.start.assert_awaited_once()
+        assert app.is_running
+        assert "생성 실패: LLM timeout" in app.log_path.read_text()

@@ -5,19 +5,16 @@
 
 ## NFR
 
-> **채점 규칙**: 상위 점수는 하위 점수의 요건을 포함한다. 2점 설계 없이 3점 조건만
-> 만족한 답변은 3점이 아니다.
-
 | # | 평가 항목 | 배점 | 획득 |
 |---|---|---|---|
 {% for s in sections %}
-| {{ s.criterion.id }} | {{ s.criterion.title | cell }} | {{ s.criterion.weight }} | ☐0 ☐1 ☐2 ☐3 |
+| NFR-C{{ loop.index }} | {{ s.criterion.title | cell }} | {{ s.criterion.weight }} | ☐0 ☐1 ☐2 ☐3 |
 {% endfor %}
 {% for s in sections %}
 
 ---
 
-### {{ s.criterion.id }}. {{ s.criterion.title | heading }} · {{ s.criterion.weight }}점
+### NFR-C{{ loop.index }}. {{ s.criterion.title | heading }} · {{ s.criterion.weight }}점
 
 **평가 항목**
 {{ s.criterion.description }}

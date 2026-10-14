@@ -41,6 +41,8 @@ Use `plan.md` as the source of truth. Treat each unchecked test item as the next
 
 ## Code Quality Rules
 
+- 루브릭 출력은 `docs/rubric-format.md`의 출력 샘플을 따른다. `competency_axis`는 사용하지 않는다.
+- 루브릭 오류가 발견되면 기존 일반 규칙의 부족 여부를 먼저 판단한다. 프롬프트에 서비스·기술별 예외를 누적하지 않고, 필요한 경우 관찰 가능한 판단 조건을 가진 일반 원칙으로 통합한다.
 - Eliminate duplication when it improves clarity.
 - Keep methods small and focused.
 - Make dependencies explicit.

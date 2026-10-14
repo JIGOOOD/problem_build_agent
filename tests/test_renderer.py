@@ -9,6 +9,24 @@ from archgen.render.renderer import render_rubric
 BRIEF = InterviewBrief(seniority=Seniority.MIDDLE, topic="실시간 채팅 시스템 설계")
 
 
+def test_render_matches_output_sample_columns_headings_and_clean_header(golden_export):
+    from archgen.render.post_render import check_rendered
+
+    export = golden_export.model_copy(deep=True)
+    export.rubric.criteria[0].id = "criterion-custom"
+    md = render_rubric(export, BRIEF)
+
+    assert "## NFR\n\n| # | 평가 항목 | 배점 | 획득 |" in md
+    assert ">" not in "\n".join(header_lines(md))
+    for i, criterion in enumerate(export.rubric.criteria, 1):
+        assert f"| NFR-C{i} | {criterion.title} | {criterion.weight} |" in md
+        assert f"### NFR-C{i}. {criterion.title} · {criterion.weight}점" in md
+    assert "역량 축" not in md
+    assert "competency_axis" not in golden_export.rubric.criteria[0].model_dump()
+    assert export.rubric.criteria[0].id == "criterion-custom"
+    assert check_rendered(md, export, BRIEF) == []
+
+
 def criterion_sections(md: str) -> dict[str, str]:
     """`### NFR-C1. ...` 헤딩부터 다음 헤딩 전까지를 criterion id로 묶는다."""
     sections = {}
@@ -38,13 +56,13 @@ def header_lines(md: str) -> list[str]:
     return md.split("\n|", 1)[0].splitlines()
 
 
-def test_header_shows_seniority_and_scoring_rule_on_their_own_lines(
+def test_header_shows_seniority_without_extra_scoring_prose(
     golden_export: NFRExport,
 ) -> None:
     lines = header_lines(render_rubric(golden_export, BRIEF))
 
     assert any(line.startswith(f"**대상 연차** {BRIEF.seniority}") for line in lines)
-    assert any("채점 규칙" in line for line in lines)
+    assert not any(line.startswith(">") for line in lines)
 
 
 def test_header_total_is_the_sum_of_weights(golden_export: NFRExport) -> None:
@@ -276,3 +294,17 @@ def test_newlines_in_headings_become_spaces(golden_export: NFRExport) -> None:
 
     assert md.startswith("# 실시간 채팅\n")
     assert read_back(md)["criteria"][0]["title"] == "읽기 경로 쓰기 경로"
+
+
+def test_shared_tradeoff_is_shown_once_without_changing_nfr_links(golden_export):
+    from archgen.render.post_render import check_rendered
+
+    export = golden_export.model_copy(deep=True)
+    shared = export.tradeoffs[0]
+    shared.related_nfr_ids = ["NFR-1", "NFR-2"]
+
+    md = render_rubric(export, BRIEF)
+
+    assert md.count(shared.description) == 1
+    assert shared.related_nfr_ids == ["NFR-1", "NFR-2"]
+    assert check_rendered(md, export, BRIEF) == []

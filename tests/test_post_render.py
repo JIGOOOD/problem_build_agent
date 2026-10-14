@@ -59,13 +59,12 @@ def repeat_first_section(md: str) -> str:
         replace_once("**대상 연차** 미들", "**대상 연차** 시니어"),
         replace_once("**배점** 100", "**배점** 90"),
         replace_once("## NFR\n", ""),
-        drop_line_containing("**채점 규칙**"),
     ],
 )
 def test_post_render_flags_a_wrong_header(
     golden_export: NFRExport, tamper: Callable[[str], str]
 ) -> None:
-    """머리말: 주제, 대상 연차, 배점 합, `## NFR` 헤딩, 채점 규칙."""
+    """머리말: 주제, 대상 연차, 배점 합, `## NFR` 헤딩."""
     md = tamper(render_rubric(golden_export, BRIEF))
 
     assert findings_for(md, golden_export) == {("RENDER_HEADER_MISMATCH", "header")}

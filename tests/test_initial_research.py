@@ -97,6 +97,9 @@ def test_initial_prompt_prioritizes_official_sources_when_generating_queries(
     )
     assert '"official documentation", "engineering blog"' in system
     assert "출처 검색 표현을 넣어도 주제 맥락과 해당 NFR을 유지한다." in system
+    assert (
+        "검색어는 한국어·영어로 작성하고 중국어 문서는 검색 대상에서 제외한다" in system
+    )
 
 
 def test_initial_prompt_provides_json_schema_with_required_plan_and_query_fields(

@@ -28,7 +28,6 @@ def read_back(md: str) -> dict:
         "seniority": _labeled(head, "대상 연차"),
         "total_weight": _labeled(head, "배점"),
         "nfr_heading": "## NFR" in head,
-        "scoring_rule": any(line.startswith("> **채점 규칙**") for line in head),
     }
     summary = [_cells(line)[:3] for line in lines if line.endswith(_SUMMARY_ROW_END)]
     criteria = []
@@ -57,7 +56,10 @@ def check_rendered(md: str, export: NFRExport, brief: InterviewBrief) -> list[Fi
     """md에 옮겨진 값이 원본과 같은가. 다르면 렌더러 버그다."""
     rendered = read_back(md)
     findings = _header_findings(rendered["header"], export, brief)
-    expected_summary = [[c.id, c.title, str(c.weight)] for c in export.rubric.criteria]
+    expected_summary = [
+        [f"NFR-C{i}", c.title, str(c.weight)]
+        for i, c in enumerate(export.rubric.criteria, 1)
+    ]
     if rendered["summary"] != expected_summary:
         findings.append(
             _error(
@@ -68,7 +70,7 @@ def check_rendered(md: str, export: NFRExport, brief: InterviewBrief) -> list[Fi
         )
     # 섹션 id 목록 전체를 순서까지 비교해야 누락·중복·순서 뒤바뀜을 모두 잡는다.
     section_ids = [section["id"] for section in rendered["criteria"]]
-    expected_ids = [c.id for c in export.rubric.criteria]
+    expected_ids = [f"NFR-C{i}" for i in range(1, len(export.rubric.criteria) + 1)]
     if section_ids != expected_ids:
         findings.append(
             _error(
@@ -82,9 +84,10 @@ def check_rendered(md: str, export: NFRExport, brief: InterviewBrief) -> list[Fi
     for section in rendered["criteria"]:
         sections.setdefault(section["id"], section)
     for i, criterion in enumerate(export.rubric.criteria):
-        if criterion.id in sections:
+        display_id = expected_ids[i]
+        if display_id in sections:
             findings += _section_findings(
-                sections[criterion.id], criterion, f"rubric.criteria[{i}]", export
+                sections[display_id], criterion, f"rubric.criteria[{i}]", export
             )
     return findings
 
@@ -92,21 +95,19 @@ def check_rendered(md: str, export: NFRExport, brief: InterviewBrief) -> list[Fi
 def _header_findings(
     header: dict, export: NFRExport, brief: InterviewBrief
 ) -> list[Finding]:
-    """머리말: 주제, 대상 연차, 배점 합, `## NFR` 헤딩, 채점 규칙."""
+    """머리말: 주제, 대상 연차, 배점 합, `## NFR` 헤딩."""
     expected = {
         # 주제는 헤딩이라 줄바꿈·연속 공백을 접어서 쓴다.
         "topic": " ".join(brief.topic.split()),
         "seniority": str(brief.seniority),
         "total_weight": str(sum(c.weight for c in export.rubric.criteria)),
         "nfr_heading": True,
-        "scoring_rule": True,
     }
     names = {
         "topic": "주제",
         "seniority": "대상 연차",
         "total_weight": "배점",
         "nfr_heading": "`## NFR` 헤딩",
-        "scoring_rule": "채점 규칙",
     }
     return [
         _error(
@@ -163,7 +164,7 @@ def _section_findings(
                 )
             )
         tradeoffs = [
-            t.description for t in export.tradeoffs if nfr.id in t.related_nfr_ids
+            t.description for t in export.tradeoffs if nfr.id in t.related_nfr_ids[:1]
         ]
         if section["tradeoffs"] != tradeoffs:
             findings.append(

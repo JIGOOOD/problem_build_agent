@@ -80,7 +80,7 @@ def generate_rubric(
         "selection": selection.model_dump(mode="json"),
     }
     if previous is not None:
-        payload["previous"] = previous.model_dump(mode="json")
+        payload["previous"] = previous.model_dump(mode="json", include={"rubric"})
         payload["findings"] = [finding.model_dump(mode="json") for finding in findings]
     messages = [
         {
@@ -91,7 +91,7 @@ def generate_rubric(
         },
         {
             "role": "user",
-            "content": json.dumps(payload, ensure_ascii=False),
+            "content": json.dumps(payload, ensure_ascii=False, separators=(",", ":")),
         },
     ]
     rubric = Rubric.model_validate_json(_call_llm(messages, llm, count_tokens))

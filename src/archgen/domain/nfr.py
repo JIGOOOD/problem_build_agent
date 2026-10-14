@@ -91,6 +91,8 @@ class NFRSelection(BaseModel):
 
     confirmed_nfrs: list[ConfirmedNFR]
     tradeoffs: list[Tradeoff]
+    scope: list[Text] = []
+    excluded_nfrs: list[Text] = []
 
 
 class NFRExport(BaseModel):
@@ -98,4 +100,6 @@ class NFRExport(BaseModel):
 
     confirmed_nfrs: list[ConfirmedNFR] = []
     tradeoffs: list[Tradeoff] = []
+    scope: list[Text] = []
+    excluded_nfrs: list[Text] = []
     rubric: Rubric

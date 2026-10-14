@@ -6,9 +6,10 @@ import pytest
 from pydantic import ValidationError
 
 from archgen.domain.brief import InterviewBrief, Seniority
+from archgen.domain.catalog import load_catalog
 from archgen.domain.nfr import NFRSelection
 from archgen.domain.research import Document, ResearchResult
-from archgen.export.agent import generate_rubric
+from archgen.export.agent import generate_rubric, select_nfrs
 from archgen.harness.checks import (
     check_criteria_count,
     check_cross_ref,
@@ -16,10 +17,115 @@ from archgen.harness.checks import (
     check_weight_sum,
 )
 from archgen.harness.runner import Runner
+from archgen.judge.judge import judge_export
+from archgen.paths import CATALOG_DIR
 from archgen.render.post_render import check_rendered
 from archgen.render.renderer import render_rubric
 
 BRIEF = InterviewBrief(Seniority.SENIOR, "채팅 서비스", "장애 복구")
+
+
+def test_agent_prompts_cover_scope_fair_levels_and_outcome_based_design(
+    research, golden_export
+):
+    brief = InterviewBrief(Seniority.MIDDLE, "실시간 채팅 서비스")
+    selector = Mock(
+        return_value=NFRSelection(
+            **golden_export.model_dump(exclude={"rubric"})
+        ).model_dump_json()
+    )
+    selected = select_nfrs(
+        brief,
+        research,
+        selector,
+        catalog=load_catalog(CATALOG_DIR),
+        count_tokens=lambda _: 1000,
+    ).selection
+    author = Mock(return_value=golden_export.rubric.model_dump_json())
+    export = generate_rubric(
+        brief, research, selected, author, count_tokens=lambda _: 1000
+    )
+    judge = Mock(return_value='{"findings": []}')
+    judge_export(brief, research, export, judge)
+
+    # 지시 전달 계약이다. 실제 생성·판별 품질을 검증하는 테스트는 아니다.
+    for llm, rules in (
+        (
+            selector,
+            (
+                "확정 요구와 미확정 범위",
+                "excluded_nfrs",
+                "선정 이유",
+                "NFR 간 충돌",
+                "설계 선택의 이득·비용",
+                "보장 수준을 명시",
+            ),
+        ),
+        (
+            author,
+            (
+                "하나의 핵심 설계 기준",
+                "동등하게 충족하는 대안 설계",
+                "선정된 요구보다 강한 조건",
+                "정당화만으로 3점을",
+                "상황 하나 → 영향 → 대응과 비용",
+                "요구 수준과 무관한 추가 조건을 필수화하지 않는다",
+            ),
+        ),
+        (
+            judge,
+            (
+                "미확정 범위를 필수 조건",
+                "동등한 구현 대안",
+                "항목 간 2점 난이도",
+                "하나의 핵심 설계 기준",
+                "3점의 추가 판단 깊이",
+                "선정된 요구보다 강한 조건",
+                "정당화만으로 3점을",
+                "NFR 간 충돌",
+            ),
+        ),
+    ):
+        system = llm.call_args.args[0][0]["content"]
+        for rule in rules:
+            assert rule in system
+
+
+def test_selection_scope_and_exclusion_reasons_stay_in_json_not_rubric_sections(
+    research, golden_export
+):
+    answer = golden_export.model_dump(exclude={"rubric"}) | {
+        "scope": [
+            "미확정: 기기 수와 대화방 규모. 합리적인 범위를 명시한 설계를 인정한다."
+        ],
+        "excluded_nfrs": [
+            "security: 중요하지만 보존 문서의 설계 근거가 부족해 이번 평가에서 제외."
+        ],
+    }
+    selected = select_nfrs(
+        BRIEF,
+        research,
+        Mock(return_value=json.dumps(answer)),
+        catalog=load_catalog(CATALOG_DIR),
+        count_tokens=lambda _: 1000,
+    ).selection
+    export = generate_rubric(
+        BRIEF,
+        research,
+        selected,
+        Mock(return_value=golden_export.rubric.model_dump_json()),
+        count_tokens=lambda _: 1000,
+    )
+
+    assert export.model_dump()["scope"] == answer["scope"]
+    assert export.model_dump()["excluded_nfrs"] == answer["excluded_nfrs"]
+    md = render_rubric(export, BRIEF)
+    assert "**적용 범위**" not in md
+    assert "**검토 후 제외한 NFR**" not in md
+    assert "**선정 이유**" not in md
+    assert answer["scope"][0] not in md
+    assert answer["excluded_nfrs"][0] not in md
+    assert check_rendered(md, export, BRIEF) == []
 
 
 @pytest.fixture
@@ -60,6 +166,13 @@ def test_generates_rubric_from_fixed_nfrs_and_validates_and_renders(
         assert rule in system["content"]
     assert "동등하게 충족하는 대안 설계" in system["content"]
     assert "문서 id·URL·출처 목록을 넣지 않는다" in system["content"]
+    for rule in (
+        "각 항목에서는 서로 다른 결과 속성을 평가한다",
+        "하나의 핵심 설계 기준",
+        "3점 추가 필수 요건은 1개",
+        "3점은 같은 연차의 우수한 답변",
+    ):
+        assert rule in system["content"]
     assert export == golden_export
     checks = Runner(
         [
@@ -112,7 +225,8 @@ def test_regeneration_receives_previous_export_and_findings_and_keeps_nfrs(
     )
 
     payload = json.loads(llm.call_args.args[0][1]["content"])
-    assert payload["previous"] == previous.model_dump(mode="json")
+    assert payload["previous"] == {"rubric": previous.rubric.model_dump(mode="json")}
+    assert payload["selection"] == selection.model_dump(mode="json")
     assert payload["findings"] == [f.model_dump(mode="json") for f in findings]
     assert payload["research"] == research.model_dump()
     assert "Finding" in llm.call_args.args[0][0]["content"]
