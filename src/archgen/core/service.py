@@ -7,6 +7,7 @@ import json
 import logging
 import os
 import tempfile
+from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -23,6 +24,8 @@ from archgen.retrieval.crawler import FetchTool, HttpFetcher, create_fetch_clien
 from archgen.retrieval.search import SearchTool
 
 from .graph import GenerationState, build_generation_graph, new_thread_config
+
+FAKE_STEP_SECONDS = 5
 
 
 class _LLMTrace(BaseCallbackHandler):
@@ -56,13 +59,18 @@ class _LLMTrace(BaseCallbackHandler):
 
 
 def run_generation(
-    brief: InterviewBrief, *, output_root: Path | None = None, judge_enabled: bool = False
+    brief: InterviewBrief,
+    *,
+    output_root: Path | None = None,
+    judge_enabled: bool = False,
+    on_progress: Callable[[str], None] | None = None,
+    fake: bool = False,
 ) -> GenerationState:
     """Judge는 실제 오탐 검증 후 judge_enabled로 활성화한다."""
     root = (
         Path(output_root)
         if output_root is not None
-        else PROJECT_ROOT / ".archgen" / "generation"
+        else PROJECT_ROOT / ".archgen" / ("fake-generation" if fake else "generation")
     )
     root.mkdir(parents=True, exist_ok=True)
     run_dir = Path(
@@ -76,11 +84,65 @@ def run_generation(
     logger.setLevel(logging.INFO)
     try:
         logger.info(
-            "실행 로그: %s | 생성 small | Judge %s",
+            "실행 로그: %s | 생성 %s | Judge %s",
             run_dir,
-            "large" if judge_enabled else "off",
+            "Fake" if fake else "small",
+            ("Fake" if fake else "large") if judge_enabled else "off",
         )
         trace = _LLMTrace(run_dir)
+        if fake:
+            from time import sleep
+
+            import yaml
+            from langchain_core.language_models.fake_chat_models import FakeListChatModel
+            from langchain_core.messages.utils import count_tokens_approximately
+
+            from archgen.domain.nfr import NFRExport, NFRSelection
+            from archgen.domain.research import Document, ResearchResult
+            from archgen.paths import GOLDEN_DIR
+
+            logger.info("Fake 모드: 외부 호출 없이 고정 채팅 예시로 실행")
+            raw = yaml.safe_load((GOLDEN_DIR / "chat.yaml").read_text(encoding="utf-8"))
+            export = NFRExport.model_validate(raw)
+            selection = NFRSelection(**export.model_dump(exclude={"rubric"}))
+            responses = [selection.model_dump_json(), export.rubric.model_dump_json()]
+            if judge_enabled:
+                responses.append('{"findings": []}')
+            model = FakeListChatModel(
+                responses=responses, sleep=FAKE_STEP_SECONDS, callbacks=[trace]
+            )
+
+            def fake_research(_brief):
+                sleep(FAKE_STEP_SECONDS)
+                return ResearchResult(
+                    topic_summary=raw["topic"],
+                    nfr_candidates=[],
+                    documents=[
+                        Document(
+                            id=d["id"],
+                            title=d["title"],
+                            url=d["url"],
+                            content="\n\n".join(d["quotes"]),
+                        )
+                        for d in raw["documents"]
+                    ],
+                )
+
+            def fake_llm(messages):
+                return response_text(model.invoke(messages))
+
+            graph = build_generation_graph(
+                research=fake_research,
+                llm=fake_llm,
+                count_tokens=count_tokens_approximately,
+                catalog=load_catalog(CATALOG_DIR),
+                output_dir=run_dir,
+                judge_llm=fake_llm if judge_enabled else None,
+                on_progress=on_progress,
+            )
+            return graph.invoke(
+                {"brief": brief, "events": []}, config=new_thread_config()
+            )
         model = build_chat_model(
             "small",
             timeout=300,
@@ -122,6 +184,7 @@ def run_generation(
                 catalog=catalog,
                 output_dir=run_dir,
                 judge_llm=judge_llm,
+                on_progress=on_progress,
             )
             result = graph.invoke(
                 {"brief": brief, "events": []}, config=new_thread_config()
@@ -145,5 +208,12 @@ def run_generation(
 
 
 class GenerationService:
-    async def start(self, brief: InterviewBrief) -> GenerationState:
-        return await asyncio.to_thread(run_generation, brief)
+    def __init__(self, *, fake: bool = False):
+        self.fake = fake
+
+    async def start(
+        self, brief: InterviewBrief, *, on_progress: Callable[[str], None] | None = None
+    ) -> GenerationState:
+        return await asyncio.to_thread(
+            run_generation, brief, on_progress=on_progress, fake=self.fake
+        )

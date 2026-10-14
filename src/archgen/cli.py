@@ -14,6 +14,9 @@ def build_parser() -> argparse.ArgumentParser:
         description="Generate system-design interview problems and rubrics.",
     )
     parser.add_argument("--version", action="version", version=__version__)
+    parser.add_argument(
+        "--fake", action="store_true", help="API 없이 고정 예시로 TUI 실행"
+    )
     subcommands = parser.add_subparsers(dest="command")
     subcommands.add_parser("harnesses", help="List configured validation harnesses.")
     return parser
@@ -28,5 +31,5 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     from .tui.app import ArchGenApp
 
-    ArchGenApp().run()
+    ArchGenApp(fake=args.fake).run()
     return 0

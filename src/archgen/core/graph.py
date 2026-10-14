@@ -61,9 +61,14 @@ def build_generation_graph(
     catalog: NFRCatalog,
     output_dir: Path,
     judge_llm: Callable[[list[dict[str, str]]], str] | None = None,
+    on_progress: Callable[[str], None] | None = None,
 ):
     """외부 호출은 주입하고 실행마다 별도 출력 디렉터리를 사용한다."""
     output_dir = Path(output_dir)
+
+    def progress(message):
+        if on_progress is not None:
+            on_progress(message)
 
     def save(name, value):
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -82,11 +87,13 @@ def build_generation_graph(
         return {**event("intake", "brief accepted"), "repairs": 0, "findings": []}
 
     def investigate(state):
+        progress("자료 조사 중")
         result = research(state["brief"])
         save("research.json", result.model_dump(mode="json"))
         return {**event("research", "completed"), "research": result}
 
     def author(state):
+        progress("NFR 선정 중")
         selection = select_nfrs(
             state["brief"],
             state["research"],
@@ -105,6 +112,7 @@ def build_generation_graph(
         update = {**event("author", selection.status), "selection": selection}
         if selection.status != "selected":
             return {**update, "status": selection.status, "reason": selection.reason}
+        progress("평가 기준 작성 중")
         export = generate_rubric(
             state["brief"],
             state["research"],
@@ -116,6 +124,7 @@ def build_generation_graph(
         return {**update, "export": export}
 
     def finalize(state):
+        progress("결과 저장 중")
         status = state.get("status") or (
             "failed" if has_errors(state["findings"]) else "complete"
         )
@@ -145,6 +154,7 @@ def build_generation_graph(
         return any(f.severity == Severity.ERROR for f in findings)
 
     def validate(state):
+        progress("기본 검증 중")
         findings = Runner(
             [
                 check_weight_sum,
@@ -160,6 +170,7 @@ def build_generation_graph(
         return {**event("validate", f"{len(findings)} findings"), "findings": findings}
 
     def render(state):
+        progress("채점표 작성 중")
         markdown = render_rubric(state["export"], state["brief"])
         findings = check_rendered(markdown, state["export"], state["brief"])
         save(
@@ -175,6 +186,7 @@ def build_generation_graph(
     def judge(state):
         if judge_llm is None:
             return event("judge", "disabled: actual validation pending")
+        progress("평가 기준 검토 중")
         findings = judge_export(
             state["brief"], state["research"], state["export"], judge_llm
         )
@@ -194,6 +206,7 @@ def build_generation_graph(
 
     def repair(state):
         attempt = state["repairs"] + 1
+        progress(f"평가 기준 보완 중 ({attempt}/2)")
         export = generate_rubric(
             state["brief"],
             state["research"],

@@ -12,6 +12,67 @@ from archgen.domain.research import Document, ResearchResult
 BRIEF = InterviewBrief(Seniority.MIDDLE, "채팅 서비스")
 
 
+def test_fake_generation_needs_no_keys_or_external_services(monkeypatch, tmp_path):
+    monkeypatch.setattr(service, "FAKE_STEP_SECONDS", 0)
+    forbidden = Mock(side_effect=AssertionError("Fake 모드에서 외부 서비스 호출"))
+    for name in ("build_chat_model", "TavilyClient", "create_fetch_client"):
+        monkeypatch.setattr(service, name, forbidden)
+    for key in ("OPENROUTER_API_KEY", "TAVILY_API_KEY"):
+        monkeypatch.delenv(key, raising=False)
+    progress = []
+
+    result = service.run_generation(
+        BRIEF, fake=True, output_root=tmp_path, on_progress=progress.append
+    )
+
+    assert result["status"] == "complete"
+    forbidden.assert_not_called()
+    root = next(tmp_path.iterdir())
+    assert (root / "nfr_rubric.md").is_file()
+    assert len(list(root.glob("llm-*-response.json"))) == 2
+    assert json.loads((root / "input.json").read_text())["topic"] == BRIEF.topic
+    assert "Fake" in (root / "run.log").read_text()
+    assert "자료 조사 중" in progress and "평가 기준 작성 중" in progress
+
+
+def test_runtime_reports_each_stage_before_work(runtime, monkeypatch, tmp_path):
+    small, large, _ = runtime
+    progress = []
+    research_result = service.run_research.return_value
+    responses = iter(small.invoke.side_effect)
+
+    def research(*args):
+        assert progress[-1] == "자료 조사 중"
+        return research_result
+
+    def generate(messages):
+        expected = "NFR 선정 중" if small.invoke.call_count == 1 else "평가 기준 작성 중"
+        assert progress[-1] == expected
+        return next(responses)
+
+    def judge(messages):
+        assert progress[-1] == "평가 기준 검토 중"
+        return AIMessage(content='{"findings": []}')
+
+    monkeypatch.setattr(service, "run_research", research)
+    small.invoke.side_effect = generate
+    large.invoke.side_effect = judge
+    result = service.run_generation(
+        BRIEF, output_root=tmp_path, judge_enabled=True, on_progress=progress.append
+    )
+
+    assert result["status"] == "complete"
+    assert progress == [
+        "자료 조사 중",
+        "NFR 선정 중",
+        "평가 기준 작성 중",
+        "기본 검증 중",
+        "채점표 작성 중",
+        "평가 기준 검토 중",
+        "결과 저장 중",
+    ]
+
+
 @pytest.fixture
 def runtime(monkeypatch, golden_export, golden_document_ids):
     small, large = Mock(), Mock()

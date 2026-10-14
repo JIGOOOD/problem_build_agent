@@ -45,6 +45,19 @@ uv run python try_judge.py
 Judge 입출력과 Finding은 `.archgen/judge/<실행>/`에 저장한다.
 Finding이 하나라도 있으면 통과시키지 않고 사람이 근거와 대조한다.
 
+TUI에서 Ctrl+G로 생성하면 현재 단계·경과 시간과 로딩 표시가 화면에 나타난다.
+완료·중단·실패 시 로딩과 시간 갱신이 멈추며, 생성 중에는 Ctrl+G로 중복 실행하지 않는다.
+
+직접 입력하며 API 없이 진행 표시를 확인하려면:
+
+```bash
+uv run archgen --fake
+```
+
+연차·주제·중점 사항을 입력한 뒤 Ctrl+G를 누른다. 조사·선정·기준 작성 단계는 각각 5초씩 대기한다.
+입력은 기록하지만 응답은 고정된 채팅 골든 예시다. 모델·검색 API를 호출하지 않으며 키도 필요 없다.
+로그와 결과는 `.archgen/fake-generation/<실행>/`에 저장한다.
+
 M5 실제 출력 확인과 M6 Judge 오탐 검증을 완료한 뒤, large Judge를 포함한 실제 통합 검증:
 
 ```bash
