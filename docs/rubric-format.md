@@ -88,7 +88,7 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 
 ## 2. 출력 샘플
 
-전체 배치 기준은 `resources/golden/uber.md`를 따른다. 아래는 구조 예시다.
+전체 배치 기준은 `resources/golden/uber_middle.md`와 `resources/golden/uber_senior.md`를 따른다. 아래는 구조 예시다.
 
 ````markdown
 # 차량 공유 서비스
