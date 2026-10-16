@@ -388,7 +388,7 @@ tradeoffs:
 
 rubric:
   criteria:
-    - id: NFR-C1
+    - id: C1
       title: <평가 항목 이름>
       description: <무엇을 평가하는지 한 문장>
       related_nfr_ids: [NFR-1]

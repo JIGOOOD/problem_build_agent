@@ -37,13 +37,13 @@ def replace_once(old: str, new: str) -> Callable[[str], str]:
 
 
 def drop_second_section(md: str) -> str:
-    """NFR-C2 섹션(헤딩부터 다음 구분선 전까지)을 통째로 지운다."""
-    head, rest = md.split("\n### NFR-C2.", 1)
+    """C2 섹션(헤딩부터 다음 구분선 전까지)을 통째로 지운다."""
+    head, rest = md.split("\n### C2.", 1)
     return head + "\n---" + rest.split("\n---", 1)[1]
 
 
 def swap_first_two_sections(md: str) -> str:
-    head, first, second, *rest = md.split("\n---\n")
+    head, first, second, *rest = md.rstrip().removesuffix("---").split("\n---\n")
     return "\n---\n".join([head, second, first, *rest])
 
 
@@ -78,7 +78,8 @@ def test_post_render_flags_sections_out_of_order_or_repeated(
     md = tamper(render_rubric(golden_export, BRIEF))
 
     assert findings_for(md, golden_export) == {
-        ("RENDER_SECTIONS_MISMATCH", "rubric.criteria")
+        ("RENDER_SECTIONS_MISMATCH", "rubric.criteria"),
+        ("RENDER_SECTIONS_MISMATCH", "confirmed_nfrs"),
     }
 
 
@@ -95,7 +96,7 @@ def test_post_render_accepts_a_topic_folded_into_one_heading_line(
     ("tamper", "expected"),
     [
         (
-            drop_line_containing("| NFR-C3 |"),
+            drop_line_containing("| NFR-3 · Scalability |"),
             {("RENDER_SUMMARY_MISMATCH", "rubric.criteria")},
         ),
         (
@@ -119,16 +120,12 @@ def test_post_render_accepts_a_topic_folded_into_one_heading_line(
             {("RENDER_DESCRIPTION_MISMATCH", "rubric.criteria[0].description")},
         ),
         (
-            replace_once("전달 신뢰성 · 45점", "전달 신뢰성 · 40점"),
+            replace_once("전달 신뢰성 · 45", "전달 신뢰성 · 40"),
             {("RENDER_HEADING_MISMATCH", "rubric.criteria[0].weight")},
         ),
         (
-            replace_once("### NFR-C1. 수락한", "### NFR-C1. 받은"),
+            replace_once("### C1. 수락한", "### C1. 받은"),
             {("RENDER_HEADING_MISMATCH", "rubric.criteria[0].title")},
-        ),
-        (
-            drop_line_containing("- 정족수를 요구하는"),
-            {("RENDER_TRADEOFF_MISMATCH", "rubric.criteria[0].tradeoffs")},
         ),
     ],
 )
@@ -151,6 +148,7 @@ def test_post_render_reports_instead_of_crashing_on_a_broken_document(
         ("RENDER_HEADER_MISMATCH", "header"),
         ("RENDER_SUMMARY_MISMATCH", "rubric.criteria"),
         ("RENDER_SECTIONS_MISMATCH", "rubric.criteria"),
+        ("RENDER_SECTIONS_MISMATCH", "confirmed_nfrs"),
     }
 
 
@@ -167,20 +165,6 @@ def test_post_render_accepts_single_newlines_inside_paragraphs(
     export = edited(golden_export, wrap)
 
     assert check_rendered(render_rubric(export, BRIEF), export, BRIEF) == []
-
-
-def test_post_render_catches_a_blank_line_that_splits_a_tradeoff(
-    golden_export: NFRExport,
-) -> None:
-    """빈 줄이 든 trade-off는 목록 항목이 끊긴다. 테스트가 못 다룬 입력을 실행 시점에 잡는다."""
-
-    def split(raw: dict) -> None:
-        raw["tradeoffs"][0]["description"] = "첫 문단의 상충.\n\n둘째 문단의 상충."
-
-    export = edited(golden_export, split)
-    found = findings_for(render_rubric(export, BRIEF), export)
-
-    assert ("RENDER_TRADEOFF_MISMATCH", "rubric.criteria[0].tradeoffs") in found
 
 
 def escaped_title(raw: dict) -> None:

@@ -50,7 +50,7 @@ NFRExport:
 
   rubric:
     criteria:
-      - id: string          # NFR-C1
+      - id: string          # C1
         title: string
         description: string
         related_nfr_ids: [string]       # 정확히 1개
@@ -93,69 +93,71 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 
 ## 2. 출력 샘플
 
-주제: 실시간 채팅 시스템 / 대상: 미들
+전체 배치 기준은 `resources/golden/uber.md`를 따른다. 아래는 구조 예시다.
 
 ````markdown
-# 실시간 채팅 시스템
+# 차량 공유 서비스
 
 **대상 연차** 미들\
 **배점** 100
 
 ## NFR
 
-| # | 평가 항목 | 배점 | 획득 |
+| NFR | 평가 항목 | 배점 | 획득 |
 |---|---|---|---|
-| NFR-C1 | 메시지 전달 지연 | 30 | ☐0 ☐1 ☐2 ☐3 |
-| NFR-C2 | 메시지 순서 보장 | 25 | ☐0 ☐1 ☐2 ☐3 |
-| NFR-C3 | 장애 시 가용성 | 25 | ☐0 ☐1 ☐2 ☐3 |
-| NFR-C4 | 동시 접속 확장성 | 20 | ☐0 ☐1 ☐2 ☐3 |
+| NFR-1 · Low Latency | C1. 주변 운전자 검색 최적화 | 30 | ☐0 ☐1 ☐2 ☐3 |
+| NFR-2 · Consistency | C2. 운전자 중복 배정 방지 | 35 | ☐0 ☐1 ☐2 ☐3 |
+| NFR-3 · High Throughput | C3. 대규모 위치 업데이트 처리 | 15 | ☐0 ☐1 ☐2 ☐3 |
+| NFR-3 · High Throughput | C4. 피크 시간대 호출 요청 유실 방지 | 20 | ☐0 ☐1 ☐2 ☐3 |
 
 ---
 
-### NFR-C1. 메시지 전달 지연 · 30점
-
-**평가 항목**
-메시지 전송부터 수신자 화면 도달까지의 지연을 요구 수준 내로 설계했는가
+## NFR-1. Low Latency
 
 **요구 수준**
-`latency` — p99 500 ms
-메시지는 전송 후 p99 500ms 이내에 수신자에게 도달해야 한다.
+`latency` — 매칭 지연을 요구 수준 내로 유지한다.
 
-**관련 trade-off**
-- 순서 보장을 강하게 걸수록 전달 지연이 증가한다.
+### C1. 주변 운전자 검색 최적화 · 30
+
+**평가 항목**
+위치 갱신과 근접 검색을 효율적으로 처리하는가?
 
 | Level | 기준 |
 |---|---|
-| 0 | latency 요구사항을 설계에서 고려하지 않는다. |
-| 1 | 낮은 지연이 필요하다고 언급하지만 이를 만족시킬 구조를 제시하지 못한다. |
-| 2 | 지속 연결(WebSocket) 등 p99 500ms를 만족할 수 있는 전송 구조를 제시한다. |
-| 3 | 요구 지연을 만족하면서 대규모 방의 팬아웃 병목, 재연결 시 tail latency, 순서 보장과의 trade-off까지 설명한다. |
+| 0 | 요구사항을 고려하지 않는다. |
+| 1 | 목표는 언급하지만 처리 구조를 제시하지 못한다. |
+| 2 | 요구 수준을 만족하는 구조와 작동 이유를 설명한다. |
+| 3 | 2점 요건과 대표 상황의 영향·대응·비용을 설명한다. |
 
 ---
 
-### NFR-C2. 메시지 순서 보장 · 25점
+## NFR-2. Consistency
 
-... (동일 구조 반복)
+... (NFR별 요구 수준과 관련 평가 항목 반복)
+
+---
 ````
 
 ### 렌더 규칙
 
-- 헤딩 단계: `# 주제` → `## NFR` → `### NFR-C{n}` (criterion)
+- 헤딩 단계: `# 주제` → `## NFR` (요약표) → `## NFR-{n}. 이름` → `### C{n}` (criterion)
 - 주제 바로 아래에 **대상 연차**와 **배점**(criterion weight 합, 고정 문구 아님)을 한 줄씩
-- md는 요약표와 평가 항목·요구 수준·관련 trade-off·레벨표를 유지한다. 조사·선정 기록은 별도 섹션으로 추가하지 않는다.
+- md는 요약표와 NFR별 요구 수준·평가 항목·레벨표를 유지한다. 조사·선정 기록은 별도 섹션으로 추가하지 않는다.
 - 4섹션을 합칠 때는 `# 주제`와 대상 연차를 합치는 쪽에서 한 번만 내고,
   각 섹션은 `## NFR`부터 끼워 넣는다
 - `## NFR` 바로 아래에 출력 샘플의 요약표를 넣는다. 채점 규칙·환산 설명은 본문에 추가하지 않는다.
-- 공유 trade-off는 첫 번째 `related_nfr_ids`의 평가 항목에서 한 번만 표시한다. 원본의 NFR 연결은 유지한다.
+- NFR별로 요구 수준을 한 번 표시하고, 그 아래 관련 평가 항목을 묶는다.
+- NFR 이름은 kind의 표시명이다. latency는 Low Latency, throughput은 High Throughput, 나머지는 밑줄을 공백으로 바꿔 Title Case로 표시한다. consistency를 자동으로 Strong Consistency로 바꾸지는 않는다.
+- 요약표는 `NFR id · 이름`, `C번호. 제목`, 배점, 획득 순이다. 본문 항목 제목은 `### C번호. 제목 · 배점`이다.
 - **요구 수준**: 정량 목표면 `` `kind` — 목표`` 다음 줄에 statement,
   정성 목표면 `` `kind` — statement`` 한 줄 (정성 목표는 statement의 요약이라 반복하지 않는다)
 - 목표 수치는 천 단위 콤마, 지수 표기 없음, 숫자와 단위는 띄우되 `%`만 붙인다
   (`p99 500 ms`, `peak 10,000 msg/s`, `99.9%`)
 - 레벨표는 데이터 순서와 상관없이 score 0 → 3 순으로 쓴다
-- 표시 번호는 코드가 항목 순서대로 `NFR-C{n}`을 붙인다. JSON의 원본 id는 유지한다.
+- NFR 표시 번호는 `confirmed_nfrs` 순서대로 `NFR-{n}`, 평가 항목은 항목 순서대로 `C{n}`을 붙인다. JSON의 원본 id와 참조는 유지한다.
 - **출처 표시(`[D1]` 인용, 근거 표)는 넣지 않는다.** 문서 id(`D{n}`)는 데이터와 하네스 안에서만 쓴다
 - descriptor 안의 `|`는 `\|`로 이스케이프
-- trade-off가 없는 criterion은 해당 블록 자체를 생략 (빈 섹션을 남기지 않는다)
+- 별도 trade-off 블록은 출력하지 않는다. 원본 JSON의 tradeoffs와 근거는 유지한다.
 
 ---
 
@@ -181,12 +183,12 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 | md 부분 | 검사 | 코드 | path |
 |---|---|---|---|
 | 머리말 | 주제(공백 접기)·대상 연차가 brief와, 배점이 weight 합과 같고, `## NFR` 헤딩이 있음 | `RENDER_HEADER_MISMATCH` | `header` |
-| 요약표 | `[표시 번호, title, 배점]`이 항목 순서와 같음 | `RENDER_SUMMARY_MISMATCH` | `rubric.criteria` |
-| criterion 섹션들 | 표시 번호 목록이 `NFR-C1`부터 순서대로 있음 (누락·중복·순서) | `RENDER_SECTIONS_MISMATCH` | `rubric.criteria` |
+| 요약표 | `[NFR id · 이름, C번호. title, 배점]`이 항목 순서와 같음 | `RENDER_SUMMARY_MISMATCH` | `rubric.criteria` |
+| NFR 섹션들 | NFR id·이름 목록이 원본 순서와 같음 | `RENDER_SECTIONS_MISMATCH` | `confirmed_nfrs` |
+| criterion 섹션들 | 표시 번호 목록이 NFR별로 묶인 항목 순서와 같음 (누락·중복·순서) | `RENDER_SECTIONS_MISMATCH` | `rubric.criteria` |
 | 헤딩 | title(공백 접기 적용)·배점이 원본과 같음 | `RENDER_HEADING_MISMATCH` | `rubric.criteria[i].title` / `.weight` |
 | 평가 항목 | 본문이 `description`과 같음 | `RENDER_DESCRIPTION_MISMATCH` | `rubric.criteria[i].description` |
 | 요구 수준 | `` `kind` — 목표/statement``와 같음 | `RENDER_REQUIREMENT_MISMATCH` | `confirmed_nfrs[k]` |
-| 관련 trade-off | bullet 목록이 그 NFR의 trade-off 설명들과 같음(개수·순서·내용) | `RENDER_TRADEOFF_MISMATCH` | `rubric.criteria[i].tradeoffs` |
 | 레벨표 | 행들이 원본 레벨(score 순)의 `(score, 서술)` 목록과 같음. 행 수 차이도 여기 | `RENDER_LEVELS_MISMATCH` | `rubric.criteria[i].levels` |
 
 code 하나가 md의 한 부분을 가리킨다 — 이름만 보고 고칠 템플릿 블록을 안다.

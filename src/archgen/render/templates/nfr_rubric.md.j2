@@ -5,34 +5,35 @@
 
 ## NFR
 
-| # | 평가 항목 | 배점 | 획득 |
+| NFR | 평가 항목 | 배점 | 획득 |
 |---|---|---|---|
 {% for s in sections %}
-| NFR-C{{ loop.index }} | {{ s.criterion.title | cell }} | {{ s.criterion.weight }} | ☐0 ☐1 ☐2 ☐3 |
+| NFR-{{ nfr_numbers[s.nfr.id] }} · {{ s.nfr.kind | nfr_name | cell }} | C{{ s.number }}. {{ s.criterion.title | cell }} | {{ s.criterion.weight }} | ☐0 ☐1 ☐2 ☐3 |
 {% endfor %}
-{% for s in sections %}
+{% for nfr in nfrs %}
 
 ---
 
-### NFR-C{{ loop.index }}. {{ s.criterion.title | heading }} · {{ s.criterion.weight }}점
+## NFR-{{ loop.index }}. {{ nfr.kind | nfr_name | heading }}
+
+**요구 수준**
+{% for s in sections if s.nfr.id == nfr.id %}
+{% if loop.first %}
+{% if s.target %}
+`{{ nfr.kind }}` — {{ s.target }}
+{{ nfr.statement }}
+{% else %}
+`{{ nfr.kind }}` — {{ nfr.statement }}
+{% endif %}
+{% else %}
+
+---
+{% endif %}
+
+### C{{ s.number }}. {{ s.criterion.title | heading }} · {{ s.criterion.weight }}
 
 **평가 항목**
 {{ s.criterion.description }}
-
-**요구 수준**
-{% if s.target %}
-`{{ s.nfr.kind }}` — {{ s.target }}
-{{ s.nfr.statement }}
-{% else %}
-`{{ s.nfr.kind }}` — {{ s.nfr.statement }}
-{% endif %}
-{% if s.tradeoffs %}
-
-**관련 trade-off**
-{% for t in s.tradeoffs %}
-- {{ t.description }}
-{% endfor %}
-{% endif %}
 
 | Level | 기준 |
 |---|---|
@@ -40,3 +41,6 @@
 | {{ level.score }} | {{ level.descriptor | cell }} |
 {% endfor %}
 {% endfor %}
+{% endfor %}
+
+---

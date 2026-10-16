@@ -10,7 +10,7 @@ import re
 from archgen.domain.brief import InterviewBrief
 from archgen.domain.nfr import ConfirmedNFR, NFRExport, RubricCriterion
 from archgen.harness.findings import Finding, FindingCode, Severity
-from archgen.render.renderer import _format_target
+from archgen.render.renderer import _format_target, _nfr_name
 
 _SUMMARY_ROW_END = "☐0 ☐1 ☐2 ☐3 |"
 _LEVEL_HEADER = "| Level | 기준 |\n|---|---|\n"
@@ -31,6 +31,16 @@ def read_back(md: str) -> dict:
     }
     summary = [_cells(line)[:3] for line in lines if line.endswith(_SUMMARY_ROW_END)]
     criteria = []
+    groups = []
+    for group in md.split("\n## ")[1:]:
+        heading = group.splitlines()[0] if group else ""
+        if heading != "NFR":
+            groups.append(
+                {
+                    "heading": heading,
+                    "requirement": _block(group.split("\n### ", 1)[0], "요구 수준"),
+                }
+            )
     for chunk in md.split("\n### ")[1:]:
         heading = chunk.splitlines()[0] if chunk else ""
         criterion_id, _, rest = heading.partition(". ")
@@ -44,20 +54,24 @@ def read_back(md: str) -> dict:
                 "title": title,
                 "weight": weight.removesuffix("점"),
                 "description": "\n".join(_block(chunk, "평가 항목")),
-                "requirement": _block(chunk, "요구 수준"),
-                "tradeoffs": _bullets(_block(chunk, "관련 trade-off")),
                 "levels": [tuple(_cells(row)) for row in table.strip().splitlines()],
             }
         )
-    return {"header": header, "summary": summary, "criteria": criteria}
+    return {"header": header, "summary": summary, "criteria": criteria, "nfrs": groups}
 
 
 def check_rendered(md: str, export: NFRExport, brief: InterviewBrief) -> list[Finding]:
     """md에 옮겨진 값이 원본과 같은가. 다르면 렌더러 버그다."""
     rendered = read_back(md)
     findings = _header_findings(rendered["header"], export, brief)
+    nfrs = {n.id: n for n in export.confirmed_nfrs}
+    nfr_numbers = {n.id: i for i, n in enumerate(export.confirmed_nfrs, 1)}
     expected_summary = [
-        [f"NFR-C{i}", c.title, str(c.weight)]
+        [
+            f"NFR-{nfr_numbers[c.related_nfr_ids[0]]} · {_nfr_name(nfrs[c.related_nfr_ids[0]].kind)}",
+            f"C{i}. {c.title}",
+            str(c.weight),
+        ]
         for i, c in enumerate(export.rubric.criteria, 1)
     ]
     if rendered["summary"] != expected_summary:
@@ -70,7 +84,12 @@ def check_rendered(md: str, export: NFRExport, brief: InterviewBrief) -> list[Fi
         )
     # 섹션 id 목록 전체를 순서까지 비교해야 누락·중복·순서 뒤바뀜을 모두 잡는다.
     section_ids = [section["id"] for section in rendered["criteria"]]
-    expected_ids = [f"NFR-C{i}" for i in range(1, len(export.rubric.criteria) + 1)]
+    expected_ids = [
+        f"C{i}"
+        for nfr in export.confirmed_nfrs
+        for i, c in enumerate(export.rubric.criteria, 1)
+        if c.related_nfr_ids[0] == nfr.id
+    ]
     if section_ids != expected_ids:
         findings.append(
             _error(
@@ -79,15 +98,38 @@ def check_rendered(md: str, export: NFRExport, brief: InterviewBrief) -> list[Fi
                 f"criterion 섹션: {_difference(section_ids, expected_ids)}",
             )
         )
+    expected_groups = [
+        " ".join(f"NFR-{i}. {_nfr_name(n.kind)}".split())
+        for i, n in enumerate(export.confirmed_nfrs, 1)
+    ]
+    if [g["heading"] for g in rendered["nfrs"]] != expected_groups:
+        findings.append(
+            _error(
+                FindingCode.RENDER_SECTIONS_MISMATCH,
+                "confirmed_nfrs",
+                "NFR 섹션 목록이 원본과 다르다.",
+            )
+        )
+    groups = {g["heading"]: g for g in rendered["nfrs"]}
+    for i, nfr in enumerate(export.confirmed_nfrs):
+        group = groups.get(expected_groups[i])
+        if group and "\n".join(group["requirement"]) != _requirement(nfr):
+            findings.append(
+                _error(
+                    FindingCode.RENDER_REQUIREMENT_MISMATCH,
+                    f"confirmed_nfrs[{i}]",
+                    "NFR 요구 수준이 원본과 다르다.",
+                )
+            )
     # 안쪽 비교는 id별 첫 섹션으로 한다. 빠진 섹션은 위에서 이미 지적했다.
     sections: dict[str, dict] = {}
     for section in rendered["criteria"]:
         sections.setdefault(section["id"], section)
     for i, criterion in enumerate(export.rubric.criteria):
-        display_id = expected_ids[i]
+        display_id = f"C{i + 1}"
         if display_id in sections:
             findings += _section_findings(
-                sections[display_id], criterion, f"rubric.criteria[{i}]", export
+                sections[display_id], criterion, f"rubric.criteria[{i}]"
             )
     return findings
 
@@ -121,7 +163,7 @@ def _header_findings(
 
 
 def _section_findings(
-    section: dict, criterion: RubricCriterion, path: str, export: NFRExport
+    section: dict, criterion: RubricCriterion, path: str
 ) -> list[Finding]:
     """criterion 섹션 하나를 원본과 비교한다. md의 부분마다 code가 하나다."""
     cid = criterion.id
@@ -151,29 +193,6 @@ def _section_findings(
                 f"{cid}의 평가 항목이 다르다.",
             )
         )
-
-    nfrs = {nfr.id: (k, nfr) for k, nfr in enumerate(export.confirmed_nfrs)}
-    if criterion.related_nfr_ids and criterion.related_nfr_ids[0] in nfrs:
-        k, nfr = nfrs[criterion.related_nfr_ids[0]]
-        if "\n".join(section["requirement"]) != _requirement(nfr):
-            findings.append(
-                _error(
-                    FindingCode.RENDER_REQUIREMENT_MISMATCH,
-                    f"confirmed_nfrs[{k}]",
-                    f"{cid}의 요구 수준이 {nfr.id}와 다르다.",
-                )
-            )
-        tradeoffs = [
-            t.description for t in export.tradeoffs if nfr.id in t.related_nfr_ids[:1]
-        ]
-        if section["tradeoffs"] != tradeoffs:
-            findings.append(
-                _error(
-                    FindingCode.RENDER_TRADEOFF_MISMATCH,
-                    f"{path}.tradeoffs",
-                    f"{cid}의 관련 trade-off: {_difference(section['tradeoffs'], tradeoffs)}",
-                )
-            )
 
     # 기준은 고정값 4가 아니라 원본 레벨 목록이다. 4개인지는 하네스 core.levels가 본다.
     levels = [
@@ -221,17 +240,6 @@ def _block(chunk: str, label: str) -> list[str]:
     if marker not in chunk:
         return []
     return chunk.split(marker, 1)[1].split("\n\n", 1)[0].splitlines()
-
-
-def _bullets(lines: list[str]) -> list[str]:
-    """`- `로 시작하지 않는 줄은 앞 항목이 이어진 것이다."""
-    items: list[str] = []
-    for line in lines:
-        if line.startswith("- ") or not items:
-            items.append(line.removeprefix("- "))
-        else:
-            items[-1] += "\n" + line
-    return items
 
 
 def _cells(row: str) -> list[str]:

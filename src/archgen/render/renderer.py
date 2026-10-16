@@ -16,7 +16,6 @@ from archgen.domain.nfr import (
     NFRTarget,
     RubricCriterion,
     RubricLevel,
-    Tradeoff,
 )
 from archgen.templating import template_env
 
@@ -37,6 +36,15 @@ _ENV.filters["cell"] = _cell
 _ENV.filters["heading"] = _heading
 
 
+def _nfr_name(kind: str) -> str:
+    return {"latency": "Low Latency", "throughput": "High Throughput"}.get(
+        kind, kind.replace("_", " ").title()
+    )
+
+
+_ENV.filters["nfr_name"] = _nfr_name
+
+
 @dataclass(frozen=True)
 class _Section:
     """criterion 하나를 렌더하는 데 필요한 것을 id 참조를 풀어 모아 둔다."""
@@ -44,7 +52,7 @@ class _Section:
     criterion: RubricCriterion
     nfr: ConfirmedNFR
     target: str | None
-    tradeoffs: list[Tradeoff]
+    number: int
     # LLM이 레벨을 어떤 순서로 내든 채점표는 0점부터 읽히게 한다.
     levels: list[RubricLevel]
 
@@ -53,24 +61,24 @@ def render_rubric(export: NFRExport, brief: InterviewBrief) -> str:
     """cross-ref 하네스를 통과한 export를 받는다. 깨진 참조는 KeyError·IndexError로 드러난다."""
     nfrs = {nfr.id: nfr for nfr in export.confirmed_nfrs}
     sections = [
-        _section(c, nfrs[c.related_nfr_ids[0]], export) for c in export.rubric.criteria
+        _section(c, nfrs[c.related_nfr_ids[0]], i)
+        for i, c in enumerate(export.rubric.criteria, 1)
     ]
     return _ENV.get_template("nfr_rubric.md.j2").render(
         brief=brief,
         sections=sections,
+        nfrs=export.confirmed_nfrs,
+        nfr_numbers={nfr.id: i for i, nfr in enumerate(export.confirmed_nfrs, 1)},
         total_weight=sum(c.weight for c in export.rubric.criteria),
     )
 
 
-def _section(
-    criterion: RubricCriterion, nfr: ConfirmedNFR, export: NFRExport
-) -> _Section:
+def _section(criterion: RubricCriterion, nfr: ConfirmedNFR, number: int) -> _Section:
     return _Section(
         criterion=criterion,
         nfr=nfr,
         target=_format_target(nfr.target),
-        # 공유 trade-off는 첫 관련 NFR에서 한 번만 보여준다.
-        tradeoffs=[t for t in export.tradeoffs if nfr.id in t.related_nfr_ids[:1]],
+        number=number,
         levels=sorted(criterion.levels, key=lambda level: level.score),
     )
 

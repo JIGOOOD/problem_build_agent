@@ -141,7 +141,7 @@ tradeoffs:
 
 rubric:
   criteria:
-    - id: NFR-C1
+    - id: C1
       title: 수락한 메시지의 전달 신뢰성
       description: 서버가 수락 완료한 메시지의 보존·재전달과 중복 억제를 평가한다.
       related_nfr_ids: [NFR-1]
@@ -157,9 +157,9 @@ rubric:
         - score: 3
           descriptor: "2점 요건을 충족하고, 자기 설계에서 메시지가 유실되거나 중복이 걸러지지 않을 수 있는 구간을 식별해 그 구간을 좁히는 선택이 지연이나 처리량과 갖는 상충을 설명한다."
 
-    - id: NFR-C2
+    - id: C2
       title: 온라인 메시지 전달 경로의 지연
-      description: 온라인 전달 경로 자체의 직렬 의존성과 전송 대기를 줄이는 설계를 평가한다. 처리 용량 증가는 NFR-C3에서만 채점한다.
+      description: 온라인 전달 경로 자체의 직렬 의존성과 전송 대기를 줄이는 설계를 평가한다. 처리 용량 증가는 C3에서만 채점한다.
       related_nfr_ids: [NFR-2]
       weight: 30
       competency_axis: TRADE_OFF
@@ -173,7 +173,7 @@ rubric:
         - score: 3
           descriptor: "2점 요건을 충족하고, 자기 전달 경로에서 대기가 길어지는 조건을 식별해 그 대기를 줄이는 선택이 무엇을 희생하는지 설명한다(예: 일괄 전송의 처리량 이점)."
 
-    - id: NFR-C3
+    - id: C3
       title: 메시지 라우팅의 분산 확장성
       description: 라우팅 담당 범위의 분할과 규모 증가 대응을 평가한다.
       related_nfr_ids: [NFR-3]

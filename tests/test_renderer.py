@@ -4,7 +4,7 @@ from helpers import edited
 from archgen.domain.brief import InterviewBrief, Seniority
 from archgen.domain.nfr import NFRExport
 from archgen.render.post_render import read_back
-from archgen.render.renderer import render_rubric
+from archgen.render.renderer import _nfr_name, render_rubric
 
 BRIEF = InterviewBrief(seniority=Seniority.MIDDLE, topic="실시간 채팅 시스템 설계")
 
@@ -16,11 +16,12 @@ def test_render_matches_output_sample_columns_headings_and_clean_header(golden_e
     export.rubric.criteria[0].id = "criterion-custom"
     md = render_rubric(export, BRIEF)
 
-    assert "## NFR\n\n| # | 평가 항목 | 배점 | 획득 |" in md
+    assert "## NFR\n\n| NFR | 평가 항목 | 배점 | 획득 |" in md
     assert ">" not in "\n".join(header_lines(md))
     for i, criterion in enumerate(export.rubric.criteria, 1):
-        assert f"| NFR-C{i} | {criterion.title} | {criterion.weight} |" in md
-        assert f"### NFR-C{i}. {criterion.title} · {criterion.weight}점" in md
+        assert f"| {criterion.related_nfr_ids[0]} · " in md
+        assert f"| C{i}. {criterion.title} | {criterion.weight} |" in md
+        assert f"### C{i}. {criterion.title} · {criterion.weight}" in md
     assert "역량 축" not in md
     assert "competency_axis" not in golden_export.rubric.criteria[0].model_dump()
     assert export.rubric.criteria[0].id == "criterion-custom"
@@ -28,7 +29,7 @@ def test_render_matches_output_sample_columns_headings_and_clean_header(golden_e
 
 
 def criterion_sections(md: str) -> dict[str, str]:
-    """`### NFR-C1. ...` 헤딩부터 다음 헤딩 전까지를 criterion id로 묶는다."""
+    """`### C1. ...` 헤딩부터 다음 헤딩 전까지를 criterion id로 묶는다."""
     sections = {}
     for chunk in md.split("\n### ")[1:]:
         criterion_id = chunk.split(".", 1)[0]
@@ -83,14 +84,23 @@ def test_summary_table_has_one_row_per_criterion(golden_export: NFRExport) -> No
     assert len(rows) == len(golden_export.rubric.criteria)
     for row, criterion in zip(rows, golden_export.rubric.criteria, strict=True):
         cells = [cell.strip() for cell in row.strip("|").split("|")]
-        assert cells[:3] == [criterion.id, criterion.title, str(criterion.weight)]
+        nfr = next(
+            n
+            for n in golden_export.confirmed_nfrs
+            if n.id == criterion.related_nfr_ids[0]
+        )
+        assert cells[:3] == [
+            f"{nfr.id} · {_nfr_name(nfr.kind)}",
+            f"{criterion.id}. {criterion.title}",
+            str(criterion.weight),
+        ]
 
 
 def test_every_criterion_gets_a_heading_with_its_weight(golden_export: NFRExport) -> None:
     md = render_rubric(golden_export, BRIEF)
 
     for criterion in golden_export.rubric.criteria:
-        heading = f"### {criterion.id}. {criterion.title} · {criterion.weight}점"
+        heading = f"### {criterion.id}. {criterion.title} · {criterion.weight}"
         assert heading in md.splitlines()
 
 
@@ -110,19 +120,17 @@ def test_qualitative_requirement_shows_the_statement_once(
 ) -> None:
     """정성 목표는 statement의 요약이라 둘 다 쓰면 같은 말을 반복한다."""
     md = render_rubric(golden_export, BRIEF)
-    sections = criterion_sections(md)
-
     for criterion in golden_export.rubric.criteria:
         nfr = next(
             n for n in golden_export.confirmed_nfrs if n.id in criterion.related_nfr_ids
         )
-        assert f"`{nfr.kind}` — {nfr.statement}" in sections[criterion.id]
+        assert md.count(f"`{nfr.kind}` — {nfr.statement}") == 1
         assert nfr.qualitative_target not in md
 
 
 def with_target(value: float, unit: str | None, condition: str | None):
     def quantify(raw: dict) -> None:
-        nfr = raw["confirmed_nfrs"][1]  # NFR-2, NFR-C2가 평가
+        nfr = raw["confirmed_nfrs"][1]  # NFR-2, C2가 평가
         nfr["qualitative_target"] = None
         nfr["target"] = {"value": value, "unit": unit, "condition": condition}
 
@@ -133,7 +141,7 @@ def test_quantitative_requirement_shows_the_target_then_the_statement(
     golden_export: NFRExport,
 ) -> None:
     export = edited(golden_export, with_target(500, "ms", "p99"))
-    section = criterion_sections(render_rubric(export, BRIEF))["NFR-C2"]
+    section = render_rubric(export, BRIEF)
     nfr = export.confirmed_nfrs[1]
 
     assert f"`{nfr.kind}` — p99 500 ms\n{nfr.statement}" in section
@@ -159,7 +167,7 @@ def test_target_numbers_are_written_for_people(
 ) -> None:
     """천 단위 콤마, 지수 표기 없음, 숫자와 단위 사이는 띄운다."""
     export = edited(golden_export, with_target(value, unit, condition))
-    section = criterion_sections(render_rubric(export, BRIEF))["NFR-C2"]
+    section = render_rubric(export, BRIEF)
 
     assert f"`{export.confirmed_nfrs[1].kind}` — {shown}\n" in section
 
@@ -177,38 +185,6 @@ def test_levels_are_listed_from_zero_to_three(golden_export: NFRExport) -> None:
     assert levels == [(str(level.score), level.descriptor) for level in by_score]
 
 
-def test_related_tradeoffs_are_listed_under_their_criterion(
-    golden_export: NFRExport,
-) -> None:
-    sections = criterion_sections(render_rubric(golden_export, BRIEF))
-
-    for criterion in golden_export.rubric.criteria:
-        related = [
-            t
-            for t in golden_export.tradeoffs
-            if set(t.related_nfr_ids) & set(criterion.related_nfr_ids)
-        ]
-        assert related, "골든셋 criterion은 모두 trade-off가 있다"
-        for tradeoff in related:
-            assert f"- {tradeoff.description}" in sections[criterion.id]
-
-
-def test_tradeoff_block_is_omitted_when_there_is_none(golden_export: NFRExport) -> None:
-    """빈 섹션을 남기지 않는다."""
-
-    def detach_from_nfr3(raw: dict) -> None:
-        raw["tradeoffs"] = [
-            t for t in raw["tradeoffs"] if "NFR-3" not in t["related_nfr_ids"]
-        ]
-
-    sections = criterion_sections(
-        render_rubric(edited(golden_export, detach_from_nfr3), BRIEF)
-    )
-
-    assert "관련 trade-off" not in sections["NFR-C3"]
-    assert "관련 trade-off" in sections["NFR-C1"]
-
-
 @pytest.mark.parametrize("blank_run", ["\n\n\n", " \n"])
 def test_rendered_markdown_has_no_stray_whitespace(
     golden_export: NFRExport, blank_run: str
@@ -223,7 +199,12 @@ def test_rendered_rubric_reads_back_to_the_export(golden_export: NFRExport) -> N
     nfrs = {nfr.id: nfr for nfr in golden_export.confirmed_nfrs}
 
     assert rendered["summary"] == [
-        [c.id, c.title, str(c.weight)] for c in golden_export.rubric.criteria
+        [
+            f"{c.related_nfr_ids[0]} · {_nfr_name(nfrs[c.related_nfr_ids[0]].kind)}",
+            f"{c.id}. {c.title}",
+            str(c.weight),
+        ]
+        for c in golden_export.rubric.criteria
     ]
     assert len(rendered["criteria"]) == len(golden_export.rubric.criteria)
     for got, criterion in zip(
@@ -235,10 +216,10 @@ def test_rendered_rubric_reads_back_to_the_export(golden_export: NFRExport) -> N
         assert got["weight"] == str(criterion.weight)
         assert got["description"] == criterion.description
         # 정성 목표: `kind` — statement 한 줄
-        assert got["requirement"] == [f"`{nfr.kind}` — {nfr.statement}"]
-        assert got["tradeoffs"] == [
-            t.description for t in golden_export.tradeoffs if nfr.id in t.related_nfr_ids
-        ]
+        group = next(
+            g for g in rendered["nfrs"] if g["heading"].startswith(f"{nfr.id}. ")
+        )
+        assert group["requirement"] == [f"`{nfr.kind}` — {nfr.statement}"]
         assert got["levels"] == [
             (str(level.score), level.descriptor) for level in criterion.levels
         ]
@@ -256,7 +237,7 @@ def test_pipes_in_table_cells_do_not_split_the_row(golden_export: NFRExport) -> 
     rendered = read_back(render_rubric(export, BRIEF))
     criterion = export.rubric.criteria[0]
 
-    assert rendered["summary"][0][1] == criterion.title
+    assert rendered["summary"][0][1] == f"C1. {criterion.title}"
     assert rendered["criteria"][0]["levels"] == [
         (str(level.score), level.descriptor) for level in criterion.levels
     ]
@@ -276,7 +257,7 @@ def test_newlines_in_table_cells_stay_inside_the_row(golden_export: NFRExport) -
     rendered = read_back(render_rubric(export, BRIEF))
     criterion = export.rubric.criteria[0]
 
-    assert rendered["summary"][0][1] == criterion.title
+    assert rendered["summary"][0][1] == f"C1. {criterion.title}"
     assert rendered["criteria"][0]["levels"] == [
         (str(level.score), level.descriptor) for level in criterion.levels
     ]
@@ -296,15 +277,64 @@ def test_newlines_in_headings_become_spaces(golden_export: NFRExport) -> None:
     assert read_back(md)["criteria"][0]["title"] == "읽기 경로 쓰기 경로"
 
 
-def test_shared_tradeoff_is_shown_once_without_changing_nfr_links(golden_export):
+def test_same_nfr_groups_multiple_criteria_once(golden_export):
     from archgen.render.post_render import check_rendered
 
     export = golden_export.model_copy(deep=True)
-    shared = export.tradeoffs[0]
-    shared.related_nfr_ids = ["NFR-1", "NFR-2"]
+    extra = export.rubric.criteria[-1].model_copy(deep=True)
+    extra.id = "C4"
+    extra.weight = 10
+    export.rubric.criteria[-1].weight -= 10
+    export.rubric.criteria.append(extra)
+    md = render_rubric(export, BRIEF)
+
+    assert md.count("## NFR-3. Scalability") == 1
+    assert md.count("| NFR-3 · Scalability |") == 2
+    assert "### C3." in md and "### C4." in md
+    assert md.index("## NFR-3.") < md.index("### C3.") < md.index("### C4.")
+    assert md.count(export.confirmed_nfrs[-1].statement) == 1
+    assert "관련 trade-off" not in md
+    assert export.tradeoffs
+    assert check_rendered(md, export, BRIEF) == []
+
+
+def test_groups_keep_criterion_numbers_when_input_is_interleaved(golden_export):
+    from archgen.render.post_render import check_rendered
+
+    export = golden_export.model_copy(deep=True)
+    extra = export.rubric.criteria[0].model_copy(deep=True)
+    extra.id = "C4"
+    extra.weight = 10
+    export.rubric.criteria[0].weight -= 10
+    export.rubric.criteria.append(extra)
+    md = render_rubric(export, BRIEF)
+
+    assert md.index("### C1.") < md.index("### C4.") < md.index("## NFR-2.")
+    assert check_rendered(md, export, BRIEF) == []
+
+
+def test_nfr_display_numbers_ignore_source_ids(golden_export):
+    from archgen.render.post_render import check_rendered
+
+    export = golden_export.model_copy(deep=True)
+    ids = {n.id: f"nfr-{n.kind}" for n in export.confirmed_nfrs}
+    for nfr in export.confirmed_nfrs:
+        nfr.id = ids[nfr.id]
+    for item in [*export.rubric.criteria, *export.tradeoffs]:
+        item.related_nfr_ids = [ids[ref] for ref in item.related_nfr_ids]
+    extra = export.rubric.criteria[-1].model_copy(deep=True)
+    extra.id = "C4"
+    extra.weight = 10
+    export.rubric.criteria[-1].weight -= 10
+    export.rubric.criteria.append(extra)
+    original = export.model_dump()
 
     md = render_rubric(export, BRIEF)
 
-    assert md.count(shared.description) == 1
-    assert shared.related_nfr_ids == ["NFR-1", "NFR-2"]
+    for i, nfr in enumerate(export.confirmed_nfrs, 1):
+        assert f"| NFR-{i} · {_nfr_name(nfr.kind)} |" in md
+        assert f"## NFR-{i}. {_nfr_name(nfr.kind)}" in md
+        assert nfr.id not in md
+    assert md.count("| NFR-3 · Scalability |") == 2
     assert check_rendered(md, export, BRIEF) == []
+    assert export.model_dump() == original

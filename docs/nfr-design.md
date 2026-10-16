@@ -415,7 +415,7 @@ LLM 호출 자체의 예외(네트워크 등)와 문자열이 아닌 응답(연�
 
 ```yaml
 Criterion:
-  id: NFR-C1
+  id: C1
   title: 검색 응답 지연시간
   description: 검색 요청이 요구되는 latency 수준을 만족하도록 설계했는가
 
@@ -762,12 +762,12 @@ total         = Σ(section.weight × section_pct)      # section weight 합 = 10
 **대상 연차** / **배점**(weight 합)
 
 ## NFR
-| # | 평가 항목 | 배점 | 획득 |          ← criterion마다 한 행
+| NFR | 평가 항목 | 배점 | 획득 |      ← NFR id · 이름 / C번호. 제목 / 배점 / 획득
 
-### NFR-C{n}. {criterion.title} · {weight}점         ← 항목 순서대로 반복
-**평가 항목**   criterion.description
+## {nfr.id}. {kind 표시명}                  ← NFR별로 반복
 **요구 수준**   `kind` — 목표 + statement (정성 목표면 statement만)
-**관련 trade-off**   그 NFR에 연결된 trade-off (없으면 블록 생략)
+### C{n}. {criterion.title} · {weight}      ← 해당 NFR의 항목들
+**평가 항목**   criterion.description
 | Level | 기준 |   score 0~3
 ```
 
@@ -775,7 +775,7 @@ total         = Σ(section.weight × section_pct)      # section weight 합 = 10
 
 **목표**
 
-- 최종 Markdown이 NFRExport 내용을 빠짐없이, 그대로 반영했는지 확인한다.
+- 최종 Markdown이 NFRExport의 채점표 표시 대상 값을 그대로 반영했는지 확인한다. trade-off와 근거는 JSON에 보존한다.
 - 렌더된 md를 되읽어 원본과 값 단위로 비교한다. 검사 목록은 `docs/rubric-format.md`의 Post-Render 표.
 
 **실패**
