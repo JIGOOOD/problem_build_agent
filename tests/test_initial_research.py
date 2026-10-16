@@ -67,22 +67,30 @@ def test_initial_prompt_requires_real_queries_for_every_candidate(catalog):
     assert "모든 후보 kind가 related_nfr에 정확히 한 번씩 나타나는지 확인한다" in system
 
 
-@pytest.mark.parametrize("notes", [None, "", " \n ", "메시지 유실 최소화"])
-def test_initial_prompt_includes_notes_only_when_provided(
-    catalog: NFRCatalog, notes: str | None
-) -> None:
-    brief = InterviewBrief(
-        topic="실시간 채팅 서비스", seniority=Seniority.SENIOR, notes=notes
-    )
+# @pytest.mark.parametrize("notes", [None, "", " \n ", "메시지 유실 최소화"])
+# def test_initial_prompt_includes_notes_only_when_provided(
+#     catalog: NFRCatalog, notes: str | None
+# ) -> None:
+#     brief = InterviewBrief(
+#         topic="실시간 채팅 서비스", seniority=Seniority.SENIOR, notes=notes
+#     )
+#
+#     messages = build_initial_research_messages(brief, catalog)
+#
+#     content = "\n".join(message["content"] for message in messages)
+#     if brief.notes:
+#         assert brief.notes in content
+#         assert "사용자 중점 요구사항" in content
+#     else:
+#         assert "사용자 중점 요구사항" not in content
 
-    messages = build_initial_research_messages(brief, catalog)
 
+def test_initial_prompt_uses_topic_without_optional_nfr_notes(catalog):
+    messages = build_initial_research_messages(BRIEF, catalog)
     content = "\n".join(message["content"] for message in messages)
-    if brief.notes:
-        assert brief.notes in content
-        assert "사용자 중점 요구사항" in content
-    else:
-        assert "사용자 중점 요구사항" not in content
+
+    assert BRIEF.topic in content
+    assert "사용자 중점 요구사항" not in content
 
 
 def test_initial_prompt_prioritizes_official_sources_when_generating_queries(

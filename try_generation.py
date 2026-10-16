@@ -17,13 +17,13 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("topic", nargs="?", default="실시간 채팅 서비스")
     parser.add_argument("--seniority", choices=list(Seniority), default=Seniority.MIDDLE)
-    parser.add_argument("--notes")
+    # parser.add_argument("--notes")
     args = parser.parse_args(argv)
     logger = logging.getLogger("archgen")
     handler = logging.StreamHandler()
     logger.addHandler(handler)
     try:
-        brief = InterviewBrief(Seniority(args.seniority), args.topic, args.notes)
+        brief = InterviewBrief(Seniority(args.seniority), args.topic)
         result = run_generation(brief)
         print(f"결과: {result['status']}\n저장 위치: {result['output_dir']}")
         return 0 if result["status"] == "complete" else 1

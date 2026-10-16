@@ -13,15 +13,12 @@ def test_manual_entrypoint_passes_brief_and_reports_output(
     run = Mock(return_value={"status": status, "output_dir": "/tmp/run"})
     monkeypatch.setattr(manual, "run_generation", run)
 
-    assert (
-        manual.main(["채팅", "--seniority", "Senior", "--notes", "메시지 보존"])
-        == exit_code
-    )
+    assert manual.main(["채팅", "--seniority", "Senior"]) == exit_code
 
     brief = run.call_args.args[0]
     assert brief.topic == "채팅"
     assert brief.seniority is Seniority.SENIOR
-    assert brief.notes == "메시지 보존"
+    assert "notes" not in vars(brief)
     assert "/tmp/run" in capsys.readouterr().out
 
 

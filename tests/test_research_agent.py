@@ -471,22 +471,11 @@ def test_research_passes_all_tool_definitions_to_bind_tools(monkeypatch):
     ]
 
 
-@pytest.mark.parametrize(
-    ("notes", "expected_user"),
-    [
-        (None, "실시간 채팅 서비스"),
-        ("메시지 유실 최소화", "실시간 채팅 서비스\n메시지 유실 최소화"),
-    ],
-)
-def test_research_forwards_initial_messages_and_preserves_loop_roles_and_notes(
-    notes, expected_user
-):
+def test_research_forwards_initial_messages_and_preserves_loop_roles():
     llm = FakeLLM(AIMessage(content=json.dumps(PLAN)), FINISH)
 
     run_research(
-        InterviewBrief(
-            topic="실시간 채팅 서비스", seniority=Seniority.MIDDLE, notes=notes
-        ),
+        InterviewBrief(topic="실시간 채팅 서비스", seniority=Seniority.MIDDLE),
         load_catalog(CATALOG_DIR),
         llm,
         Mock(spec=SearchTool),
@@ -497,7 +486,7 @@ def test_research_forwards_initial_messages_and_preserves_loop_roles_and_notes(
     messages = llm.calls[1]
     assert [message["role"] for message in messages] == ["system", "user", "assistant"]
     assert [set(message) for message in messages] == [{"role", "content"}] * 3
-    assert messages[1]["content"] == expected_user
+    assert messages[1]["content"] == "실시간 채팅 서비스"
     assert json.loads(messages[2]["content"]) == {
         **PLAN,
         "nfr_candidates": [

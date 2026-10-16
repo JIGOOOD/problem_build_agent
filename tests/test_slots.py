@@ -66,9 +66,9 @@ def test_topic_is_required_too() -> None:
     assert filler.current.key == "topic"
 
 
-def test_notes_are_optional_and_finish_the_interview() -> None:
+def test_seniority_and_topic_finish_the_interview_without_notes() -> None:
     filler = SlotFiller()
-    fill(filler, "Senior", "주문/결제 시스템", "")
+    fill(filler, "Senior", "주문/결제 시스템")
 
     assert filler.is_complete
     assert filler.current is None
@@ -76,16 +76,16 @@ def test_notes_are_optional_and_finish_the_interview() -> None:
     brief = filler.build_brief()
     assert brief.seniority is Seniority.SENIOR
     assert brief.topic == "주문/결제 시스템"
-    assert brief.notes is None
+    assert "notes" not in vars(brief)
 
 
-def test_notes_are_kept_when_provided() -> None:
-    filler = SlotFiller()
-    fill(filler, "1", "채팅 서비스", "  멀티 리전 고려  ")
-
-    brief = filler.build_brief()
-    assert brief.seniority is Seniority.MIDDLE
-    assert brief.notes == "멀티 리전 고려"
+# def test_notes_are_kept_when_provided() -> None:
+#     filler = SlotFiller()
+#     fill(filler, "1", "채팅 서비스", "  멀티 리전 고려  ")
+#
+#     brief = filler.build_brief()
+#     assert brief.seniority is Seniority.MIDDLE
+#     assert brief.notes == "멀티 리전 고려"
 
 
 def test_build_brief_before_completion_is_an_error() -> None:
@@ -98,21 +98,21 @@ def test_build_brief_before_completion_is_an_error() -> None:
 
 def test_filled_answers_are_exposed_for_the_transcript() -> None:
     filler = SlotFiller()
-    fill(filler, "Middle", "피드 랭킹", "")
+    fill(filler, "Middle", "피드 랭킹")
 
     assert filler.filled == (
         ("대상 연차", "Middle"),
         ("주제", "피드 랭킹"),
-        ("중점 비기능적 요구사항", "(없음)"),
+        # ("중점 비기능적 요구사항", "(없음)"),
     )
 
 
 def test_brief_converts_to_the_graph_input() -> None:
     filler = SlotFiller()
-    fill(filler, "Senior", "주문/결제 시스템", "중복 결제 시 일관성 유지 로직 등")
+    fill(filler, "Senior", "주문/결제 시스템")
 
     assert filler.build_brief().to_lines() == [
         "대상 연차: Senior",
         "주제: 주문/결제 시스템",
-        "중점 비기능적 요구사항: 중복 결제 시 일관성 유지 로직 등",
+        # "중점 비기능적 요구사항: 중복 결제 시 일관성 유지 로직 등",
     ]

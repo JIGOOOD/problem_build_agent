@@ -28,7 +28,7 @@ class GenerationProgress(Message):
 
 
 class ArchGenApp(App[None]):
-    """Ask for seniority, topic, and optional notes before generating."""
+    """Ask for seniority and topic before generating."""
 
     TITLE = "ArchGen"
     SUB_TITLE = "System-design interview generator"

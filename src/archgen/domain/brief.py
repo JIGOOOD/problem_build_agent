@@ -21,22 +21,23 @@ class InterviewBrief:
 
     seniority: Seniority
     topic: str
-    notes: str | None = None
+    # 중점 NFR 입력은 추후 구현 시 활성화한다.
+    # notes: str | None = None
 
     def __post_init__(self) -> None:
         # TUI 밖(그래프·테스트)에서 만들어도 Planner 프롬프트에 빈 값이 나가지 않게 정리한다.
         topic = self.topic.strip()
         if not topic:
             raise ValueError("주제가 비어 있다.")
-        notes = self.notes.strip() if self.notes else ""
+        # notes = self.notes.strip() if self.notes else ""
         object.__setattr__(self, "topic", topic)
-        object.__setattr__(self, "notes", notes or None)
+        # object.__setattr__(self, "notes", notes or None)
 
     def to_lines(self) -> list[str]:
         """Render the brief as the line list the generation graph consumes."""
         lines = [f"대상 연차: {self.seniority}", f"주제: {self.topic}"]
-        if self.notes:
-            lines.append(f"중점 비기능적 요구사항: {self.notes}")
+        # if self.notes:
+        #     lines.append(f"중점 비기능적 요구사항: {self.notes}")
         return lines
 
 

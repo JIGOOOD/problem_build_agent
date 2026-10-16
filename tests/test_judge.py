@@ -9,7 +9,7 @@ from archgen.domain.research import Document, ResearchResult
 from archgen.harness.findings import Finding, Severity
 from archgen.judge.judge import judge_export
 
-BRIEF = InterviewBrief(Seniority.SENIOR, "채팅 서비스", "장애 복구")
+BRIEF = InterviewBrief(Seniority.SENIOR, "채팅 서비스")
 ISSUE = {
     "code": "LEVEL_AMBIGUOUS",
     "severity": "ERROR",

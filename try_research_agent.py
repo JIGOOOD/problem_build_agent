@@ -394,7 +394,7 @@ class TraceLLM:
 def run(
     topic="실시간 채팅 서비스",
     *,
-    notes=None,
+    # notes=None,
     llm_timeout=DEFAULT_LLM_TIMEOUT,
     log_root=None,
     debug=False,
@@ -440,7 +440,7 @@ def run(
             with create_fetch_client() as client:
                 fetch = FetchTool(HttpFetcher(client))
                 result = run_research(
-                    InterviewBrief(topic=topic, seniority=Seniority.MIDDLE, notes=notes),
+                    InterviewBrief(topic=topic, seniority=Seniority.MIDDLE),
                     load_catalog(CATALOG_DIR),
                     llm,
                     SearchTool(TavilyClient(api_key=tavily_key)),
@@ -483,7 +483,7 @@ if __name__ == "__main__":
         description="Research runner의 실제 도구 호출 흐름을 기록한다."
     )
     parser.add_argument("topic", nargs="?", default="실시간 채팅 서비스")
-    parser.add_argument("--notes")
+    # parser.add_argument("--notes")
     parser.add_argument(
         "--debug", action="store_true", help="각 LLM 입력과 최종 전체 대화도 저장한다"
     )
@@ -497,6 +497,6 @@ if __name__ == "__main__":
     if args.llm_timeout <= 0:
         parser.error("--llm-timeout은 0보다 커야 합니다.")
     try:
-        run(args.topic, notes=args.notes, llm_timeout=args.llm_timeout, debug=args.debug)
+        run(args.topic, llm_timeout=args.llm_timeout, debug=args.debug)
     except TimeoutError:
         raise SystemExit(1) from None

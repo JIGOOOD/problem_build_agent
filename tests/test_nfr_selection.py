@@ -10,7 +10,7 @@ from archgen.domain.research import Document, NFRCandidate, ResearchResult
 from archgen.export.agent import select_nfrs
 from archgen.paths import CATALOG_DIR
 
-BRIEF = InterviewBrief(Seniority.MIDDLE, "채팅 서비스", "수락한 메시지 보존")
+BRIEF = InterviewBrief(Seniority.MIDDLE, "채팅 서비스")
 CATALOG = load_catalog(CATALOG_DIR)
 
 

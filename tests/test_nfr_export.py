@@ -22,7 +22,7 @@ from archgen.paths import CATALOG_DIR
 from archgen.render.post_render import check_rendered
 from archgen.render.renderer import render_rubric
 
-BRIEF = InterviewBrief(Seniority.SENIOR, "채팅 서비스", "장애 복구")
+BRIEF = InterviewBrief(Seniority.SENIOR, "채팅 서비스")
 
 
 def test_agent_prompts_cover_scope_fair_levels_and_outcome_based_design(

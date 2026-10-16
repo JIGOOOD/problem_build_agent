@@ -1,7 +1,7 @@
 """실행: uv run python try_nfr_agent.py [M4의 result.json 경로].
 
 경로 생략 시 최신 M4 결과를 사용한다. 주제·notes는 M4 기록에서 복원하며
---topic / --notes / --seniority로 지정할 수도 있다. 기존 .env의 small 모델을 쓴다.
+--topic / --seniority로 지정할 수도 있다. 기존 .env의 small 모델을 쓴다.
 .archgen/nfr-agent/<실행>/에 run.log, LLM 입출력, selection.json,
 nfr_export.json, 검사 결과, 검증을 통과한 nfr_rubric.md를 저장한다.
 입력 13K 제한은 o200k_base 추정값이며 API의 실제 토큰 사용량은 응답에 따로 남긴다.
@@ -41,7 +41,7 @@ from try_research import llm_deadline, save_json
 _LOGGER = logging.getLogger("archgen.export.manual")
 
 
-def _brief(source, topic, seniority, notes):
+def _brief(source, topic, seniority):
     saved = {}
     trace = source.parent / "step-01-llm.json"
     if trace.exists():
@@ -50,8 +50,8 @@ def _brief(source, topic, seniority, notes):
                 for line in message.get("content", "").splitlines():
                     if line.startswith("- 주제: "):
                         saved["topic"] = line.removeprefix("- 주제: ")
-                    if line.startswith("- 사용자 중점 요구사항: "):
-                        saved["notes"] = line.removeprefix("- 사용자 중점 요구사항: ")
+                    # if line.startswith("- 사용자 중점 요구사항: "):
+                    #     saved["notes"] = line.removeprefix("- 사용자 중점 요구사항: ")
     log = source.parent / "run.log"
     if "topic" not in saved and log.exists():
         for line in log.read_text().splitlines():
@@ -60,7 +60,7 @@ def _brief(source, topic, seniority, notes):
                 break
     if not (topic or saved.get("topic")):
         raise ValueError("M4 기록에서 주제를 찾지 못했습니다. --topic을 지정하세요.")
-    return InterviewBrief(seniority, topic or saved["topic"], notes or saved.get("notes"))
+    return InterviewBrief(seniority, topic or saved["topic"])
 
 
 def run(
@@ -68,7 +68,7 @@ def run(
     *,
     topic=None,
     seniority=Seniority.MIDDLE,
-    notes=None,
+    # notes=None,
     log_root=None,
     llm_timeout=300,
 ):
@@ -102,7 +102,7 @@ def run(
             research_path = max(results, key=lambda p: p.stat().st_mtime_ns)
         source = Path(research_path).resolve()
         research = ResearchResult.model_validate_json(source.read_text(encoding="utf-8"))
-        brief = _brief(source, topic, seniority, notes)
+        brief = _brief(source, topic, seniority)
         save_json(
             run_dir / "input.json",
             {
@@ -256,7 +256,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("--topic", help="저장된 M4 주제 대신 사용할 주제")
     parser.add_argument("--seniority", choices=list(Seniority), default=Seniority.MIDDLE)
-    parser.add_argument("--notes")
+    # parser.add_argument("--notes")
     parser.add_argument("--llm-timeout", type=float, default=300)
     args = parser.parse_args()
     if args.llm_timeout <= 0:
@@ -265,6 +265,6 @@ if __name__ == "__main__":
         args.research_path,
         topic=args.topic,
         seniority=Seniority(args.seniority),
-        notes=args.notes,
+        # notes=args.notes,
         llm_timeout=args.llm_timeout,
     )

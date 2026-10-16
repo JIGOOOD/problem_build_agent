@@ -10,7 +10,7 @@ from archgen.domain.nfr import NFRSelection
 from archgen.domain.research import Document, ResearchResult
 from archgen.paths import CATALOG_DIR
 
-BRIEF = InterviewBrief(Seniority.SENIOR, "채팅 서비스", "메시지 보존")
+BRIEF = InterviewBrief(Seniority.SENIOR, "채팅 서비스")
 
 
 @pytest.fixture
@@ -56,7 +56,7 @@ def test_research_result_reaches_selection_and_rubric(pipeline, golden_export):
         payload = json.loads(call.args[0][1]["content"])
         assert payload["research"] == result["research"].model_dump(mode="json")
         assert payload["brief"]["seniority"] == "Senior"
-        assert payload["brief"]["notes"] == "메시지 보존"
+        assert "notes" not in payload["brief"]
 
 
 @pytest.mark.parametrize("failure", [None, "pre", "post"])
