@@ -64,12 +64,8 @@ def test_agent_prompts_cover_scope_fair_levels_and_outcome_based_design(
         (
             author,
             (
-                "하나의 핵심 설계 기준",
                 "동등하게 충족하는 대안 설계",
                 "선정된 요구보다 강한 조건",
-                "정당화만으로 3점을",
-                "상황 하나 → 영향 → 대응과 비용",
-                "요구 수준과 무관한 추가 조건을 필수화하지 않는다",
             ),
         ),
         (
@@ -77,11 +73,7 @@ def test_agent_prompts_cover_scope_fair_levels_and_outcome_based_design(
             (
                 "미확정 범위를 필수 조건",
                 "동등한 구현 대안",
-                "항목 간 2점 난이도",
-                "하나의 핵심 설계 기준",
-                "3점의 추가 판단 깊이",
                 "선정된 요구보다 강한 조건",
-                "정당화만으로 3점을",
                 "NFR 간 충돌",
             ),
         ),
@@ -168,9 +160,7 @@ def test_generates_rubric_from_fixed_nfrs_and_validates_and_renders(
     assert "문서 id·URL·출처 목록을 넣지 않는다" in system["content"]
     for rule in (
         "각 항목에서는 서로 다른 결과 속성을 평가한다",
-        "하나의 핵심 설계 기준",
-        "3점 추가 필수 요건은 1개",
-        "3점은 같은 연차의 우수한 답변",
+        "점수 의미와 난이도는 아래 MD 기준만 따른다",
     ):
         assert rule in system["content"]
     assert export == golden_export
@@ -280,5 +270,12 @@ def test_full_seniority_criteria_reach_author_budget_and_judge(
             assert f"## {other}\n" in system
         assert "비교" in system
         assert "brief.seniority" in system
-        assert "배점 비율이 아니다" in system
-        assert "질문·힌트 기록이 없으면" in system
+        assert "점수 의미와 난이도는 아래 MD 기준만 따른다" in system
+        for removed in (
+            "3점 추가 필수 요건은 1개",
+            "상황 하나 → 영향 → 대응과 비용",
+            "정당화만으로 3점을",
+            "3점은 대표 상황 하나의 영향·대응·비용",
+        ):
+            assert removed not in system
+        assert "Staff+" not in system

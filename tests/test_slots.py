@@ -14,7 +14,7 @@ def test_first_slot_asks_for_seniority_with_choices() -> None:
 
     assert filler.current.key == "seniority"
     assert filler.current.required is True
-    assert filler.current.choices == ("Middle", "Senior", "Staff+")
+    assert filler.current.choices == ("Middle", "Senior")
 
 
 def test_required_slot_repeats_until_it_gets_a_value() -> None:
@@ -27,7 +27,7 @@ def test_required_slot_repeats_until_it_gets_a_value() -> None:
         assert filler.current.key == "seniority", "빈 입력은 슬롯을 넘기지 않는다"
 
 
-@pytest.mark.parametrize("raw", ["경력 많음", "신입", "주니어", "4", "5"])
+@pytest.mark.parametrize("raw", ["경력 많음", "신입", "주니어", "Staff+", "3", "4", "5"])
 def test_seniority_rejects_an_unknown_level(raw: str) -> None:
     filler = SlotFiller()
 
@@ -43,10 +43,8 @@ def test_seniority_rejects_an_unknown_level(raw: str) -> None:
     [
         ("Middle", Seniority.MIDDLE),
         ("  Senior  ", Seniority.SENIOR),
-        ("Staff+", Seniority.STAFF),
         ("1", Seniority.MIDDLE),
         ("2", Seniority.SENIOR),
-        ("3", Seniority.STAFF),
     ],
 )
 def test_seniority_accepts_a_label_or_its_number(raw: str, expected: Seniority) -> None:

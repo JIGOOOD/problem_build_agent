@@ -36,7 +36,6 @@ def test_brief_strips_the_notes() -> None:
         "# 기준\n\n## Senior\n\n다른 기준",
         "# 기준\n\n## Middle\n\n## Senior\n\n다른 기준",
         "# 기준\n\n## Middle\n\n첫 기준\n\n## Middle\n\n중복 기준",
-        "# 기준\n\n## Middle\n\n미들 기준\n\n## Senior\n\n시니어 기준",
     ],
 )
 def test_missing_empty_or_duplicate_seniority_criteria_are_rejected(

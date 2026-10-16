@@ -13,7 +13,6 @@ class Seniority(StrEnum):
 
     MIDDLE = "Middle"
     SENIOR = "Senior"
-    STAFF = "Staff+"
 
 
 @dataclass(frozen=True)

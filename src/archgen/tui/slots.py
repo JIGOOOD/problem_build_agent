@@ -57,7 +57,7 @@ SLOTS: tuple[Slot, ...] = (
         key="seniority",
         label="대상 연차",
         prompt="대상 연차를 골라 주세요 (번호 또는 이름).",
-        placeholder="1. Middle  2. Senior  3. Staff+",
+        placeholder="1. Middle  2. Senior",
         choices=tuple(level.value for level in Seniority),
         parse=_parse_seniority,
     ),
