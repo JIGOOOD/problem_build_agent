@@ -27,3 +27,25 @@ def test_brief_strips_the_notes() -> None:
     brief = InterviewBrief(seniority=Seniority.MIDDLE, topic="채팅", notes="  가용성 ")
 
     assert brief.notes == "가용성"
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "",
+        "# 기준\n\n## Senior\n\n다른 기준",
+        "# 기준\n\n## Middle\n\n## Senior\n\n다른 기준",
+        "# 기준\n\n## Middle\n\n첫 기준\n\n## Middle\n\n중복 기준",
+        "# 기준\n\n## Middle\n\n미들 기준\n\n## Senior\n\n시니어 기준",
+    ],
+)
+def test_missing_empty_or_duplicate_seniority_criteria_are_rejected(
+    tmp_path, monkeypatch, text
+):
+    from archgen.domain import brief
+
+    monkeypatch.setattr(brief, "RESOURCES", tmp_path)
+    (tmp_path / "seniority-criteria.md").write_text(text)
+
+    with pytest.raises(ValueError, match="평가 기준"):
+        brief.load_seniority_criteria()

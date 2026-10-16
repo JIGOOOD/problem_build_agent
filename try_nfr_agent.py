@@ -4,7 +4,7 @@
 --topic / --notes / --seniority로 지정할 수도 있다. 기존 .env의 small 모델을 쓴다.
 .archgen/nfr-agent/<실행>/에 run.log, LLM 입출력, selection.json,
 nfr_export.json, 검사 결과, 검증을 통과한 nfr_rubric.md를 저장한다.
-입력 10K 제한은 o200k_base 추정값이며 API의 실제 토큰 사용량은 응답에 따로 남긴다.
+입력 13K 제한은 o200k_base 추정값이며 API의 실제 토큰 사용량은 응답에 따로 남긴다.
 """
 
 import argparse
@@ -123,7 +123,7 @@ def run(
             "small", timeout=llm_timeout, max_retries=0, tiktoken_model_name="gpt-4o"
         )
         _LOGGER.info(
-            "모델: %s | 입력 제한: 10K | 토큰 수는 o200k_base 추정값", model.model_name
+            "모델: %s | 입력 제한: 13K | 토큰 수는 o200k_base 추정값", model.model_name
         )
         calls = 0
 

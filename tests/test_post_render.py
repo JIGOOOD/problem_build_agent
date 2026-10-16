@@ -56,7 +56,7 @@ def repeat_first_section(md: str) -> str:
     "tamper",
     [
         replace_once("# 실시간 채팅 시스템 설계\n", "# 엉뚱한 주제\n"),
-        replace_once("**대상 연차** 미들", "**대상 연차** 시니어"),
+        replace_once("**대상 연차** Middle", "**대상 연차** Senior"),
         replace_once("**배점** 100", "**배점** 90"),
         replace_once("## NFR\n", ""),
     ],

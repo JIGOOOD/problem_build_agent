@@ -193,15 +193,16 @@ def test_rubric_input_budget_includes_schema_documents_and_selection(
 ):
     selection = NFRSelection(**golden_export.model_dump(exclude={"rubric"}))
     llm = Mock(return_value=golden_export.rubric.model_dump_json())
-    counter = Mock(return_value=10001)
+    counter = Mock(return_value=13001)
 
-    with pytest.raises(ValueError, match="10,001.*10,000.*1토큰"):
+    with pytest.raises(ValueError, match="13,001.*13,000.*1토큰"):
         generate_rubric(BRIEF, research, selection, llm, count_tokens=counter)
 
     system, user = counter.call_args.args[0]
     assert "required" in system["content"]
     assert json.loads(user["content"])["research"] == research.model_dump()
     assert json.loads(user["content"])["selection"] == selection.model_dump(mode="json")
+    assert "## Senior\n" in system["content"]
     llm.assert_not_called()
 
 
@@ -245,3 +246,39 @@ def test_rejects_malformed_rubric_responses(research, golden_export, response):
         )
 
     assert selection.confirmed_nfrs == golden_export.confirmed_nfrs
+
+
+@pytest.mark.parametrize("seniority", list(Seniority))
+@pytest.mark.parametrize("repair", [False, True])
+def test_full_seniority_criteria_reach_author_budget_and_judge(
+    research, golden_export, seniority, repair
+):
+    from archgen.paths import RESOURCES
+
+    brief = InterviewBrief(seniority, "채팅 서비스")
+    criteria = (RESOURCES / "seniority-criteria.md").read_text()
+    selection = NFRSelection(**golden_export.model_dump(exclude={"rubric"}))
+    author = Mock(return_value=golden_export.rubric.model_dump_json())
+    counter = Mock(return_value=13_000)
+    export = generate_rubric(
+        brief,
+        research,
+        selection,
+        author,
+        count_tokens=counter,
+        previous=golden_export if repair else None,
+    )
+    judge = Mock(return_value='{"findings": []}')
+    judge_export(brief, research, export, judge)
+
+    assert counter.call_args.args[0] == author.call_args.args[0]
+    for llm in (author, judge):
+        system = llm.call_args.args[0][0]["content"]
+        assert criteria in system
+        assert f"## {seniority}\n" in system
+        for other in Seniority:
+            assert f"## {other}\n" in system
+        assert "비교" in system
+        assert "brief.seniority" in system
+        assert "배점 비율이 아니다" in system
+        assert "질문·힌트 기록이 없으면" in system

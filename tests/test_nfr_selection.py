@@ -156,15 +156,16 @@ def test_insufficient_evidence_preserves_partial_output_and_reason(
 def test_over_budget_stops_before_llm_without_truncating_input(research, answer, caplog):
     before = research.model_dump(mode="json")
     llm = Mock(return_value=json.dumps(answer))
-    counter = Mock(return_value=10001)
+    counter = Mock(return_value=13001)
 
-    with pytest.raises(ValueError, match="10,001.*10,000.*1토큰"):
+    with pytest.raises(ValueError, match="13,001.*13,000.*1토큰"):
         select_nfrs(BRIEF, research, llm, catalog=CATALOG, count_tokens=counter)
 
     counter.assert_called_once()
     messages = counter.call_args.args[0]
     assert CATALOG.to_prompt_block() in messages[0]["content"]
     assert "confirmed_nfrs" in messages[0]["content"]
+    assert "Breadth" not in messages[0]["content"]
     assert json.loads(messages[1]["content"]) == {
         "brief": asdict(BRIEF),
         "research": before,

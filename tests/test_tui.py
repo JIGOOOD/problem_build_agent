@@ -26,7 +26,7 @@ async def test_interactive_fake_mode_runs_without_api_keys(tmp_path, monkeypatch
     app = ArchGenApp(fake=True, log_path=tmp_path / "input.log")
     async with app.run_test() as pilot:
         assert "Fake" in app.sub_title and "고정 채팅 예시" in app.sub_title
-        await answer(pilot, "미들")
+        await answer(pilot, "Middle")
         await answer(pilot, "주문/결제 시스템")
         await answer(pilot, "멱등성")
         app.action_generate()
@@ -109,7 +109,7 @@ async def test_tui_runs_real_generation_graph_with_fake_llm(
 
     app = ArchGenApp(log_path=tmp_path / "input.log")
     async with app.run_test() as pilot:
-        await answer(pilot, "미들")
+        await answer(pilot, "Middle")
         await answer(pilot, "채팅 서비스")
         await answer(pilot, "")
         app.action_generate()
@@ -152,7 +152,7 @@ async def test_generation_shows_live_stage_elapsed_time_and_prevents_duplicates(
 
     app.generation.start = AsyncMock(side_effect=generate)
     async with app.run_test() as pilot:
-        await answer(pilot, "미들")
+        await answer(pilot, "Middle")
         await answer(pilot, "채팅 서비스")
         await answer(pilot, "")
         app.action_generate()
@@ -211,7 +211,7 @@ async def test_required_slot_loops_until_answered() -> None:
         assert app.filler.current.key == "seniority", "빈 입력으로는 넘어가지 않는다"
         assert "필수 입력" in transcript_of(app)
 
-        await answer(pilot, "주니어")
+        await answer(pilot, "Middle")
         assert app.filler.current.key == "topic"
 
 
@@ -220,7 +220,7 @@ async def test_optional_slot_completes_the_brief() -> None:
     app = ArchGenApp()
 
     async with app.run_test() as pilot:
-        await answer(pilot, "3")
+        await answer(pilot, "1")
         await answer(pilot, "주문/결제 시스템")
         await answer(pilot, "")
 
@@ -235,7 +235,7 @@ async def test_generate_is_refused_while_slots_are_unfilled() -> None:
     app = ArchGenApp()
 
     async with app.run_test() as pilot:
-        await answer(pilot, "시니어")
+        await answer(pilot, "Senior")
         app.action_generate()
         await pilot.pause()
 
@@ -254,7 +254,7 @@ async def test_generate_starts_generation_once_filled() -> None:
     )
 
     async with app.run_test() as pilot:
-        await answer(pilot, "시니어")
+        await answer(pilot, "Senior")
         await answer(pilot, "주문/결제 시스템")
         await answer(pilot, "멱등성 중요")
 
@@ -274,7 +274,7 @@ async def test_generation_failure_is_reported_without_crashing_app(tmp_path):
     app.generation.start = AsyncMock(side_effect=TimeoutError("LLM timeout"))
 
     async with app.run_test() as pilot:
-        await answer(pilot, "미들")
+        await answer(pilot, "Middle")
         await answer(pilot, "채팅 서비스")
         await answer(pilot, "")
         app.action_generate()

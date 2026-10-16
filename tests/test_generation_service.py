@@ -219,7 +219,7 @@ def test_runtime_failure_preserves_logs_and_never_publishes_markdown(
     logger = logging.getLogger("archgen")
     old_handlers, old_level = list(logger.handlers), logger.level
     if failure == "budget":
-        small.get_num_tokens_from_messages.return_value = 10001
+        small.get_num_tokens_from_messages.return_value = 13001
     elif failure == "selection_json":
         small.invoke.side_effect = [AIMessage(content="bad json")]
     elif failure == "rubric_json":

@@ -9,7 +9,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ValidationError
 
-from archgen.domain.brief import InterviewBrief
+from archgen.domain.brief import InterviewBrief, load_seniority_criteria
 from archgen.domain.nfr import NFRExport
 from archgen.domain.research import ResearchResult
 from archgen.harness.findings import Finding, FindingCode, Severity
@@ -44,7 +44,8 @@ def judge_export(
         {
             "role": "system",
             "content": _ENV.get_template("system.md.j2").render(
-                schema=json.dumps(JudgeResponse.model_json_schema(), ensure_ascii=False)
+                schema=json.dumps(JudgeResponse.model_json_schema(), ensure_ascii=False),
+                seniority_criteria=load_seniority_criteria(),
             ),
         },
         {

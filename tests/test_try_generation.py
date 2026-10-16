@@ -14,7 +14,7 @@ def test_manual_entrypoint_passes_brief_and_reports_output(
     monkeypatch.setattr(manual, "run_generation", run)
 
     assert (
-        manual.main(["채팅", "--seniority", "시니어", "--notes", "메시지 보존"])
+        manual.main(["채팅", "--seniority", "Senior", "--notes", "메시지 보존"])
         == exit_code
     )
 

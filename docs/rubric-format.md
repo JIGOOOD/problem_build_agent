@@ -98,7 +98,7 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 ````markdown
 # 차량 공유 서비스
 
-**대상 연차** 미들\
+**대상 연차** Middle\
 **배점** 100
 
 ## NFR

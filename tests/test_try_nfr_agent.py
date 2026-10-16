@@ -125,7 +125,7 @@ def test_failures_leave_diagnostics_without_successful_markdown(
     saved_m4, tmp_path, monkeypatch, failure
 ):
     if failure == "budget":
-        saved_m4.get_num_tokens_from_messages.return_value = 10001
+        saved_m4.get_num_tokens_from_messages.return_value = 13001
     elif failure == "json":
         saved_m4.invoke.side_effect = [AIMessage(content="invalid JSON")]
     elif failure == "schema":

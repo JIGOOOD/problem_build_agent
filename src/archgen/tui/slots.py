@@ -41,7 +41,7 @@ class SlotResult:
 
 
 def _parse_seniority(raw: str) -> Seniority:
-    """Accept either a level label ("주니어") or its 1-based number ("2")."""
+    """Accept either a level label ("Senior") or its 1-based number ("2")."""
     levels = list(Seniority)
     if raw.isdigit() and 1 <= int(raw) <= len(levels):
         return levels[int(raw) - 1]
@@ -57,7 +57,7 @@ SLOTS: tuple[Slot, ...] = (
         key="seniority",
         label="대상 연차",
         prompt="대상 연차를 골라 주세요 (번호 또는 이름).",
-        placeholder="1. 신입  2. 주니어  3. 미들  4. 시니어",
+        placeholder="1. Middle  2. Senior  3. Staff+",
         choices=tuple(level.value for level in Seniority),
         parse=_parse_seniority,
     ),

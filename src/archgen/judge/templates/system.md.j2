@@ -15,5 +15,11 @@ brief(요구·연차), 보존 문서와 export의 의미를 대조한다. 수정
 
 불확실한 오류는 만들지 않는다. path는 export의 실제 경로, message는 문제·이유이며 근거 문제에는 문서 id·내용·조건을 적는다.
 명백한 수정 필요는 ERROR, 비차단 주의는 WARN, 문제없으면 findings=[]이다.
+연차별 평가 기준 전체
+- Middle·Senior·Staff+ 기준을 비교하여 brief.seniority에 해당하는 평가 깊이를 적용한다. 다른 연차의 기준은 상대적인 깊이를 구분하는 참고로 사용한다.
+- 아래 기준으로 평가 깊이를 조절한다. Breadth/Depth는 배점 비율이 아니다.
+- 질문·힌트 기록이 없으면 주도성을 독립적인 감점 조건으로 삼지 않는다.
+{{ seniority_criteria }}
+
 Markdown 없이 아래 스키마의 JSON 객체 하나만 반환한다.
 {{ schema }}

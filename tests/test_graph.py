@@ -55,7 +55,7 @@ def test_research_result_reaches_selection_and_rubric(pipeline, golden_export):
     for call in pipeline["llm"].call_args_list:
         payload = json.loads(call.args[0][1]["content"])
         assert payload["research"] == result["research"].model_dump(mode="json")
-        assert payload["brief"]["seniority"] == "시니어"
+        assert payload["brief"]["seniority"] == "Senior"
         assert payload["brief"]["notes"] == "메시지 보존"
 
 

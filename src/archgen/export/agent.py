@@ -7,7 +7,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Literal
 
-from archgen.domain.brief import InterviewBrief
+from archgen.domain.brief import InterviewBrief, load_seniority_criteria
 from archgen.domain.catalog import NFRCatalog
 from archgen.domain.nfr import NFRExport, NFRSelection, Rubric
 from archgen.domain.research import ResearchResult
@@ -16,7 +16,7 @@ from archgen.templating import template_env
 
 _ENV = template_env(Path(__file__).parent / "templates")
 _LOGGER = logging.getLogger(__name__)
-MAX_INPUT_TOKENS = 10_000
+MAX_INPUT_TOKENS = 13_000
 
 
 @dataclass(frozen=True)
@@ -86,7 +86,8 @@ def generate_rubric(
         {
             "role": "system",
             "content": _ENV.get_template("rubric_system.md.j2").render(
-                schema=json.dumps(Rubric.model_json_schema(), ensure_ascii=False)
+                schema=json.dumps(Rubric.model_json_schema(), ensure_ascii=False),
+                seniority_criteria=load_seniority_criteria(),
             ),
         },
         {
