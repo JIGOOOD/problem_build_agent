@@ -11,6 +11,7 @@ from archgen.domain.brief import InterviewBrief, load_seniority_criteria
 from archgen.domain.catalog import NFRCatalog
 from archgen.domain.nfr import NFRExport, NFRSelection, Rubric
 from archgen.domain.research import ResearchResult
+from archgen.export.language import check_language
 from archgen.harness.findings import Finding
 from archgen.templating import template_env
 
@@ -56,7 +57,7 @@ def select_nfrs(
             ),
         },
     ]
-    selection = NFRSelection.model_validate_json(_call_llm(messages, llm, count_tokens))
+    selection = _generate(messages, llm, count_tokens, NFRSelection)
     if len(selection.confirmed_nfrs) < 2:
         reason = f"최종 NFR {len(selection.confirmed_nfrs)}개: 최소 2개에 필요한 근거가 부족하다."
         _LOGGER.warning(reason)
@@ -95,8 +96,31 @@ def generate_rubric(
             "content": json.dumps(payload, ensure_ascii=False, separators=(",", ":")),
         },
     ]
-    rubric = Rubric.model_validate_json(_call_llm(messages, llm, count_tokens))
+    rubric = _generate(messages, llm, count_tokens, Rubric)
     return NFRExport(**selection.model_dump(), rubric=rubric)
+
+
+def _generate(messages, llm, count_tokens, schema):
+    for attempt in range(3):
+        response = _call_llm(messages, llm, count_tokens)
+        result = schema.model_validate_json(response)
+        errors = check_language(result.model_dump(mode="json"))
+        if not errors:
+            return result
+        feedback = "\n".join(errors)
+        if attempt == 2:
+            raise ValueError(
+                f"언어 검증 실패: 최대 2회 재생성 후에도 위반했습니다.\n{feedback}"
+            )
+        _LOGGER.warning("언어 검증 위반으로 재생성 (%s/2): %s", attempt + 1, feedback)
+        messages = [
+            *messages,
+            {"role": "assistant", "content": response},
+            {
+                "role": "user",
+                "content": feedback + "\n위 문제를 고쳐 전체 JSON을 다시 반환하세요.",
+            },
+        ]
 
 
 def _call_llm(messages, llm, count_tokens):
