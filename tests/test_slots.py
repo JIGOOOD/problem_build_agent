@@ -27,7 +27,10 @@ def test_required_slot_repeats_until_it_gets_a_value() -> None:
         assert filler.current.key == "seniority", "빈 입력은 슬롯을 넘기지 않는다"
 
 
-@pytest.mark.parametrize("raw", ["경력 많음", "신입", "주니어", "Staff+", "3", "4", "5"])
+@pytest.mark.parametrize(
+    "raw",
+    ["경력 많음", "신입", "주니어", "Staff+", "3", "4", "5", "1.Senior", "2.Middle"],
+)
 def test_seniority_rejects_an_unknown_level(raw: str) -> None:
     filler = SlotFiller()
 
@@ -42,6 +45,15 @@ def test_seniority_rejects_an_unknown_level(raw: str) -> None:
     ("raw", "expected"),
     [
         ("Middle", Seniority.MIDDLE),
+        ("middle", Seniority.MIDDLE),
+        ("MIDDLE", Seniority.MIDDLE),
+        ("1.Middle", Seniority.MIDDLE),
+        ("1.MIDDLE", Seniority.MIDDLE),
+        ("1. Middle", Seniority.MIDDLE),
+        ("senior", Seniority.SENIOR),
+        ("SENIOR", Seniority.SENIOR),
+        ("2.Senior", Seniority.SENIOR),
+        ("2. SENIOR", Seniority.SENIOR),
         ("  Senior  ", Seniority.SENIOR),
         ("1", Seniority.MIDDLE),
         ("2", Seniority.SENIOR),

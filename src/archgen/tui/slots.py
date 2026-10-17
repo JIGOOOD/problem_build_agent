@@ -7,6 +7,7 @@ the current question until they receive a usable answer.
 
 from __future__ import annotations
 
+import re
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
@@ -41,15 +42,15 @@ class SlotResult:
 
 
 def _parse_seniority(raw: str) -> Seniority:
-    """Accept either a level label ("Senior") or its 1-based number ("2")."""
+    """번호, 이름, 번호.이름을 받으며 이름의 대소문자는 구분하지 않는다."""
     levels = list(Seniority)
     if raw.isdigit() and 1 <= int(raw) <= len(levels):
         return levels[int(raw) - 1]
-    try:
-        return Seniority(raw)
-    except ValueError:
-        labels = " / ".join(f"{i}. {level}" for i, level in enumerate(levels, 1))
-        raise SlotError(f"다음 중에서 골라 주세요 — {labels}") from None
+    for index, level in enumerate(levels, 1):
+        if re.fullmatch(rf"(?:{index}\s*\.\s*)?{level.value}", raw, re.IGNORECASE):
+            return level
+    labels = " / ".join(f"{i}. {level}" for i, level in enumerate(levels, 1))
+    raise SlotError(f"다음 중에서 골라 주세요 — {labels}")
 
 
 SLOTS: tuple[Slot, ...] = (
