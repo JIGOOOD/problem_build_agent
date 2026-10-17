@@ -219,7 +219,7 @@ def _unknown_nfrs(refs: list[str], nfr_ids: set[str], path: str) -> list[Finding
 
 
 def _coverage(export: NFRExport) -> list[Finding]:
-    """확정 NFR은 정확히 하나의 criterion에서 평가된다."""
+    """확정 NFR은 하나 이상의 criterion에서 평가된다."""
     covered = Counter(
         ref
         for criterion in export.rubric.criteria
@@ -234,14 +234,6 @@ def _coverage(export: NFRExport) -> list[Finding]:
                     FindingCode.NFR_NOT_COVERED,
                     path,
                     f"{nfr.id}를 평가하는 criterion이 없다.",
-                )
-            )
-        elif covered[nfr.id] > 1:
-            findings.append(
-                _error(
-                    FindingCode.NFR_MULTI_COVERED,
-                    path,
-                    f"{nfr.id}를 criterion {covered[nfr.id]}개가 평가한다. 하나여야 한다.",
                 )
             )
     return findings

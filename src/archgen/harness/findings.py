@@ -47,7 +47,8 @@ class FindingCode(StrEnum):
     CRITERION_MULTI_NFR = "CRITERION_MULTI_NFR"  # criterion 하나가 NFR 둘 이상을 평가
     NFR_REFERENCE_INVALID = "NFR_REFERENCE_INVALID"  # 없는 NFR id를 가리킴
     NFR_NOT_COVERED = "NFR_NOT_COVERED"  # 어느 criterion도 평가하지 않는 NFR
-    NFR_MULTI_COVERED = "NFR_MULTI_COVERED"  # 둘 이상의 criterion이 평가하는 NFR
+    # 이전 실행 기록 호환용. 현재는 검출하지 않는다.
+    NFR_MULTI_COVERED = "NFR_MULTI_COVERED"
     EVIDENCE_REF_UNKNOWN = "EVIDENCE_REF_UNKNOWN"  # 크롤한 적 없는 문서를 인용
     EVIDENCE_REF_MISSING = "EVIDENCE_REF_MISSING"  # 근거 문서가 하나도 없음
     # trade-off가 어느 NFR에도 연결되지 않음

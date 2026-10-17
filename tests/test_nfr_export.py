@@ -64,6 +64,7 @@ def test_agent_prompts_cover_scope_fair_levels_and_outcome_based_design(
                 "NFR 간 충돌",
                 "설계 선택의 이득·비용",
                 "보장 수준을 명시",
+                "kind가 같다는 이유만으로 다른 요구를 제외하지 않는다",
             ),
         ),
         (
@@ -80,6 +81,7 @@ def test_agent_prompts_cover_scope_fair_levels_and_outcome_based_design(
                 "동등한 구현 대안",
                 "선정된 요구보다 강한 조건",
                 "NFR 간 충돌",
+                "중복 채점",
             ),
         ),
     ):
@@ -146,6 +148,25 @@ def research(golden_document_ids):
 def test_generates_rubric_from_fixed_nfrs_and_validates_and_renders(
     research, golden_export
 ):
+    golden_export = golden_export.model_copy(deep=True)
+    extra = golden_export.rubric.criteria[-1].model_copy(deep=True)
+    extra.id = "C4"
+    extra.title = "집중 부하 분산"
+    extra.description = "특정 대화에 요청이 집중될 때 부하를 분산하는 설계를 평가한다."
+    extra.weight = 10
+    for level, descriptor in zip(
+        extra.levels,
+        (
+            "특정 대화에 요청이 집중되어 처리 병목이 생기는 상황을 고려하지 않는다.",
+            "처리 서버를 늘리지만 특정 대화에 집중된 작업을 나누는 흐름은 설명하지 못한다.",
+            "특정 대화의 요청 처리를 여러 작업자에 분산하는 흐름과 담당 범위를 설명한다.",
+            "작업 분산 이후 남는 병목을 식별하고 처리량과 메시지 순서 보장 사이의 절충을 설명한다.",
+        ),
+        strict=True,
+    ):
+        level.descriptor = descriptor
+    golden_export.rubric.criteria[-1].weight -= extra.weight
+    golden_export.rubric.criteria.append(extra)
     selection = NFRSelection(
         confirmed_nfrs=golden_export.confirmed_nfrs, tradeoffs=golden_export.tradeoffs
     )
@@ -163,12 +184,22 @@ def test_generates_rubric_from_fixed_nfrs_and_validates_and_renders(
         "research": research.model_dump(),
         "selection": selection.model_dump(mode="json"),
     }
-    for rule in ("0~3", "100", "2~4", "연차", "하나의 NFR", "수치", "근거"):
+    for rule in (
+        "0~3",
+        "100",
+        "2~4",
+        "연차",
+        "하나의 NFR",
+        "수치",
+        "근거",
+        "여러 평가 항목",
+        "반복 채점하지 않는다",
+    ):
         assert rule in system["content"]
     assert "동등하게 충족하는 대안 설계" in system["content"]
     assert "문서 id·URL·출처 목록을 넣지 않는다" in system["content"]
     for rule in (
-        "각 항목에서는 서로 다른 결과 속성을 평가한다",
+        "각 항목은 평가 대상이나 설계 판단을 구분한다",
         "점수 의미와 난이도는 아래 MD 기준만 따른다",
     ):
         assert rule in system["content"]

@@ -12,7 +12,7 @@
 | NFR 내부 배점 합 | **100 고정** | 채점식이 `Σw`로 나누므로 섹션 내부 합은 자유 → 읽기 쉬운 값으로 고정 |
 | 역량 축 | **사용하지 않는다** | 스키마·요약표·항목 헤딩에 추가하지 않는다 |
 | criterion 개수 | **3개 기본 / 2~4개 허용** | 면접에서 NFR에 쓸 수 있는 시간이 10~15분 |
-| criterion:NFR | **1:1** | 점수 하나로 두 NFR을 판정하면 채점이 갈린다. |
+| criterion:NFR | **항목마다 NFR 1개, NFR마다 항목 1개 이상** | 같은 NFR도 평가 대상·설계 판단이 다르면 여러 항목으로 나눌 수 있다. 같은 판단을 반복 채점하지 않는다. |
 | descriptor 길이 | **15~200자** | 하한은 "미고려" 같은 무의미한 서술을, 상한은 한 레벨이 두 가지를 평가하는 걸 막는다 |
 | md 작성 주체 | **Jinja2** (LLM 아님) | README 설계 원칙 1 |
 
@@ -73,7 +73,7 @@ NFRExport:
 각 항목의 score 0~3은 한 번씩 있어야 하며, 이 형식은 스키마와 하네스가 검증한다.
 항목 획득 배점은 `항목 배점 × 레벨 / 3`으로 환산한다. 채점표 머리말에는 설명 문구를 추가하지 않는다.
 항목별 반올림 없이 합산한 뒤 총점을 소수 둘째 자리까지 표시한다.
-같은 설계 선택이 여러 NFR에 기여해도 각 항목은 서로 다른 결과 속성을 평가한다.
+같은 설계 선택이 여러 NFR에 기여할 수 있으며, 같은 NFR에서도 각 항목은 평가 대상이나 설계 판단을 구분한다.
 
 `scope`는 brief에 명시된 요구와 미확정 기능·규모를 구분한다. 문서 사례는 추가 요구가 아니다.
 조건부 가정은 그 가정을 택하지 않은 합리적인 설계의 감점 사유가 될 수 없다.
@@ -175,7 +175,7 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 | `core.weight-sum` | `WEIGHT_OUT_OF_RANGE` / `WEIGHT_SUM_INVALID` | 합 == **100**, 각 weight 1~100 자연수로 확정. 누락·소수는 스키마가 거부 |
 | `core.levels` | `LEVEL_MISSING` / `LEVEL_DUPLICATED` / `LEVEL_DESCRIPTOR_MISSING` / `LEVEL_DESCRIPTOR_DUPLICATED` / **`LEVEL_DESCRIPTOR_TOO_SHORT`** / **`LEVEL_DESCRIPTOR_TOO_LONG`** | ← 15~200자. 길이 검사 2개는 2순위·미구현 |
 | `core.nfr-measurable` | `NFR_KIND_MISSING` / `NFR_VALUE_NOT_FOUND` / `NFR_UNIT_MISSING` / `NFR_COMPARATOR_MISSING` / `NFR_GUARANTEE_UNCLEAR` | 2순위·미구현 |
-| `core.cross-ref` | **`ID_DUPLICATED`** / `NFR_REFERENCE_INVALID` / `NFR_NOT_COVERED` / **`NFR_MULTI_COVERED`** / `CRITERION_NFR_REFERENCE_MISSING` / **`CRITERION_MULTI_NFR`** / **`TRADEOFF_NFR_REFERENCE_MISSING`** / **`EVIDENCE_REF_MISSING`** / **`EVIDENCE_REF_UNKNOWN`** | ← 인용이 실존 Document를 가리키는가. NFR은 정확히 한 criterion에서 평가 |
+| `core.cross-ref` | **`ID_DUPLICATED`** / `NFR_REFERENCE_INVALID` / `NFR_NOT_COVERED` / `CRITERION_NFR_REFERENCE_MISSING` / **`CRITERION_MULTI_NFR`** / **`TRADEOFF_NFR_REFERENCE_MISSING`** / **`EVIDENCE_REF_MISSING`** / **`EVIDENCE_REF_UNKNOWN`** | ← 인용이 실존 Document를 가리키는가. NFR은 하나 이상의 criterion에서 평가 |
 | **`core.criteria-count`** | **`CRITERIA_COUNT_OUT_OF_RANGE`** | ← criterion 2~4개 |
 
 ### Post-Render (M2)
