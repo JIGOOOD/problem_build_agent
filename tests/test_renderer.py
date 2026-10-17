@@ -41,7 +41,25 @@ def test_rubric_starts_with_the_topic_as_the_top_heading(
     golden_export: NFRExport,
 ) -> None:
     """면접관이 가장 먼저 보는 정보라 문서 제목으로 둔다."""
-    assert render_rubric(golden_export, BRIEF).startswith(f"# {BRIEF.topic}\n")
+    from archgen.render.post_render import check_rendered
+
+    brief = InterviewBrief(
+        Seniority.MIDDLE,
+        "실시간 채팅",
+        scope="메시지 전송부터 수신까지.\n\n대화방 관리는 제외한다.",
+        focus="메시지 전달 신뢰성",
+    )
+    md = render_rubric(golden_export, brief)
+    assert md.startswith(
+        "# 실시간 채팅\n\n**설계 범위**\n메시지 전송부터 수신까지. 대화방 관리는 제외한다."
+        "\n\n**평가 초점**\n메시지 전달 신뢰성\n\n**대상 연차** Middle"
+    )
+    assert check_rendered(md, golden_export, brief) == []
+    damaged = md.replace("메시지 전달 신뢰성", "전혀 다른 평가 초점", 1)
+    assert any(
+        f.code == "RENDER_HEADER_MISMATCH"
+        for f in check_rendered(damaged, golden_export, brief)
+    )
 
 
 def test_nfr_section_heading_sits_under_the_topic(golden_export: NFRExport) -> None:

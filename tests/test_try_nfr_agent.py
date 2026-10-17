@@ -45,7 +45,7 @@ def test_saved_m4_result_produces_logged_selection_and_validated_markdown(
     monkeypatch.setattr(manual, "build_chat_model", factory)
     run_dir = manual.run()
 
-    assert factory.call_args.args == ("small",)
+    assert factory.call_args.args == ("medium",)
     assert saved_m4.invoke.call_count == 2
     assert json.loads((run_dir / "selection.json").read_text())["status"] == "selected"
     assert json.loads(

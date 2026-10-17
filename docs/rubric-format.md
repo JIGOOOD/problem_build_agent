@@ -23,6 +23,10 @@
 LLM이 만드는 것은 `NFRExport`뿐이다. 근거 문서 목록(`Document[]`)은 파이프라인
 상태이지 LLM 출력이 아니다 — **LLM이 출처를 지어내지 못하게 하려는 의도적 분리.**
 하네스(`core.cross-ref`)가 이 목록으로 `evidence_refs`를 검사한다.
+TUI 초안의 `title`은 `InterviewBrief.topic`으로 저장해 문서 제목에 사용한다.
+확정 `scope`와 `focus`가 있으면 제목 아래에 **설계 범위**·**평가 초점**을 각각 표시한다.
+범위를 지정하지 않은 직접 실행 입력은 기존 제목·연차·배점 형식을 유지한다.
+
 렌더러는 `(NFRExport, InterviewBrief)`를 받는다 — md에 출처를 쓰지 않으므로 문서 목록이 필요 없다.
 
 ```yaml
@@ -92,6 +96,12 @@ total         = Σ(section.weight × section_pct)    # section weight 합 = 100
 
 ````markdown
 # 차량 공유 서비스
+
+**설계 범위**
+주변 차량 검색과 운전자 배정까지. 요금 계산과 결제는 제외한다.
+
+**평가 초점**
+주변 차량 검색 지연과 운전자 중복 배정 방지
 
 **대상 연차** Middle\
 **배점** 100

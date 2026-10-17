@@ -380,8 +380,7 @@ def _build_messages(brief: InterviewBrief, session: _Session) -> list[dict]:
         {"role": "system", "content": system},
         {
             "role": "user",
-            "content": brief.topic,
-            # + (f"\n{brief.notes}" if brief.notes else ""),
+            "content": "\n".join(brief.to_lines()) if brief.scope else brief.topic,
         },
         {"role": "assistant", "content": session.plan.model_dump_json()},
     ]

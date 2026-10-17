@@ -25,6 +25,8 @@ def read_back(md: str) -> dict:
         "topic": head[0].removeprefix("# ")
         if head and head[0].startswith("# ")
         else None,
+        "scope": " ".join(_block("\n".join(head), "설계 범위")) or None,
+        "focus": " ".join(_block("\n".join(head), "평가 초점")) or None,
         "seniority": _labeled(head, "대상 연차"),
         "total_weight": _labeled(head, "배점"),
         "nfr_heading": "## NFR" in head,
@@ -141,12 +143,16 @@ def _header_findings(
     expected = {
         # 주제는 헤딩이라 줄바꿈·연속 공백을 접어서 쓴다.
         "topic": " ".join(brief.topic.split()),
+        "scope": " ".join(brief.scope.split()) if brief.scope is not None else None,
+        "focus": " ".join(brief.focus.split()) if brief.focus is not None else None,
         "seniority": str(brief.seniority),
         "total_weight": str(sum(c.weight for c in export.rubric.criteria)),
         "nfr_heading": True,
     }
     names = {
         "topic": "주제",
+        "scope": "설계 범위",
+        "focus": "평가 초점",
         "seniority": "대상 연차",
         "total_weight": "배점",
         "nfr_heading": "`## NFR` 헤딩",

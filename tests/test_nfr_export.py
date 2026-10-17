@@ -28,7 +28,12 @@ BRIEF = InterviewBrief(Seniority.SENIOR, "채팅 서비스")
 def test_agent_prompts_cover_scope_fair_levels_and_outcome_based_design(
     research, golden_export
 ):
-    brief = InterviewBrief(Seniority.MIDDLE, "실시간 채팅 서비스")
+    brief = InterviewBrief(
+        Seniority.MIDDLE,
+        "실시간 채팅 서비스",
+        scope="메시지 전송부터 상대방 수신까지",
+        focus="메시지 유실 방지",
+    )
     selector = Mock(
         return_value=NFRSelection(
             **golden_export.model_dump(exclude={"rubric"})
@@ -79,6 +84,10 @@ def test_agent_prompts_cover_scope_fair_levels_and_outcome_based_design(
         ),
     ):
         system = llm.call_args.args[0][0]["content"]
+        payload = json.loads(llm.call_args.args[0][1]["content"])
+        assert payload["brief"]["scope"] == brief.scope
+        assert payload["brief"]["focus"] == brief.focus
+        assert "brief.scope" in system
         for rule in rules:
             assert rule in system
 

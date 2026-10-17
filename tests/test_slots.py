@@ -51,68 +51,48 @@ def test_seniority_accepts_a_label_or_its_number(raw: str, expected: Seniority) 
     filler = SlotFiller()
 
     assert filler.submit(raw).accepted
-    assert filler.current.key == "topic"  # 다음 질문으로 넘어갔는지
+    assert filler.current is None
     assert filler.values["seniority"] == expected
 
 
-def test_topic_is_required_too() -> None:
+def test_seniority_finishes_slots_and_scope_builds_the_brief() -> None:
     filler = SlotFiller()
-    fill(filler, "Middle")
-
-    result = filler.submit("  ")
-
-    assert result.accepted is False
-    assert "주제" in result.error
-    assert filler.current.key == "topic"
-
-
-def test_seniority_and_topic_finish_the_interview_without_notes() -> None:
-    filler = SlotFiller()
-    fill(filler, "Senior", "주문/결제 시스템")
+    fill(filler, "Senior")
 
     assert filler.is_complete
     assert filler.current is None
-
-    brief = filler.build_brief()
+    assert not filler.submit("주제").accepted
+    brief = filler.build_brief(
+        "결제 처리 시스템", "결제 요청부터 결과 반영까지", "중복 결제 방지"
+    )
     assert brief.seniority is Seniority.SENIOR
-    assert brief.topic == "주문/결제 시스템"
-    assert "notes" not in vars(brief)
-
-
-# def test_notes_are_kept_when_provided() -> None:
-#     filler = SlotFiller()
-#     fill(filler, "1", "채팅 서비스", "  멀티 리전 고려  ")
-#
-#     brief = filler.build_brief()
-#     assert brief.seniority is Seniority.MIDDLE
-#     assert brief.notes == "멀티 리전 고려"
+    assert brief.topic == "결제 처리 시스템"
+    assert brief.scope == "결제 요청부터 결과 반영까지"
+    assert brief.focus == "중복 결제 방지"
 
 
 def test_build_brief_before_completion_is_an_error() -> None:
     filler = SlotFiller()
-    fill(filler, "Middle")
-
-    with pytest.raises(ValueError, match="주제"):
-        filler.build_brief()
+    with pytest.raises(ValueError, match="대상 연차"):
+        filler.build_brief("결제", "결제 요청부터 결과 반영까지", "중복 방지")
 
 
 def test_filled_answers_are_exposed_for_the_transcript() -> None:
     filler = SlotFiller()
-    fill(filler, "Middle", "피드 랭킹")
+    fill(filler, "Middle")
 
-    assert filler.filled == (
-        ("대상 연차", "Middle"),
-        ("주제", "피드 랭킹"),
-        # ("중점 비기능적 요구사항", "(없음)"),
-    )
+    assert filler.filled == (("대상 연차", "Middle"),)
 
 
 def test_brief_converts_to_the_graph_input() -> None:
     filler = SlotFiller()
-    fill(filler, "Senior", "주문/결제 시스템")
+    fill(filler, "Senior")
 
-    assert filler.build_brief().to_lines() == [
+    assert filler.build_brief(
+        "결제 처리 시스템", "결제 요청부터 결과 반영까지", "상태 일관성"
+    ).to_lines() == [
         "대상 연차: Senior",
-        "주제: 주문/결제 시스템",
-        # "중점 비기능적 요구사항: 중복 결제 시 일관성 유지 로직 등",
+        "주제: 결제 처리 시스템",
+        "확정 범위: 결제 요청부터 결과 반영까지",
+        "평가 초점: 상태 일관성",
     ]

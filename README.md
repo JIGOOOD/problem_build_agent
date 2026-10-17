@@ -129,4 +129,4 @@ src/archgen/
 
 - 하네스 본 구현 (내장 4개는 패턴 예시일 뿐)
 - 골든 셋: 손으로 쓴 루브릭 3–5개. 하네스 규칙과 few-shot 의 근거가 됩니다
-- 모델명은 `.env` 에서 조정하세요 (`ARCHGEN_MODEL_LARGE` / `_SMALL`)
+- 모델명은 `.env` 에서 조정하세요 (`ARCHGEN_MODEL_SMALL`: TUI, `_MEDIUM`: 조사·NFR 선정·루브릭 생성, `_LARGE`: Judge)

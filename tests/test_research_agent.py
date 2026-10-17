@@ -471,11 +471,18 @@ def test_research_passes_all_tool_definitions_to_bind_tools(monkeypatch):
     ]
 
 
-def test_research_forwards_initial_messages_and_preserves_loop_roles():
+@pytest.mark.parametrize("scoped", [False, True])
+def test_research_forwards_initial_messages_and_preserves_loop_roles(scoped):
     llm = FakeLLM(AIMessage(content=json.dumps(PLAN)), FINISH)
+    brief = InterviewBrief(
+        topic="실시간 채팅 서비스",
+        seniority=Seniority.MIDDLE,
+        scope="메시지 전송부터 상대방 수신까지" if scoped else None,
+        focus="메시지 유실 방지" if scoped else None,
+    )
 
     run_research(
-        InterviewBrief(topic="실시간 채팅 서비스", seniority=Seniority.MIDDLE),
+        brief,
         load_catalog(CATALOG_DIR),
         llm,
         Mock(spec=SearchTool),
@@ -486,7 +493,12 @@ def test_research_forwards_initial_messages_and_preserves_loop_roles():
     messages = llm.calls[1]
     assert [message["role"] for message in messages] == ["system", "user", "assistant"]
     assert [set(message) for message in messages] == [{"role", "content"}] * 3
-    assert messages[1]["content"] == "실시간 채팅 서비스"
+    assert messages[1]["content"] == (
+        "\n".join(brief.to_lines()) if scoped else brief.topic
+    )
+    if scoped:
+        assert brief.scope in llm.calls[0][1]["content"]
+        assert brief.focus in llm.calls[0][1]["content"]
     assert json.loads(messages[2]["content"]) == {
         **PLAN,
         "nfr_candidates": [

@@ -10,11 +10,15 @@ from archgen import config
     [("https://api.openai.com/v1", True), ("https://openrouter.ai/api/v1", False)],
 )
 def test_model_factory_routes_provider_options(monkeypatch, base_url, responses):
-    settings = config.Settings("fake-key", base_url, "gpt-6.1-sol", "gpt-6.1-sol")
+    settings = config.Settings(
+        "fake-key", base_url, "large-model", "medium-model", "small-model"
+    )
     monkeypatch.setattr(config, "get_settings", lambda: settings)
     factory = Mock()
 
-    config.build_chat_model("small", model_class=factory)
+    for tier in ("small", "medium", "large"):
+        config.build_chat_model(tier, model_class=factory)
+        assert factory.call_args.kwargs["model"] == f"{tier}-model"
 
     options = factory.call_args.kwargs
     assert options["use_responses_api"] is responses

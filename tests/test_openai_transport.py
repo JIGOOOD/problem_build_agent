@@ -50,7 +50,11 @@ def test_generation_schemas_reach_the_responses_api(monkeypatch, golden_export, 
         config,
         "get_settings",
         lambda: config.Settings(
-            "fake-key", "https://api.openai.com/v1", "gpt-6.1-sol", "gpt-6.1-sol"
+            "fake-key",
+            "https://api.openai.com/v1",
+            "gpt-6.1-sol",
+            "gpt-6.1-sol",
+            "gpt-6.1-sol",
         ),
     )
     outputs = {
@@ -85,7 +89,11 @@ def test_initial_schema_and_tool_roundtrip_use_responses_without_provider_option
         config,
         "get_settings",
         lambda: config.Settings(
-            "fake-key", "https://api.openai.com/v1", "gpt-6.1-sol", "gpt-6.1-sol"
+            "fake-key",
+            "https://api.openai.com/v1",
+            "gpt-6.1-sol",
+            "gpt-6.1-sol",
+            "gpt-6.1-sol",
         ),
     )
     calls = []

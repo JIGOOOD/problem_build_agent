@@ -61,19 +61,6 @@ SLOTS: tuple[Slot, ...] = (
         choices=tuple(level.value for level in Seniority),
         parse=_parse_seniority,
     ),
-    Slot(
-        key="topic",
-        label="주제",
-        prompt="어떤 주제로 문제를 만들까요?",
-        placeholder="예: 주문/결제 시스템",
-    ),
-    # Slot(
-    #     key="notes",
-    #     label="중점 비기능적 요구사항",
-    #     prompt="비기능적 요구사항 중 주의깊게 평가할 요소가 있으면 작성해주세요. 없다면 Enter를 눌러주세요.",
-    #     placeholder="예: 중복 결제 시 일관성 유지 로직 등 (선택)",
-    #     required=False,
-    # ),
 )
 
 
@@ -128,13 +115,14 @@ class SlotFiller:
         self._index += 1
         return SlotResult(accepted=True)
 
-    def build_brief(self) -> InterviewBrief:
+    def build_brief(self, title: str, scope: str, focus: str) -> InterviewBrief:
         """Freeze the collected answers, refusing to build a half-filled brief."""
         missing = [slot.label for slot in self.slots[self._index :] if slot.required]
         if missing:
             raise ValueError(f"아직 받지 못한 필수 항목이 있습니다: {', '.join(missing)}")
         return InterviewBrief(
             seniority=self.values["seniority"],
-            topic=self.values["topic"],
-            # notes=self.values.get("notes"),
+            topic=title,
+            scope=scope,
+            focus=focus,
         )

@@ -88,7 +88,7 @@ def run_generation(
         logger.info(
             "실행 로그: %s | 생성 %s | Judge %s",
             run_dir,
-            "Fake" if fake else "small",
+            "Fake" if fake else "medium",
             ("Fake" if fake else "large") if judge_enabled else "off",
         )
         trace = _LLMTrace(run_dir)
@@ -145,7 +145,7 @@ def run_generation(
                 {"brief": brief, "events": []}, config=new_thread_config()
             )
         model = build_chat_model(
-            "small",
+            "medium",
             timeout=300,
             max_retries=0,
             tiktoken_model_name="gpt-4o",
