@@ -1,0 +1,7 @@
+- 주제: {{ brief.topic | one_line }}
+{# 중점 NFR 입력은 추후 구현 시 활성화한다.
+{% if brief.notes %}
+- 사용자 중점 요구사항: {{ brief.notes | one_line }}
+우선 검토하되 검색으로 검증하고 주제와 무관하면 제외한다.
+{% endif %}
+#}

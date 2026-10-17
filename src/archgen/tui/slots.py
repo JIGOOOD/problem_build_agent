@@ -41,7 +41,7 @@ class SlotResult:
 
 
 def _parse_seniority(raw: str) -> Seniority:
-    """Accept either a level label ("주니어") or its 1-based number ("2")."""
+    """Accept either a level label ("Senior") or its 1-based number ("2")."""
     levels = list(Seniority)
     if raw.isdigit() and 1 <= int(raw) <= len(levels):
         return levels[int(raw) - 1]
@@ -57,7 +57,7 @@ SLOTS: tuple[Slot, ...] = (
         key="seniority",
         label="대상 연차",
         prompt="대상 연차를 골라 주세요 (번호 또는 이름).",
-        placeholder="1. 신입  2. 주니어  3. 미들  4. 시니어",
+        placeholder="1. Middle  2. Senior",
         choices=tuple(level.value for level in Seniority),
         parse=_parse_seniority,
     ),
@@ -67,13 +67,13 @@ SLOTS: tuple[Slot, ...] = (
         prompt="어떤 주제로 문제를 만들까요?",
         placeholder="예: 주문/결제 시스템",
     ),
-    Slot(
-        key="notes",
-        label="중점 비기능적 요구사항",
-        prompt="비기능적 요구사항 중 주의깊게 평가할 요소가 있으면 작성해주세요. 없다면 Enter를 눌러주세요.",
-        placeholder="예: 중복 결제 시 일관성 유지 로직 등 (선택)",
-        required=False,
-    ),
+    # Slot(
+    #     key="notes",
+    #     label="중점 비기능적 요구사항",
+    #     prompt="비기능적 요구사항 중 주의깊게 평가할 요소가 있으면 작성해주세요. 없다면 Enter를 눌러주세요.",
+    #     placeholder="예: 중복 결제 시 일관성 유지 로직 등 (선택)",
+    #     required=False,
+    # ),
 )
 
 
@@ -136,5 +136,5 @@ class SlotFiller:
         return InterviewBrief(
             seniority=self.values["seniority"],
             topic=self.values["topic"],
-            notes=self.values.get("notes"),
+            # notes=self.values.get("notes"),
         )

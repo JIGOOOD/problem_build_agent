@@ -6,6 +6,7 @@ import os
 from dataclasses import dataclass
 from functools import lru_cache
 from typing import Literal
+from urllib.parse import urlparse
 
 from dotenv import load_dotenv
 
@@ -14,7 +15,7 @@ Tier = Literal["large", "small"]
 
 @dataclass(frozen=True)
 class Settings:
-    """Credentials and model choices for the OpenRouter-backed agents."""
+    """Credentials and model choices for the OpenAI-compatible agents."""
 
     api_key: str
     base_url: str
@@ -58,14 +59,55 @@ def get_settings() -> Settings:
     )
 
 
-def build_chat_model(tier: Tier = "large", **overrides):
-    """Return a ChatOpenAI client for one model tier, pointed at OpenRouter."""
+def build_chat_model(tier: Tier = "large", *, model_class=None, **overrides):
+    """공식 OpenAI는 Responses, OpenRouter는 Chat Completions를 사용한다."""
     from langchain_openai import ChatOpenAI
 
     settings = get_settings()
-    return ChatOpenAI(
+    host = urlparse(settings.base_url).hostname
+    overrides.setdefault("use_responses_api", host == "api.openai.com")
+    if host == "api.openai.com":
+        overrides.setdefault("output_version", "v0")
+    elif host == "openrouter.ai":
+        overrides.setdefault("extra_body", {"provider": {"require_parameters": True}})
+    return (model_class or ChatOpenAI)(
         model=overrides.pop("model", settings.model_for(tier)),
         api_key=settings.api_key,
         base_url=settings.base_url,
         **overrides,
     )
+
+
+def bind_structured_model(model, schema):
+    """기존 Pydantic 모델의 구조를 API 응답에 강제한다."""
+    from langchain_core.utils.function_calling import convert_to_json_schema
+
+    return model.bind(
+        response_format={
+            "type": "json_schema",
+            "json_schema": {
+                "name": schema.__name__,
+                "strict": True,
+                "schema": convert_to_json_schema(schema, strict=True),
+            },
+        }
+    )
+
+
+def response_text(message) -> str:
+    """문자열 또는 Responses의 텍스트 블록만 허용한다."""
+    content = message.content
+    if isinstance(content, str):
+        return content
+    if (
+        isinstance(content, list)
+        and content
+        and all(
+            isinstance(block, dict)
+            and block.get("type") == "text"
+            and isinstance(block.get("text"), str)
+            for block in content
+        )
+    ):
+        return "".join(block["text"] for block in content)
+    raise TypeError("LLM 응답은 텍스트 문자열 또는 텍스트 블록이어야 한다.")

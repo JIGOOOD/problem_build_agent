@@ -1,0 +1,46 @@
+# {{ brief.topic | heading }}
+
+**대상 연차** {{ brief.seniority }}\
+**배점** {{ total_weight }}
+
+## NFR
+
+| NFR | 평가 항목 | 배점 | 획득 |
+|---|---|---|---|
+{% for s in sections %}
+| NFR-{{ nfr_numbers[s.nfr.id] }} · {{ s.nfr.kind | nfr_name | cell }} | C{{ s.number }}. {{ s.criterion.title | cell }} | {{ s.criterion.weight }} | ☐0 ☐1 ☐2 ☐3 |
+{% endfor %}
+{% for nfr in nfrs %}
+
+---
+
+## NFR-{{ loop.index }}. {{ nfr.kind | nfr_name | heading }}
+
+**요구 수준**
+{% for s in sections if s.nfr.id == nfr.id %}
+{% if loop.first %}
+{% if s.target %}
+`{{ nfr.kind }}` — {{ s.target }}
+{{ nfr.statement }}
+{% else %}
+`{{ nfr.kind }}` — {{ nfr.statement }}
+{% endif %}
+{% else %}
+
+---
+{% endif %}
+
+### C{{ s.number }}. {{ s.criterion.title | heading }} · {{ s.criterion.weight }}
+
+**평가 항목**
+{{ s.criterion.description }}
+
+| Level | 기준 |
+|---|---|
+{% for level in s.levels %}
+| {{ level.score }} | {{ level.descriptor | cell }} |
+{% endfor %}
+{% endfor %}
+{% endfor %}
+
+---

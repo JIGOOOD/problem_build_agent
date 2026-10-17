@@ -6,8 +6,11 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+mutants/
 .env
 .omx/
 .vscode/
 .archgen/
 .claude/settings.local.json
+survived.txt
+survived-ignored.txt

@@ -11,10 +11,19 @@ dependencies = [
     "jinja2>=3.1",
     "textual>=0.60",
     "python-dotenv>=1.0",
+    "pyyaml>=6.0",
+    "tavily-python>=0.8.5",
+    "httpx>=0.28.1",
+    "trafilatura>=2.3.1",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "pytest-asyncio>=0.23", "ruff>=0.5"]
+dev = [
+    "mutmut>=3.7,<4",
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.5",
+]
 
 [project.scripts]
 archgen = "archgen.cli:main"
@@ -29,6 +38,24 @@ packages = ["src/archgen"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+pythonpath = ["."]
+markers = ["slow: opt-in live API integration tests"]
 
 [tool.ruff]
 line-length = 90
+
+[tool.mutmut]
+source_paths = ["src/"]
+only_mutate = [
+    "src/archgen/research/runner.py",
+    "src/archgen/research/keep.py",
+    "src/archgen/retrieval/crawler.py",
+    "src/archgen/retrieval/search.py",
+]
+pytest_add_cli_args_test_selection = [
+    "tests/test_research_agent.py",
+    "tests/test_keep.py",
+    "tests/test_crawler.py",
+    "tests/test_search.py",
+]
+also_copy = ["resources/", "try_research.py", "try_research_agent.py"]
