@@ -6,6 +6,8 @@ import asyncio
 import json
 import logging
 import os
+import subprocess
+import sys
 import tempfile
 from collections.abc import Callable
 from datetime import UTC, datetime
@@ -28,6 +30,32 @@ from archgen.retrieval.search import SearchTool
 from .graph import GenerationState, build_generation_graph, new_thread_config
 
 FAKE_STEP_SECONDS = 5
+
+
+def _start_evaluation(run_dir: Path) -> None:
+    logger = logging.getLogger("archgen")
+    try:
+        with (run_dir / "evaluation.log").open("w", encoding="utf-8") as log:
+            # shortcut: 중단 시 자동 재시도는 없으며, 작업 보장이 필요해지면 영속 큐로 전환한다.
+            process = subprocess.Popen(
+                [
+                    sys.executable,
+                    "-u",
+                    "-m",
+                    "archgen.evaluation",
+                    str((run_dir / "nfr_rubric.md").resolve()),
+                    "--source",
+                    "generation",
+                ],
+                stdin=subprocess.DEVNULL,
+                stdout=log,
+                stderr=subprocess.STDOUT,
+                start_new_session=True,
+                env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+            )
+        logger.info("백그라운드 평가 시작: PID %s | %s", process.pid, run_dir)
+    except OSError:
+        logger.exception("백그라운드 평가 시작 실패: %s", run_dir)
 
 
 class _LLMTrace(BaseCallbackHandler):
@@ -193,6 +221,8 @@ def run_generation(
             result = graph.invoke(
                 {"brief": brief, "events": []}, config=new_thread_config()
             )
+        if result["status"] == "complete":
+            _start_evaluation(run_dir)
         return result
     except Exception as error:
         logger.exception("생성 실패")

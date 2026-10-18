@@ -4,7 +4,7 @@ from unittest.mock import Mock
 
 import pytest
 
-import evaluate_rubric as evaluator
+from archgen import evaluation as evaluator
 
 
 def test_judge_retries_chinese_and_five_english_words_before_returning_korean(tmp_path):
@@ -254,8 +254,9 @@ def test_invalid_json_or_call_failure_is_an_evaluation_error(response):
         )
 
 
+@pytest.mark.parametrize("source", ["golden", "generation"])
 def test_records_only_scored_assessments_and_keeps_unscorable_reason(
-    tmp_path, monkeypatch
+    tmp_path, monkeypatch, source
 ):
     from unittest.mock import MagicMock
 
@@ -284,8 +285,16 @@ def test_records_only_scored_assessments_and_keeps_unscorable_reason(
         model=model,
         client=client,
         failure_root=tmp_path,
+        source=source,
     )
 
+    observation = client.start_as_current_observation.call_args.kwargs
+    assert observation["name"] == (
+        "generated-rubric-evaluation"
+        if source == "generation"
+        else "golden-rubric-evaluation"
+    )
+    assert observation["metadata"]["source"] == source
     assert output["trace_id"] == "trace-123"
     scores = client.api.scores.create.call_args.kwargs["request"]
     assert [(s.name, s.value) for s in scores if s.data_type == "BOOLEAN"] == [

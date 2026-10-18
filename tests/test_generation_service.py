@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
@@ -15,6 +16,7 @@ BRIEF = InterviewBrief(Seniority.MIDDLE, "채팅 서비스")
 def test_fake_generation_needs_no_keys_or_external_services(monkeypatch, tmp_path):
     monkeypatch.setattr(service, "FAKE_STEP_SECONDS", 0)
     forbidden = Mock(side_effect=AssertionError("Fake 모드에서 외부 서비스 호출"))
+    monkeypatch.setattr(service.subprocess, "Popen", forbidden)
     for name in ("build_chat_model", "TavilyClient", "create_fetch_client"):
         monkeypatch.setattr(service, name, forbidden)
     for key in ("OPENROUTER_API_KEY", "TAVILY_API_KEY"):
@@ -107,6 +109,7 @@ def test_runtime_reports_each_stage_before_work(runtime, monkeypatch, tmp_path):
 
 @pytest.fixture
 def runtime(monkeypatch, golden_export, golden_document_ids):
+    monkeypatch.setattr(service.subprocess, "Popen", Mock())
     medium, large = Mock(), Mock()
     medium.bind.return_value = medium
     large.bind.return_value = large
@@ -271,3 +274,53 @@ def test_runtime_failure_preserves_logs_and_never_publishes_markdown(
     assert logger.level == old_level
     if failure == "budget":
         medium.invoke.assert_not_called()
+    service.subprocess.Popen.assert_not_called()
+
+
+def test_successful_generation_starts_evaluation_without_waiting(runtime, tmp_path):
+    def launch(command, **kwargs):
+        assert command[2:4] == ["-m", "archgen.evaluation"]
+        rubric = Path(command[4])
+        assert rubric.is_file()
+        assert rubric.name == "nfr_rubric.md"
+        assert command[-2:] == ["--source", "generation"]
+        assert kwargs["start_new_session"] is True
+        assert kwargs["stdin"] == service.subprocess.DEVNULL
+        assert kwargs["stdout"].name == str(rubric.parent / "evaluation.log")
+        return process
+
+    process = Mock(pid=123)
+    service.subprocess.Popen.side_effect = launch
+
+    result = service.run_generation(BRIEF, output_root=tmp_path)
+
+    assert result["status"] == "complete"
+    service.subprocess.Popen.assert_called_once()
+    process.wait.assert_not_called()
+    process.communicate.assert_not_called()
+
+
+def test_evaluation_launch_failure_preserves_successful_generation(runtime, tmp_path):
+    service.subprocess.Popen.side_effect = OSError("cannot start evaluator")
+
+    result = service.run_generation(BRIEF, output_root=tmp_path)
+
+    root = Path(result["output_dir"])
+    assert result["status"] == "complete"
+    assert (root / "nfr_rubric.md").is_file()
+    assert "백그라운드 평가 시작 실패" in (root / "run.log").read_text()
+    assert not (root / "error.json").exists()
+
+
+@pytest.mark.parametrize("status", ["failed", "insufficient_evidence"])
+def test_incomplete_generation_does_not_start_evaluation(
+    runtime, monkeypatch, tmp_path, status
+):
+    graph = Mock()
+    graph.invoke.return_value = {"status": status}
+    monkeypatch.setattr(service, "build_generation_graph", Mock(return_value=graph))
+
+    result = service.run_generation(BRIEF, output_root=tmp_path)
+
+    assert result["status"] == status
+    service.subprocess.Popen.assert_not_called()
