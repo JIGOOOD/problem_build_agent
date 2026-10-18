@@ -14,3 +14,4 @@ mutants/
 .claude/settings.local.json
 survived.txt
 survived-ignored.txt
+/docs/evaluator/golden-tuning.md
