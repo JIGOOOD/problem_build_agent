@@ -22,6 +22,8 @@ class Settings:
     model_large: str
     model_medium: str
     model_small: str
+    reasoning_effort_medium: str | None = None
+    reasoning_effort_large: str = "low"
 
     def model_for(self, tier: Tier) -> str:
         """Return the model name for a tier, rejecting unknown tiers loudly."""
@@ -61,6 +63,12 @@ def get_settings() -> Settings:
         model_large=values["ARCHGEN_MODEL_LARGE"],
         model_medium=values["ARCHGEN_MODEL_MEDIUM"],
         model_small=values["ARCHGEN_MODEL_SMALL"],
+        reasoning_effort_medium=(
+            os.getenv("ARCHGEN_REASONING_EFFORT_MEDIUM", "").strip() or None
+        ),
+        reasoning_effort_large=(
+            os.getenv("ARCHGEN_REASONING_EFFORT_LARGE", "low").strip() or "low"
+        ),
     )
 
 
@@ -69,6 +77,12 @@ def build_chat_model(tier: Tier = "medium", *, model_class=None, **overrides):
     from langchain_openai import ChatOpenAI
 
     settings = get_settings()
+    effort = {
+        "medium": settings.reasoning_effort_medium,
+        "large": settings.reasoning_effort_large,
+    }.get(tier)
+    if effort:
+        overrides.setdefault("reasoning_effort", effort)
     host = urlparse(settings.base_url).hostname
     overrides.setdefault("use_responses_api", host == "api.openai.com")
     if host == "api.openai.com":

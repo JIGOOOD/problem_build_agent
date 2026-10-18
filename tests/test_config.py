@@ -5,6 +5,27 @@ import pytest
 from archgen import config
 
 
+def test_reasoning_effort_follows_role_environment_and_allows_override(monkeypatch):
+    monkeypatch.setattr(config, "load_dotenv", lambda: None)
+    for name in config.REQUIRED_VARS:
+        monkeypatch.setenv(name, "test-value")
+    monkeypatch.setenv("OPENROUTER_BASE_URL", "https://api.openai.com/v1")
+    monkeypatch.setenv("ARCHGEN_REASONING_EFFORT_MEDIUM", "low")
+    monkeypatch.setenv("ARCHGEN_REASONING_EFFORT_LARGE", "medium")
+    config.get_settings.cache_clear()
+    try:
+        factory = Mock()
+        for tier, effort in (("medium", "low"), ("large", "medium")):
+            config.build_chat_model(tier, model_class=factory)
+            assert factory.call_args.kwargs["reasoning_effort"] == effort
+        config.build_chat_model("large", model_class=factory, reasoning_effort="high")
+        assert factory.call_args.kwargs["reasoning_effort"] == "high"
+        config.build_chat_model("small", model_class=factory)
+        assert "reasoning_effort" not in factory.call_args.kwargs
+    finally:
+        config.get_settings.cache_clear()
+
+
 @pytest.mark.parametrize(
     "base_url,responses",
     [("https://api.openai.com/v1", True), ("https://openrouter.ai/api/v1", False)],

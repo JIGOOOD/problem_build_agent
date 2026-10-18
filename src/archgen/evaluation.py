@@ -238,9 +238,7 @@ def run(
     if client is None:
         client, exporter = _connect_langfuse()
     if model is None:
-        unbound = build_chat_model(
-            "large", timeout=600, max_retries=0, reasoning_effort="low"
-        )
+        unbound = build_chat_model("large", timeout=600, max_retries=0)
         model_name = unbound.model_name
         model = bind_structured_model(unbound, Evaluation)
     else:
