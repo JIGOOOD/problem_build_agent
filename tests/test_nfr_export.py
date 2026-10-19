@@ -64,7 +64,7 @@ def test_agent_prompts_cover_scope_fair_levels_and_outcome_based_design(
                 "NFR 간 충돌",
                 "설계 선택의 이득·비용",
                 "보장 수준을 명시",
-                "kind가 같다는 이유만으로 다른 요구를 제외하지 않는다",
+                "같은 kind라도 평가 대상이 다르면 구분한다",
             ),
         ),
         (
