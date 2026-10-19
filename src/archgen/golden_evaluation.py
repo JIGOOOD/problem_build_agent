@@ -20,8 +20,7 @@ class GoldenAssessment(Assessment):
     matched_ids: list[str]
     golden_quotes: list[NonBlank]
     generated_quotes: list[NonBlank]
-    differing_levels: list[Literal[0, 1, 2, 3]]
-    null_reason: Literal["unmapped", "insufficient_data"] | None
+    null_reason: Literal["insufficient_data"] | None
 
 
 class GoldenEvaluation(Evaluation):
@@ -40,7 +39,7 @@ class GoldenEvaluation(Evaluation):
             ),
             "null_reasons": {
                 reason: sum(r.null_reason == reason for r in self.results)
-                for reason in ("unmapped", "insufficient_data")
+                for reason in ("insufficient_data",)
             },
         }
 
@@ -68,7 +67,7 @@ def evaluate_golden(candidate, golden, llm, *, criteria_path=CRITERIA):
     if identity != gold_identity:
         raise ValueError("동일 주제·연차의 생성물과 골든만 비교할 수 있다.")
     expected = [("1-1", target) for target in gold_nfrs] + [
-        (rule, target) for rule in ("2-1", "3-1") for target in gold_criteria
+        ("2-1", target) for target in gold_criteria
     ]
     rules = Path(criteria_path).read_text(encoding="utf-8")
     if not rules.strip():
@@ -86,10 +85,7 @@ def evaluate_golden(candidate, golden, llm, *, criteria_path=CRITERIA):
                 + "\nmatched_ids는 생성물의 실제 ID 목록이다. 일대다·다대일 대응을 허용한다. "
                 "대응이 없으면 빈 목록이다. golden_quotes와 generated_quotes에는 각각 실제 "
                 "문구를 인용한다. 생성물 누락이면 generated_quotes는 빈 목록을 허용한다. "
-                "Level이 달라 Fail이면 differing_levels에 0~3 중 차이 나는 점수를 기록한다. "
-                "3-1은 2-1의 대응 ID를 그대로 사용한다. 2-1이 Fail이고 대응 없는 "
-                "3-1은 verdict=null, null_reason=unmapped로 한다. 2-1 자체가 "
-                "자료 부족이면 Level도 insufficient_data로 한다. 다른 판단 불가도 insufficient_data, "
+                "판단 불가는 null_reason=insufficient_data, "
                 "Pass/Fail이면 null_reason=null이다. 자료가 충분한 필수 역량 누락은 Fail이다."
             ),
         },
@@ -106,7 +102,6 @@ def evaluate_golden(candidate, golden, llm, *, criteria_path=CRITERIA):
         keys = [(r.criterion_id, r.target_id) for r in result.results]
         if len(keys) != len(expected) or set(keys) != set(expected):
             raise ValueError("골든 비교 결과 누락·중복·대상 불일치")
-        competency = {r.target_id: r for r in result.results if r.criterion_id == "2-1"}
         for row in result.results:
             allowed = nfrs if row.criterion_id == "1-1" else criteria
             if (
@@ -130,20 +125,6 @@ def evaluate_golden(candidate, golden, llm, *, criteria_path=CRITERIA):
             ):
                 if any(" ".join(q.split()) not in " ".join(text.split()) for q in quotes):
                     raise ValueError("대응 문서에 없는 인용 근거")
-            if row.criterion_id == "3-1":
-                if set(row.matched_ids) != set(competency[row.target_id].matched_ids):
-                    raise ValueError("Criterion과 Level의 대응 불일치")
-                if not row.matched_ids:
-                    missing = competency[row.target_id].verdict == "Fail"
-                    reason = "unmapped" if missing else "insufficient_data"
-                    if row.verdict is not None or row.null_reason != reason:
-                        raise ValueError("미대응 Level은 중복 감점 없이 생략해야 한다.")
-                elif row.null_reason == "unmapped":
-                    raise ValueError("대응이 있는 Level을 미대응으로 생략할 수 없다.")
-                if row.verdict == "Fail" and not row.differing_levels:
-                    raise ValueError("차이 나는 Level 누락")
-            elif row.null_reason == "unmapped":
-                raise ValueError("미대응 생략은 Level 비교에만 적용한다.")
         errors = check_language(
             [result.compatibility_reason]
             + [

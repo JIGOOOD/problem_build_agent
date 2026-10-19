@@ -21,7 +21,6 @@ def case(tmp_path):
     for rule, target, mapped in [
         ("1-1", "NFR-1", "NFR-9"),
         ("2-1", "C1", "C7"),
-        ("3-1", "C1", "C7"),
     ]:
         rows.append(
             {
@@ -40,7 +39,6 @@ def case(tmp_path):
                     if rule == "1-1"
                     else "분산 처리로 대기를 줄인다."
                 ],
-                "differing_levels": [],
                 "null_reason": None,
             }
         )
@@ -75,7 +73,7 @@ def test_golden_comparison_keeps_semantic_mapping_despite_different_ids(tmp_path
         "wrong_path",
         "null_reason",
         "pass_no_mapping",
-        "level_mismatch",
+        "removed_level_rule",
         "duplicate",
         "missing",
     ],
@@ -95,8 +93,8 @@ def test_rejects_invalid_comparison_evidence_and_result_coverage(tmp_path, defec
         row["null_reason"] = "insufficient_data"
     elif defect == "pass_no_mapping":
         row["matched_ids"] = []
-    elif defect == "level_mismatch":
-        response["results"][2]["matched_ids"] = []
+    elif defect == "removed_level_rule":
+        response["results"].append({**row, "criterion_id": "3-1"})
     elif defect == "duplicate":
         response["results"].append(row.copy())
     else:
@@ -105,20 +103,17 @@ def test_rejects_invalid_comparison_evidence_and_result_coverage(tmp_path, defec
         evaluate_golden(candidate, gold, Mock(return_value=json.dumps(response)))
 
 
-def test_missing_competency_skips_only_its_level_and_keeps_unknown_separate(tmp_path):
+def test_missing_competency_fails_and_keeps_unknown_separate(tmp_path):
     from archgen.golden_evaluation import evaluate_golden
 
     candidate, gold, response = case(tmp_path)
     response["results"][0].update(verdict=None, null_reason="insufficient_data")
     response["results"][1].update(verdict="Fail", matched_ids=[], generated_quotes=[])
-    response["results"][2].update(
-        verdict=None, null_reason="unmapped", matched_ids=[], generated_quotes=[]
-    )
     result = evaluate_golden(candidate, gold, Mock(return_value=json.dumps(response)))
     assert result.summary["by_criterion"]["2-1"]["percentage"] == 0
-    assert result.summary["by_criterion"]["3-1"]["percentage"] is None
+    assert "3-1" not in result.summary["by_criterion"]
     assert result.summary["unmapped_criteria"] == 1
-    assert result.summary["null_reasons"] == {"unmapped": 1, "insufficient_data": 1}
+    assert result.summary["null_reasons"] == {"insufficient_data": 1}
 
 
 @pytest.mark.parametrize("mismatch", ["tier", "scope"])
@@ -181,8 +176,7 @@ def test_unknown_mapping_does_not_count_as_confirmed_missing_competency(tmp_path
         )
     result = evaluate_golden(candidate, gold, Mock(return_value=json.dumps(response)))
     assert result.summary["unmapped_criteria"] == 0
-    assert result.summary["null_reasons"]["unmapped"] == 0
-    assert result.summary["null_reasons"]["insufficient_data"] == 2
+    assert result.summary["null_reasons"]["insufficient_data"] == 1
 
 
 @pytest.mark.parametrize("with_golden", [False, True])
@@ -254,3 +248,15 @@ def test_langfuse_golden_percentage_is_separate_from_quality_score_names(tmp_pat
     names = [score.name for score in scores]
     assert "golden::overall::percentage" in names
     assert not any(name.startswith("quality::") for name in names)
+
+
+def test_comparison_evaluates_only_nfr_and_competency_without_level_equivalence(tmp_path):
+    from archgen.golden_evaluation import evaluate_golden
+
+    candidate, gold, response = case(tmp_path)
+    response["results"] = response["results"][:2]
+    for row in response["results"]:
+        row.pop("differing_levels", None)
+    result = evaluate_golden(candidate, gold, Mock(return_value=json.dumps(response)))
+    assert set(result.summary["by_criterion"]) == {"1-1", "2-1"}
+    assert all("differing_levels" not in row.model_dump() for row in result.results)
