@@ -49,12 +49,13 @@ Kind = Annotated[
 
 
 class SearchResult(BaseModel):
-    """검색 순서대로 선택한 URL과 그 URL을 찾은 쿼리."""
+    """검색 결과의 쿼리·순위·제목·요약."""
 
     query_id: str
     url: str
     title: str
     rank: int
+    snippet: str = ""
 
 
 class Sentence(BaseModel):

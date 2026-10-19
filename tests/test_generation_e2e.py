@@ -56,7 +56,18 @@ class ResearchModel:
         if self.calls == 2:
             return tools("search", [{"query_id": "query-1"}])
         if self.calls == 3:
-            return tools("fetch", [{"query_id": "query-1"}])
+            return tools(
+                "fetch",
+                [
+                    {
+                        "query_id": "query-1",
+                        "urls": [
+                            "https://example.com/keep",
+                            "https://example.com/discard",
+                        ],
+                    }
+                ],
+            )
         if self.calls == 4:
             kept = next(
                 doc for doc in self.fetch.documents.values() if doc.url.endswith("/keep")

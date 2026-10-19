@@ -42,6 +42,7 @@ class SearchTool:
                     url=item["url"],
                     title=item["title"],
                     rank=len(results) + 1,
+                    snippet=item.get("content") or "",
                 )
             )
             self._seen_urls.add(item["url"])

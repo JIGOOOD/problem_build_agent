@@ -184,7 +184,13 @@ def test_manual_runner_labels_query_and_search_rank_and_saves_context(
                 for i, _ in enumerate(plan["search_queries"], start=1)
             ],
         ),
-        tool_call("fetch", [{"query_id": "query-1"}, {"query_id": "query-2"}]),
+        tool_call(
+            "fetch",
+            [
+                {"query_id": "query-1", "urls": [topic_url]},
+                {"query_id": "query-2", "urls": latency_urls},
+            ],
+        ),
         keep_fetched,
         AIMessage(content="조사 완료"),
     )
