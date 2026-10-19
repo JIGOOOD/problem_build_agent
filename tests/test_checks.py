@@ -433,3 +433,34 @@ def test_cross_ref_ignores_whitespace_the_llm_added_to_an_id(
         raw["confirmed_nfrs"][0]["evidence_refs"] = [" D2", "D3 "]
 
     assert check_cross_ref(golden_document_ids)(edited(golden_export, pad)) == []
+
+
+@pytest.mark.parametrize(
+    "target", [{}, {"value": 100}, {"unit": "ms"}, {"value": 100, "unit": "  "}]
+)
+def test_incomplete_numeric_target_is_rejected_before_render(golden_export, target):
+    from archgen.harness.checks import check_targets
+
+    raw = golden_export.model_dump()
+    raw["confirmed_nfrs"][0].update(target=target, qualitative_target=None)
+    export = NFRExport.model_validate(raw)
+    findings = check_targets(export)
+    assert [(f.code, f.path) for f in findings] == [
+        ("TARGET_INCOMPLETE", "confirmed_nfrs[0].target")
+    ]
+
+
+@pytest.mark.parametrize(
+    "target", [None, {"value": 0, "unit": "ms"}, {"value": 100, "unit": " ms "}]
+)
+def test_target_check_accepts_qualitative_and_complete_numeric_targets(
+    golden_export, target
+):
+    from archgen.harness.checks import check_targets
+
+    raw = golden_export.model_dump()
+    raw["confirmed_nfrs"][0].update(
+        target=target,
+        qualitative_target="검색 후보의 조회 범위를 줄인다." if target is None else None,
+    )
+    assert check_targets(NFRExport.model_validate(raw)) == []

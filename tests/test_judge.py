@@ -201,3 +201,22 @@ def test_grounding_review_uses_retained_evidence_and_preserves_finding_paths(
     assert "불확실" in system
     assert "실제 경로" in system
     assert findings[0].model_dump(exclude={"source"}) == response
+
+
+def test_judge_can_report_unclear_nfr_requirement_at_its_actual_target(
+    research, golden_export
+):
+    response = ISSUE | {
+        "code": "NFR_REQUIREMENT_AMBIGUOUS",
+        "path": "export.confirmed_nfrs[0].qualitative_target",
+        "message": "요구 수준에 개선 대상 동작과 조건이 없다.",
+    }
+    findings = judge_export(
+        BRIEF,
+        research,
+        golden_export,
+        Mock(return_value=json.dumps({"findings": [response]})),
+    )
+    assert findings[0].code == "NFR_REQUIREMENT_AMBIGUOUS"
+    assert findings[0].path == response["path"]
+    assert findings[0].severity == Severity.ERROR

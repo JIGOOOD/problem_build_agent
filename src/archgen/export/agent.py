@@ -12,12 +12,25 @@ from archgen.domain.catalog import NFRCatalog
 from archgen.domain.nfr import NFRExport, NFRSelection, Rubric
 from archgen.domain.research import ResearchResult
 from archgen.export.language import check_language
-from archgen.harness.findings import Finding
+from archgen.harness.findings import Finding, FindingCode, Severity
 from archgen.templating import template_env
 
 _ENV = template_env(Path(__file__).parent / "templates")
 _LOGGER = logging.getLogger(__name__)
 MAX_INPUT_TOKENS = 13_000
+
+
+def rubric_repair_findings(findings: Sequence[Finding]) -> list[Finding]:
+    """선정 결과는 루브릭 생성의 고정 입력이므로 보완할 수 있는 오류만 전달한다."""
+    immutable = ("confirmed_nfrs", "tradeoffs", "scope", "excluded_nfrs")
+    repairable = []
+    for finding in findings:
+        root = finding.path.removeprefix("export.").split(".", 1)[0].split("[", 1)[0]
+        if finding.severity == Severity.ERROR and (
+            root not in immutable or finding.code == FindingCode.NFR_NOT_COVERED
+        ):
+            repairable.append(finding)
+    return repairable
 
 
 @dataclass(frozen=True)

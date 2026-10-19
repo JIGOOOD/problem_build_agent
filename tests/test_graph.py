@@ -279,3 +279,55 @@ def test_invalid_brief_is_rejected_before_any_external_call(pipeline):
 
     pipeline["research"].assert_not_called()
     pipeline["llm"].assert_not_called()
+
+
+def test_selection_error_stops_rubric_repairs_and_reports_upstream_cause(
+    pipeline, golden_export
+):
+    problem = {
+        "code": "NFR_NOT_GROUNDED",
+        "severity": "ERROR",
+        "path": "export.tradeoffs[0]",
+        "message": "선정한 두 요구의 상충이 근거로 뒷받침되지 않는다.",
+        "source": "judge",
+    }
+    pipeline["judge_llm"] = Mock(return_value=json.dumps({"findings": [problem]}))
+    pipeline["llm"].side_effect = [
+        NFRSelection(**golden_export.model_dump(exclude={"rubric"})).model_dump_json(),
+        *[golden_export.rubric.model_dump_json()] * 3,
+    ]
+    result = invoke(pipeline)
+    assert result["repairs"] == 0
+    assert result["status"] == "failed" and "선정" in result["reason"]
+    assert pipeline["llm"].call_count == 2
+
+
+def test_uncovered_selected_nfr_remains_repairable_through_rubric():
+    from archgen.export.agent import rubric_repair_findings
+    from archgen.harness.findings import Finding, FindingCode, Severity
+
+    finding = Finding(
+        code=FindingCode.NFR_NOT_COVERED,
+        severity=Severity.ERROR,
+        path="confirmed_nfrs[0]",
+        message="선정된 NFR을 평가하는 항목이 없다.",
+    )
+    assert rubric_repair_findings([finding]) == [finding]
+
+
+def test_incomplete_numeric_target_blocks_delivery_and_skips_rubric_repair(
+    pipeline, golden_export
+):
+    raw = golden_export.model_dump(exclude={"rubric"})
+    raw["confirmed_nfrs"][0].update(target={"unit": "ms"}, qualitative_target=None)
+    pipeline["llm"].side_effect = [
+        NFRSelection.model_validate(raw).model_dump_json(),
+        golden_export.rubric.model_dump_json(),
+    ]
+    pipeline["judge_llm"] = Mock(return_value='{"findings": []}')
+    result = invoke(pipeline)
+    assert result["status"] == "failed"
+    assert result["repairs"] == 0
+    assert any(f.code == "TARGET_INCOMPLETE" for f in result["findings"])
+    pipeline["judge_llm"].assert_not_called()
+    assert not (pipeline["output_dir"] / "nfr_rubric.md").exists()

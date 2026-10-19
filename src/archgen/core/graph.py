@@ -18,11 +18,17 @@ from archgen.domain.brief import InterviewBrief
 from archgen.domain.catalog import NFRCatalog
 from archgen.domain.nfr import NFRExport
 from archgen.domain.research import ResearchResult
-from archgen.export.agent import SelectionResult, generate_rubric, select_nfrs
+from archgen.export.agent import (
+    SelectionResult,
+    generate_rubric,
+    rubric_repair_findings,
+    select_nfrs,
+)
 from archgen.harness.checks import (
     check_criteria_count,
     check_cross_ref,
     check_levels,
+    check_targets,
     check_weight_sum,
 )
 from archgen.harness.findings import Finding, Severity
@@ -134,12 +140,18 @@ def build_generation_graph(
             "status": status,
             "output_dir": str(output_dir),
         }
+        if (
+            state.get("phase") != "render"
+            and has_errors(state["findings"])
+            and not rubric_repair_findings(state["findings"])
+        ):
+            update["reason"] = "NFR 선정 결과의 오류는 루브릭 보완만으로 해결할 수 없다."
         save("findings.json", [f.model_dump(mode="json") for f in state["findings"]])
         save(
             "status.json",
             {
                 "status": status,
-                "reason": state.get("reason"),
+                "reason": update.get("reason", state.get("reason")),
                 "repairs": state["repairs"],
                 "judge_enabled": judge_llm is not None,
                 "events": [*state["events"], *update["events"]],
@@ -161,6 +173,7 @@ def build_generation_graph(
                 check_weight_sum,
                 check_criteria_count,
                 check_levels,
+                check_targets,
                 check_cross_ref({doc.id for doc in state["research"].documents}),
             ]
         ).run(state["export"])
@@ -201,7 +214,7 @@ def build_generation_graph(
         }
 
     def repair_route(state):
-        if has_errors(state["findings"]) and state["repairs"] < 2:
+        if rubric_repair_findings(state["findings"]) and state["repairs"] < 2:
             return "repair"
         return "finalize"
 
@@ -215,7 +228,7 @@ def build_generation_graph(
             llm,
             count_tokens=count_tokens,
             previous=state["export"],
-            findings=state["findings"],
+            findings=rubric_repair_findings(state["findings"]),
         )
         save(f"nfr_export-{attempt}.json", export.model_dump(mode="json"))
         return {**event("repair", f"{attempt}/2"), "export": export, "repairs": attempt}

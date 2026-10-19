@@ -18,6 +18,20 @@ CRITERIA_MIN, CRITERIA_MAX = 2, 4
 SCORES = (0, 1, 2, 3)
 
 
+def check_targets(export: NFRExport) -> list[Finding]:
+    """정량 목표를 선택했다면 값과 단위가 모두 있어야 한다. 정성 목표는 허용한다."""
+    return [
+        _error(
+            FindingCode.TARGET_INCOMPLETE,
+            f"confirmed_nfrs[{i}].target",
+            f"{nfr.id}의 정량 목표에 값 또는 단위가 없다.",
+        )
+        for i, nfr in enumerate(export.confirmed_nfrs)
+        if nfr.target is not None
+        and (nfr.target.value is None or not (nfr.target.unit or "").strip())
+    ]
+
+
 def check_weight_sum(export: NFRExport) -> list[Finding]:
     """core.weight-sum — 각 weight가 1~100이고 합이 정확히 100인가."""
     criteria = export.rubric.criteria
