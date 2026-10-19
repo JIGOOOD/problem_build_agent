@@ -319,3 +319,28 @@ def test_full_seniority_criteria_reach_author_budget_and_judge(
         ):
             assert removed not in system
         assert "Staff+" not in system
+
+
+def test_author_receives_paired_golden_examples_in_the_counted_prompt(
+    research, golden_export
+):
+    import re
+
+    from archgen.paths import RESOURCES
+
+    selection = NFRSelection(**golden_export.model_dump(exclude={"rubric"}))
+    author = Mock(return_value=golden_export.rubric.model_dump_json())
+    counter = Mock(return_value=10_000)
+    generate_rubric(BRIEF, research, selection, author, count_tokens=counter)
+
+    system = author.call_args.args[0][0]["content"]
+    assert counter.call_args.args[0] == author.call_args.args[0]
+    for topic, version, criterion in (("uber", "v3", "C3"), ("youtube", "v2", "C4")):
+        for tier in ("middle", "senior"):
+            path = RESOURCES / "golden" / topic / version / f"{topic}_{tier}.md"
+            text = path.read_text().split(f"### {criterion}.", 1)[1].split("\n---", 1)[0]
+            levels = re.findall(r"(?m)^\| ([0-3]) \| (.+?) \|$", text)
+            assert len(levels) == 4
+            for _, descriptor in levels:
+                assert descriptor in system
+    assert "예시의 기술·NFR·배점을 현재 주제의 필수 조건으로 복사하지 않는다" in system
