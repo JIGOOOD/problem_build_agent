@@ -197,10 +197,15 @@ def test_generates_rubric_from_fixed_nfrs_and_validates_and_renders(
     ):
         assert rule in system["content"]
     assert "동등하게 충족하는 대안 설계" in system["content"]
+    assert "Level 3에는 Level 2 설계의 대표적인 한계" not in system["content"]
     assert "문서 id·URL·출처 목록을 넣지 않는다" in system["content"]
     for rule in (
         "각 항목은 평가 대상이나 설계 판단을 구분한다",
         "점수 의미와 난이도는 아래 MD 기준만 따른다",
+        "기본 설계를 먼저 정한다",
+        "모든 세부 조건의 설명을 2점에 일괄 요구하지 않는다",
+        "처리 조건·순서·갱신 단위",
+        "관측지표·검증방법을 추가 필수 채점 조건으로 붙이지 않는다",
     ):
         assert rule in system["content"]
     assert export == golden_export
