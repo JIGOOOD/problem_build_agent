@@ -735,9 +735,8 @@ total         = Σ(section.weight × section_pct)      # section weight 합 = 10
 - Criterion이 정확히 하나의 NFR과 연결되어 있는지 확인한다.
     - CRITERION_NFR_REFERENCE_MISSING (0개)
     - CRITERION_MULTI_NFR (2개 이상)
-- 모든 확정 NFR이 정확히 하나의 Criterion에서 평가되는지 확인한다.
+- 모든 확정 NFR이 하나 이상의 Criterion에서 평가되는지 확인한다. 같은 NFR의 여러 항목은 평가 대상·설계 판단이 달라야 하며, 의미 중복은 Judge가 검토한다.
     - NFR_NOT_COVERED (0개)
-    - NFR_MULTI_COVERED (2개 이상)
 - NFR과 trade-off에 근거 문서가 있는지 확인한다.
     - EVIDENCE_REF_MISSING
 - NFR과 trade-off의 evidence_refs가 ResearchResult.documents의 Document ID만 가리키는지 확인한다.

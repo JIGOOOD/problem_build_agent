@@ -21,6 +21,8 @@ class InterviewBrief:
 
     seniority: Seniority
     topic: str
+    scope: str | None = None
+    focus: str | None = None
     # 중점 NFR 입력은 추후 구현 시 활성화한다.
     # notes: str | None = None
 
@@ -31,11 +33,21 @@ class InterviewBrief:
             raise ValueError("주제가 비어 있다.")
         # notes = self.notes.strip() if self.notes else ""
         object.__setattr__(self, "topic", topic)
+        if (self.scope is None) != (self.focus is None):
+            raise ValueError("확정 범위와 평가 초점은 함께 지정해야 한다.")
+        for name in ("scope", "focus"):
+            value = getattr(self, name)
+            if value is not None:
+                if not value.strip():
+                    raise ValueError(f"{name}은 비어 있을 수 없다.")
+                object.__setattr__(self, name, value.strip())
         # object.__setattr__(self, "notes", notes or None)
 
     def to_lines(self) -> list[str]:
         """Render the brief as the line list the generation graph consumes."""
         lines = [f"대상 연차: {self.seniority}", f"주제: {self.topic}"]
+        if self.scope is not None:
+            lines += [f"확정 범위: {self.scope}", f"평가 초점: {self.focus}"]
         # if self.notes:
         #     lines.append(f"중점 비기능적 요구사항: {self.notes}")
         return lines

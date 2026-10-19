@@ -54,7 +54,7 @@ def save_json(path: Path, value) -> None:
 
 def main(run_dir: Path) -> None:
     model = bind_initial_research_model(
-        build_chat_model("small", timeout=300, max_retries=0)
+        build_chat_model("medium", timeout=300, max_retries=0)
     )
     tavily_key = os.getenv("TAVILY_API_KEY", "").strip()
     if not tavily_key:
@@ -71,7 +71,7 @@ def main(run_dir: Path) -> None:
             "Markdown 코드 블록이나 설명을 붙이지 마라."
         )
         started = time.monotonic()
-        record = {"status": "running", "tier": "small", "messages": request_messages}
+        record = {"status": "running", "tier": "medium", "messages": request_messages}
         response_path = run_dir / f"llm-{call_count:02d}.json"
         save_json(response_path, record)
         try:

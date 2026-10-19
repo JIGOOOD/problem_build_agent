@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 from unittest.mock import Mock
 
 import pytest
@@ -15,6 +16,7 @@ BRIEF = InterviewBrief(Seniority.MIDDLE, "채팅 서비스")
 def test_fake_generation_needs_no_keys_or_external_services(monkeypatch, tmp_path):
     monkeypatch.setattr(service, "FAKE_STEP_SECONDS", 0)
     forbidden = Mock(side_effect=AssertionError("Fake 모드에서 외부 서비스 호출"))
+    monkeypatch.setattr(service.subprocess, "Popen", forbidden)
     for name in ("build_chat_model", "TavilyClient", "create_fetch_client"):
         monkeypatch.setattr(service, name, forbidden)
     for key in ("OPENROUTER_API_KEY", "TAVILY_API_KEY"):
@@ -36,12 +38,12 @@ def test_fake_generation_needs_no_keys_or_external_services(monkeypatch, tmp_pat
 
 
 def test_runtime_binds_each_stage_to_its_strict_schema(runtime, tmp_path):
-    small, large, _ = runtime
+    medium, large, _ = runtime
     service.run_generation(BRIEF, output_root=tmp_path, judge_enabled=True)
 
     specs = [
         call.kwargs["response_format"]
-        for model in (small, large)
+        for model in (medium, large)
         for call in model.bind.call_args_list
     ]
     assert all(spec["type"] == "json_schema" for spec in specs)
@@ -68,17 +70,17 @@ def test_runtime_binds_each_stage_to_its_strict_schema(runtime, tmp_path):
 
 
 def test_runtime_reports_each_stage_before_work(runtime, monkeypatch, tmp_path):
-    small, large, _ = runtime
+    medium, large, _ = runtime
     progress = []
     research_result = service.run_research.return_value
-    responses = iter(small.invoke.side_effect)
+    responses = iter(medium.invoke.side_effect)
 
     def research(*args):
         assert progress[-1] == "자료 조사 중"
         return research_result
 
     def generate(messages):
-        expected = "NFR 선정 중" if small.invoke.call_count == 1 else "평가 기준 작성 중"
+        expected = "NFR 선정 중" if medium.invoke.call_count == 1 else "평가 기준 작성 중"
         assert progress[-1] == expected
         return next(responses)
 
@@ -87,7 +89,7 @@ def test_runtime_reports_each_stage_before_work(runtime, monkeypatch, tmp_path):
         return AIMessage(content='{"findings": []}')
 
     monkeypatch.setattr(service, "run_research", research)
-    small.invoke.side_effect = generate
+    medium.invoke.side_effect = generate
     large.invoke.side_effect = judge
     result = service.run_generation(
         BRIEF, output_root=tmp_path, judge_enabled=True, on_progress=progress.append
@@ -107,11 +109,12 @@ def test_runtime_reports_each_stage_before_work(runtime, monkeypatch, tmp_path):
 
 @pytest.fixture
 def runtime(monkeypatch, golden_export, golden_document_ids):
-    small, large = Mock(), Mock()
-    small.bind.return_value = small
+    monkeypatch.setattr(service.subprocess, "Popen", Mock())
+    medium, large = Mock(), Mock()
+    medium.bind.return_value = medium
     large.bind.return_value = large
-    small.get_num_tokens_from_messages.return_value = 9000
-    small.invoke.side_effect = [
+    medium.get_num_tokens_from_messages.return_value = 9000
+    medium.invoke.side_effect = [
         AIMessage(
             content=NFRSelection(
                 **golden_export.model_dump(exclude={"rubric"})
@@ -120,7 +123,9 @@ def runtime(monkeypatch, golden_export, golden_document_ids):
         AIMessage(content=golden_export.rubric.model_dump_json()),
     ]
     large.invoke.return_value = AIMessage(content='{"findings": []}')
-    factory = Mock(side_effect=lambda tier, **kwargs: small if tier == "small" else large)
+    factory = Mock(
+        side_effect=lambda tier, **kwargs: medium if tier == "medium" else large
+    )
     monkeypatch.setattr(service, "build_chat_model", factory)
     monkeypatch.setenv("TAVILY_API_KEY", "fake-key")
     monkeypatch.setattr(service, "TavilyClient", Mock())
@@ -133,14 +138,14 @@ def runtime(monkeypatch, golden_export, golden_document_ids):
         ],
     )
     monkeypatch.setattr(service, "run_research", Mock(return_value=research))
-    return small, large, factory
+    return medium, large, factory
 
 
 @pytest.mark.parametrize("judge_enabled", [False, True])
-def test_runtime_uses_small_for_generation_and_large_for_enabled_judge(
+def test_runtime_uses_medium_for_generation_and_large_for_enabled_judge(
     runtime, tmp_path, judge_enabled
 ):
-    small, large, factory = runtime
+    medium, large, factory = runtime
 
     result = service.run_generation(
         BRIEF, output_root=tmp_path, judge_enabled=judge_enabled
@@ -148,9 +153,9 @@ def test_runtime_uses_small_for_generation_and_large_for_enabled_judge(
 
     assert result["status"] == "complete"
     assert [call.args[0] for call in factory.call_args_list] == (
-        ["small", "large"] if judge_enabled else ["small"]
+        ["medium", "large"] if judge_enabled else ["medium"]
     )
-    assert small.invoke.call_count == 2
+    assert medium.invoke.call_count == 2
     assert large.invoke.call_count == int(judge_enabled)
     root = next(tmp_path.iterdir())
     assert (root / "nfr_rubric.md").exists()
@@ -215,20 +220,20 @@ def test_runtime_failure_preserves_logs_and_never_publishes_markdown(
 ):
     import logging
 
-    small, large, factory = runtime
+    medium, large, factory = runtime
     logger = logging.getLogger("archgen")
     old_handlers, old_level = list(logger.handlers), logger.level
     if failure == "budget":
-        small.get_num_tokens_from_messages.return_value = 13001
+        medium.get_num_tokens_from_messages.return_value = 13001
     elif failure == "selection_json":
-        small.invoke.side_effect = [AIMessage(content="bad json")]
+        medium.invoke.side_effect = [AIMessage(content="bad json")]
     elif failure == "rubric_json":
-        responses = list(small.invoke.side_effect)
-        small.invoke.side_effect = [responses[0], AIMessage(content="bad json")]
+        responses = list(medium.invoke.side_effect)
+        medium.invoke.side_effect = [responses[0], AIMessage(content="bad json")]
     elif failure == "timeout":
-        small.invoke.side_effect = TimeoutError("LLM timeout")
+        medium.invoke.side_effect = TimeoutError("LLM timeout")
     elif failure == "non_text":
-        small.invoke.side_effect = [
+        medium.invoke.side_effect = [
             AIMessage(
                 content=[
                     {
@@ -268,4 +273,54 @@ def test_runtime_failure_preserves_logs_and_never_publishes_markdown(
     assert logger.handlers == old_handlers
     assert logger.level == old_level
     if failure == "budget":
-        small.invoke.assert_not_called()
+        medium.invoke.assert_not_called()
+    service.subprocess.Popen.assert_not_called()
+
+
+def test_successful_generation_starts_evaluation_without_waiting(runtime, tmp_path):
+    def launch(command, **kwargs):
+        assert command[2:4] == ["-m", "archgen.evaluation"]
+        rubric = Path(command[4])
+        assert rubric.is_file()
+        assert rubric.name == "nfr_rubric.md"
+        assert command[-2:] == ["--source", "generation"]
+        assert kwargs["start_new_session"] is True
+        assert kwargs["stdin"] == service.subprocess.DEVNULL
+        assert kwargs["stdout"].name == str(rubric.parent / "evaluation.log")
+        return process
+
+    process = Mock(pid=123)
+    service.subprocess.Popen.side_effect = launch
+
+    result = service.run_generation(BRIEF, output_root=tmp_path)
+
+    assert result["status"] == "complete"
+    service.subprocess.Popen.assert_called_once()
+    process.wait.assert_not_called()
+    process.communicate.assert_not_called()
+
+
+def test_evaluation_launch_failure_preserves_successful_generation(runtime, tmp_path):
+    service.subprocess.Popen.side_effect = OSError("cannot start evaluator")
+
+    result = service.run_generation(BRIEF, output_root=tmp_path)
+
+    root = Path(result["output_dir"])
+    assert result["status"] == "complete"
+    assert (root / "nfr_rubric.md").is_file()
+    assert "백그라운드 평가 시작 실패" in (root / "run.log").read_text()
+    assert not (root / "error.json").exists()
+
+
+@pytest.mark.parametrize("status", ["failed", "insufficient_evidence"])
+def test_incomplete_generation_does_not_start_evaluation(
+    runtime, monkeypatch, tmp_path, status
+):
+    graph = Mock()
+    graph.invoke.return_value = {"status": status}
+    monkeypatch.setattr(service, "build_generation_graph", Mock(return_value=graph))
+
+    result = service.run_generation(BRIEF, output_root=tmp_path)
+
+    assert result["status"] == status
+    service.subprocess.Popen.assert_not_called()

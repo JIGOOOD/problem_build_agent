@@ -263,7 +263,6 @@ def test_cross_ref_flags_a_criterion_with_two_nfrs(
 
     assert cross_ref_findings(edited(golden_export, add_nfr), golden_document_ids) == {
         ("CRITERION_MULTI_NFR", "rubric.criteria[0].related_nfr_ids"),
-        ("NFR_MULTI_COVERED", "confirmed_nfrs[1]"),
     }
 
 
@@ -292,15 +291,17 @@ def test_cross_ref_flags_a_tradeoff_pointing_at_an_unknown_nfr(
     ) == {("NFR_REFERENCE_INVALID", "tradeoffs[1].related_nfr_ids")}
 
 
-def test_cross_ref_flags_an_nfr_scored_by_two_criteria(
+def test_cross_ref_allows_distinct_criteria_for_the_same_nfr(
     golden_export: NFRExport, golden_document_ids: set[str]
 ) -> None:
-    """빠진 NFR이 없어 NFR_NOT_COVERED로는 드러나지 않는 중복 평가."""
-    export = with_criteria(golden_export, 4)  # C4가 C1을 복제해 NFR-1을 또 평가한다
+    """참조 중복만으로는 서로 다른 설계 판단을 평가하는 항목을 거부하지 않는다."""
+    export = with_criteria(golden_export, 4)
+    export.rubric.criteria[-1].title = "장애 후 재전달"
+    export.rubric.criteria[
+        -1
+    ].description = "보존한 메시지를 장애 후 다시 전달하는 흐름을 평가한다."
 
-    assert cross_ref_findings(export, golden_document_ids) == {
-        ("NFR_MULTI_COVERED", "confirmed_nfrs[0]")
-    }
+    assert cross_ref_findings(export, golden_document_ids) == set()
 
 
 @pytest.mark.parametrize("section", ["confirmed_nfrs", "tradeoffs"])
@@ -432,3 +433,34 @@ def test_cross_ref_ignores_whitespace_the_llm_added_to_an_id(
         raw["confirmed_nfrs"][0]["evidence_refs"] = [" D2", "D3 "]
 
     assert check_cross_ref(golden_document_ids)(edited(golden_export, pad)) == []
+
+
+@pytest.mark.parametrize(
+    "target", [{}, {"value": 100}, {"unit": "ms"}, {"value": 100, "unit": "  "}]
+)
+def test_incomplete_numeric_target_is_rejected_before_render(golden_export, target):
+    from archgen.harness.checks import check_targets
+
+    raw = golden_export.model_dump()
+    raw["confirmed_nfrs"][0].update(target=target, qualitative_target=None)
+    export = NFRExport.model_validate(raw)
+    findings = check_targets(export)
+    assert [(f.code, f.path) for f in findings] == [
+        ("TARGET_INCOMPLETE", "confirmed_nfrs[0].target")
+    ]
+
+
+@pytest.mark.parametrize(
+    "target", [None, {"value": 0, "unit": "ms"}, {"value": 100, "unit": " ms "}]
+)
+def test_target_check_accepts_qualitative_and_complete_numeric_targets(
+    golden_export, target
+):
+    from archgen.harness.checks import check_targets
+
+    raw = golden_export.model_dump()
+    raw["confirmed_nfrs"][0].update(
+        target=target,
+        qualitative_target="검색 후보의 조회 범위를 줄인다." if target is None else None,
+    )
+    assert check_targets(NFRExport.model_validate(raw)) == []

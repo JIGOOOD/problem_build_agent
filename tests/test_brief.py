@@ -14,6 +14,26 @@ def test_brief_strips_the_topic() -> None:
     assert InterviewBrief(seniority=Seniority.MIDDLE, topic="  채팅  ").topic == "채팅"
 
 
+@pytest.mark.parametrize(
+    ("scope", "focus"),
+    [(None, "지연"), ("메시지 전송", None), (" ", "지연"), ("메시지 전송", "\n")],
+)
+def test_confirmed_scope_and_focus_must_both_be_nonblank(scope, focus):
+    with pytest.raises(ValueError):
+        InterviewBrief(Seniority.MIDDLE, "채팅", scope=scope, focus=focus)
+
+
+def test_confirmed_scope_and_focus_are_trimmed_and_included_in_prompt_lines():
+    brief = InterviewBrief(
+        Seniority.MIDDLE, "채팅", scope=" 전송부터 수신까지 ", focus=" 유실 방지 "
+    )
+    assert brief.topic == "채팅"
+    assert brief.to_lines()[-2:] == [
+        "확정 범위: 전송부터 수신까지",
+        "평가 초점: 유실 방지",
+    ]
+
+
 # @pytest.mark.parametrize("blank", ["", "   ", "\n"])
 # def test_blank_notes_mean_no_notes(blank: str) -> None:
 #     """공백뿐인 중점 요구사항이 프롬프트에 빈 지시로 들어가지 않게 한다."""

@@ -56,7 +56,18 @@ class ResearchModel:
         if self.calls == 2:
             return tools("search", [{"query_id": "query-1"}])
         if self.calls == 3:
-            return tools("fetch", [{"query_id": "query-1"}])
+            return tools(
+                "fetch",
+                [
+                    {
+                        "query_id": "query-1",
+                        "urls": [
+                            "https://example.com/keep",
+                            "https://example.com/discard",
+                        ],
+                    }
+                ],
+            )
         if self.calls == 4:
             kept = next(
                 doc for doc in self.fetch.documents.values() if doc.url.endswith("/keep")
@@ -129,7 +140,8 @@ def test_real_research_runner_to_markdown_with_fake_external_services(
     assert result["status"] == ("failed" if cite_discarded else "complete")
     assert (tmp_path / "nfr_rubric.md").exists() == (not cite_discarded)
     if cite_discarded:
-        assert result["repairs"] == 2
+        assert result["repairs"] == 0
+        assert "선정" in result["reason"]
         assert any(f.code == "EVIDENCE_REF_UNKNOWN" for f in result["findings"])
         judge.assert_not_called()
     else:

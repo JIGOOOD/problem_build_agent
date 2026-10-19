@@ -94,6 +94,9 @@ def test_passes_all_evidence_and_selection_rules_and_parses_response(
     assert "사람이 읽는 텍스트는 한국어로 작성한다" in system
     # 프롬프트 계약만 검사한다. 실제 선정 품질은 M5-4에서 사람이 검토한다.
     for rule in (
+        "brief의 품질 보장을 유지하며 짧게",
+        "세부 예외·해결 절차를 필수화하지 않는다",
+        "연차별 평가 깊이는 Rubric에서 정한다",
         "주제 적합성",
         "문서 근거",
         "설계 영향",

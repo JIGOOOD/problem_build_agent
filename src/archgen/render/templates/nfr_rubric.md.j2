@@ -1,5 +1,13 @@
 # {{ brief.topic | heading }}
 
+{% if brief.scope %}
+**설계 범위**
+{{ brief.scope | heading }}
+
+**평가 초점**
+{{ brief.focus | heading }}
+
+{% endif %}
 **대상 연차** {{ brief.seniority }}\
 **배점** {{ total_weight }}
 

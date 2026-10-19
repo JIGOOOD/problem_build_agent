@@ -18,6 +18,20 @@ CRITERIA_MIN, CRITERIA_MAX = 2, 4
 SCORES = (0, 1, 2, 3)
 
 
+def check_targets(export: NFRExport) -> list[Finding]:
+    """정량 목표를 선택했다면 값과 단위가 모두 있어야 한다. 정성 목표는 허용한다."""
+    return [
+        _error(
+            FindingCode.TARGET_INCOMPLETE,
+            f"confirmed_nfrs[{i}].target",
+            f"{nfr.id}의 정량 목표에 값 또는 단위가 없다.",
+        )
+        for i, nfr in enumerate(export.confirmed_nfrs)
+        if nfr.target is not None
+        and (nfr.target.value is None or not (nfr.target.unit or "").strip())
+    ]
+
+
 def check_weight_sum(export: NFRExport) -> list[Finding]:
     """core.weight-sum — 각 weight가 1~100이고 합이 정확히 100인가."""
     criteria = export.rubric.criteria
@@ -219,7 +233,7 @@ def _unknown_nfrs(refs: list[str], nfr_ids: set[str], path: str) -> list[Finding
 
 
 def _coverage(export: NFRExport) -> list[Finding]:
-    """확정 NFR은 정확히 하나의 criterion에서 평가된다."""
+    """확정 NFR은 하나 이상의 criterion에서 평가된다."""
     covered = Counter(
         ref
         for criterion in export.rubric.criteria
@@ -234,14 +248,6 @@ def _coverage(export: NFRExport) -> list[Finding]:
                     FindingCode.NFR_NOT_COVERED,
                     path,
                     f"{nfr.id}를 평가하는 criterion이 없다.",
-                )
-            )
-        elif covered[nfr.id] > 1:
-            findings.append(
-                _error(
-                    FindingCode.NFR_MULTI_COVERED,
-                    path,
-                    f"{nfr.id}를 criterion {covered[nfr.id]}개가 평가한다. 하나여야 한다.",
                 )
             )
     return findings

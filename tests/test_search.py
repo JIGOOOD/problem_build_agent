@@ -48,18 +48,21 @@ def test_search_returns_metadata_and_ranks_in_tavily_order(query_id: str) -> Non
             "url": "https://blog.example/Chat",
             "title": "Chat 설계",
             "rank": 1,
+            "snippet": "",
         },
         {
             "query_id": query_id,
             "url": "https://docs.example/api",
             "title": "API 문서",
             "rank": 2,
+            "snippet": "",
         },
         {
             "query_id": query_id,
             "url": "https://paper.example/a",
             "title": "논문",
             "rank": 3,
+            "snippet": "",
         },
     ]
 
@@ -117,12 +120,14 @@ def test_search_removes_duplicate_urls_within_and_across_queries() -> None:
             "url": "https://example.com/a",
             "title": "첫 A",
             "rank": 1,
+            "snippet": "",
         },
         {
             "query_id": "query-topic",
             "url": "https://example.com/b",
             "title": "첫 B",
             "rank": 2,
+            "snippet": "",
         },
     ]
     assert [result.model_dump() for result in second] == [
@@ -131,12 +136,14 @@ def test_search_removes_duplicate_urls_within_and_across_queries() -> None:
             "url": "https://example.com/c",
             "title": "첫 C",
             "rank": 1,
+            "snippet": "",
         },
         {
             "query_id": "query-latency",
             "url": "https://example.com/d",
             "title": "첫 D",
             "rank": 2,
+            "snippet": "",
         },
     ]
 
@@ -170,3 +177,22 @@ def test_search_keeps_tavily_order_when_official_documentation_is_last() -> None
     assert not isinstance(results, str)
     assert [result.url for result in results] == urls
     assert [result.rank for result in results] == [1, 2]
+
+
+def test_search_preserves_snippet_for_fetch_selection():
+    snippet = "공유 상태의 원자적 변경으로 중복 배정을 방지하는 설계"
+    client = FakeTavily(
+        {
+            "results": [
+                {
+                    "url": "https://docs.example/dispatch",
+                    "title": "배정 설계",
+                    "content": snippet,
+                }
+            ]
+        }
+    )
+
+    results = SearchTool(client).search("dispatch concurrency", query_id="query-2")
+
+    assert results[0].model_dump()["snippet"] == snippet

@@ -8,6 +8,33 @@ from archgen.domain.brief import Seniority
 from archgen.tui.app import ArchGenApp
 
 
+@pytest.fixture(autouse=True)
+def scope_assessor(monkeypatch):
+    from unittest.mock import Mock
+
+    from archgen.intake.agent import ScopeDecision
+
+    def assess(brief, *, history):
+        judgment = {"applies": False, "reason": "범위가 정해진 테스트 입력이다."}
+        return ScopeDecision(
+            multiple_domains=judgment,
+            unclear_core_function=judgment,
+            nfr_depends_on_scope=judgment,
+            question=None if history else "어떤 서비스를 설계할까요?",
+            draft={
+                "title": history[-1]["content"],
+                "scope": history[-1]["content"],
+                "focus": "메시지 전달과 보존",
+            }
+            if history
+            else None,
+        )
+
+    mock = Mock(side_effect=assess)
+    monkeypatch.setattr("archgen.tui.app.assess_scope", mock)
+    return mock
+
+
 @pytest.mark.asyncio
 async def test_interactive_fake_mode_runs_without_api_keys(tmp_path, monkeypatch):
     import json
@@ -28,6 +55,7 @@ async def test_interactive_fake_mode_runs_without_api_keys(tmp_path, monkeypatch
         assert "Fake" in app.sub_title and "고정 채팅 예시" in app.sub_title
         await answer(pilot, "Middle")
         await answer(pilot, "주문/결제 시스템")
+        await answer(pilot, "y")
         app.action_generate()
         await pilot.pause()
         assert app.query_one("#loading", LoadingIndicator).display
@@ -42,7 +70,8 @@ async def test_interactive_fake_mode_runs_without_api_keys(tmp_path, monkeypatch
         runs = list((tmp_path / ".archgen" / "fake-generation").iterdir())
         assert len(runs) == 1
         raw = json.loads((runs[0] / "input.json").read_text())
-        assert raw["topic"] == "주문/결제 시스템"
+        assert raw["topic"] == "실시간 채팅 시스템"
+        assert raw["scope"] == "주문/결제 시스템"
         assert "notes" not in raw
         assert (runs[0] / "nfr_rubric.md").is_file()
 
@@ -111,6 +140,7 @@ async def test_tui_runs_real_generation_graph_with_fake_llm(
     async with app.run_test() as pilot:
         await answer(pilot, "Middle")
         await answer(pilot, "채팅 서비스")
+        await answer(pilot, "y")
         app.action_generate()
         try:
             for step, phase in enumerate(["NFR 선정 중", "평가 기준 작성 중"]):
@@ -153,11 +183,15 @@ async def test_generation_shows_live_stage_elapsed_time_and_prevents_duplicates(
     async with app.run_test() as pilot:
         await answer(pilot, "Middle")
         await answer(pilot, "채팅 서비스")
+        await answer(pilot, "y")
         app.action_generate()
         await asyncio.wait_for(started.wait(), timeout=2)
         await pilot.pause()
 
         progress = app.query_one("#progress", Static)
+        assert progress.has_class("running")
+        assert "생성 진행 중" in str(progress.render())
+        assert not app.query_one("#input_area").display
         assert "자료 조사 중" in str(progress.render())
         assert app.query_one("#loading", LoadingIndicator).display
         clock[0] = 14.0
@@ -170,6 +204,8 @@ async def test_generation_shows_live_stage_elapsed_time_and_prevents_duplicates(
         release.set()
         await pilot.pause()
         assert "생성 완료" in str(progress.render())
+        assert not progress.has_class("running")
+        assert app.query_one("#input_area").display
         assert not app.query_one("#loading", LoadingIndicator).display
         clock[0] = 20.0
         await pilot.pause(1.1)
@@ -210,7 +246,7 @@ async def test_required_slot_loops_until_answered() -> None:
         assert "필수 입력" in transcript_of(app)
 
         await answer(pilot, "Middle")
-        assert app.filler.current.key == "topic"
+        assert app.filler.current is None
 
 
 @pytest.mark.asyncio
@@ -220,9 +256,12 @@ async def test_topic_completes_the_brief() -> None:
     async with app.run_test() as pilot:
         await answer(pilot, "1")
         await answer(pilot, "주문/결제 시스템")
+        await answer(pilot, "y")
 
         assert app.filler.is_complete
-        brief = app.filler.build_brief()
+        brief = app.filler.build_brief(
+            app._draft.title, app._draft.scope, app._draft.focus
+        )
         assert brief.seniority is Seniority.MIDDLE
         assert "notes" not in vars(brief)
 
@@ -253,6 +292,7 @@ async def test_generate_starts_generation_once_filled() -> None:
     async with app.run_test() as pilot:
         await answer(pilot, "Senior")
         await answer(pilot, "주문/결제 시스템")
+        await answer(pilot, "y")
 
         app.action_generate()
         await pilot.pause()
@@ -272,6 +312,7 @@ async def test_generation_failure_is_reported_without_crashing_app(tmp_path):
     async with app.run_test() as pilot:
         await answer(pilot, "Middle")
         await answer(pilot, "채팅 서비스")
+        await answer(pilot, "y")
         app.action_generate()
         await pilot.pause()
 

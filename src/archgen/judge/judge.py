@@ -24,6 +24,7 @@ class _JudgeFinding(Finding):
         FindingCode.LEVEL_AMBIGUOUS,
         FindingCode.CRITERION_UNSCORABLE,
         FindingCode.LEVEL_NOT_PROGRESSIVE,
+        FindingCode.NFR_REQUIREMENT_AMBIGUOUS,
         FindingCode.NFR_NOT_GROUNDED,
         FindingCode.TARGET_VALUE_FABRICATED,
     ]

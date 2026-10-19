@@ -28,7 +28,12 @@ BRIEF = InterviewBrief(Seniority.SENIOR, "채팅 서비스")
 def test_agent_prompts_cover_scope_fair_levels_and_outcome_based_design(
     research, golden_export
 ):
-    brief = InterviewBrief(Seniority.MIDDLE, "실시간 채팅 서비스")
+    brief = InterviewBrief(
+        Seniority.MIDDLE,
+        "실시간 채팅 서비스",
+        scope="메시지 전송부터 상대방 수신까지",
+        focus="메시지 유실 방지",
+    )
     selector = Mock(
         return_value=NFRSelection(
             **golden_export.model_dump(exclude={"rubric"})
@@ -59,6 +64,7 @@ def test_agent_prompts_cover_scope_fair_levels_and_outcome_based_design(
                 "NFR 간 충돌",
                 "설계 선택의 이득·비용",
                 "보장 수준을 명시",
+                "같은 kind라도 평가 대상이 다르면 구분한다",
             ),
         ),
         (
@@ -75,10 +81,15 @@ def test_agent_prompts_cover_scope_fair_levels_and_outcome_based_design(
                 "동등한 구현 대안",
                 "선정된 요구보다 강한 조건",
                 "NFR 간 충돌",
+                "중복 채점",
             ),
         ),
     ):
         system = llm.call_args.args[0][0]["content"]
+        payload = json.loads(llm.call_args.args[0][1]["content"])
+        assert payload["brief"]["scope"] == brief.scope
+        assert payload["brief"]["focus"] == brief.focus
+        assert "brief.scope" in system
         for rule in rules:
             assert rule in system
 
@@ -137,6 +148,25 @@ def research(golden_document_ids):
 def test_generates_rubric_from_fixed_nfrs_and_validates_and_renders(
     research, golden_export
 ):
+    golden_export = golden_export.model_copy(deep=True)
+    extra = golden_export.rubric.criteria[-1].model_copy(deep=True)
+    extra.id = "C4"
+    extra.title = "집중 부하 분산"
+    extra.description = "특정 대화에 요청이 집중될 때 부하를 분산하는 설계를 평가한다."
+    extra.weight = 10
+    for level, descriptor in zip(
+        extra.levels,
+        (
+            "특정 대화에 요청이 집중되어 처리 병목이 생기는 상황을 고려하지 않는다.",
+            "처리 서버를 늘리지만 특정 대화에 집중된 작업을 나누는 흐름은 설명하지 못한다.",
+            "특정 대화의 요청 처리를 여러 작업자에 분산하는 흐름과 담당 범위를 설명한다.",
+            "작업 분산 이후 남는 병목을 식별하고 처리량과 메시지 순서 보장 사이의 절충을 설명한다.",
+        ),
+        strict=True,
+    ):
+        level.descriptor = descriptor
+    golden_export.rubric.criteria[-1].weight -= extra.weight
+    golden_export.rubric.criteria.append(extra)
     selection = NFRSelection(
         confirmed_nfrs=golden_export.confirmed_nfrs, tradeoffs=golden_export.tradeoffs
     )
@@ -154,13 +184,28 @@ def test_generates_rubric_from_fixed_nfrs_and_validates_and_renders(
         "research": research.model_dump(),
         "selection": selection.model_dump(mode="json"),
     }
-    for rule in ("0~3", "100", "2~4", "연차", "하나의 NFR", "수치", "근거"):
+    for rule in (
+        "0~3",
+        "100",
+        "2~4",
+        "연차",
+        "하나의 NFR",
+        "수치",
+        "근거",
+        "여러 평가 항목",
+        "반복 채점하지 않는다",
+    ):
         assert rule in system["content"]
     assert "동등하게 충족하는 대안 설계" in system["content"]
+    assert "Level 3에는 Level 2 설계의 대표적인 한계" not in system["content"]
     assert "문서 id·URL·출처 목록을 넣지 않는다" in system["content"]
     for rule in (
-        "각 항목에서는 서로 다른 결과 속성을 평가한다",
+        "각 항목은 평가 대상이나 설계 판단을 구분한다",
         "점수 의미와 난이도는 아래 MD 기준만 따른다",
+        "기본 설계를 먼저 정한다",
+        "모든 세부 조건의 설명을 2점에 일괄 요구하지 않는다",
+        "처리 조건·순서·갱신 단위",
+        "관측지표·검증방법을 추가 필수 채점 조건으로 붙이지 않는다",
     ):
         assert rule in system["content"]
     assert export == golden_export
@@ -279,3 +324,28 @@ def test_full_seniority_criteria_reach_author_budget_and_judge(
         ):
             assert removed not in system
         assert "Staff+" not in system
+
+
+def test_author_receives_paired_golden_examples_in_the_counted_prompt(
+    research, golden_export
+):
+    import re
+
+    from archgen.paths import RESOURCES
+
+    selection = NFRSelection(**golden_export.model_dump(exclude={"rubric"}))
+    author = Mock(return_value=golden_export.rubric.model_dump_json())
+    counter = Mock(return_value=10_000)
+    generate_rubric(BRIEF, research, selection, author, count_tokens=counter)
+
+    system = author.call_args.args[0][0]["content"]
+    assert counter.call_args.args[0] == author.call_args.args[0]
+    for topic, version, criterion in (("uber", "v3", "C3"), ("youtube", "v2", "C4")):
+        for tier in ("middle", "senior"):
+            path = RESOURCES / "golden" / topic / version / f"{topic}_{tier}.md"
+            text = path.read_text().split(f"### {criterion}.", 1)[1].split("\n---", 1)[0]
+            levels = re.findall(r"(?m)^\| ([0-3]) \| (.+?) \|$", text)
+            assert len(levels) == 4
+            for _, descriptor in levels:
+                assert descriptor in system
+    assert "예시의 기술·NFR·배점을 현재 주제의 필수 조건으로 복사하지 않는다" in system

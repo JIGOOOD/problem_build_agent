@@ -400,7 +400,7 @@ def run(
     debug=False,
 ):
     model = build_chat_model(
-        "small", model_class=RawTraceChatOpenAI, timeout=llm_timeout, max_retries=0
+        "medium", model_class=RawTraceChatOpenAI, timeout=llm_timeout, max_retries=0
     )
     tavily_key = os.getenv("TAVILY_API_KEY", "").strip()
     if not tavily_key:
@@ -433,7 +433,7 @@ def run(
         progress.start()
         print(f"실행 로그: {run_dir}", flush=True)
         print(
-            f"주제: {topic}\n모델: small ({getattr(model, 'model_name', '테스트 모델')})\nLLM 호출별 상한: {llm_timeout:g}초",
+            f"주제: {topic}\n모델: medium ({getattr(model, 'model_name', '테스트 모델')})\nLLM 호출별 상한: {llm_timeout:g}초",
             flush=True,
         )
         try:

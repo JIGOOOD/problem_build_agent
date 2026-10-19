@@ -41,7 +41,25 @@ def test_rubric_starts_with_the_topic_as_the_top_heading(
     golden_export: NFRExport,
 ) -> None:
     """면접관이 가장 먼저 보는 정보라 문서 제목으로 둔다."""
-    assert render_rubric(golden_export, BRIEF).startswith(f"# {BRIEF.topic}\n")
+    from archgen.render.post_render import check_rendered
+
+    brief = InterviewBrief(
+        Seniority.MIDDLE,
+        "실시간 채팅",
+        scope="메시지 전송부터 수신까지.\n\n대화방 관리는 제외한다.",
+        focus="메시지 전달 신뢰성",
+    )
+    md = render_rubric(golden_export, brief)
+    assert md.startswith(
+        "# 실시간 채팅\n\n**설계 범위**\n메시지 전송부터 수신까지. 대화방 관리는 제외한다."
+        "\n\n**평가 초점**\n메시지 전달 신뢰성\n\n**대상 연차** Middle"
+    )
+    assert check_rendered(md, golden_export, brief) == []
+    damaged = md.replace("메시지 전달 신뢰성", "전혀 다른 평가 초점", 1)
+    assert any(
+        f.code == "RENDER_HEADER_MISMATCH"
+        for f in check_rendered(damaged, golden_export, brief)
+    )
 
 
 def test_nfr_section_heading_sits_under_the_topic(golden_export: NFRExport) -> None:
@@ -115,17 +133,17 @@ def test_every_criterion_has_a_four_row_level_table(golden_export: NFRExport) ->
         assert [row.split("|")[1].strip() for row in rows] == ["0", "1", "2", "3"]
 
 
-def test_qualitative_requirement_shows_the_statement_once(
+def test_qualitative_requirement_preserves_statement_and_target_once(
     golden_export: NFRExport,
 ) -> None:
-    """정성 목표는 statement의 요약이라 둘 다 쓰면 같은 말을 반복한다."""
+    """정성 목표에만 있는 보장 조건도 요구 수준에 보존한다."""
     md = render_rubric(golden_export, BRIEF)
     for criterion in golden_export.rubric.criteria:
         nfr = next(
             n for n in golden_export.confirmed_nfrs if n.id in criterion.related_nfr_ids
         )
-        assert md.count(f"`{nfr.kind}` — {nfr.statement}") == 1
-        assert nfr.qualitative_target not in md
+        assert md.count(nfr.statement) == 1
+        assert md.count(nfr.qualitative_target) == 1
 
 
 def with_target(value: float, unit: str | None, condition: str | None):
@@ -215,11 +233,14 @@ def test_rendered_rubric_reads_back_to_the_export(golden_export: NFRExport) -> N
         assert got["title"] == criterion.title
         assert got["weight"] == str(criterion.weight)
         assert got["description"] == criterion.description
-        # 정성 목표: `kind` — statement 한 줄
+        # 정성 목표와 원래 요구 설명을 모두 보존한다.
         group = next(
             g for g in rendered["nfrs"] if g["heading"].startswith(f"{nfr.id}. ")
         )
-        assert group["requirement"] == [f"`{nfr.kind}` — {nfr.statement}"]
+        assert group["requirement"] == [
+            f"`{nfr.kind}` — {nfr.qualitative_target}",
+            nfr.statement,
+        ]
         assert got["levels"] == [
             (str(level.score), level.descriptor) for level in criterion.levels
         ]
@@ -338,3 +359,22 @@ def test_nfr_display_numbers_ignore_source_ids(golden_export):
     assert md.count("| NFR-3 · Scalability |") == 2
     assert check_rendered(md, export, BRIEF) == []
     assert export.model_dump() == original
+
+
+def test_render_preserves_distinct_qualitative_target_and_detects_its_loss(golden_export):
+    from archgen.render.post_render import check_rendered
+
+    export = golden_export.model_copy(deep=True)
+    nfr = export.confirmed_nfrs[0]
+    nfr.qualitative_target = (
+        "접수 성공한 메시지는 장애 후에도 복구 가능한 상태로 남아야 한다."
+    )
+    md = render_rubric(export, BRIEF)
+    assert nfr.statement in md
+    assert nfr.qualitative_target in md
+    assert check_rendered(md, export, BRIEF) == []
+    damaged = md.replace(nfr.qualitative_target + "\n", "", 1)
+    assert any(
+        f.code == "RENDER_REQUIREMENT_MISMATCH"
+        for f in check_rendered(damaged, export, BRIEF)
+    )

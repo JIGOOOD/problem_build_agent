@@ -108,7 +108,7 @@ def test_post_render_accepts_a_topic_folded_into_one_heading_line(
             {("RENDER_LEVELS_MISMATCH", "rubric.criteria[0].levels")},
         ),
         (
-            replace_once("— 서버가 수락한", "— 서버가 받은"),
+            replace_once("\n서버가 수락한 채팅 메시지를", "\n서버가 받은 채팅 메시지를"),
             {("RENDER_REQUIREMENT_MISMATCH", "confirmed_nfrs[0]")},
         ),
         (

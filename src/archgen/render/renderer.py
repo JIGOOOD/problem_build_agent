@@ -77,14 +77,20 @@ def _section(criterion: RubricCriterion, nfr: ConfirmedNFR, number: int) -> _Sec
     return _Section(
         criterion=criterion,
         nfr=nfr,
-        target=_format_target(nfr.target),
+        target=_requirement_target(nfr),
         number=number,
         levels=sorted(criterion.levels, key=lambda level: level.score),
     )
 
 
+def _requirement_target(nfr: ConfirmedNFR) -> str | None:
+    if nfr.target is not None:
+        return _format_target(nfr.target)
+    return nfr.qualitative_target if nfr.qualitative_target != nfr.statement else None
+
+
 def _format_target(target: NFRTarget | None) -> str | None:
-    """정량 목표만 한 줄로 만든다. 정성 목표는 statement의 요약이라 따로 쓰지 않는다."""
+    """정량 목표를 한 줄로 만든다."""
     if target is None:
         return None
     value = _format_number(target.value) if target.value is not None else ""

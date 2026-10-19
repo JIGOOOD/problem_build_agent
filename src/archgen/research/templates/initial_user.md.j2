@@ -1,4 +1,9 @@
 - 주제: {{ brief.topic | one_line }}
+{% if brief.scope %}
+- 확정 범위: {{ brief.scope | one_line }}
+- 평가 초점: {{ brief.focus | one_line }}
+원래 주제보다 확정 범위를 우선하여 조사한다. 평가 초점은 조사 방향이며 문서 근거나 수치 목표가 아니다.
+{% endif %}
 {# 중점 NFR 입력은 추후 구현 시 활성화한다.
 {% if brief.notes %}
 - 사용자 중점 요구사항: {{ brief.notes | one_line }}

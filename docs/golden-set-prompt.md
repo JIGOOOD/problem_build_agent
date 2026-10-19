@@ -161,7 +161,8 @@ NFR이 criterion보다 많을 때는 이렇게 한다:
    "순서 보장을 강화하면 지연이 증가하는 trade-off를 설명한다"로 평가
    이때 그 NFR은 `confirmed_nfrs`에서도 빼고 `tradeoffs`에만 남긴다
 
-**모든 `confirmed_nfrs`는 정확히 하나의 criterion에서 평가되어야 한다.**
+**모든 `confirmed_nfrs`는 하나 이상의 criterion에서 평가되어야 한다.**
+같은 NFR도 평가 대상이나 설계 판단이 다르면 여러 criterion으로 나눌 수 있다. 같은 대상을 같은 판단 기준으로 반복 채점하지 않는다.
 어디에도 안 묶인 NFR은 평가되지 않으므로 `confirmed_nfrs`에 넣지 마라.
 
 ## 3단계 — 목표 수준 결정

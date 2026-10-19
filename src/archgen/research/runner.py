@@ -73,7 +73,7 @@ TOOLS = [
     ),
     _tool(
         "requery",
-        f"URL을 모두 확인해도 근거가 부족한 쿼리만 새 검색어로 {MAX_REQUERY}회 재검색한다.",
+        f"적합한 검색 결과가 없거나 보존 근거가 부족한 쿼리를 새 검색어로 최대 {MAX_REQUERY}회 재검색한다. 부적합한 URL을 전부 가져올 필요는 없다.",
         {
             "query_id": {"type": "string"},
             "new_query": {"type": "string"},
@@ -82,9 +82,10 @@ TOOLS = [
     ),
     _tool(
         "fetch",
-        f"query_id만 전달한다. 코드가 해당 쿼리의 순위가 높은 미확인 URL을 {FETCH_BATCH}개씩 가져온다. 남은 URL이 적으면 남은 만큼 가져온다.",
+        f"검색 결과에서 관련성을 검토해 선택한 urls만 가져온다. 쿼리당 한 회차 최대 {FETCH_BATCH}개이며 적합한 문서가 적으면 채우지 않는다.",
         {
             "query_id": {"type": "string"},
+            "urls": {"type": "array", "items": {"type": "string"}},
         },
     ),
     _tool(
@@ -99,7 +100,7 @@ TOOLS = [
 
 
 def _validate_tool_args(name: str, args: dict) -> None:
-    """현재 세 도구의 문자열·정수 배열 인자를 실행 전에 검사한다."""
+    """도구의 문자열·배열 인자를 실행 전에 검사한다."""
     definition = next(
         tool["function"] for tool in TOOLS if tool["function"]["name"] == name
     )
@@ -111,6 +112,15 @@ def _validate_tool_args(name: str, args: dict) -> None:
         if schema["type"] == "string":
             if not isinstance(value, str) or not value.strip():
                 raise ValueError(f"{key}는 빈 값이 아닌 문자열이어야 한다.")
+        elif schema["items"]["type"] == "string":
+            if (
+                not isinstance(value, list)
+                or not value
+                or any(not isinstance(url, str) or not url.strip() for url in value)
+            ):
+                raise ValueError(
+                    f"{key}는 빈 값이 아닌 문자열의 비어 있지 않은 배열이어야 한다."
+                )
         elif (
             not isinstance(value, list)
             or not value
@@ -164,8 +174,6 @@ class _Session:
                 return "requery 오류: 먼저 초기 검색을 수행해야 한다."
             if kept >= required:
                 return "requery 오류: 이미 충분한 근거를 확보했다."
-            if any(result.url not in query.seen for result in query.results):
-                return "requery 오류: 미확인 URL을 먼저 가져와야 한다."
             if query.requery_count >= MAX_REQUERY:
                 return "requery 오류: 재검색 횟수 상한에 도달했다."
             new_query = args["new_query"].strip()
@@ -194,14 +202,18 @@ class _Session:
         query_id = args["query_id"]
         query = self.queries[query_id]
         with self.lock:
-            batch = [
-                result
-                for result in query.results
-                if result.url in allowed[query_id] and result.url not in query.seen
-            ]
-            if not batch:
-                return "fetch 오류: 이번 배치에서 가져올 미확인 URL이 없다."
-            query.seen.update(result.url for result in batch)
+            urls = args["urls"]
+            if len(set(urls)) != len(urls):
+                return "fetch 오류: 선택 URL은 중복될 수 없다."
+            if not set(urls) <= allowed[query_id] or set(urls) & query.seen:
+                return "fetch 오류: 검색 결과의 미확인 URL만 선택할 수 있다."
+            if len(urls) + len(allowed[query_id] & query.seen) > FETCH_BATCH:
+                return (
+                    f"fetch 오류: 쿼리당 한 회차 최대 {FETCH_BATCH}개만 선택할 수 있다."
+                )
+            by_url = {result.url: result for result in query.results}
+            batch = [by_url[url] for url in urls]
+            query.seen.update(urls)
         with ThreadPoolExecutor(max_workers=len(batch)) as pool:
             results = list(pool.map(self.fetch.fetch, [item.url for item in batch]))
         return [
@@ -209,13 +221,13 @@ class _Session:
             for item, result in zip(batch, results, strict=True)
         ]
 
-    def _fetch_batch_urls(self) -> dict[str, set[str]]:
+    def _available_fetch_urls(self) -> dict[str, set[str]]:
         allowed = {}
         for query_id, query in self.queries.items():
             unseen = [
                 result.url for result in query.results if result.url not in query.seen
             ]
-            allowed[query_id] = set(unseen[:FETCH_BATCH])
+            allowed[query_id] = set(unseen)
         return allowed
 
     def _call_tool(
@@ -274,7 +286,7 @@ class _Session:
             indices = [i for i, call in enumerate(calls) if call["name"] == name]
             if not indices:
                 continue
-            allowed = self._fetch_batch_urls()
+            allowed = self._available_fetch_urls()
             if name == "keep":
                 # keep은 선택 문서와 문장 목록을 갱신하므로 순서대로 실행한다.
                 results = [self._call_tool(calls[index], allowed) for index in indices]
@@ -292,7 +304,7 @@ class _Session:
 
     def progress(self) -> dict:
         """판정할 문서와 쿼리별 다음 행동을 LLM에게 알려준다."""
-        allowed = self._fetch_batch_urls()
+        allowed = self._available_fetch_urls()
         queries = {}
         for query_id, query in self.queries.items():
             kept_ids = [
@@ -309,7 +321,7 @@ class _Session:
                 "kept_doc_ids": kept_ids,
                 "required_documents": required,
                 "next_fetch_urls": [
-                    {"rank": result.rank, "url": result.url}
+                    result.model_dump(exclude={"query_id"})
                     for result in query.results
                     if kept < required and result.url in allowed[query_id]
                 ],
@@ -380,8 +392,7 @@ def _build_messages(brief: InterviewBrief, session: _Session) -> list[dict]:
         {"role": "system", "content": system},
         {
             "role": "user",
-            "content": brief.topic,
-            # + (f"\n{brief.notes}" if brief.notes else ""),
+            "content": "\n".join(brief.to_lines()) if brief.scope else brief.topic,
         },
         {"role": "assistant", "content": session.plan.model_dump_json()},
     ]

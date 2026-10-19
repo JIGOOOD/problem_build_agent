@@ -71,7 +71,13 @@ SEARCH = tool_response(
     "search",
     [{"query_id": f"query-{i}"} for i, _ in enumerate(PLAN["search_queries"], start=1)],
 )
-FETCH = tool_response("fetch", [{"query_id": f"query-{i}"} for i in [1, 2, 3]])
+FETCH = tool_response(
+    "fetch",
+    [
+        {"query_id": f"query-{i}", "urls": URLS[kind]}
+        for i, kind in enumerate(("topic", "latency", "availability"), start=1)
+    ],
+)
 FINISH = AIMessage(content="조사 완료")
 
 
@@ -313,7 +319,9 @@ def test_research_stops_at_20_calls_including_initial_plan_retry():
 
 def test_research_returns_partial_evidence_when_topic_documents_are_missing():
     search_latency = tool_response("search", [{"query_id": "query-2"}])
-    fetch_latency = tool_response("fetch", [{"query_id": "query-2"}])
+    fetch_latency = tool_response(
+        "fetch", [{"query_id": "query-2", "urls": URLS["latency"]}]
+    )
 
     scenario = planned(search_latency, fetch_latency, keep_fetched, FINISH)
 
@@ -325,12 +333,17 @@ def test_research_returns_partial_evidence_when_topic_documents_are_missing():
     ]
 
 
-def test_research_fetches_only_top_three_unseen_urls_per_query(monkeypatch):
+def test_research_fetches_selected_batches_across_rounds(monkeypatch):
     urls = [f"https://docs.example/latency/{i}" for i in range(1, 6)]
     monkeypatch.setitem(URLS, "latency", urls)
-    batch = tool_response("fetch", [{"query_id": "query-2"}])
+    batch = tool_response("fetch", [{"query_id": "query-2", "urls": urls[:3]}])
 
-    scenario = planned(SEARCH, batch, batch, FINISH)
+    scenario = planned(
+        SEARCH,
+        batch,
+        tool_response("fetch", [{"query_id": "query-2", "urls": urls[3:]}]),
+        FINISH,
+    )
 
     first_results = json.loads(latest_tools(scenario.llm.calls[3])[0]["content"])
     assert [item["url"] for item in first_results] == urls[:3]
@@ -352,8 +365,13 @@ def test_fetch_failure_counts_toward_batch_size_and_next_call_moves_on(monkeypat
         return "fetch 실패: HTTP 403" if url == urls[0] else original(self, url)
 
     monkeypatch.setattr(FetchTool, "fetch", fetch)
-    batch = tool_response("fetch", [{"query_id": "query-2"}])
-    scenario = planned(SEARCH, batch, batch, FINISH)
+    batch = tool_response("fetch", [{"query_id": "query-2", "urls": urls[:3]}])
+    scenario = planned(
+        SEARCH,
+        batch,
+        tool_response("fetch", [{"query_id": "query-2", "urls": urls[3:]}]),
+        FINISH,
+    )
 
     first = json.loads(latest_tools(scenario.llm.calls[3])[0]["content"])
     assert [item["url"] for item in first] == urls[:3]
@@ -367,7 +385,7 @@ def test_fetch_failure_counts_toward_batch_size_and_next_call_moves_on(monkeypat
 def test_duplicate_fetch_calls_in_one_response_do_not_exceed_three_urls(monkeypatch):
     urls = [f"https://docs.example/latency/{i}" for i in range(1, 7)]
     monkeypatch.setitem(URLS, "latency", urls)
-    calls = tool_response("fetch", [{"query_id": "query-2"}] * 2)
+    calls = tool_response("fetch", [{"query_id": "query-2", "urls": urls[:3]}] * 2)
 
     scenario = planned(SEARCH, calls, FINISH)
 
@@ -471,11 +489,18 @@ def test_research_passes_all_tool_definitions_to_bind_tools(monkeypatch):
     ]
 
 
-def test_research_forwards_initial_messages_and_preserves_loop_roles():
+@pytest.mark.parametrize("scoped", [False, True])
+def test_research_forwards_initial_messages_and_preserves_loop_roles(scoped):
     llm = FakeLLM(AIMessage(content=json.dumps(PLAN)), FINISH)
+    brief = InterviewBrief(
+        topic="실시간 채팅 서비스",
+        seniority=Seniority.MIDDLE,
+        scope="메시지 전송부터 상대방 수신까지" if scoped else None,
+        focus="메시지 유실 방지" if scoped else None,
+    )
 
     run_research(
-        InterviewBrief(topic="실시간 채팅 서비스", seniority=Seniority.MIDDLE),
+        brief,
         load_catalog(CATALOG_DIR),
         llm,
         Mock(spec=SearchTool),
@@ -486,7 +511,12 @@ def test_research_forwards_initial_messages_and_preserves_loop_roles():
     messages = llm.calls[1]
     assert [message["role"] for message in messages] == ["system", "user", "assistant"]
     assert [set(message) for message in messages] == [{"role", "content"}] * 3
-    assert messages[1]["content"] == "실시간 채팅 서비스"
+    assert messages[1]["content"] == (
+        "\n".join(brief.to_lines()) if scoped else brief.topic
+    )
+    if scoped:
+        assert brief.scope in llm.calls[0][1]["content"]
+        assert brief.focus in llm.calls[0][1]["content"]
     assert json.loads(messages[2]["content"]) == {
         **PLAN,
         "nfr_candidates": [
@@ -503,7 +533,7 @@ def test_research_system_prompt_contains_query_mapping_and_numeric_limits():
     assert json.loads(query_block) == {
         f"query-{i}": query for i, query in enumerate(PLAN["search_queries"], start=1)
     }
-    assert f"쿼리당 최대 {runner.FETCH_BATCH}개씩" in system
+    assert f"쿼리당 한 회차 최대 {runner.FETCH_BATCH}개" in system
     assert (
         f"NFR 쿼리는 keep한 문서 {runner.SUFFICIENT_DOCS}개, "
         f"주제 쿼리는 {runner.SUFFICIENT_DOCS_TOPIC}개가 필요하다."
@@ -652,7 +682,8 @@ def test_research_reports_pending_documents_and_remaining_urls_to_llm():
 
     before_fetch = state_at(2)
     assert before_fetch["queries"]["query-2"]["next_fetch_urls"] == [
-        {"rank": i, "url": url} for i, url in enumerate(URLS["latency"], start=1)
+        {"rank": i, "url": url, "title": url, "snippet": ""}
+        for i, url in enumerate(URLS["latency"], start=1)
     ]
     before_keep = state_at(3)
     fetched = fetched_documents(scenario.llm.calls[3])
@@ -726,7 +757,7 @@ def test_research_hides_remaining_urls_when_exactly_enough_documents_are_kept(
 
     scenario = planned(
         tool_response("search", [{"query_id": "query-2"}]),
-        tool_response("fetch", [{"query_id": "query-2"}]),
+        tool_response("fetch", [{"query_id": "query-2", "urls": URLS["latency"][:3]}]),
         keep_two,
         FINISH,
     )
@@ -743,9 +774,7 @@ def test_research_prompt_tells_the_llm_the_per_document_keep_budget():
     assert "문서당 2000자 이내에서 선택한다" in scenario.llm.calls[-1][0]["content"]
 
 
-def test_research_requeries_only_exhausted_query_and_accumulates_evidence(
-    monkeypatch, caplog
-):
+def test_research_requeries_and_accumulates_evidence(monkeypatch, caplog):
     from archgen.domain.research import SearchResult
 
     original_url = URLS["latency"][0]
@@ -770,7 +799,14 @@ def test_research_requeries_only_exhausted_query_and_accumulates_evidence(
     monkeypatch.setattr(SearchTool, "search", search)
     scenario = planned(
         SEARCH,
-        FETCH,
+        tool_response(
+            "fetch",
+            [
+                {"query_id": "query-1", "urls": URLS["topic"]},
+                {"query_id": "query-2", "urls": [original_url]},
+                {"query_id": "query-3", "urls": URLS["availability"]},
+            ],
+        ),
         keep_fetched,
         tool_response(
             "requery",
@@ -782,7 +818,7 @@ def test_research_requeries_only_exhausted_query_and_accumulates_evidence(
                 }
             ],
         ),
-        tool_response("fetch", [{"query_id": "query-2"}]),
+        tool_response("fetch", [{"query_id": "query-2", "urls": [new_url]}]),
         keep_fetched,
         FINISH,
     )
@@ -808,7 +844,7 @@ def test_research_requeries_only_exhausted_query_and_accumulates_evidence(
     assert records[0].reason == "기존 URL을 모두 확인했지만 근거가 하나뿐이다."
 
 
-@pytest.mark.parametrize("condition", ["unseen", "sufficient", "repeated", "same-query"])
+@pytest.mark.parametrize("condition", ["sufficient", "repeated", "same-query"])
 def test_requery_rejects_requests_without_changing_state_or_searching(condition):
     from archgen.domain.research import SearchResult
 
@@ -827,8 +863,7 @@ def test_requery_rejects_requests_without_changing_state_or_searching(condition)
         return session.execute(tool_response(name, [args]).tool_calls)[0]["content"]
 
     execute("search", query_id="query-2")
-    if condition != "unseen":
-        execute("fetch", query_id="query-2")
+    execute("fetch", query_id="query-2", urls=URLS["latency"])
     if condition == "sufficient":
         for doc_id in list(session.pending):
             execute("keep", doc_id=doc_id, sentence_indices=[0])
@@ -927,9 +962,145 @@ def test_research_tool_failure_does_not_block_another_query(stage):
     calls = [{"query_id": qid} for qid in ["query-2", "query-3"]]
     results = session.execute(tool_response("search", calls).tool_calls)
     if stage == "fetch":
-        results = session.execute(tool_response("fetch", calls).tool_calls)
+        results = session.execute(
+            tool_response(
+                "fetch",
+                [
+                    {**call, "urls": ["https://docs.example/" + call["query_id"]]}
+                    for call in calls
+                ],
+            ).tool_calls
+        )
         assert isinstance(json.loads(results[1]["content"])[0]["result"], str)
         assert json.loads(results[0]["content"])[0]["result"]["sentences"]
     else:
         assert results[1]["content"] == "search 실패"
         assert json.loads(results[0]["content"])[0]["query_id"] == "query-2"
+
+
+def test_research_fetches_only_the_selected_lower_ranked_url(monkeypatch):
+    urls = [f"https://docs.example/latency/{i}" for i in range(1, 6)]
+    monkeypatch.setitem(URLS, "latency", urls)
+    selected = tool_response("fetch", [{"query_id": "query-2", "urls": [urls[-1]]}])
+
+    scenario = planned(SEARCH, selected, keep_fetched, FINISH)
+
+    assert [doc.url for doc in scenario.result.documents] == [urls[-1]]
+    payload = json.loads(latest_tools(scenario.llm.calls[3])[0]["content"])
+    assert [(item["url"], item["rank"]) for item in payload] == [(urls[-1], 5)]
+
+
+def test_requery_skips_unfetched_results_when_they_are_irrelevant():
+    from archgen.domain.research import SearchResult
+
+    search, fetch = Mock(), Mock()
+    search.search.side_effect = [
+        [
+            SearchResult(
+                query_id="query-2",
+                url="https://docs.example/careers",
+                title="채용 공고",
+                rank=1,
+                snippet="지원 방법 안내",
+            )
+        ],
+        [],
+    ]
+    session = runner._Session(
+        runner.InitialResearchPlan.model_validate(PLAN), search, fetch
+    )
+    session.execute(tool_response("search", [{"query_id": "query-2"}]).tool_calls)
+
+    result = session.execute(
+        tool_response(
+            "requery",
+            [
+                {
+                    "query_id": "query-2",
+                    "new_query": "chat delivery latency technical design",
+                    "reason": "남은 결과는 채용 공고뿐이라 Fetch 대상에서 제외한다.",
+                }
+            ],
+        ).tool_calls
+    )
+
+    assert result[0]["content"] == "[]"
+    assert session.queries["query-2"].requery_count == 1
+    fetch.fetch.assert_not_called()
+    assert search.search.call_count == 2
+
+
+@pytest.mark.parametrize(
+    "urls",
+    [
+        [],
+        "https://docs.example/latency/1",
+        [None],
+        [""],
+        ["https://outside.example/not-in-search"],
+        ["https://docs.example/latency/1"] * 2,
+        [f"https://docs.example/latency/{i}" for i in range(1, 5)],
+    ],
+)
+def test_fetch_rejects_invalid_selection_without_fetching_or_marking_seen(urls):
+    from archgen.domain.research import SearchResult
+
+    search, fetch = Mock(), Mock()
+    search.search.return_value = [
+        SearchResult(
+            query_id="query-2",
+            url=f"https://docs.example/latency/{i}",
+            title="설계",
+            rank=i,
+        )
+        for i in range(1, 6)
+    ]
+    session = runner._Session(
+        runner.InitialResearchPlan.model_validate(PLAN), search, fetch
+    )
+    session.execute(tool_response("search", [{"query_id": "query-2"}]).tool_calls)
+
+    result = session.execute(
+        tool_response(
+            "fetch",
+            [
+                {
+                    "query_id": "query-2",
+                    "urls": urls,
+                }
+            ],
+        ).tool_calls
+    )
+
+    assert result[0]["content"].startswith("fetch 오류:")
+    fetch.fetch.assert_not_called()
+    assert session.queries["query-2"].seen == set()
+
+
+def test_parallel_fetch_selections_share_the_per_query_round_limit():
+    from archgen.domain.research import SearchResult
+
+    urls = [f"https://docs.example/latency/{i}" for i in range(1, 6)]
+    search, fetch = Mock(), Mock()
+    search.search.return_value = [
+        SearchResult(query_id="query-2", url=url, title="설계", rank=i)
+        for i, url in enumerate(urls, 1)
+    ]
+    fetch.fetch.return_value = "수집 실패"
+    session = runner._Session(
+        runner.InitialResearchPlan.model_validate(PLAN), search, fetch
+    )
+    session.execute(tool_response("search", [{"query_id": "query-2"}]).tool_calls)
+
+    result = session.execute(
+        tool_response(
+            "fetch",
+            [
+                {"query_id": "query-2", "urls": urls[:3]},
+                {"query_id": "query-2", "urls": urls[3:]},
+            ],
+        ).tool_calls
+    )
+
+    assert fetch.fetch.call_count <= runner.FETCH_BATCH
+    assert sum(r["content"].startswith("fetch 오류:") for r in result) == 1
