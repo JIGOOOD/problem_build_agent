@@ -78,7 +78,7 @@ def test_persistent_foreign_language_never_creates_langfuse_scores(tmp_path):
 
     with pytest.raises(RuntimeError, match="언어 검증 실패.*2회"):
         evaluator.run(
-            [Path("resources/golden/v1/uber_middle.md")],
+            [Path("resources/golden/uber/v1/uber_middle.md")],
             model=model,
             client=client,
             failure_root=tmp_path,
@@ -190,7 +190,7 @@ def test_rejects_a_judge_response_that_silently_omits_required_assessments():
 
     with pytest.raises(ValueError, match="누락|불일치"):
         evaluator.evaluate(
-            [Path("resources/golden/v1/uber_middle.md")],
+            [Path("resources/golden/uber/v1/uber_middle.md")],
             Path("docs/evaluator/rubric.md"),
             llm,
         )
@@ -198,8 +198,8 @@ def test_rejects_a_judge_response_that_silently_omits_required_assessments():
 
 def test_compares_matching_middle_senior_and_rejects_different_scope(tmp_path):
     paths = [
-        Path("resources/golden/v1/uber_middle.md"),
-        Path("resources/golden/v1/uber_senior.md"),
+        Path("resources/golden/uber/v1/uber_middle.md"),
+        Path("resources/golden/uber/v1/uber_senior.md"),
     ]
 
     def llm(messages):
@@ -248,7 +248,7 @@ def test_invalid_json_or_call_failure_is_an_evaluation_error(response):
     )
     with pytest.raises((ValueError, TimeoutError)):
         evaluator.evaluate(
-            [Path("resources/golden/v1/uber_middle.md")],
+            [Path("resources/golden/uber/v1/uber_middle.md")],
             Path("docs/evaluator/rubric.md"),
             llm,
         )
@@ -281,7 +281,7 @@ def test_records_only_scored_assessments_and_keeps_unscorable_reason(
     model = Mock(model_name="test-judge")
 
     output = evaluator.run(
-        [Path("resources/golden/v1/uber_middle.md")],
+        [Path("resources/golden/uber/v1/uber_middle.md")],
         model=model,
         client=client,
         failure_root=tmp_path,
@@ -356,7 +356,7 @@ def test_langfuse_transfer_failure_keeps_result_for_manual_recovery(
 
     with pytest.raises(RuntimeError, match="Langfuse 기록 실패"):
         evaluator.run(
-            [Path("resources/golden/v1/uber_middle.md")],
+            [Path("resources/golden/uber/v1/uber_middle.md")],
             model=Mock(model_name="test-judge"),
             client=client,
             failure_root=tmp_path,
