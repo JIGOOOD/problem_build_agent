@@ -231,6 +231,9 @@ def run(
     client=None,
     failure_root=PROJECT_ROOT / ".archgen/eval-failed",
     source="golden",
+    evaluate_fn=None,
+    metadata=None,
+    score_group="quality",
 ):
     from langfuse.api.scores.types.create_score_request import CreateScoreRequest
 
@@ -240,9 +243,13 @@ def run(
     if model is None:
         unbound = build_chat_model("large", timeout=600, max_retries=0)
         model_name = unbound.model_name
+        reasoning_effort = getattr(unbound, "reasoning_effort", None)
         model = bind_structured_model(unbound, Evaluation)
     else:
         model_name = model.model_name
+        reasoning_effort = getattr(model, "reasoning_effort", None)
+    if not isinstance(reasoning_effort, str):
+        reasoning_effort = None
     trace_id = uuid.uuid4().hex
     pending = {
         "trace_id": trace_id,
@@ -250,13 +257,18 @@ def run(
         "started_at": datetime.now(UTC).isoformat(),
         "paths": [str(p) for p in paths],
         "model": model_name,
+        "reasoning_effort": reasoning_effort,
     }
+    if metadata is not None:
+        pending["context"] = metadata
     evaluation_error = None
     result = None
     try:
         with client.start_as_current_observation(
             name=(
-                "generated-rubric-evaluation"
+                f"{source}-evaluation"
+                if source.startswith("stage-") or source == "golden-comparison"
+                else "generated-rubric-evaluation"
                 if source == "generation"
                 else "golden-rubric-evaluation"
             ),
@@ -275,6 +287,7 @@ def run(
                     name="rubric-judge",
                     as_type="generation",
                     model=model_name,
+                    metadata={"reasoning_effort": reasoning_effort},
                     input=messages,
                 ) as generation:
                     response = model.invoke(messages)
@@ -283,7 +296,7 @@ def run(
                     return raw
 
             try:
-                result = evaluate(paths, criteria_path, llm)
+                result = (evaluate_fn or evaluate)(paths, criteria_path, llm)
                 pending["result"] = result.model_dump(mode="json")
                 pending.pop("judge_response", None)
                 span.update(output=pending["result"])
@@ -325,7 +338,7 @@ def run(
                 CreateScoreRequest(
                     trace_id=trace_id,
                     observation_id=span.id,
-                    name=f"quality::{key}::percentage",
+                    name=f"{score_group}::{key}::percentage",
                     value=counts["percentage"],
                     data_type="NUMERIC",
                     comment=(
@@ -345,19 +358,29 @@ def run(
         root.mkdir(parents=True, exist_ok=True)
         pending["delivery_error"] = str(error)
         path = root / f"{trace_id}.json"
+        failed = (
+            {key: pending[key] for key in ("trace_id", "source", "started_at", "model")}
+            if source.startswith("stage-")
+            else pending
+        )
+        if source.startswith("stage-"):
+            failed["error_type"] = type(error).__name__
         path.write_text(
-            json.dumps(pending, ensure_ascii=False, indent=2), encoding="utf-8"
+            json.dumps(failed, ensure_ascii=False, indent=2), encoding="utf-8"
         )
         raise RuntimeError(f"Langfuse 기록 실패. 미전송 기록: {path}") from error
     if evaluation_error is not None:
         raise RuntimeError(
             f"평가 오류(Langfuse 기록 완료): {evaluation_error}"
         ) from evaluation_error
-    return {
+    output = {
         "trace_id": trace_id,
         "trace_url": client.get_trace_url(trace_id=trace_id),
         "evaluation": result.model_dump(mode="json"),
     }
+    if metadata is not None:
+        output.update(model=model_name, reasoning_effort=reasoning_effort)
+    return output
 
 
 def main():
