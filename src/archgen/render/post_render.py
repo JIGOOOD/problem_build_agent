@@ -10,7 +10,7 @@ import re
 from archgen.domain.brief import InterviewBrief
 from archgen.domain.nfr import ConfirmedNFR, NFRExport, RubricCriterion
 from archgen.harness.findings import Finding, FindingCode, Severity
-from archgen.render.renderer import _format_target, _nfr_name
+from archgen.render.renderer import _nfr_name, _requirement_target
 
 _SUMMARY_ROW_END = "☐0 ☐1 ☐2 ☐3 |"
 _LEVEL_HEADER = "| Level | 기준 |\n|---|---|\n"
@@ -225,7 +225,7 @@ def _difference(got: list, expected: list) -> str:
 
 
 def _requirement(nfr: ConfirmedNFR) -> str:
-    target = _format_target(nfr.target)
+    target = _requirement_target(nfr)
     if target:
         return f"`{nfr.kind}` — {target}\n{nfr.statement}"
     return f"`{nfr.kind}` — {nfr.statement}"
