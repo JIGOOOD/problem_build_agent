@@ -390,9 +390,21 @@ def main():
     )
     parser.add_argument("--criteria", type=Path, default=DEFAULT_CRITERIA)
     parser.add_argument("--source", choices=("golden", "generation"), default="golden")
+    parser.add_argument(
+        "--golden", type=Path, help="생성물 1개와 비교할 같은 주제·연차의 골든 MD"
+    )
     args = parser.parse_args()
     try:
-        output = run(args.rubrics, args.criteria, source=args.source)
+        if args.golden is not None:
+            from archgen.golden_evaluation import run_comparison
+
+            if len(args.rubrics) != 1:
+                raise ValueError("--golden 비교에는 생성물 한 개를 지정한다.")
+            output = run_comparison(
+                args.rubrics[0], args.golden, quality_criteria=args.criteria
+            )
+        else:
+            output = run(args.rubrics, args.criteria, source=args.source)
     except Exception as error:  # noqa: BLE001 -- CLI에서 오류를 표시하고 실패 종료한다.
         parser.exit(1, f"{error}\n")
     print(json.dumps(output, ensure_ascii=False, indent=2))
