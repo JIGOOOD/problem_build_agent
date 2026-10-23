@@ -47,7 +47,9 @@ Senior C3·C4는 Criterion이 Fail이어도 모든 하위 오류를 잡은 것�
 - 전체 합산: [요약](summary.json)
 - 입력·정답표: [resources/evaluator](../../../../resources/evaluator/README.md)
 
-평가 원문과 정답표는 유지했다. 요약·오류별 대조에는 사용자 확인 상태와 재집계를 반영했다.
+평가 판정·근거와 원본 정답표는 유지했다. 요약·오류별 대조에는 사용자 확인 상태와 재집계를 반영했다.
+결과에 복사했던 원본 본문·정답 설명은 제거했다. `source_rubric`은 resources의 원본 루브릭을,
+`source_label`은 원본 정답 파일의 해당 항목을 참조한다. 비교 결과의 기대 Pass/Fail은 유지한다.
 포함된 로컬 절대 경로는 실행 당시의 출처 정보다.
 원시 API 메시지·사용량·전체 추적 자료는 `.archgen/`에 보관하며 Git 추적 대상에서 제외한다.
 

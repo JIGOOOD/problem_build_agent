@@ -52,6 +52,10 @@ Level별 Middle·Senior 요구를 표로 나누고, 과도한 Middle 요구와 �
 
 ## 기록
 
+원본 본문·정답 설명은 resources의 데이터셋에서만 관리한다.
+결과의 `source_rubric`·`source_label`로 원본 루브릭과 정답 항목을 참조한다.
+평가 판정·근거·검출 여부와 비교 결과의 기대 Pass/Fail은 유지했다.
+
 - [전체 요약](summary.json), [실행 조건·입력 해시](conditions.json), [실제 사용한 평가 기준](evaluation-criteria.md)
 - 오류 주입: [요약](seniority-error-injection/summary.json), [오류별 근거](seniority-error-injection/injected-error-review.json), [판정 대조](seniority-error-injection/verdict-comparison.json)
 - 실제 티켓: [요약](ticket-rubric-review/summary.json), [오류별 근거](ticket-rubric-review/issue-review.json), [판정 대조](ticket-rubric-review/verdict-comparison.json), [평가 원문](ticket-rubric-review/01/quality.json)
