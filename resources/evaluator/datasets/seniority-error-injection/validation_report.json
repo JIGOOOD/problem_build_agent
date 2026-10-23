@@ -1,0 +1,798 @@
+{
+  "dataset_id": "seniority_eval_test_v5",
+  "checks_passed": true,
+  "num_checks": 139,
+  "counts": {
+    "pairs": 8,
+    "rubric_files": 16,
+    "direct_errors": 24,
+    "reworked_E08_levels": 3,
+    "level_descriptors": 256,
+    "expected_3_5_criterion_pass": 40,
+    "expected_3_5_criterion_fail": 24,
+    "expected_4_1_pair_pass": 2,
+    "expected_4_1_pair_fail": 6,
+    "expected_failing_levels_including_inheritance": 27
+  },
+  "source_sha256": {
+    "middle": "2ead7264473a55ecb9b67bed53db79131607f906cf84a1dbb116ed09875cf64d",
+    "senior": "cc7d46dbb810d0c9b1d7cb6912c6db56a957d4bcb0397d0f7a96aa042ce0c3f7"
+  },
+  "llm_evaluator_called": false,
+  "semantic_labels": "author_expected_not_measured",
+  "checks": [
+    {
+      "check": "01.middle.only_E08_rows_changed",
+      "passed": true,
+      "details": {
+        "actual": [],
+        "expected": []
+      }
+    },
+    {
+      "check": "01.middle.bytes_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "01.middle.sha256_matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "01.middle.length",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "01.middle.C1.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "01.middle.C2.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "01.middle.C3.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "01.middle.C4.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "01.senior.only_E08_rows_changed",
+      "passed": true,
+      "details": {
+        "actual": [],
+        "expected": []
+      }
+    },
+    {
+      "check": "01.senior.bytes_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "01.senior.sha256_matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "01.senior.length",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "01.senior.C1.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "01.senior.C2.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "01.senior.C3.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "01.senior.C4.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "02.middle.only_E08_rows_changed",
+      "passed": true,
+      "details": {
+        "actual": [],
+        "expected": []
+      }
+    },
+    {
+      "check": "02.middle.bytes_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "02.middle.sha256_matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "02.middle.length",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "02.middle.C1.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "02.middle.C2.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "02.middle.C3.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "02.middle.C4.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "02.senior.only_E08_rows_changed",
+      "passed": true,
+      "details": {
+        "actual": [],
+        "expected": []
+      }
+    },
+    {
+      "check": "02.senior.bytes_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "02.senior.sha256_matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "02.senior.length",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "02.senior.C1.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "02.senior.C2.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "02.senior.C3.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "02.senior.C4.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "03.middle.only_E08_rows_changed",
+      "passed": true,
+      "details": {
+        "actual": [],
+        "expected": []
+      }
+    },
+    {
+      "check": "03.middle.bytes_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "03.middle.sha256_matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "03.middle.length",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "03.middle.C1.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "03.middle.C2.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "03.middle.C3.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "03.middle.C4.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "03.senior.only_E08_rows_changed",
+      "passed": true,
+      "details": {
+        "actual": [
+          [
+            "C4",
+            3
+          ]
+        ],
+        "expected": [
+          [
+            "C4",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "check": "03.senior.sha256_matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "03.senior.length",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "03.senior.C1.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "03.senior.C2.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "03.senior.C3.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "03.senior.C4.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "04.middle.only_E08_rows_changed",
+      "passed": true,
+      "details": {
+        "actual": [],
+        "expected": []
+      }
+    },
+    {
+      "check": "04.middle.bytes_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "04.middle.sha256_matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "04.middle.length",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "04.middle.C1.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "04.middle.C2.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "04.middle.C3.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "04.middle.C4.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "04.senior.only_E08_rows_changed",
+      "passed": true,
+      "details": {
+        "actual": [],
+        "expected": []
+      }
+    },
+    {
+      "check": "04.senior.bytes_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "04.senior.sha256_matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "04.senior.length",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "04.senior.C1.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "04.senior.C2.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "04.senior.C3.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "04.senior.C4.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "05.middle.only_E08_rows_changed",
+      "passed": true,
+      "details": {
+        "actual": [],
+        "expected": []
+      }
+    },
+    {
+      "check": "05.middle.bytes_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "05.middle.sha256_matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "05.middle.length",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "05.middle.C1.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "05.middle.C2.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "05.middle.C3.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "05.middle.C4.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "05.senior.only_E08_rows_changed",
+      "passed": true,
+      "details": {
+        "actual": [],
+        "expected": []
+      }
+    },
+    {
+      "check": "05.senior.bytes_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "05.senior.sha256_matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "05.senior.length",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "05.senior.C1.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "05.senior.C2.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "05.senior.C3.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "05.senior.C4.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "06.middle.only_E08_rows_changed",
+      "passed": true,
+      "details": {
+        "actual": [],
+        "expected": []
+      }
+    },
+    {
+      "check": "06.middle.bytes_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "06.middle.sha256_matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "06.middle.length",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "06.middle.C1.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "06.middle.C2.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "06.middle.C3.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "06.middle.C4.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "06.senior.only_E08_rows_changed",
+      "passed": true,
+      "details": {
+        "actual": [
+          [
+            "C3",
+            3
+          ]
+        ],
+        "expected": [
+          [
+            "C3",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "check": "06.senior.sha256_matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "06.senior.length",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "06.senior.C1.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "06.senior.C2.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "06.senior.C3.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "06.senior.C4.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "07.middle.only_E08_rows_changed",
+      "passed": true,
+      "details": {
+        "actual": [],
+        "expected": []
+      }
+    },
+    {
+      "check": "07.middle.bytes_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "07.middle.sha256_matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "07.middle.length",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "07.middle.C1.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "07.middle.C2.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "07.middle.C3.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "07.middle.C4.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "07.senior.only_E08_rows_changed",
+      "passed": true,
+      "details": {
+        "actual": [
+          [
+            "C2",
+            3
+          ]
+        ],
+        "expected": [
+          [
+            "C2",
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "check": "07.senior.sha256_matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "07.senior.length",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "07.senior.C1.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "07.senior.C2.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "07.senior.C3.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "07.senior.C4.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "08.middle.only_E08_rows_changed",
+      "passed": true,
+      "details": {
+        "actual": [],
+        "expected": []
+      }
+    },
+    {
+      "check": "08.middle.bytes_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "08.middle.sha256_matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "08.middle.length",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "08.middle.C1.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "08.middle.C2.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "08.middle.C3.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "08.middle.C4.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "08.senior.only_E08_rows_changed",
+      "passed": true,
+      "details": {
+        "actual": [],
+        "expected": []
+      }
+    },
+    {
+      "check": "08.senior.bytes_preserved",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "08.senior.sha256_matches",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "08.senior.length",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "08.senior.C1.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "08.senior.C2.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "08.senior.C3.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "08.senior.C4.descriptors_match_labels",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "three_new_E08",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "24_direct_errors",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "3_each_type",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "baseline_01_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "normal_04_unmodified",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "E08-01.additional_situation",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "E08-01.different_content_from_L2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "E08-01.expected_fail",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "E08-02.additional_situation",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "E08-02.different_content_from_L2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "E08-02.expected_fail",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "E08-03.additional_situation",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "E08-03.different_content_from_L2",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "E08-03.expected_fail",
+      "passed": true,
+      "details": null
+    }
+  ]
+}

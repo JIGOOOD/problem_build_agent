@@ -1,0 +1,26 @@
+{
+  "valid": true,
+  "source_integrity": {
+    "Middle": {
+      "path": "inputs/ticket/middle/nfr_rubric.md",
+      "sha256": "40c43f71b8d37dbbaccf12ea43e3879b1cbd64b2519ac0316a108570f64c0b3b",
+      "matches_v1": true
+    },
+    "Senior": {
+      "path": "inputs/ticket/senior/nfr_rubric.md",
+      "sha256": "5470b1d4686a2ad27bda8b29c5f00ed40f335284b9edd67bd0a7a62037cbc659",
+      "matches_v1": true
+    }
+  },
+  "expected_3_5_level_count": 32,
+  "expected_3_5_criterion_count": 8,
+  "expected_4_1_pair_count": 1,
+  "level_pass": 21,
+  "level_fail": 11,
+  "criterion_pass": 2,
+  "criterion_fail": 6,
+  "pair_fail": 1,
+  "labels_in_raw_descriptors": true,
+  "middle_inherited_fail_checked": true,
+  "status": "analyst_proposed_pending_user_review"
+}

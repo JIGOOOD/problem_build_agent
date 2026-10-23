@@ -1,0 +1,22 @@
+{
+  "confirmed_on": "2026-10-24",
+  "confirmed_by": "user",
+  "confirmation": "사용자가 정답표를 직접 확인했다고 밝혔고 검토 필요 항목도 포함한 집계를 요청함.",
+  "include_review_required": true,
+  "source_labels_preserved": true,
+  "scope": "정답표 확인. 보조자의 모델 근거 대조까지 독립 검증했다는 의미는 아님.",
+  "datasets": [
+    {
+      "dataset": "seniority-error-injection",
+      "labels": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json",
+      "sha256": "2d0694b7d816904656ee34bce3c131d84bb23ebba79f832d75f03ca7e972e448",
+      "user_confirmed": true
+    },
+    {
+      "dataset": "ticket-rubric-review",
+      "labels": "resources/evaluator/datasets/ticket-rubric-review/review/expected_labels.json",
+      "sha256": "d18958d49f9ff5545fe4462d0b5b35fba376142c9dc4db9eb1542b1510166574",
+      "user_confirmed": true
+    }
+  ]
+}

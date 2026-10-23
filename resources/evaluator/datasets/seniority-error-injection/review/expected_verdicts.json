@@ -1,0 +1,629 @@
+[
+  {
+    "case_id": "01",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C1",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "01",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C2",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "01",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C3",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "01",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C4",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "01",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C1",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "01",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C2",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "01",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C3",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "01",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C4",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "01",
+    "metric": "4-1",
+    "seniority": "pair",
+    "target_id": "pair",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "02",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C1",
+    "expected": "Fail",
+    "failing_levels": [
+      0
+    ]
+  },
+  {
+    "case_id": "02",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C2",
+    "expected": "Fail",
+    "failing_levels": [
+      2,
+      3
+    ]
+  },
+  {
+    "case_id": "02",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C3",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "02",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C4",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "02",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C1",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "02",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C2",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "02",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C3",
+    "expected": "Fail",
+    "failing_levels": [
+      1
+    ]
+  },
+  {
+    "case_id": "02",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C4",
+    "expected": "Fail",
+    "failing_levels": [
+      2
+    ]
+  },
+  {
+    "case_id": "02",
+    "metric": "4-1",
+    "seniority": "pair",
+    "target_id": "pair",
+    "expected": "Fail",
+    "failing_levels": []
+  },
+  {
+    "case_id": "03",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C1",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "03",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C2",
+    "expected": "Fail",
+    "failing_levels": [
+      1
+    ]
+  },
+  {
+    "case_id": "03",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C3",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "03",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C4",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "03",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C1",
+    "expected": "Fail",
+    "failing_levels": [
+      3
+    ]
+  },
+  {
+    "case_id": "03",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C2",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "03",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C3",
+    "expected": "Fail",
+    "failing_levels": [
+      2
+    ]
+  },
+  {
+    "case_id": "03",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C4",
+    "expected": "Fail",
+    "failing_levels": [
+      3
+    ]
+  },
+  {
+    "case_id": "03",
+    "metric": "4-1",
+    "seniority": "pair",
+    "target_id": "pair",
+    "expected": "Fail",
+    "failing_levels": []
+  },
+  {
+    "case_id": "04",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C1",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "04",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C2",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "04",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C3",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "04",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C4",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "04",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C1",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "04",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C2",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "04",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C3",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "04",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C4",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "04",
+    "metric": "4-1",
+    "seniority": "pair",
+    "target_id": "pair",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "05",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C1",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "05",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C2",
+    "expected": "Fail",
+    "failing_levels": [
+      0
+    ]
+  },
+  {
+    "case_id": "05",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C3",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "05",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C4",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "05",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C1",
+    "expected": "Fail",
+    "failing_levels": [
+      1
+    ]
+  },
+  {
+    "case_id": "05",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C2",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "05",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C3",
+    "expected": "Fail",
+    "failing_levels": [
+      3
+    ]
+  },
+  {
+    "case_id": "05",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C4",
+    "expected": "Fail",
+    "failing_levels": [
+      2
+    ]
+  },
+  {
+    "case_id": "05",
+    "metric": "4-1",
+    "seniority": "pair",
+    "target_id": "pair",
+    "expected": "Fail",
+    "failing_levels": []
+  },
+  {
+    "case_id": "06",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C1",
+    "expected": "Fail",
+    "failing_levels": [
+      2,
+      3
+    ]
+  },
+  {
+    "case_id": "06",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C2",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "06",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C3",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "06",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C4",
+    "expected": "Fail",
+    "failing_levels": [
+      1
+    ]
+  },
+  {
+    "case_id": "06",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C1",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "06",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C2",
+    "expected": "Fail",
+    "failing_levels": [
+      2
+    ]
+  },
+  {
+    "case_id": "06",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C3",
+    "expected": "Fail",
+    "failing_levels": [
+      3
+    ]
+  },
+  {
+    "case_id": "06",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C4",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "06",
+    "metric": "4-1",
+    "seniority": "pair",
+    "target_id": "pair",
+    "expected": "Fail",
+    "failing_levels": []
+  },
+  {
+    "case_id": "07",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C1",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "07",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C2",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "07",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C3",
+    "expected": "Fail",
+    "failing_levels": [
+      0
+    ]
+  },
+  {
+    "case_id": "07",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C4",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "07",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C1",
+    "expected": "Fail",
+    "failing_levels": [
+      2
+    ]
+  },
+  {
+    "case_id": "07",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C2",
+    "expected": "Fail",
+    "failing_levels": [
+      3
+    ]
+  },
+  {
+    "case_id": "07",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C3",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "07",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C4",
+    "expected": "Fail",
+    "failing_levels": [
+      3
+    ]
+  },
+  {
+    "case_id": "07",
+    "metric": "4-1",
+    "seniority": "pair",
+    "target_id": "pair",
+    "expected": "Fail",
+    "failing_levels": []
+  },
+  {
+    "case_id": "08",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C1",
+    "expected": "Fail",
+    "failing_levels": [
+      1
+    ]
+  },
+  {
+    "case_id": "08",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C2",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "08",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C3",
+    "expected": "Fail",
+    "failing_levels": [
+      2,
+      3
+    ]
+  },
+  {
+    "case_id": "08",
+    "metric": "3-5",
+    "seniority": "Middle",
+    "target_id": "C4",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "08",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C1",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "08",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C2",
+    "expected": "Fail",
+    "failing_levels": [
+      2
+    ]
+  },
+  {
+    "case_id": "08",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C3",
+    "expected": "Pass",
+    "failing_levels": []
+  },
+  {
+    "case_id": "08",
+    "metric": "3-5",
+    "seniority": "Senior",
+    "target_id": "C4",
+    "expected": "Fail",
+    "failing_levels": [
+      1
+    ]
+  },
+  {
+    "case_id": "08",
+    "metric": "4-1",
+    "seniority": "pair",
+    "target_id": "pair",
+    "expected": "Fail",
+    "failing_levels": []
+  }
+]

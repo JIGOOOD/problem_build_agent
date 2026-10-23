@@ -1,0 +1,81 @@
+{
+  "dataset_id": "seniority_eval_test_v5",
+  "instructions": "선택적 제출 형식. 기존 Evaluator JSON 원본을 케이스별로 보내도 충분하다. 모델에게 이 템플릿의 기대 라벨을 제공하지 않는다.",
+  "evaluator_version": null,
+  "criteria_version": null,
+  "model": null,
+  "results": [
+    {
+      "case_id": "01",
+      "attempt": 1,
+      "trace": null,
+      "raw_result_file": null,
+      "evaluation_error": null,
+      "criterion_results": [],
+      "pair_result": null
+    },
+    {
+      "case_id": "02",
+      "attempt": 1,
+      "trace": null,
+      "raw_result_file": null,
+      "evaluation_error": null,
+      "criterion_results": [],
+      "pair_result": null
+    },
+    {
+      "case_id": "03",
+      "attempt": 1,
+      "trace": null,
+      "raw_result_file": null,
+      "evaluation_error": null,
+      "criterion_results": [],
+      "pair_result": null
+    },
+    {
+      "case_id": "04",
+      "attempt": 1,
+      "trace": null,
+      "raw_result_file": null,
+      "evaluation_error": null,
+      "criterion_results": [],
+      "pair_result": null
+    },
+    {
+      "case_id": "05",
+      "attempt": 1,
+      "trace": null,
+      "raw_result_file": null,
+      "evaluation_error": null,
+      "criterion_results": [],
+      "pair_result": null
+    },
+    {
+      "case_id": "06",
+      "attempt": 1,
+      "trace": null,
+      "raw_result_file": null,
+      "evaluation_error": null,
+      "criterion_results": [],
+      "pair_result": null
+    },
+    {
+      "case_id": "07",
+      "attempt": 1,
+      "trace": null,
+      "raw_result_file": null,
+      "evaluation_error": null,
+      "criterion_results": [],
+      "pair_result": null
+    },
+    {
+      "case_id": "08",
+      "attempt": 1,
+      "trace": null,
+      "raw_result_file": null,
+      "evaluation_error": null,
+      "criterion_results": [],
+      "pair_result": null
+    }
+  ]
+}

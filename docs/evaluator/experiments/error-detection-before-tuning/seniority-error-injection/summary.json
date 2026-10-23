@@ -1,0 +1,148 @@
+{
+  "dataset": "seniority_eval_test_v5",
+  "evaluation_head": "e33b730",
+  "seniority_policy": "프로젝트의 e33b730 연차 MD 원문",
+  "cases": [
+    {
+      "case_id": "01",
+      "passed": 9,
+      "failed": 0,
+      "unscorable": 0,
+      "percentage": 100.0
+    },
+    {
+      "case_id": "02",
+      "passed": 5,
+      "failed": 4,
+      "unscorable": 0,
+      "percentage": 55.56
+    },
+    {
+      "case_id": "03",
+      "passed": 6,
+      "failed": 3,
+      "unscorable": 0,
+      "percentage": 66.67
+    },
+    {
+      "case_id": "04",
+      "passed": 9,
+      "failed": 0,
+      "unscorable": 0,
+      "percentage": 100.0
+    },
+    {
+      "case_id": "05",
+      "passed": 7,
+      "failed": 2,
+      "unscorable": 0,
+      "percentage": 77.78
+    },
+    {
+      "case_id": "06",
+      "passed": 5,
+      "failed": 4,
+      "unscorable": 0,
+      "percentage": 55.56
+    },
+    {
+      "case_id": "07",
+      "passed": 6,
+      "failed": 3,
+      "unscorable": 0,
+      "percentage": 66.67
+    },
+    {
+      "case_id": "08",
+      "passed": 7,
+      "failed": 2,
+      "unscorable": 0,
+      "percentage": 77.78
+    }
+  ],
+  "actual_model_calls": 8,
+  "strict_direct_error_detection": {
+    "detected": 18,
+    "total": 24,
+    "percentage": 75.0
+  },
+  "by_error_type": {
+    "E01": {
+      "name": "Level 0에 문제 인식·해결 시도 배치",
+      "detected": 3,
+      "total": 3,
+      "percentage": 100.0
+    },
+    "E02": {
+      "name": "Middle 2점에 심층 분석·기술 선택 필수화",
+      "detected": 3,
+      "total": 3,
+      "percentage": 100.0
+    },
+    "E03": {
+      "name": "Senior 1점에 미완성 제안만 배치",
+      "detected": 1,
+      "total": 3,
+      "percentage": 33.33
+    },
+    "E04": {
+      "name": "Senior 2점의 기본 흐름을 고급 어휘로 포장",
+      "detected": 3,
+      "total": 3,
+      "percentage": 100.0
+    },
+    "E05": {
+      "name": "Senior 3점에 추상적인 분석·Trade-off만 추가",
+      "detected": 0,
+      "total": 3,
+      "percentage": 0.0
+    },
+    "E06": {
+      "name": "Middle 1점에 완성된 기본 흐름 배치",
+      "detected": 2,
+      "total": 3,
+      "percentage": 66.67
+    },
+    "E07": {
+      "name": "Senior 2점에 Middle 2점 기본 흐름 그대로 배치",
+      "detected": 3,
+      "total": 3,
+      "percentage": 100.0
+    },
+    "E08": {
+      "name": "Senior 3점에 구체적 예외 대응을 추가하지만 대안 비교·선택 근거가 부족",
+      "detected": 3,
+      "total": 3,
+      "percentage": 100.0
+    }
+  },
+  "normal_controls_acceptance": {
+    "matched": 18,
+    "total": 18,
+    "percentage": 100.0
+  },
+  "expected_normal_acceptance": {
+    "matched": 42,
+    "total": 42,
+    "percentage": 100.0
+  },
+  "pair_error_detection": {
+    "matched": 0,
+    "total": 6,
+    "percentage": 0.0
+  },
+  "verdict_agreement": {
+    "matched": 60,
+    "total": 72,
+    "percentage": 83.33
+  },
+  "limitations": [
+    "단일 티켓 주제·사용자 확인 정답표 기준·각 1회 평가.",
+    "근거 의미 대조는 보조자 검토이며 독립 사람 검토는 아니다."
+  ],
+  "source_run": ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/v5",
+  "conservative_cost_usd": 0.3679975,
+  "evaluation_code_head": "e33b730",
+  "label_status": "user_confirmed",
+  "label_approval": "resources/evaluator/label-approval.json"
+}
