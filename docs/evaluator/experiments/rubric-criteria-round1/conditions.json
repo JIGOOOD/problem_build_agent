@@ -1,0 +1,146 @@
+{
+  "created_at": "2026-10-23T19:22:24.034549+00:00",
+  "head": "186cf9b9047df82c019f7c7393184fc0f8da2437",
+  "baseline": ".archgen/m7-followup/v5-ticket-v2-baseline-20261024",
+  "changed_variable": "docs/evaluator/rubric.md의 3-5",
+  "groups": [
+    {
+      "key": "v5",
+      "dataset": "seniority_eval_test_v5",
+      "policy": "policy-current.md",
+      "cases": [
+        {
+          "case_id": "01",
+          "paths": [
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/01/middle.md",
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/01/senior.md"
+          ]
+        },
+        {
+          "case_id": "02",
+          "paths": [
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/middle.md",
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/senior.md"
+          ]
+        },
+        {
+          "case_id": "03",
+          "paths": [
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/03/middle.md",
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/03/senior.md"
+          ]
+        },
+        {
+          "case_id": "04",
+          "paths": [
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/04/middle.md",
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/04/senior.md"
+          ]
+        },
+        {
+          "case_id": "05",
+          "paths": [
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/05/middle.md",
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/05/senior.md"
+          ]
+        },
+        {
+          "case_id": "06",
+          "paths": [
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/06/middle.md",
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/06/senior.md"
+          ]
+        },
+        {
+          "case_id": "07",
+          "paths": [
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/middle.md",
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/senior.md"
+          ]
+        },
+        {
+          "case_id": "08",
+          "paths": [
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/08/middle.md",
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/08/senior.md"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "ticket-v2",
+      "dataset": "ticket_expected_labels_v2",
+      "policy": "policy-ticket-v2.md",
+      "cases": [
+        {
+          "case_id": "01",
+          "paths": [
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/middle.md",
+            ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/senior.md"
+          ]
+        }
+      ]
+    }
+  ],
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "high",
+  "planned_model_calls": 9,
+  "max_calls_per_case": 1,
+  "metrics": [
+    "3-5",
+    "4-1"
+  ],
+  "labels_in_model_input": false,
+  "messages_equal_except_3_5_criteria": true,
+  "cost_at_start_upper_usd": 46.46754720000003,
+  "budget_usd": 50,
+  "source_files_sha256": {
+    ".archgen/m7-followup/scripts/run-rubric-criteria-round1.py": "013d883cf80171c2be61fa51fd5ca789f894642f874864ff1f2dd34eacac718a",
+    ".archgen/m7-followup/scripts/run-seniority-evaluator.py": "f8eb7572d0396088004cd02a539990531f0889bcc0fba9b91279aae17825d688",
+    ".archgen/m7-followup/scripts/run-ticket-rules-ablation.py": "521828eab3de5da9858eb3da9ccf7976270187147e0db232f3d4055e8d3c42b1",
+    ".archgen/m7-followup/scripts/run-comparisons.py": "e5c5e51f7a4355d69cbc9558fd58dc79742b898cf43602eef8000b3fa4e06bed",
+    "src/archgen/evaluation.py": "5a3535fa9012e4f7c4e27865ccdc341190c0b0eface2a61bed7fd74efd6f929a",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/01/middle.md": "2ead7264473a55ecb9b67bed53db79131607f906cf84a1dbb116ed09875cf64d",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/01/senior.md": "cc7d46dbb810d0c9b1d7cb6912c6db56a957d4bcb0397d0f7a96aa042ce0c3f7",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/v5/01/prepared-messages.json": "c3bd83cf930ad06df81cc799c4200ab425007951d230224f1fd46ba36310df22",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/middle.md": "9a3794e7bb7a57110439f0426c05f1be5b7799991bfa57787cc2419bdd4cc889",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/senior.md": "70cdbc9e7c24b84c15f79f83cf73dec74c68d858b252cdbe318a73cf0edf586f",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/v5/02/prepared-messages.json": "d98c2f281488f97bb6ae0d4280888d7ae77b8e130ef67ef920e9c4b00d70df3a",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/03/middle.md": "354577bc2744112b6bc159435bb8f0e533e6f984ce2d49a635355d3970e1c3f4",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/03/senior.md": "f86f5bacd1fbe17de960d4aacab66370b2f93eb82f5d91805afc9ac698f604ab",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/v5/03/prepared-messages.json": "9b69e9f91aed8d75716091c0c099ae2dff105f7a627ac2af78acec8003e27a1d",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/04/middle.md": "2ead7264473a55ecb9b67bed53db79131607f906cf84a1dbb116ed09875cf64d",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/04/senior.md": "0c451907d497cb0c8dd82ea0b57180c9fc3e34a7c61b5e02784844dbafb24406",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/v5/04/prepared-messages.json": "14230089ec73b068a4fd4c761fb99ace501bbd8dfa764a7a4d37f7df09977d03",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/05/middle.md": "7ea30a26ec4253ea62f001ac7ee8453bb3347627531278c80c62ac1494927930",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/05/senior.md": "1a143aa6666aab9ef5307451939651278831547a7638d3054709a0dfa9132a23",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/v5/05/prepared-messages.json": "8835ebcda68b99fb55d6e35219a152be2dd1462680820c0543b9c117f29d4c31",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/06/middle.md": "b4656a9d249e5317ccf1828a2d094167571951ccac9deb12e3583f85fa17c8b8",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/06/senior.md": "12f09ea99bdf3f23e06dbc390721ed564751645c87ad4cfc2f1cbdea7b9b4384",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/v5/06/prepared-messages.json": "4da6be7c5aec7c4e95a01b3193ff4600acd158ef3356ada274bd55e9992d71ae",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/middle.md": "26a2ccbf131def9f399856bde00d6a6b06bb8d3d5b38566776779963422fd553",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/senior.md": "c6f9c712c3851e1c197efb05d74afe182df7d55b60aefce94a973b383e428856",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/v5/07/prepared-messages.json": "7e53ef06392b7b003ac8a2bf9405281f15cccfe5a61498115e99c33c32f54882",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/08/middle.md": "f45df38b3031da3eaf615ade96d8d2202520ccc4d0a201104a7168d7bae14ba2",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/08/senior.md": "10f803b646a59d1190d368c9dd7d8b0decdbbc078cbad13bc80dfc34df7bf693",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/v5/08/prepared-messages.json": "9b92943f5c423557c964bb4afa19ddec44a74336c293faa6a3ccce3d9a83052a",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/middle.md": "40c43f71b8d37dbbaccf12ea43e3879b1cbd64b2519ac0316a108570f64c0b3b",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/senior.md": "5470b1d4686a2ad27bda8b29c5f00ed40f335284b9edd67bd0a7a62037cbc659",
+    ".archgen/m7-followup/v5-ticket-v2-baseline-20261024/ticket-v2/01/prepared-messages.json": "f995f9c45e232e5095f276defe28ab0072c4098283815b2efa5be4c236be1a28",
+    ".archgen/m7-followup/rubric-criteria-round1-20261024/evaluation-source.py": "5a3535fa9012e4f7c4e27865ccdc341190c0b0eface2a61bed7fd74efd6f929a",
+    ".archgen/m7-followup/rubric-criteria-round1-20261024/runner-as-executed.py": "013d883cf80171c2be61fa51fd5ca789f894642f874864ff1f2dd34eacac718a",
+    ".archgen/m7-followup/rubric-criteria-round1-20261024/policy-current.md": "ac4aabeb05f45606afe6e1a3e526832147fdd705fc4fa53d23b459f28fc6c07d",
+    ".archgen/m7-followup/rubric-criteria-round1-20261024/policy-ticket-v2.md": "b9a02df90d61cb8c333dfd23e9256dfc6713299f9b15a93f76895d8897f4714e",
+    ".archgen/m7-followup/rubric-criteria-round1-20261024/evaluation-criteria.md": "37c11257a6118afd102e00ebe1c35e8888113ff3ea103903ee261e9d349c31ac",
+    ".archgen/m7-followup/rubric-criteria-round1-20261024/criteria-full.md": "289bab4e9543487bab780ee111b8fded062d8484ab189a01a8279d44b7237166",
+    ".archgen/m7-followup/rubric-criteria-round1-20261024/ticket-v2/01/prepared-messages.json": "80b6bdf9484aa10bcc8f65dca15711ded2a4c8b8f133c3288621635a817b44bc",
+    ".archgen/m7-followup/rubric-criteria-round1-20261024/v5/03/prepared-messages.json": "69c48e0fd55efd49ecf67d0ea0edbc6221df0b84da14c5f42674b7bb3c74ee6c",
+    ".archgen/m7-followup/rubric-criteria-round1-20261024/v5/08/prepared-messages.json": "6c866449ee3974a8b3b34d058bfccff1f366bc2503983d7c14841fcf7026352e",
+    ".archgen/m7-followup/rubric-criteria-round1-20261024/v5/07/prepared-messages.json": "3e182c754418edde308bbf4135a5d9494af981de30c007031608f95bdfbec512",
+    ".archgen/m7-followup/rubric-criteria-round1-20261024/v5/02/prepared-messages.json": "6a7643887519ca7fd4f1837bc0d58f2aa5a943f26776ecebb9e8be341e6b8ea2",
+    ".archgen/m7-followup/rubric-criteria-round1-20261024/v5/05/prepared-messages.json": "565a01f769195937c29f8dbdfaa832a62f0cd215eacb45f313a25297e6447a0c",
+    ".archgen/m7-followup/rubric-criteria-round1-20261024/v5/04/prepared-messages.json": "ca50d78d5b9874678ab56252b2899450aa386ae3d13b2af8c166a7e1615cc971",
+    ".archgen/m7-followup/rubric-criteria-round1-20261024/v5/06/prepared-messages.json": "945ad8257bc1700c15aa27ec8433265f28cbf0e826e5daad6b4322f42d0592d1",
+    ".archgen/m7-followup/rubric-criteria-round1-20261024/v5/01/prepared-messages.json": "6455b0f305dfe483d78e947b6775f587d778bff09fcc625f811ff19ccf360f43"
+  }
+}
