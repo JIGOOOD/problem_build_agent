@@ -1,0 +1,147 @@
+{
+  "evaluation": {
+    "results": [
+      {
+        "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/middle.md",
+        "criterion_id": "3-5",
+        "target_id": "C1",
+        "verdict": "Pass",
+        "applied_rule": "중급 2점은 기본 상태 전이와 최소 유효성 조건을, 3점은 대표적인 한계와 기본 개선을 요구해야 한다.",
+        "reason": "2점은 '권위 있는 판정 지점'의 역할과 소유권·유효성에 따른 일관된 처리 흐름을 요구하며, 개별 경합의 상세 제어 기법까지 강제하지 않는다. 3점은 '재할당 뒤 도착한 결제 결과나 오래된 만료 작업'이라는 대표적인 한계와 현재 상태를 구분하는 개선을 요구하므로 적합하다.",
+        "score": 1,
+        "percentage": 100.0,
+        "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md"
+      },
+      {
+        "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/middle.md",
+        "criterion_id": "3-5",
+        "target_id": "C2",
+        "verdict": "Fail",
+        "applied_rule": "중급 2점에서 기본 보존·재개를 넘어 복수의 독립적인 예외 대응을 필수화하면 부적합하며, 상위 수준의 상속도 확인한다.",
+        "reason": "2점은 '접수 성공 전에 주문과 진행 상태를 보존'하는 기본 복구에 더해, 재처리 중복 효과 방지와 결제 결과 불명 주문의 미결 추적·외부 대사를 모두 필수로 요구하여 대응 범위가 과도하다. 3점도 '2점에 더해'로 이 요구를 상속하므로 연쇄적으로 부적합하다.",
+        "score": 0,
+        "percentage": 0.0,
+        "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md"
+      },
+      {
+        "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/middle.md",
+        "criterion_id": "3-5",
+        "target_id": "C3",
+        "verdict": "Pass",
+        "applied_rule": "중급은 기본 유입 제어 흐름을 설명하고, 상위 수준에서 대표적인 한계에 연결된 개선을 제시하면 된다.",
+        "reason": "1점은 대기·제한의 제안에 머물고, 2점은 '처리 능력에 맞춰 유입을 제어'하는 구성요소와 초과 요청·내부 적체의 기본 처리 흐름을 요구한다. 3점의 고정 수용 기준 한계와 관찰에 따른 유입량·재시도 안내 조정은 대표적인 문제의 개선이며 복잡한 분석이나 대안 비교를 강제하지 않는다.",
+        "score": 1,
+        "percentage": 100.0,
+        "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md"
+      },
+      {
+        "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/middle.md",
+        "criterion_id": "3-5",
+        "target_id": "C4",
+        "verdict": "Pass",
+        "applied_rule": "중급 2점은 확장을 성립시키는 기본 분산 구조를, 3점은 대표적인 병목과 개선을 요구해야 한다.",
+        "reason": "2점의 '인기 공연 내부에도 추가 자원이 효과를 내는 처리 단위'와 충돌 판정 유지·부하 검증은 자원 추가가 실제 확장으로 이어지는 기본 설계를 확인하는 요구다. 3점은 부하 편중이나 공통 처리 지점이라는 대표적인 한계에 분산 단위 조정 등의 개선을 연결하며, 복잡한 상황 분석이나 선택 비용 비교는 요구하지 않는다.",
+        "score": 1,
+        "percentage": 100.0,
+        "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md"
+      },
+      {
+        "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/senior.md",
+        "criterion_id": "3-5",
+        "target_id": "C1",
+        "verdict": "Pass",
+        "applied_rule": "시니어는 기본 설계에서 구체적인 경합 처리로 발전하고, 3점에서는 한계 분석과 비용·선택 근거까지 요구해야 한다.",
+        "reason": "1점은 배타적 점유·확정의 기본 흐름을, 2점은 현재 소유권·상태·만료를 검증하는 배타적 전이와 지연 요청·재시도의 구체적인 처리 조건을 요구한다. 3점은 만료·재점유 사이의 경합을 추적하고 검증 경계·전이 순서의 개선 및 경합 대기·재시도 부담의 선택 근거까지 요구한다.",
+        "score": 1,
+        "percentage": 100.0,
+        "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md"
+      },
+      {
+        "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/senior.md",
+        "criterion_id": "3-5",
+        "target_id": "C2",
+        "verdict": "Fail",
+        "applied_rule": "시니어 2점은 중복 효과 방지의 결과뿐 아니라 이를 성립시키는 구체적인 판정 조건과 처리 원리를 요구해야 한다.",
+        "reason": "2점은 진행 상태·외부 작업 식별 정보의 보존과 결과 대조를 요구하지만, '재전달·재처리의 중복 확정을 막으며'에는 이미 확정된 주문을 무엇으로 판정하고 재반영을 차단하는지에 대한 필수 설명이 없다. 결과 불명 대조 흐름만으로 중복 확정 방지의 구체적인 처리 원리까지 요구한다고 볼 수 없다.",
+        "score": 0,
+        "percentage": 0.0,
+        "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md"
+      },
+      {
+        "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/senior.md",
+        "criterion_id": "3-5",
+        "target_id": "C3",
+        "verdict": "Fail",
+        "applied_rule": "시니어 1점은 핵심 요구를 충족하는 기본 설계를, 2점은 실제 과부하를 통제하는 구체적인 동작 조건과 처리 기제를 요구해야 한다.",
+        "reason": "1점은 '제한 기준을 처리 용량과 연결'하거나 실제 점유·주문 경로의 작업량을 통제하는 방법을 설명하지 않아도 충족되어, 핵심 요구를 만족하는 기본 설계가 부족하다. 2점도 '핵심 경로에 전달되는 작업량을 제한'한다는 결과 외에 한도를 실제로 강제하고 내부 적체를 제어하는 구체적인 동작 조건을 요구하지 않는다.",
+        "score": 0,
+        "percentage": 0.0,
+        "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md"
+      },
+      {
+        "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/senior.md",
+        "criterion_id": "3-5",
+        "target_id": "C4",
+        "verdict": "Fail",
+        "applied_rule": "시니어 1점은 단순한 증설 제안이 아니라 핵심 요구를 충족하는 기본 분산 설계와 처리 흐름을 요구해야 한다.",
+        "reason": "1점은 '조회 부하 분리나 처리 자원 증설을 제시'하면서 서로 다른 좌석의 작업 분산을 설명하지 못하거나, 증설로 동일 좌석 경합도 해소된다고 가정해도 충족된다. 따라서 핵심 확장 요구를 충족하는 기본 설계 없이 단순한 기술 제안만으로 점수를 받을 수 있다.",
+        "score": 0,
+        "percentage": 0.0,
+        "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md"
+      },
+      {
+        "rubric": "comparison",
+        "criterion_id": "4-1",
+        "target_id": "pair",
+        "verdict": "Fail",
+        "applied_rule": "대응되는 핵심 항목의 2점에서 실질적인 처리 기제·동작 조건의 차이가 있어야 하며, 3점의 추가 요구로 차이 부족을 상쇄할 수 없다.",
+        "reason": "중급 C3 2점의 '처리 능력에 맞춰 유입을 제어'하고 초과 요청을 대기·제한하는 흐름은 시니어 C3 2점의 '유입 한도를 정하는 절차'와 작업량 제한 요구에서 실질적으로 반복된다. 시니어는 요청 종류별 부하 검증을 추가하지만 실제 유입 통제의 처리 기제·동작 조건을 더 요구하지 않아, 3점의 선택 근거 요구를 고려해도 해당 수준의 역량 차이가 부족하다.",
+        "score": 0,
+        "percentage": 0.0
+      }
+    ],
+    "summary": {
+      "overall": {
+        "passed": 4,
+        "failed": 5,
+        "unscorable": 0,
+        "percentage": 44.44
+      },
+      "by_criterion": {
+        "3-5": {
+          "passed": 4,
+          "failed": 4,
+          "unscorable": 0,
+          "percentage": 50.0
+        },
+        "4-1": {
+          "passed": 0,
+          "failed": 1,
+          "unscorable": 0,
+          "percentage": 0.0
+        }
+      },
+      "by_rubric": {
+        "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/middle.md": {
+          "passed": 3,
+          "failed": 1,
+          "unscorable": 0,
+          "percentage": 75.0
+        },
+        "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/senior.md": {
+          "passed": 1,
+          "failed": 3,
+          "unscorable": 0,
+          "percentage": 25.0
+        },
+        "comparison": {
+          "passed": 0,
+          "failed": 1,
+          "unscorable": 0,
+          "percentage": 0.0
+        }
+      }
+    }
+  },
+  "model_calls": 1
+}

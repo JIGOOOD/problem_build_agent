@@ -1,0 +1,152 @@
+{
+  "baseline": "docs/evaluator/experiments/rubric-criteria-round2",
+  "changed_variable": "4-1 판정 방법2·3만 수정: 점수별 요구 비교와 다른 Level에 의한 상쇄 금지. 나머지 전송 메시지 동일.",
+  "actual_model_calls": 9,
+  "unscorable": 0,
+  "datasets": {
+    "seniority-error-injection": {
+      "reference_labels": "user_confirmed_including_review_required",
+      "baseline": "docs/evaluator/experiments/rubric-criteria-round2/seniority-error-injection",
+      "actual_model_calls": 8,
+      "strict_direct_error_detection": {
+        "detected": 24,
+        "total": 24,
+        "percentage": 100.0
+      },
+      "pair_error_detection": {
+        "detected": 6,
+        "total": 6,
+        "percentage": 100.0
+      },
+      "verdict_agreement": {
+        "matched": 72,
+        "total": 72,
+        "percentage": 100.0
+      },
+      "expected_normal_acceptance": {
+        "matched": 42,
+        "total": 42,
+        "percentage": 100.0
+      },
+      "normal_controls_acceptance": {
+        "matched": 18,
+        "total": 18,
+        "percentage": 100.0
+      },
+      "semantic_review": "assistant_semantic_review",
+      "by_error_type": {
+        "E01": {
+          "detected": 3,
+          "total": 3,
+          "percentage": 100.0
+        },
+        "E02": {
+          "detected": 3,
+          "total": 3,
+          "percentage": 100.0
+        },
+        "E03": {
+          "detected": 3,
+          "total": 3,
+          "percentage": 100.0
+        },
+        "E04": {
+          "detected": 3,
+          "total": 3,
+          "percentage": 100.0
+        },
+        "E05": {
+          "detected": 3,
+          "total": 3,
+          "percentage": 100.0
+        },
+        "E06": {
+          "detected": 3,
+          "total": 3,
+          "percentage": 100.0
+        },
+        "E07": {
+          "detected": 3,
+          "total": 3,
+          "percentage": 100.0
+        },
+        "E08": {
+          "detected": 3,
+          "total": 3,
+          "percentage": 100.0
+        }
+      }
+    },
+    "ticket-rubric-review": {
+      "reference_labels": "user_confirmed_including_review_required",
+      "baseline": "docs/evaluator/experiments/rubric-criteria-round2/ticket-rubric-review",
+      "actual_model_calls": 1,
+      "strict_direct_error_detection": {
+        "detected": 5,
+        "total": 8,
+        "percentage": 62.5
+      },
+      "pair_error_detection": {
+        "detected": 1,
+        "total": 1,
+        "percentage": 100.0
+      },
+      "verdict_agreement": {
+        "matched": 7,
+        "total": 9,
+        "percentage": 77.78
+      },
+      "expected_normal_acceptance": {
+        "matched": 2,
+        "total": 2,
+        "percentage": 100.0
+      },
+      "normal_controls_acceptance": null,
+      "semantic_review": "assistant_semantic_review",
+      "inherited_effect_detection": {
+        "detected": 1,
+        "total": 3,
+        "percentage": 33.33
+      },
+      "all_level_issue_detection": {
+        "detected": 6,
+        "total": 11,
+        "percentage": 54.55
+      },
+      "newly_detected_direct_issues": [
+        "T07"
+      ],
+      "previously_detected_now_missed_direct_issues": [],
+      "additional_wrong_level_citations": []
+    }
+  },
+  "cost": {
+    "conservative_additional_cost_usd": 0.47944,
+    "cumulative_upper_usd": 47.88716470000002
+  },
+  "limitations": [
+    "각 사례 1회·단일 티켓 주제다.",
+    "데이터셋별 연차 정책은 전후 동일하며 데이터셋 간 정책은 다르다.",
+    "정답표는 사용자 확인, 모델 근거와 오류 원인의 의미 대조는 보조자 검토다."
+  ],
+  "strict_direct_error_detection": {
+    "detected": 29,
+    "total": 32,
+    "percentage": 90.62
+  },
+  "pair_error_detection": {
+    "detected": 7,
+    "total": 7,
+    "percentage": 100.0
+  },
+  "verdict_agreement": {
+    "matched": 79,
+    "total": 81,
+    "percentage": 97.53
+  },
+  "normal_controls_acceptance": {
+    "matched": 18,
+    "total": 18,
+    "percentage": 100.0
+  }
+}

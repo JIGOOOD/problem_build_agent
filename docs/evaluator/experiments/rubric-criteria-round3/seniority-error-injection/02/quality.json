@@ -1,0 +1,147 @@
+{
+  "evaluation": {
+    "results": [
+      {
+        "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/middle.md",
+        "criterion_id": "3-5",
+        "target_id": "C1",
+        "verdict": "Fail",
+        "applied_rule": "중급 0점은 핵심 설계 문제를 고려하지 않는 수준이어야 한다.",
+        "reason": "0점의 '좌석 중복 예매 문제를 인식하고 잠금 사용을 제안'은 이미 핵심 문제 인식과 기본 해결 방향을 포함한다. 이는 문제를 고려하지 않는 0점이 아니라 중급 1점에 해당하는 역량이다.",
+        "score": 0,
+        "percentage": 0.0,
+        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/middle.md"
+      },
+      {
+        "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/middle.md",
+        "criterion_id": "3-5",
+        "target_id": "C2",
+        "verdict": "Fail",
+        "applied_rule": "중급 2점에서 복잡한 장애 복구 분석과 기술적 대안의 비용 비교·선택 정당화를 필수로 요구해서는 안 된다.",
+        "reason": "2점이 '결제 성공·내부 기록 실패·중복 통지가 교차하는 순서별 복구 결과' 분석과 '분산 원자성 한계' 설명을 요구한다. 여기에 대사·재시도 대안을 복구 지연·중복 위험·운영 비용으로 비교해 선택까지 정당화하도록 하여 중급 기본 설계 수준을 초과한다.",
+        "score": 0,
+        "percentage": 0.0,
+        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/middle.md"
+      },
+      {
+        "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/middle.md",
+        "criterion_id": "3-5",
+        "target_id": "C3",
+        "verdict": "Pass",
+        "applied_rule": "중급은 문제 미고려, 기본 방향 제안, 기본 처리 흐름, 대표적 한계와 개선 순으로 발전해야 한다.",
+        "reason": "0점은 무제한 적체 문제를 고려하지 않고, 1점은 대기·제한 제안에 그치며, 2점은 '앞단에서 제한'하여 전달·대기·거절하는 기본 흐름을 요구한다. 3점의 재시도 집중 문제와 '재시도 시점을 분산'하는 개선도 대표적인 한계 대응 수준으로 적합하다.",
+        "score": 1,
+        "percentage": 100.0,
+        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/middle.md"
+      },
+      {
+        "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/middle.md",
+        "criterion_id": "3-5",
+        "target_id": "C4",
+        "verdict": "Pass",
+        "applied_rule": "중급 2점은 컴포넌트 역할과 기본 분산 흐름, 3점은 대표적 병목과 개선 방안을 요구해야 한다.",
+        "reason": "0점은 확장 필요성을 고려하지 않고, 1점은 서버 증설 제안에 그치며, 2점은 '조회 서버와 점유 서버의 역할' 및 공연별 요청 분산 흐름을 요구한다. 3점은 인기 공연에 남는 병목을 인식하고 '좌석군처럼 더 작은 단위'로 분산하도록 하므로 복잡한 구현이나 비용 분석까지 요구하지 않는다.",
+        "score": 1,
+        "percentage": 100.0,
+        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/middle.md"
+      },
+      {
+        "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/senior.md",
+        "criterion_id": "3-5",
+        "target_id": "C1",
+        "verdict": "Pass",
+        "applied_rule": "고급은 기본 설계에서 구체적 동시성 제어로 발전하고, 상위 수준에서 한계·비용·선택 근거를 요구해야 한다.",
+        "reason": "1점은 단일 점유와 결제 후 확정·해제 흐름을 제시하고, 2점은 '점유 ID 일치·대기 상태·미만료 조건'의 원자 갱신으로 만료·재점유 경합에 대응한다. 3점은 사건 순서별 안전성을 분석하고 잠금 대기·충돌 재시도 비용과 처리 경계의 근거까지 요구한다.",
+        "score": 1,
+        "percentage": 100.0,
+        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/senior.md"
+      },
+      {
+        "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/senior.md",
+        "criterion_id": "3-5",
+        "target_id": "C2",
+        "verdict": "Pass",
+        "applied_rule": "고급 1점은 기본 보존·재개 설계, 2점은 중복·경합 대응 메커니즘, 3점은 복구 한계와 선택 판단을 요구해야 한다.",
+        "reason": "1점은 주문 저장 후 접수 응답과 작업자의 재개 흐름을 제시하고, 2점은 '유일성 제약'과 '같은 트랜잭션'으로 중복 확정 및 경합을 제어한다. 3점은 결제 성공 후 내부 기록 전 장애를 분석하며 외부 결제를 묶을 수 없는 한계와 대사 주기의 복구 지연·조회 부하 및 선택 근거를 요구한다.",
+        "score": 1,
+        "percentage": 100.0,
+        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/senior.md"
+      },
+      {
+        "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/senior.md",
+        "criterion_id": "3-5",
+        "target_id": "C3",
+        "verdict": "Fail",
+        "applied_rule": "고급 1점은 단순한 해결 방향이 아니라 핵심 요구사항을 충족하는 기본 설계와 처리 흐름을 요구해야 한다.",
+        "reason": "1점은 '요청을 대기시키거나 제한하겠다고' 제안하면서도 '제한 지점과 초과 요청의 처리 흐름을 설명하지 못한다'고 명시한다. 기본 설계 없이 단순한 방향 제안만으로 충족되므로 고급 1점 기준보다 낮다.",
+        "score": 0,
+        "percentage": 0.0,
+        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/senior.md"
+      },
+      {
+        "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/senior.md",
+        "criterion_id": "3-5",
+        "target_id": "C4",
+        "verdict": "Fail",
+        "applied_rule": "고급 2점은 기본 컴포넌트 구성·흐름을 넘어 구체적인 확장 메커니즘과 주요 병목 대응을 요구해야 한다.",
+        "reason": "2점의 '조회 계층과 점유 계층을 분리'하고 '공연 단위 요청을 다중 처리 노드에 배분'하는 요구는 기본 구성과 분산 흐름에 머문다. '수평 확장 메커니즘을 상세히 설명'이라는 표현만 있고, 1점에서 지적한 인기 공연의 요청·점유 데이터 분할 방법이나 집중 병목 대응은 명시하지 않는다.",
+        "score": 0,
+        "percentage": 0.0,
+        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/senior.md"
+      },
+      {
+        "rubric": "comparison",
+        "criterion_id": "4-1",
+        "target_id": "pair",
+        "verdict": "Fail",
+        "applied_rule": "대응하는 핵심 항목마다 고급의 구체적 메커니즘·문제 대응과 상위 수준의 설계 판단이 중급보다 실질적으로 높아야 한다.",
+        "reason": "C2는 중급 2점부터 장애 순서별 복구 분석과 분산 원자성 한계, 대안의 비용 비교·선택 정당화를 요구하여 고급 2점보다 낮은 역량으로 구분되지 않으며, 고급 3점의 외부 결제 대사와 비용 판단도 중급 상위 수준과 겹친다. C4의 두 2점은 모두 조회·점유 계층 분리와 공연별 요청의 다중 서버 분산을 요구하므로, 고급에 추가된 '수평 확장 메커니즘을 상세히 설명'만으로는 구체적 분산 조건이나 인기 공연 병목 대응의 실질적 차이가 확인되지 않는다.",
+        "score": 0,
+        "percentage": 0.0
+      }
+    ],
+    "summary": {
+      "overall": {
+        "passed": 4,
+        "failed": 5,
+        "unscorable": 0,
+        "percentage": 44.44
+      },
+      "by_criterion": {
+        "3-5": {
+          "passed": 4,
+          "failed": 4,
+          "unscorable": 0,
+          "percentage": 50.0
+        },
+        "4-1": {
+          "passed": 0,
+          "failed": 1,
+          "unscorable": 0,
+          "percentage": 0.0
+        }
+      },
+      "by_rubric": {
+        "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/middle.md": {
+          "passed": 2,
+          "failed": 2,
+          "unscorable": 0,
+          "percentage": 50.0
+        },
+        "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/senior.md": {
+          "passed": 2,
+          "failed": 2,
+          "unscorable": 0,
+          "percentage": 50.0
+        },
+        "comparison": {
+          "passed": 0,
+          "failed": 1,
+          "unscorable": 0,
+          "percentage": 0.0
+        }
+      }
+    }
+  },
+  "model_calls": 1
+}

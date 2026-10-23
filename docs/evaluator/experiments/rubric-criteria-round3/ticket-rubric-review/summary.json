@@ -1,0 +1,42 @@
+{
+  "reference_labels": "user_confirmed_including_review_required",
+  "baseline": "docs/evaluator/experiments/rubric-criteria-round2/ticket-rubric-review",
+  "actual_model_calls": 1,
+  "strict_direct_error_detection": {
+    "detected": 5,
+    "total": 8,
+    "percentage": 62.5
+  },
+  "pair_error_detection": {
+    "detected": 1,
+    "total": 1,
+    "percentage": 100.0
+  },
+  "verdict_agreement": {
+    "matched": 7,
+    "total": 9,
+    "percentage": 77.78
+  },
+  "expected_normal_acceptance": {
+    "matched": 2,
+    "total": 2,
+    "percentage": 100.0
+  },
+  "normal_controls_acceptance": null,
+  "semantic_review": "assistant_semantic_review",
+  "inherited_effect_detection": {
+    "detected": 1,
+    "total": 3,
+    "percentage": 33.33
+  },
+  "all_level_issue_detection": {
+    "detected": 6,
+    "total": 11,
+    "percentage": 54.55
+  },
+  "newly_detected_direct_issues": [
+    "T07"
+  ],
+  "previously_detected_now_missed_direct_issues": [],
+  "additional_wrong_level_citations": []
+}
