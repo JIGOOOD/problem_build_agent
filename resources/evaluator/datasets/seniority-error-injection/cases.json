@@ -1,0 +1,50 @@
+{
+  "dataset_id": "seniority_eval_test_v5",
+  "topic": "공연 좌석 티켓 예매",
+  "metrics": [
+    "3-5",
+    "4-1"
+  ],
+  "cases": [
+    {
+      "case_id": "01",
+      "middle": "cases/01/middle.md",
+      "senior": "cases/01/senior.md"
+    },
+    {
+      "case_id": "02",
+      "middle": "cases/02/middle.md",
+      "senior": "cases/02/senior.md"
+    },
+    {
+      "case_id": "03",
+      "middle": "cases/03/middle.md",
+      "senior": "cases/03/senior.md"
+    },
+    {
+      "case_id": "04",
+      "middle": "cases/04/middle.md",
+      "senior": "cases/04/senior.md"
+    },
+    {
+      "case_id": "05",
+      "middle": "cases/05/middle.md",
+      "senior": "cases/05/senior.md"
+    },
+    {
+      "case_id": "06",
+      "middle": "cases/06/middle.md",
+      "senior": "cases/06/senior.md"
+    },
+    {
+      "case_id": "07",
+      "middle": "cases/07/middle.md",
+      "senior": "cases/07/senior.md"
+    },
+    {
+      "case_id": "08",
+      "middle": "cases/08/middle.md",
+      "senior": "cases/08/senior.md"
+    }
+  ]
+}

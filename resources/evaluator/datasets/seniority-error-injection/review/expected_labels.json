@@ -1,0 +1,3426 @@
+{
+  "dataset_id": "seniority_eval_test_v5",
+  "label_status": "author_expected_not_model_measured",
+  "source_sha256": {
+    "middle": "2ead7264473a55ecb9b67bed53db79131607f906cf84a1dbb116ed09875cf64d",
+    "senior": "cc7d46dbb810d0c9b1d7cb6912c6db56a957d4bcb0397d0f7a96aa042ce0c3f7"
+  },
+  "contract": {
+    "basis": "사용자가 승인한 seniority_eval_clean_v2/01_clean을 고정한 정상 기준으로 사용. 새 Senior 정의나 새 골든셋을 만들지 않음.",
+    "relative_levels": [
+      "Middle 2 ≈ Senior 1",
+      "Middle 3 ≈ Senior 2"
+    ],
+    "meaning": "유사한 설계 문제·문제 해결 수준에서 Senior 2는 처리 조건·동작 원리를 추가로 요구. 같은 기술을 쓴다는 사실은 오류가 아님.",
+    "metrics_scope": [
+      "3-5: Level 0~3 개별 판정과 Criterion별 합성",
+      "4-1: 설계 문제를 기준으로 대응한 연차 차이와 쌍 전체 판정"
+    ],
+    "normal_status": "정상 01은 사용자가 승인한 기준안. 오류 정답과 정상 순서 변형은 이번에 작성한 기대 라벨이며 실제 Judge 측정값은 아님.",
+    "inheritance": "「2점에 더해」는 기존 2점 요구를 상속한다. E02의 Middle 3점 Fail은 연쇄 영향으로 명시하며 새로운 오류로 세지 않음.",
+    "independent_level_review": "상위 Level이 충분히 구체적이어도 낮은 Level의 부적합은 상쇄하지 않음. 수정하지 않은 구체적 상위 서술은 자기 조건에 따라 판정.",
+    "out_of_scope": "3-5·4-1 이외의 품질 기준은 이 데이터의 확정 라벨 대상이 아님. 수준 중복 때문에 3-2 등이 함께 실패할 수 있음.",
+    "no_leakage": "review 폴더·README·validation_report와 오류 ID·기대 판정은 평가 LLM 입력에 넣지 않음.",
+    "paraphrase_revision": "v4에서는 E06 3건의 문장 표현을 바꾸되 같은 기본 흐름을 유지했다. v5는 E08 3건을 변경해 Senior 2점의 단순 반복 대신 구체적인 예외·병목과 한 가지 대응을 추가하지만 대안 비교·선택 근거가 부족한 3점 경계 오류로 바꿨다."
+  },
+  "error_types": {
+    "E01": {
+      "name": "Level 0에 문제 인식·해결 시도 배치",
+      "role": "middle",
+      "level": 0,
+      "reason": "문제 미고려가 아니라 문제를 인식하고 해결 방향을 제안하는 답변을 0점 조건으로 둔다.",
+      "required": "해당 Level 0에 문제 인식 또는 해결 제안이 들어 있어 0점 경계를 어겼음을 지적한다.",
+      "pair": "Level 0은 연차 차이의 대상이 아니다. 이 오류 하나만으로 4-1 Fail을 요구하지 않는다."
+    },
+    "E02": {
+      "name": "Middle 2점에 심층 분석·기술 선택 필수화",
+      "role": "middle",
+      "level": 2,
+      "reason": "기본 구성·흐름을 넘어 복합 상황의 보장 분석과 대안의 비용·선택 정당화를 Middle 2점에 필수화한다.",
+      "required": "단순 기술 이름이나 원자성 언급 때문이 아니라, 실제로 요구한 복합 상황 분석·대안 판단이 Middle 2점의 깊이를 넘는다고 지적한다.",
+      "pair": "Middle 2점이 Senior 1점의 기본 흐름 수준보다 현저히 높아 상대적 난이도 관계가 깨진다."
+    },
+    "E03": {
+      "name": "Senior 1점에 미완성 제안만 배치",
+      "role": "senior",
+      "level": 1,
+      "reason": "승인된 Middle 1점 문장을 Senior 1점으로 복사하여 기본 구성과 정상 처리 흐름도 충족하지 못하게 한다.",
+      "required": "Senior 1점이 기술·방향 제안에 그치고 정상 처리 흐름을 설명하지 못하여 Middle 2점 수준에 못 미친다고 지적한다.",
+      "pair": "Senior 1점이 Middle 1점과 같으며 Middle 2점에 대응하는 기본 흐름 수준에 도달하지 못한다."
+    },
+    "E04": {
+      "name": "Senior 2점의 기본 흐름을 고급 어휘로 포장",
+      "role": "senior",
+      "level": 2,
+      "reason": "Middle 2점의 기본 흐름에 아키텍처·메커니즘·정교함 등 표현만 추가하고 필수 처리 조건이나 주요 문제 대응은 추가하지 않는다.",
+      "required": "말이 어려워졌지만 Middle 2점의 최소 답변으로도 충족되고, Senior 2점 고유의 조건·동작·문제 대응이 없음을 지적한다.",
+      "pair": "Middle 2점과 Senior 2점 사이에 어휘 이외의 추가 필수 역량이 없다."
+    },
+    "E05": {
+      "name": "Senior 3점에 추상적인 분석·Trade-off만 추가",
+      "role": "senior",
+      "level": 3,
+      "reason": "어떤 상황·한계·상충 관계를 분석할지 없이 심층 분석과 Trade-off라는 표현만으로 3점을 구분한다.",
+      "required": "분석·Trade-off라는 말은 있으나 구체적으로 평가할 한계·상황·이득과 비용이 없음을 지적한다.",
+      "pair": "Senior 3점에 요구되는 심화 판단이 추상적인 표현에 그쳐 실제 추가 역량을 식별할 수 없다."
+    },
+    "E06": {
+      "name": "Middle 1점에 완성된 기본 흐름 배치",
+      "role": "middle",
+      "level": 1,
+      "reason": "Middle 2점과 같은 완성된 기본 흐름을 표현만 바꿔 1점에 배치하여 미흡한 시도와 동작하는 설계의 경계를 없앤다.",
+      "required": "Middle 1점이 이미 기본 역할·정상 처리 흐름을 완비해 2점과 같음을 지적한다.",
+      "pair": "주 판정은 3-5의 Level 1 경계다. 이 오류만을 근거로 4-1 판정을 일률적으로 강제하지 않는다."
+    },
+    "E07": {
+      "name": "Senior 2점에 Middle 2점 기본 흐름 그대로 배치",
+      "role": "senior",
+      "level": 2,
+      "reason": "Middle 2점 원문을 그대로 옮겨 Senior 2점에 필요한 구체적인 조건·문제 대응을 제거한다.",
+      "required": "구성·흐름만 반복되며 Senior 2점의 추가 필수 메커니즘과 주요 문제 대응이 없음을 지적한다.",
+      "pair": "Middle 2점과 Senior 2점의 필수 설명이 문자상으로도 동일하다."
+    },
+    "E08": {
+      "name": "Senior 3점에 구체적 예외 대응을 추가하지만 대안 비교·선택 근거가 부족",
+      "role": "senior",
+      "level": 3,
+      "reason": "Senior 2점보다 구체적인 장애·병목 상황과 단일 대응 방안을 추가했지만 대안의 이득·비용, 상충 관계, 선택 근거까지는 요구하지 않는다.",
+      "required": "Senior 3점에 새로운 예외 상황과 한 가지 개선 방안은 있으나 대안 간 보장·비용 비교와 설계 선택의 근거가 부족함을 지적한다. Senior 2점과 문장이 비슷하다는 이유만으로 실패 처리하지 않는다.",
+      "pair": "Senior 2점에 비해 심화된 상황은 추가되지만, Senior 3점 고유의 대안 비교·판단 역량을 검증할 만큼 구체적인 Trade-off가 부족하다."
+    }
+  },
+  "cases": [
+    {
+      "case_id": "01",
+      "kind_for_reviewer_only": "approved_baseline",
+      "files": {
+        "middle": "cases/01/middle.md",
+        "senior": "cases/01/senior.md"
+      },
+      "sha256": {
+        "middle": "2ead7264473a55ecb9b67bed53db79131607f906cf84a1dbb116ed09875cf64d",
+        "senior": "cc7d46dbb810d0c9b1d7cb6912c6db56a957d4bcb0397d0f7a96aa042ce0c3f7"
+      },
+      "normal_variant": null,
+      "direct_error_ids": [],
+      "criterion_mapping": [
+        {
+          "middle": "C1",
+          "senior": "C1"
+        },
+        {
+          "middle": "C2",
+          "senior": "C2"
+        },
+        {
+          "middle": "C3",
+          "senior": "C3"
+        },
+        {
+          "middle": "C4",
+          "senior": "C4"
+        }
+      ],
+      "expected_3_5": [
+        {
+          "seniority": "Middle",
+          "criterion_id": "C1",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "같은 좌석을 여러 사용자가 동시에 점유해 중복 예매될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 잠금이나 상태 확인을 제안하지만, 경쟁 요청 중 누가 점유하는지와 결제 후 확정하는 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 상태를 관리하는 저장소에서 한 요청만 점유에 성공하게 하고, 점유자 확인 후 결제 결과에 따라 확정하거나 해제하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 늦은 결제 응답이 만료된 점유를 확정할 수 있다는 한계를 설명한다. 확정 전에 점유 유효성을 다시 확인하는 기본 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C2",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "접수한 주문이 처리 중 장애로 유실될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "장애 후 재시도하겠다고 제안하지만, 어떤 주문을 어디에 저장하고 누가 다시 처리하는지 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문을 지속 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 후 완료 상태를 기록하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 완료 기록 전에 장애가 나면 주문이 다시 처리될 수 있다는 한계를 설명한다. 기존 처리 결과를 확인해 중복 확정을 피하는 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "예매 오픈 때 처리 능력을 넘는 요청으로 내부 작업이 무제한 쌓일 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "요청을 대기시키거나 제한하겠다고 하지만, 제한 지점과 초과 요청의 처리 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "진입 요청을 앞단에서 제한해 처리 가능한 수만 점유·주문 서비스로 보내고, 나머지는 대기시키거나 거절하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 대기 중인 사용자의 재시도가 동시에 몰려 다시 과부하가 생기는 한계를 설명한다. 재시도 시점을 분산하는 기본 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "인기 공연에 조회·점유가 몰릴 때 서버 확장이 필요하다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "서버를 늘리겠다고 제안하지만, 조회·점유 요청을 여러 서버에 어떻게 분산하는지 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회 서버와 점유 서버의 역할을 구분하고, 공연별 요청을 여러 처리 서버로 나눠 부하를 분담하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 인기 공연 하나에 요청이 집중되면 공연별 분산만으로 병목이 남는 한계를 설명한다. 좌석군처럼 더 작은 단위로 점유 요청을 분산하는 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C1",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "같은 좌석을 여러 사용자가 동시에 점유해 중복 예매될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 저장소에서 한 요청만 점유하게 하고, 점유자를 확인해 결제 결과에 따라 확정하거나 해제하는 흐름을 제시한다. 다만 확인 이후 만료·재점유가 끼어들 때 변경을 막는 구체적인 조건은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "가용 좌석에 점유 ID·만료 시각을 원자적으로 기록한다. 확정은 점유 ID 일치·대기 상태·미만료 조건에서, 해제는 같은 ID·대기 상태에서 만료나 결제 실패 조건으로 원자 갱신해 오래된 응답이 새 점유나 확정을 바꾸지 못하게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 만료 해제·재점유·이전 결제 응답의 순서가 달라도 새 점유가 유지되는 근거를 분석한다. 좌석별 잠금과 조건부 갱신을 비교해 잠금 대기·충돌 재시도 비용을 설명하고, 외부 결제 대기와 좌석 변경의 처리 경계를 정당화한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C2",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "접수한 주문이 처리 중 장애로 유실될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문과 진행 상태를 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 뒤 완료로 기록하는 흐름을 제시한다. 다만 같은 주문이 다시 처리될 때 중복 확정을 막는 구체적인 조건은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문 접수·재개 흐름에서 주문 ID별 확정 기록에 유일성 제약을 두고, 확정 결과와 완료 상태를 같은 트랜잭션으로 저장한다. 재처리·중복 결제 통지는 기존 기록이 있으면 결과를 재사용하고, 없으면 새로 반영하되 경합한 작업 중 한 건만 커밋되게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 결제 성공 후 내부 기록 전에 장애가 난 상황에서 기존 결제 식별자로 외부 결과를 대조해 복구하는 흐름을 분석한다. 외부 결제까지 로컬 트랜잭션으로 묶을 수 없는 한계를 짚고, 대사 주기에 따른 복구 지연·조회 부하와 선택 근거를 설명한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "예매 오픈 때 처리 능력을 넘는 요청으로 내부 작업이 무제한 쌓일 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "앞단에서 처리 가능한 수만 점유·주문 서비스로 보내고 초과 요청은 대기시키거나 거절하는 흐름을 제시한다. 다만 여러 진입 서버가 허용량을 나눠 쓰거나 대기자가 동시에 재시도할 때의 제어 방식은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "진입 서버들이 처리 중 요청 수와 상한을 공유하고, 상한 미만일 때만 원자적으로 수를 늘려 요청을 전달한다. 완료는 요청 ID로 한 번만 차감한다. 거절된 클라이언트는 대기 간격에 임의 지연을 더하며, 재시도도 같은 진입 검사를 거치게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 모든 진입 서버가 공유 카운터를 갱신해 진입 판단 자체가 병목이 되는 상황을 분석한다. 전체 상한을 서버별로 나눠 관리하는 대안과 비교해 조정 비용·남는 용량의 활용·서버 장애 시 용량 회수의 상충을 설명하고 선택을 정당화한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "인기 공연에 조회·점유가 몰릴 때 서버 확장이 필요하다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회 서버와 점유 서버의 역할을 나누고, 공연별 요청을 여러 처리 서버로 분산해 부하를 나누는 흐름을 제시한다. 다만 인기 공연 하나에 요청이 집중될 때 요청과 점유 데이터를 함께 나눌 방법은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회는 읽기 복제본이나 캐시로 보내고, 점유 상태는 공연 ID·좌석군 기준으로 여러 저장소에 분할한다. 라우터는 분할표로 담당 저장소를 찾아 같은 좌석의 변경을 같은 곳으로 보낸다. 서버만 늘려도 남는 단일 쓰기 저장소 병목을 줄이는 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 좌석군 재배치 중 이전·새 저장소가 동시에 점유를 받는 위험을 분석한다. 쓰기를 멈춰 복사한 뒤 라우팅을 전환하는 방식과, 변경분을 복제한 뒤 쓰기 담당을 전환하는 방식을 비교해 중단 시간·상태 동기화 비용과 선택 근거를 설명한다."
+            }
+          ]
+        }
+      ],
+      "expected_4_1": {
+        "expected": "Pass",
+        "required_failure_evidence": [],
+        "normal_comparisons": [
+          {
+            "middle_criterion_id": "C1",
+            "senior_criterion_id": "C1",
+            "expected": "Pass",
+            "reason": "대응 Level 1~3은 승인 정상본과 동일하다. Level 0의 동일함이나 다른 오류로부터 부정 판정을 전파하지 않는다."
+          },
+          {
+            "middle_criterion_id": "C2",
+            "senior_criterion_id": "C2",
+            "expected": "Pass",
+            "reason": "대응 Level 1~3은 승인 정상본과 동일하다. Level 0의 동일함이나 다른 오류로부터 부정 판정을 전파하지 않는다."
+          },
+          {
+            "middle_criterion_id": "C3",
+            "senior_criterion_id": "C3",
+            "expected": "Pass",
+            "reason": "대응 Level 1~3은 승인 정상본과 동일하다. Level 0의 동일함이나 다른 오류로부터 부정 판정을 전파하지 않는다."
+          },
+          {
+            "middle_criterion_id": "C4",
+            "senior_criterion_id": "C4",
+            "expected": "Pass",
+            "reason": "대응 Level 1~3은 승인 정상본과 동일하다. Level 0의 동일함이나 다른 오류로부터 부정 판정을 전파하지 않는다."
+          }
+        ],
+        "note": "전체 판정만 맞아도 모든 오류를 검출한 것은 아니다. E01·E06은 3-5 검출을 주 정답으로 삼는다."
+      }
+    },
+    {
+      "case_id": "02",
+      "kind_for_reviewer_only": "multi_error",
+      "files": {
+        "middle": "cases/02/middle.md",
+        "senior": "cases/02/senior.md"
+      },
+      "sha256": {
+        "middle": "9a3794e7bb7a57110439f0426c05f1be5b7799991bfa57787cc2419bdd4cc889",
+        "senior": "70cdbc9e7c24b84c15f79f83cf73dec74c68d858b252cdbe318a73cf0edf586f"
+      },
+      "normal_variant": null,
+      "direct_error_ids": [
+        "E01-01",
+        "E02-01",
+        "E03-01",
+        "E04-01"
+      ],
+      "criterion_mapping": [
+        {
+          "middle": "C1",
+          "senior": "C1"
+        },
+        {
+          "middle": "C2",
+          "senior": "C2"
+        },
+        {
+          "middle": "C3",
+          "senior": "C3"
+        },
+        {
+          "middle": "C4",
+          "senior": "C4"
+        }
+      ],
+      "expected_3_5": [
+        {
+          "seniority": "Middle",
+          "criterion_id": "C1",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E01-01",
+              "descriptor": "좌석 중복 예매 문제를 인식하고 잠금 사용을 제안하지만, 점유와 결제 확정으로 이어지는 처리 흐름은 설명하지 못한다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 잠금이나 상태 확인을 제안하지만, 경쟁 요청 중 누가 점유하는지와 결제 후 확정하는 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 상태를 관리하는 저장소에서 한 요청만 점유에 성공하게 하고, 점유자 확인 후 결제 결과에 따라 확정하거나 해제하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 늦은 결제 응답이 만료된 점유를 확정할 수 있다는 한계를 설명한다. 확정 전에 점유 유효성을 다시 확인하는 기본 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C2",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "접수한 주문이 처리 중 장애로 유실될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "장애 후 재시도하겠다고 제안하지만, 어떤 주문을 어디에 저장하고 누가 다시 처리하는지 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E02-01",
+              "descriptor": "주문 보존·재개 흐름에 더해, 결제 성공·내부 기록 실패·중복 통지가 교차하는 순서별 복구 결과를 분석한다. 외부 결제와 내부 저장의 분산 원자성 한계를 설명하고, 대사·재시도 대안을 복구 지연·중복 위험·운영 비용으로 비교해 선택을 정당화한다."
+            },
+            {
+              "level": 3,
+              "expected": "Fail",
+              "label_basis": "inherited",
+              "error_id": "E02-01",
+              "descriptor": "2점에 더해, 완료 기록 전에 장애가 나면 주문이 다시 처리될 수 있다는 한계를 설명한다. 기존 처리 결과를 확인해 중복 확정을 피하는 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "예매 오픈 때 처리 능력을 넘는 요청으로 내부 작업이 무제한 쌓일 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "요청을 대기시키거나 제한하겠다고 하지만, 제한 지점과 초과 요청의 처리 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "진입 요청을 앞단에서 제한해 처리 가능한 수만 점유·주문 서비스로 보내고, 나머지는 대기시키거나 거절하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 대기 중인 사용자의 재시도가 동시에 몰려 다시 과부하가 생기는 한계를 설명한다. 재시도 시점을 분산하는 기본 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "인기 공연에 조회·점유가 몰릴 때 서버 확장이 필요하다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "서버를 늘리겠다고 제안하지만, 조회·점유 요청을 여러 서버에 어떻게 분산하는지 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회 서버와 점유 서버의 역할을 구분하고, 공연별 요청을 여러 처리 서버로 나눠 부하를 분담하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 인기 공연 하나에 요청이 집중되면 공연별 분산만으로 병목이 남는 한계를 설명한다. 좌석군처럼 더 작은 단위로 점유 요청을 분산하는 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C1",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "같은 좌석을 여러 사용자가 동시에 점유해 중복 예매될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 저장소에서 한 요청만 점유하게 하고, 점유자를 확인해 결제 결과에 따라 확정하거나 해제하는 흐름을 제시한다. 다만 확인 이후 만료·재점유가 끼어들 때 변경을 막는 구체적인 조건은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "가용 좌석에 점유 ID·만료 시각을 원자적으로 기록한다. 확정은 점유 ID 일치·대기 상태·미만료 조건에서, 해제는 같은 ID·대기 상태에서 만료나 결제 실패 조건으로 원자 갱신해 오래된 응답이 새 점유나 확정을 바꾸지 못하게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 만료 해제·재점유·이전 결제 응답의 순서가 달라도 새 점유가 유지되는 근거를 분석한다. 좌석별 잠금과 조건부 갱신을 비교해 잠금 대기·충돌 재시도 비용을 설명하고, 외부 결제 대기와 좌석 변경의 처리 경계를 정당화한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C2",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "접수한 주문이 처리 중 장애로 유실될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문과 진행 상태를 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 뒤 완료로 기록하는 흐름을 제시한다. 다만 같은 주문이 다시 처리될 때 중복 확정을 막는 구체적인 조건은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문 접수·재개 흐름에서 주문 ID별 확정 기록에 유일성 제약을 두고, 확정 결과와 완료 상태를 같은 트랜잭션으로 저장한다. 재처리·중복 결제 통지는 기존 기록이 있으면 결과를 재사용하고, 없으면 새로 반영하되 경합한 작업 중 한 건만 커밋되게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 결제 성공 후 내부 기록 전에 장애가 난 상황에서 기존 결제 식별자로 외부 결과를 대조해 복구하는 흐름을 분석한다. 외부 결제까지 로컬 트랜잭션으로 묶을 수 없는 한계를 짚고, 대사 주기에 따른 복구 지연·조회 부하와 선택 근거를 설명한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C3",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "예매 오픈 때 처리 능력을 넘는 요청으로 내부 작업이 무제한 쌓일 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E03-01",
+              "descriptor": "요청을 대기시키거나 제한하겠다고 하지만, 제한 지점과 초과 요청의 처리 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "진입 서버들이 처리 중 요청 수와 상한을 공유하고, 상한 미만일 때만 원자적으로 수를 늘려 요청을 전달한다. 완료는 요청 ID로 한 번만 차감한다. 거절된 클라이언트는 대기 간격에 임의 지연을 더하며, 재시도도 같은 진입 검사를 거치게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 모든 진입 서버가 공유 카운터를 갱신해 진입 판단 자체가 병목이 되는 상황을 분석한다. 전체 상한을 서버별로 나눠 관리하는 대안과 비교해 조정 비용·남는 용량의 활용·서버 장애 시 용량 회수의 상충을 설명하고 선택을 정당화한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C4",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "인기 공연에 조회·점유가 몰릴 때 서버 확장이 필요하다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회 서버와 점유 서버의 역할을 나누고, 공연별 요청을 여러 처리 서버로 분산해 부하를 나누는 흐름을 제시한다. 다만 인기 공연 하나에 요청이 집중될 때 요청과 점유 데이터를 함께 나눌 방법은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E04-01",
+              "descriptor": "조회 계층과 점유 계층을 분리한 분산 아키텍처를 제시하고, 공연 단위 요청을 다중 처리 노드에 배분하는 수평 확장 메커니즘을 상세히 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 좌석군 재배치 중 이전·새 저장소가 동시에 점유를 받는 위험을 분석한다. 쓰기를 멈춰 복사한 뒤 라우팅을 전환하는 방식과, 변경분을 복제한 뒤 쓰기 담당을 전환하는 방식을 비교해 중단 시간·상태 동기화 비용과 선택 근거를 설명한다."
+            }
+          ]
+        }
+      ],
+      "expected_4_1": {
+        "expected": "Fail",
+        "required_failure_evidence": [
+          {
+            "error_id": "E02-01",
+            "middle_criterion_id": "C2",
+            "senior_criterion_id": "C2",
+            "reason": "Middle 2점이 Senior 1점의 기본 흐름 수준보다 현저히 높아 상대적 난이도 관계가 깨진다."
+          },
+          {
+            "error_id": "E03-01",
+            "middle_criterion_id": "C3",
+            "senior_criterion_id": "C3",
+            "reason": "Senior 1점이 Middle 1점과 같으며 Middle 2점에 대응하는 기본 흐름 수준에 도달하지 못한다."
+          },
+          {
+            "error_id": "E04-01",
+            "middle_criterion_id": "C4",
+            "senior_criterion_id": "C4",
+            "reason": "Middle 2점과 Senior 2점 사이에 어휘 이외의 추가 필수 역량이 없다."
+          }
+        ],
+        "normal_comparisons": [
+          {
+            "middle_criterion_id": "C1",
+            "senior_criterion_id": "C1",
+            "expected": "Pass",
+            "reason": "대응 Level 1~3은 승인 정상본과 동일하다. Level 0의 동일함이나 다른 오류로부터 부정 판정을 전파하지 않는다."
+          }
+        ],
+        "note": "전체 판정만 맞아도 모든 오류를 검출한 것은 아니다. E01·E06은 3-5 검출을 주 정답으로 삼는다."
+      }
+    },
+    {
+      "case_id": "03",
+      "kind_for_reviewer_only": "multi_error",
+      "files": {
+        "middle": "cases/03/middle.md",
+        "senior": "cases/03/senior.md"
+      },
+      "sha256": {
+        "middle": "354577bc2744112b6bc159435bb8f0e533e6f984ce2d49a635355d3970e1c3f4",
+        "senior": "f86f5bacd1fbe17de960d4aacab66370b2f93eb82f5d91805afc9ac698f604ab"
+      },
+      "normal_variant": null,
+      "direct_error_ids": [
+        "E05-01",
+        "E06-01",
+        "E07-01",
+        "E08-01"
+      ],
+      "criterion_mapping": [
+        {
+          "middle": "C1",
+          "senior": "C1"
+        },
+        {
+          "middle": "C2",
+          "senior": "C2"
+        },
+        {
+          "middle": "C3",
+          "senior": "C3"
+        },
+        {
+          "middle": "C4",
+          "senior": "C4"
+        }
+      ],
+      "expected_3_5": [
+        {
+          "seniority": "Middle",
+          "criterion_id": "C1",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "같은 좌석을 여러 사용자가 동시에 점유해 중복 예매될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 잠금이나 상태 확인을 제안하지만, 경쟁 요청 중 누가 점유하는지와 결제 후 확정하는 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 상태를 관리하는 저장소에서 한 요청만 점유에 성공하게 하고, 점유자 확인 후 결제 결과에 따라 확정하거나 해제하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 늦은 결제 응답이 만료된 점유를 확정할 수 있다는 한계를 설명한다. 확정 전에 점유 유효성을 다시 확인하는 기본 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C2",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "접수한 주문이 처리 중 장애로 유실될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E06-01",
+              "descriptor": "주문을 계속 보관할 저장소에 기록하고 나서 접수 성공을 알린다. 이후 작업자가 처리되지 않은 주문을 찾아 실행하고, 끝난 주문의 상태를 완료로 남기는 절차를 설명한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문을 지속 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 후 완료 상태를 기록하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 완료 기록 전에 장애가 나면 주문이 다시 처리될 수 있다는 한계를 설명한다. 기존 처리 결과를 확인해 중복 확정을 피하는 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "예매 오픈 때 처리 능력을 넘는 요청으로 내부 작업이 무제한 쌓일 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "요청을 대기시키거나 제한하겠다고 하지만, 제한 지점과 초과 요청의 처리 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "진입 요청을 앞단에서 제한해 처리 가능한 수만 점유·주문 서비스로 보내고, 나머지는 대기시키거나 거절하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 대기 중인 사용자의 재시도가 동시에 몰려 다시 과부하가 생기는 한계를 설명한다. 재시도 시점을 분산하는 기본 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "인기 공연에 조회·점유가 몰릴 때 서버 확장이 필요하다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "서버를 늘리겠다고 제안하지만, 조회·점유 요청을 여러 서버에 어떻게 분산하는지 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회 서버와 점유 서버의 역할을 구분하고, 공연별 요청을 여러 처리 서버로 나눠 부하를 분담하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 인기 공연 하나에 요청이 집중되면 공연별 분산만으로 병목이 남는 한계를 설명한다. 좌석군처럼 더 작은 단위로 점유 요청을 분산하는 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C1",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "같은 좌석을 여러 사용자가 동시에 점유해 중복 예매될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 저장소에서 한 요청만 점유하게 하고, 점유자를 확인해 결제 결과에 따라 확정하거나 해제하는 흐름을 제시한다. 다만 확인 이후 만료·재점유가 끼어들 때 변경을 막는 구체적인 조건은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "가용 좌석에 점유 ID·만료 시각을 원자적으로 기록한다. 확정은 점유 ID 일치·대기 상태·미만료 조건에서, 해제는 같은 ID·대기 상태에서 만료나 결제 실패 조건으로 원자 갱신해 오래된 응답이 새 점유나 확정을 바꾸지 못하게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E05-01",
+              "descriptor": "2점에 더해, 좌석 상태 전이의 복잡한 예외와 심층적인 한계를 분석하고 고도화된 아키텍처의 Trade-off를 종합적으로 검토하여 최적의 설계를 정당화한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C2",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "접수한 주문이 처리 중 장애로 유실될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문과 진행 상태를 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 뒤 완료로 기록하는 흐름을 제시한다. 다만 같은 주문이 다시 처리될 때 중복 확정을 막는 구체적인 조건은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문 접수·재개 흐름에서 주문 ID별 확정 기록에 유일성 제약을 두고, 확정 결과와 완료 상태를 같은 트랜잭션으로 저장한다. 재처리·중복 결제 통지는 기존 기록이 있으면 결과를 재사용하고, 없으면 새로 반영하되 경합한 작업 중 한 건만 커밋되게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 결제 성공 후 내부 기록 전에 장애가 난 상황에서 기존 결제 식별자로 외부 결과를 대조해 복구하는 흐름을 분석한다. 외부 결제까지 로컬 트랜잭션으로 묶을 수 없는 한계를 짚고, 대사 주기에 따른 복구 지연·조회 부하와 선택 근거를 설명한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C3",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "예매 오픈 때 처리 능력을 넘는 요청으로 내부 작업이 무제한 쌓일 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "앞단에서 처리 가능한 수만 점유·주문 서비스로 보내고 초과 요청은 대기시키거나 거절하는 흐름을 제시한다. 다만 여러 진입 서버가 허용량을 나눠 쓰거나 대기자가 동시에 재시도할 때의 제어 방식은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E07-01",
+              "descriptor": "진입 요청을 앞단에서 제한해 처리 가능한 수만 점유·주문 서비스로 보내고, 나머지는 대기시키거나 거절하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 모든 진입 서버가 공유 카운터를 갱신해 진입 판단 자체가 병목이 되는 상황을 분석한다. 전체 상한을 서버별로 나눠 관리하는 대안과 비교해 조정 비용·남는 용량의 활용·서버 장애 시 용량 회수의 상충을 설명하고 선택을 정당화한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C4",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "인기 공연에 조회·점유가 몰릴 때 서버 확장이 필요하다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회 서버와 점유 서버의 역할을 나누고, 공연별 요청을 여러 처리 서버로 분산해 부하를 나누는 흐름을 제시한다. 다만 인기 공연 하나에 요청이 집중될 때 요청과 점유 데이터를 함께 나눌 방법은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회는 읽기 복제본이나 캐시로 보내고, 점유 상태는 공연 ID·좌석군 기준으로 여러 저장소에 분할한다. 라우터는 분할표로 담당 저장소를 찾아 같은 좌석의 변경을 같은 곳으로 보낸다. 서버만 늘려도 남는 단일 쓰기 저장소 병목을 줄이는 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E08-01",
+              "descriptor": "2점에 더해, 좌석군을 다른 저장소로 재배치할 때 이전 경로로 점유 쓰기가 들어와 두 저장소가 동시에 같은 좌석을 변경할 수 있음을 지적한다. 이를 막기 위해 해당 좌석군의 쓰기를 잠시 중단하고 데이터를 복사한 뒤 라우팅을 전환하는 절차를 제시한다."
+            }
+          ]
+        }
+      ],
+      "expected_4_1": {
+        "expected": "Fail",
+        "required_failure_evidence": [
+          {
+            "error_id": "E05-01",
+            "middle_criterion_id": "C1",
+            "senior_criterion_id": "C1",
+            "reason": "Senior 3점에 요구되는 심화 판단이 추상적인 표현에 그쳐 실제 추가 역량을 식별할 수 없다."
+          },
+          {
+            "error_id": "E07-01",
+            "middle_criterion_id": "C3",
+            "senior_criterion_id": "C3",
+            "reason": "Middle 2점과 Senior 2점의 필수 설명이 문자상으로도 동일하다."
+          },
+          {
+            "error_id": "E08-01",
+            "middle_criterion_id": "C4",
+            "senior_criterion_id": "C4",
+            "reason": "Senior 3점의 심화 판단 경계가 사라진다. Senior 2점이 상세하다는 이유로 보완된 것으로 보지 않는다."
+          }
+        ],
+        "normal_comparisons": [],
+        "note": "전체 판정만 맞아도 모든 오류를 검출한 것은 아니다. E01·E06은 3-5 검출을 주 정답으로 삼는다."
+      }
+    },
+    {
+      "case_id": "04",
+      "kind_for_reviewer_only": "normal_order_variant",
+      "files": {
+        "middle": "cases/04/middle.md",
+        "senior": "cases/04/senior.md"
+      },
+      "sha256": {
+        "middle": "2ead7264473a55ecb9b67bed53db79131607f906cf84a1dbb116ed09875cf64d",
+        "senior": "0c451907d497cb0c8dd82ea0b57180c9fc3e34a7c61b5e02784844dbafb24406"
+      },
+      "normal_variant": "Senior의 20점 항목 두 개 순서·NFR/Criterion ID 교환. Level 원문과 평가 내용은 그대로.",
+      "direct_error_ids": [],
+      "criterion_mapping": [
+        {
+          "middle": "C1",
+          "senior": "C1"
+        },
+        {
+          "middle": "C2",
+          "senior": "C2"
+        },
+        {
+          "middle": "C3",
+          "senior": "C4"
+        },
+        {
+          "middle": "C4",
+          "senior": "C3"
+        }
+      ],
+      "expected_3_5": [
+        {
+          "seniority": "Middle",
+          "criterion_id": "C1",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "같은 좌석을 여러 사용자가 동시에 점유해 중복 예매될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 잠금이나 상태 확인을 제안하지만, 경쟁 요청 중 누가 점유하는지와 결제 후 확정하는 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 상태를 관리하는 저장소에서 한 요청만 점유에 성공하게 하고, 점유자 확인 후 결제 결과에 따라 확정하거나 해제하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 늦은 결제 응답이 만료된 점유를 확정할 수 있다는 한계를 설명한다. 확정 전에 점유 유효성을 다시 확인하는 기본 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C2",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "접수한 주문이 처리 중 장애로 유실될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "장애 후 재시도하겠다고 제안하지만, 어떤 주문을 어디에 저장하고 누가 다시 처리하는지 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문을 지속 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 후 완료 상태를 기록하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 완료 기록 전에 장애가 나면 주문이 다시 처리될 수 있다는 한계를 설명한다. 기존 처리 결과를 확인해 중복 확정을 피하는 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "예매 오픈 때 처리 능력을 넘는 요청으로 내부 작업이 무제한 쌓일 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "요청을 대기시키거나 제한하겠다고 하지만, 제한 지점과 초과 요청의 처리 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "진입 요청을 앞단에서 제한해 처리 가능한 수만 점유·주문 서비스로 보내고, 나머지는 대기시키거나 거절하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 대기 중인 사용자의 재시도가 동시에 몰려 다시 과부하가 생기는 한계를 설명한다. 재시도 시점을 분산하는 기본 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "인기 공연에 조회·점유가 몰릴 때 서버 확장이 필요하다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "서버를 늘리겠다고 제안하지만, 조회·점유 요청을 여러 서버에 어떻게 분산하는지 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회 서버와 점유 서버의 역할을 구분하고, 공연별 요청을 여러 처리 서버로 나눠 부하를 분담하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 인기 공연 하나에 요청이 집중되면 공연별 분산만으로 병목이 남는 한계를 설명한다. 좌석군처럼 더 작은 단위로 점유 요청을 분산하는 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C1",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "같은 좌석을 여러 사용자가 동시에 점유해 중복 예매될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 저장소에서 한 요청만 점유하게 하고, 점유자를 확인해 결제 결과에 따라 확정하거나 해제하는 흐름을 제시한다. 다만 확인 이후 만료·재점유가 끼어들 때 변경을 막는 구체적인 조건은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "가용 좌석에 점유 ID·만료 시각을 원자적으로 기록한다. 확정은 점유 ID 일치·대기 상태·미만료 조건에서, 해제는 같은 ID·대기 상태에서 만료나 결제 실패 조건으로 원자 갱신해 오래된 응답이 새 점유나 확정을 바꾸지 못하게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 만료 해제·재점유·이전 결제 응답의 순서가 달라도 새 점유가 유지되는 근거를 분석한다. 좌석별 잠금과 조건부 갱신을 비교해 잠금 대기·충돌 재시도 비용을 설명하고, 외부 결제 대기와 좌석 변경의 처리 경계를 정당화한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C2",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "접수한 주문이 처리 중 장애로 유실될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문과 진행 상태를 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 뒤 완료로 기록하는 흐름을 제시한다. 다만 같은 주문이 다시 처리될 때 중복 확정을 막는 구체적인 조건은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문 접수·재개 흐름에서 주문 ID별 확정 기록에 유일성 제약을 두고, 확정 결과와 완료 상태를 같은 트랜잭션으로 저장한다. 재처리·중복 결제 통지는 기존 기록이 있으면 결과를 재사용하고, 없으면 새로 반영하되 경합한 작업 중 한 건만 커밋되게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 결제 성공 후 내부 기록 전에 장애가 난 상황에서 기존 결제 식별자로 외부 결과를 대조해 복구하는 흐름을 분석한다. 외부 결제까지 로컬 트랜잭션으로 묶을 수 없는 한계를 짚고, 대사 주기에 따른 복구 지연·조회 부하와 선택 근거를 설명한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "인기 공연에 조회·점유가 몰릴 때 서버 확장이 필요하다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회 서버와 점유 서버의 역할을 나누고, 공연별 요청을 여러 처리 서버로 분산해 부하를 나누는 흐름을 제시한다. 다만 인기 공연 하나에 요청이 집중될 때 요청과 점유 데이터를 함께 나눌 방법은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회는 읽기 복제본이나 캐시로 보내고, 점유 상태는 공연 ID·좌석군 기준으로 여러 저장소에 분할한다. 라우터는 분할표로 담당 저장소를 찾아 같은 좌석의 변경을 같은 곳으로 보낸다. 서버만 늘려도 남는 단일 쓰기 저장소 병목을 줄이는 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 좌석군 재배치 중 이전·새 저장소가 동시에 점유를 받는 위험을 분석한다. 쓰기를 멈춰 복사한 뒤 라우팅을 전환하는 방식과, 변경분을 복제한 뒤 쓰기 담당을 전환하는 방식을 비교해 중단 시간·상태 동기화 비용과 선택 근거를 설명한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "예매 오픈 때 처리 능력을 넘는 요청으로 내부 작업이 무제한 쌓일 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "앞단에서 처리 가능한 수만 점유·주문 서비스로 보내고 초과 요청은 대기시키거나 거절하는 흐름을 제시한다. 다만 여러 진입 서버가 허용량을 나눠 쓰거나 대기자가 동시에 재시도할 때의 제어 방식은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "진입 서버들이 처리 중 요청 수와 상한을 공유하고, 상한 미만일 때만 원자적으로 수를 늘려 요청을 전달한다. 완료는 요청 ID로 한 번만 차감한다. 거절된 클라이언트는 대기 간격에 임의 지연을 더하며, 재시도도 같은 진입 검사를 거치게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 모든 진입 서버가 공유 카운터를 갱신해 진입 판단 자체가 병목이 되는 상황을 분석한다. 전체 상한을 서버별로 나눠 관리하는 대안과 비교해 조정 비용·남는 용량의 활용·서버 장애 시 용량 회수의 상충을 설명하고 선택을 정당화한다."
+            }
+          ]
+        }
+      ],
+      "expected_4_1": {
+        "expected": "Pass",
+        "required_failure_evidence": [],
+        "normal_comparisons": [
+          {
+            "middle_criterion_id": "C1",
+            "senior_criterion_id": "C1",
+            "expected": "Pass",
+            "reason": "대응 Level 1~3은 승인 정상본과 동일하다. Level 0의 동일함이나 다른 오류로부터 부정 판정을 전파하지 않는다."
+          },
+          {
+            "middle_criterion_id": "C2",
+            "senior_criterion_id": "C2",
+            "expected": "Pass",
+            "reason": "대응 Level 1~3은 승인 정상본과 동일하다. Level 0의 동일함이나 다른 오류로부터 부정 판정을 전파하지 않는다."
+          },
+          {
+            "middle_criterion_id": "C3",
+            "senior_criterion_id": "C4",
+            "expected": "Pass",
+            "reason": "대응 Level 1~3은 승인 정상본과 동일하다. Level 0의 동일함이나 다른 오류로부터 부정 판정을 전파하지 않는다."
+          },
+          {
+            "middle_criterion_id": "C4",
+            "senior_criterion_id": "C3",
+            "expected": "Pass",
+            "reason": "대응 Level 1~3은 승인 정상본과 동일하다. Level 0의 동일함이나 다른 오류로부터 부정 판정을 전파하지 않는다."
+          }
+        ],
+        "note": "전체 판정만 맞아도 모든 오류를 검출한 것은 아니다. E01·E06은 3-5 검출을 주 정답으로 삼는다."
+      }
+    },
+    {
+      "case_id": "05",
+      "kind_for_reviewer_only": "multi_error",
+      "files": {
+        "middle": "cases/05/middle.md",
+        "senior": "cases/05/senior.md"
+      },
+      "sha256": {
+        "middle": "7ea30a26ec4253ea62f001ac7ee8453bb3347627531278c80c62ac1494927930",
+        "senior": "1a143aa6666aab9ef5307451939651278831547a7638d3054709a0dfa9132a23"
+      },
+      "normal_variant": null,
+      "direct_error_ids": [
+        "E03-02",
+        "E01-02",
+        "E05-02",
+        "E07-02"
+      ],
+      "criterion_mapping": [
+        {
+          "middle": "C1",
+          "senior": "C1"
+        },
+        {
+          "middle": "C2",
+          "senior": "C2"
+        },
+        {
+          "middle": "C3",
+          "senior": "C3"
+        },
+        {
+          "middle": "C4",
+          "senior": "C4"
+        }
+      ],
+      "expected_3_5": [
+        {
+          "seniority": "Middle",
+          "criterion_id": "C1",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "같은 좌석을 여러 사용자가 동시에 점유해 중복 예매될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 잠금이나 상태 확인을 제안하지만, 경쟁 요청 중 누가 점유하는지와 결제 후 확정하는 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 상태를 관리하는 저장소에서 한 요청만 점유에 성공하게 하고, 점유자 확인 후 결제 결과에 따라 확정하거나 해제하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 늦은 결제 응답이 만료된 점유를 확정할 수 있다는 한계를 설명한다. 확정 전에 점유 유효성을 다시 확인하는 기본 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C2",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E01-02",
+              "descriptor": "주문이 장애로 사라질 수 있음을 인식하고 지속 저장과 재시도를 제안하지만, 보존 시점과 재개할 주문을 찾는 흐름은 설명하지 못한다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "장애 후 재시도하겠다고 제안하지만, 어떤 주문을 어디에 저장하고 누가 다시 처리하는지 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문을 지속 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 후 완료 상태를 기록하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 완료 기록 전에 장애가 나면 주문이 다시 처리될 수 있다는 한계를 설명한다. 기존 처리 결과를 확인해 중복 확정을 피하는 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "예매 오픈 때 처리 능력을 넘는 요청으로 내부 작업이 무제한 쌓일 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "요청을 대기시키거나 제한하겠다고 하지만, 제한 지점과 초과 요청의 처리 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "진입 요청을 앞단에서 제한해 처리 가능한 수만 점유·주문 서비스로 보내고, 나머지는 대기시키거나 거절하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 대기 중인 사용자의 재시도가 동시에 몰려 다시 과부하가 생기는 한계를 설명한다. 재시도 시점을 분산하는 기본 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "인기 공연에 조회·점유가 몰릴 때 서버 확장이 필요하다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "서버를 늘리겠다고 제안하지만, 조회·점유 요청을 여러 서버에 어떻게 분산하는지 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회 서버와 점유 서버의 역할을 구분하고, 공연별 요청을 여러 처리 서버로 나눠 부하를 분담하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 인기 공연 하나에 요청이 집중되면 공연별 분산만으로 병목이 남는 한계를 설명한다. 좌석군처럼 더 작은 단위로 점유 요청을 분산하는 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C1",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "같은 좌석을 여러 사용자가 동시에 점유해 중복 예매될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E03-02",
+              "descriptor": "좌석 잠금이나 상태 확인을 제안하지만, 경쟁 요청 중 누가 점유하는지와 결제 후 확정하는 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "가용 좌석에 점유 ID·만료 시각을 원자적으로 기록한다. 확정은 점유 ID 일치·대기 상태·미만료 조건에서, 해제는 같은 ID·대기 상태에서 만료나 결제 실패 조건으로 원자 갱신해 오래된 응답이 새 점유나 확정을 바꾸지 못하게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 만료 해제·재점유·이전 결제 응답의 순서가 달라도 새 점유가 유지되는 근거를 분석한다. 좌석별 잠금과 조건부 갱신을 비교해 잠금 대기·충돌 재시도 비용을 설명하고, 외부 결제 대기와 좌석 변경의 처리 경계를 정당화한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C2",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "접수한 주문이 처리 중 장애로 유실될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문과 진행 상태를 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 뒤 완료로 기록하는 흐름을 제시한다. 다만 같은 주문이 다시 처리될 때 중복 확정을 막는 구체적인 조건은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문 접수·재개 흐름에서 주문 ID별 확정 기록에 유일성 제약을 두고, 확정 결과와 완료 상태를 같은 트랜잭션으로 저장한다. 재처리·중복 결제 통지는 기존 기록이 있으면 결과를 재사용하고, 없으면 새로 반영하되 경합한 작업 중 한 건만 커밋되게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 결제 성공 후 내부 기록 전에 장애가 난 상황에서 기존 결제 식별자로 외부 결과를 대조해 복구하는 흐름을 분석한다. 외부 결제까지 로컬 트랜잭션으로 묶을 수 없는 한계를 짚고, 대사 주기에 따른 복구 지연·조회 부하와 선택 근거를 설명한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C3",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "예매 오픈 때 처리 능력을 넘는 요청으로 내부 작업이 무제한 쌓일 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "앞단에서 처리 가능한 수만 점유·주문 서비스로 보내고 초과 요청은 대기시키거나 거절하는 흐름을 제시한다. 다만 여러 진입 서버가 허용량을 나눠 쓰거나 대기자가 동시에 재시도할 때의 제어 방식은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "진입 서버들이 처리 중 요청 수와 상한을 공유하고, 상한 미만일 때만 원자적으로 수를 늘려 요청을 전달한다. 완료는 요청 ID로 한 번만 차감한다. 거절된 클라이언트는 대기 간격에 임의 지연을 더하며, 재시도도 같은 진입 검사를 거치게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E05-02",
+              "descriptor": "2점에 더해, 유입 제어의 다양한 장애와 병목을 심층적으로 검토하고 성능과 안정성의 Trade-off를 종합적으로 분석하여 최적의 제어 정책을 정당화한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C4",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "인기 공연에 조회·점유가 몰릴 때 서버 확장이 필요하다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회 서버와 점유 서버의 역할을 나누고, 공연별 요청을 여러 처리 서버로 분산해 부하를 나누는 흐름을 제시한다. 다만 인기 공연 하나에 요청이 집중될 때 요청과 점유 데이터를 함께 나눌 방법은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E07-02",
+              "descriptor": "조회 서버와 점유 서버의 역할을 구분하고, 공연별 요청을 여러 처리 서버로 나눠 부하를 분담하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 좌석군 재배치 중 이전·새 저장소가 동시에 점유를 받는 위험을 분석한다. 쓰기를 멈춰 복사한 뒤 라우팅을 전환하는 방식과, 변경분을 복제한 뒤 쓰기 담당을 전환하는 방식을 비교해 중단 시간·상태 동기화 비용과 선택 근거를 설명한다."
+            }
+          ]
+        }
+      ],
+      "expected_4_1": {
+        "expected": "Fail",
+        "required_failure_evidence": [
+          {
+            "error_id": "E03-02",
+            "middle_criterion_id": "C1",
+            "senior_criterion_id": "C1",
+            "reason": "Senior 1점이 Middle 1점과 같으며 Middle 2점에 대응하는 기본 흐름 수준에 도달하지 못한다."
+          },
+          {
+            "error_id": "E05-02",
+            "middle_criterion_id": "C3",
+            "senior_criterion_id": "C3",
+            "reason": "Senior 3점에 요구되는 심화 판단이 추상적인 표현에 그쳐 실제 추가 역량을 식별할 수 없다."
+          },
+          {
+            "error_id": "E07-02",
+            "middle_criterion_id": "C4",
+            "senior_criterion_id": "C4",
+            "reason": "Middle 2점과 Senior 2점의 필수 설명이 문자상으로도 동일하다."
+          }
+        ],
+        "normal_comparisons": [
+          {
+            "middle_criterion_id": "C2",
+            "senior_criterion_id": "C2",
+            "expected": "Pass",
+            "reason": "대응 Level 1~3은 승인 정상본과 동일하다. Level 0의 동일함이나 다른 오류로부터 부정 판정을 전파하지 않는다."
+          }
+        ],
+        "note": "전체 판정만 맞아도 모든 오류를 검출한 것은 아니다. E01·E06은 3-5 검출을 주 정답으로 삼는다."
+      }
+    },
+    {
+      "case_id": "06",
+      "kind_for_reviewer_only": "multi_error",
+      "files": {
+        "middle": "cases/06/middle.md",
+        "senior": "cases/06/senior.md"
+      },
+      "sha256": {
+        "middle": "b4656a9d249e5317ccf1828a2d094167571951ccac9deb12e3583f85fa17c8b8",
+        "senior": "12f09ea99bdf3f23e06dbc390721ed564751645c87ad4cfc2f1cbdea7b9b4384"
+      },
+      "normal_variant": null,
+      "direct_error_ids": [
+        "E02-02",
+        "E04-02",
+        "E08-02",
+        "E06-02"
+      ],
+      "criterion_mapping": [
+        {
+          "middle": "C1",
+          "senior": "C1"
+        },
+        {
+          "middle": "C2",
+          "senior": "C2"
+        },
+        {
+          "middle": "C3",
+          "senior": "C3"
+        },
+        {
+          "middle": "C4",
+          "senior": "C4"
+        }
+      ],
+      "expected_3_5": [
+        {
+          "seniority": "Middle",
+          "criterion_id": "C1",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "같은 좌석을 여러 사용자가 동시에 점유해 중복 예매될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 잠금이나 상태 확인을 제안하지만, 경쟁 요청 중 누가 점유하는지와 결제 후 확정하는 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E02-02",
+              "descriptor": "좌석 점유·확정 흐름을 제시하고, 만료·재점유·이전 결제 응답이 교차하는 순서마다 허용되는 전이를 검증한다. 잠금 대기와 조건부 갱신의 충돌 재시도 비용을 비교하고, 외부 결제 대기를 포함할 처리 경계의 보장 한계와 선택 근거를 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Fail",
+              "label_basis": "inherited",
+              "error_id": "E02-02",
+              "descriptor": "2점에 더해, 늦은 결제 응답이 만료된 점유를 확정할 수 있다는 한계를 설명한다. 확정 전에 점유 유효성을 다시 확인하는 기본 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C2",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "접수한 주문이 처리 중 장애로 유실될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "장애 후 재시도하겠다고 제안하지만, 어떤 주문을 어디에 저장하고 누가 다시 처리하는지 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문을 지속 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 후 완료 상태를 기록하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 완료 기록 전에 장애가 나면 주문이 다시 처리될 수 있다는 한계를 설명한다. 기존 처리 결과를 확인해 중복 확정을 피하는 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "예매 오픈 때 처리 능력을 넘는 요청으로 내부 작업이 무제한 쌓일 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "요청을 대기시키거나 제한하겠다고 하지만, 제한 지점과 초과 요청의 처리 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "진입 요청을 앞단에서 제한해 처리 가능한 수만 점유·주문 서비스로 보내고, 나머지는 대기시키거나 거절하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 대기 중인 사용자의 재시도가 동시에 몰려 다시 과부하가 생기는 한계를 설명한다. 재시도 시점을 분산하는 기본 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C4",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "인기 공연에 조회·점유가 몰릴 때 서버 확장이 필요하다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E06-02",
+              "descriptor": "조회와 좌석 점유를 담당할 서버를 따로 두고, 공연별로 들어온 요청을 여러 처리 서버에 나누어 보내 부하를 분담하는 방식을 설명한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회 서버와 점유 서버의 역할을 구분하고, 공연별 요청을 여러 처리 서버로 나눠 부하를 분담하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 인기 공연 하나에 요청이 집중되면 공연별 분산만으로 병목이 남는 한계를 설명한다. 좌석군처럼 더 작은 단위로 점유 요청을 분산하는 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C1",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "같은 좌석을 여러 사용자가 동시에 점유해 중복 예매될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 저장소에서 한 요청만 점유하게 하고, 점유자를 확인해 결제 결과에 따라 확정하거나 해제하는 흐름을 제시한다. 다만 확인 이후 만료·재점유가 끼어들 때 변경을 막는 구체적인 조건은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "가용 좌석에 점유 ID·만료 시각을 원자적으로 기록한다. 확정은 점유 ID 일치·대기 상태·미만료 조건에서, 해제는 같은 ID·대기 상태에서 만료나 결제 실패 조건으로 원자 갱신해 오래된 응답이 새 점유나 확정을 바꾸지 못하게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 만료 해제·재점유·이전 결제 응답의 순서가 달라도 새 점유가 유지되는 근거를 분석한다. 좌석별 잠금과 조건부 갱신을 비교해 잠금 대기·충돌 재시도 비용을 설명하고, 외부 결제 대기와 좌석 변경의 처리 경계를 정당화한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C2",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "접수한 주문이 처리 중 장애로 유실될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문과 진행 상태를 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 뒤 완료로 기록하는 흐름을 제시한다. 다만 같은 주문이 다시 처리될 때 중복 확정을 막는 구체적인 조건은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E04-02",
+              "descriptor": "주문 정보를 내구성 저장 계층에 보존한 뒤 접수 성공을 반환한다. 실행 워커가 미완료 주문을 탐색·처리하고 완료 상태를 반영하는 장애 복구 아키텍처와 처리 메커니즘을 정교하게 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 결제 성공 후 내부 기록 전에 장애가 난 상황에서 기존 결제 식별자로 외부 결과를 대조해 복구하는 흐름을 분석한다. 외부 결제까지 로컬 트랜잭션으로 묶을 수 없는 한계를 짚고, 대사 주기에 따른 복구 지연·조회 부하와 선택 근거를 설명한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C3",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "예매 오픈 때 처리 능력을 넘는 요청으로 내부 작업이 무제한 쌓일 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "앞단에서 처리 가능한 수만 점유·주문 서비스로 보내고 초과 요청은 대기시키거나 거절하는 흐름을 제시한다. 다만 여러 진입 서버가 허용량을 나눠 쓰거나 대기자가 동시에 재시도할 때의 제어 방식은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "진입 서버들이 처리 중 요청 수와 상한을 공유하고, 상한 미만일 때만 원자적으로 수를 늘려 요청을 전달한다. 완료는 요청 ID로 한 번만 차감한다. 거절된 클라이언트는 대기 간격에 임의 지연을 더하며, 재시도도 같은 진입 검사를 거치게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E08-02",
+              "descriptor": "2점에 더해, 진입 서버들이 공유 카운터를 빈번히 갱신하면 입장 판단 자체가 병목이 될 수 있음을 지적한다. 각 서버에 일정 허용량을 미리 배정하고 소진되면 중앙에서 다시 배분받아 카운터 접근을 줄이는 절차를 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "인기 공연에 조회·점유가 몰릴 때 서버 확장이 필요하다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회 서버와 점유 서버의 역할을 나누고, 공연별 요청을 여러 처리 서버로 분산해 부하를 나누는 흐름을 제시한다. 다만 인기 공연 하나에 요청이 집중될 때 요청과 점유 데이터를 함께 나눌 방법은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회는 읽기 복제본이나 캐시로 보내고, 점유 상태는 공연 ID·좌석군 기준으로 여러 저장소에 분할한다. 라우터는 분할표로 담당 저장소를 찾아 같은 좌석의 변경을 같은 곳으로 보낸다. 서버만 늘려도 남는 단일 쓰기 저장소 병목을 줄이는 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 좌석군 재배치 중 이전·새 저장소가 동시에 점유를 받는 위험을 분석한다. 쓰기를 멈춰 복사한 뒤 라우팅을 전환하는 방식과, 변경분을 복제한 뒤 쓰기 담당을 전환하는 방식을 비교해 중단 시간·상태 동기화 비용과 선택 근거를 설명한다."
+            }
+          ]
+        }
+      ],
+      "expected_4_1": {
+        "expected": "Fail",
+        "required_failure_evidence": [
+          {
+            "error_id": "E02-02",
+            "middle_criterion_id": "C1",
+            "senior_criterion_id": "C1",
+            "reason": "Middle 2점이 Senior 1점의 기본 흐름 수준보다 현저히 높아 상대적 난이도 관계가 깨진다."
+          },
+          {
+            "error_id": "E04-02",
+            "middle_criterion_id": "C2",
+            "senior_criterion_id": "C2",
+            "reason": "Middle 2점과 Senior 2점 사이에 어휘 이외의 추가 필수 역량이 없다."
+          },
+          {
+            "error_id": "E08-02",
+            "middle_criterion_id": "C3",
+            "senior_criterion_id": "C3",
+            "reason": "Senior 3점의 심화 판단 경계가 사라진다. Senior 2점이 상세하다는 이유로 보완된 것으로 보지 않는다."
+          }
+        ],
+        "normal_comparisons": [],
+        "note": "전체 판정만 맞아도 모든 오류를 검출한 것은 아니다. E01·E06은 3-5 검출을 주 정답으로 삼는다."
+      }
+    },
+    {
+      "case_id": "07",
+      "kind_for_reviewer_only": "multi_error",
+      "files": {
+        "middle": "cases/07/middle.md",
+        "senior": "cases/07/senior.md"
+      },
+      "sha256": {
+        "middle": "26a2ccbf131def9f399856bde00d6a6b06bb8d3d5b38566776779963422fd553",
+        "senior": "c6f9c712c3851e1c197efb05d74afe182df7d55b60aefce94a973b383e428856"
+      },
+      "normal_variant": null,
+      "direct_error_ids": [
+        "E04-03",
+        "E08-03",
+        "E01-03",
+        "E05-03"
+      ],
+      "criterion_mapping": [
+        {
+          "middle": "C1",
+          "senior": "C1"
+        },
+        {
+          "middle": "C2",
+          "senior": "C2"
+        },
+        {
+          "middle": "C3",
+          "senior": "C3"
+        },
+        {
+          "middle": "C4",
+          "senior": "C4"
+        }
+      ],
+      "expected_3_5": [
+        {
+          "seniority": "Middle",
+          "criterion_id": "C1",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "같은 좌석을 여러 사용자가 동시에 점유해 중복 예매될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 잠금이나 상태 확인을 제안하지만, 경쟁 요청 중 누가 점유하는지와 결제 후 확정하는 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 상태를 관리하는 저장소에서 한 요청만 점유에 성공하게 하고, 점유자 확인 후 결제 결과에 따라 확정하거나 해제하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 늦은 결제 응답이 만료된 점유를 확정할 수 있다는 한계를 설명한다. 확정 전에 점유 유효성을 다시 확인하는 기본 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C2",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "접수한 주문이 처리 중 장애로 유실될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "장애 후 재시도하겠다고 제안하지만, 어떤 주문을 어디에 저장하고 누가 다시 처리하는지 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문을 지속 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 후 완료 상태를 기록하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 완료 기록 전에 장애가 나면 주문이 다시 처리될 수 있다는 한계를 설명한다. 기존 처리 결과를 확인해 중복 확정을 피하는 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C3",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E01-03",
+              "descriptor": "요청 폭증에 따른 적체 문제를 인식하고 대기열이나 요청 제한을 제안하지만, 제어 위치와 초과 요청의 처리 흐름은 설명하지 못한다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "요청을 대기시키거나 제한하겠다고 하지만, 제한 지점과 초과 요청의 처리 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "진입 요청을 앞단에서 제한해 처리 가능한 수만 점유·주문 서비스로 보내고, 나머지는 대기시키거나 거절하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 대기 중인 사용자의 재시도가 동시에 몰려 다시 과부하가 생기는 한계를 설명한다. 재시도 시점을 분산하는 기본 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "인기 공연에 조회·점유가 몰릴 때 서버 확장이 필요하다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "서버를 늘리겠다고 제안하지만, 조회·점유 요청을 여러 서버에 어떻게 분산하는지 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회 서버와 점유 서버의 역할을 구분하고, 공연별 요청을 여러 처리 서버로 나눠 부하를 분담하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 인기 공연 하나에 요청이 집중되면 공연별 분산만으로 병목이 남는 한계를 설명한다. 좌석군처럼 더 작은 단위로 점유 요청을 분산하는 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C1",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "같은 좌석을 여러 사용자가 동시에 점유해 중복 예매될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 저장소에서 한 요청만 점유하게 하고, 점유자를 확인해 결제 결과에 따라 확정하거나 해제하는 흐름을 제시한다. 다만 확인 이후 만료·재점유가 끼어들 때 변경을 막는 구체적인 조건은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E04-03",
+              "descriptor": "좌석 상태 관리 계층에서 단일 요청의 점유를 성립시키고, 소유자 검증 후 결제 결과를 반영해 확정 또는 해제하는 동시성 제어 아키텍처와 상태 전이 메커니즘을 정교하게 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 만료 해제·재점유·이전 결제 응답의 순서가 달라도 새 점유가 유지되는 근거를 분석한다. 좌석별 잠금과 조건부 갱신을 비교해 잠금 대기·충돌 재시도 비용을 설명하고, 외부 결제 대기와 좌석 변경의 처리 경계를 정당화한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C2",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "접수한 주문이 처리 중 장애로 유실될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문과 진행 상태를 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 뒤 완료로 기록하는 흐름을 제시한다. 다만 같은 주문이 다시 처리될 때 중복 확정을 막는 구체적인 조건은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문 접수·재개 흐름에서 주문 ID별 확정 기록에 유일성 제약을 두고, 확정 결과와 완료 상태를 같은 트랜잭션으로 저장한다. 재처리·중복 결제 통지는 기존 기록이 있으면 결과를 재사용하고, 없으면 새로 반영하되 경합한 작업 중 한 건만 커밋되게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E08-03",
+              "descriptor": "2점에 더해, 결제는 성공했지만 내부 확정 결과를 기록하기 전에 장애가 나면 주문이 미완료로 남는 상황을 설명한다. 재개 작업자가 결제 식별자로 외부 결과를 다시 조회해 내부 확정 기록을 복구하는 절차를 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "예매 오픈 때 처리 능력을 넘는 요청으로 내부 작업이 무제한 쌓일 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "앞단에서 처리 가능한 수만 점유·주문 서비스로 보내고 초과 요청은 대기시키거나 거절하는 흐름을 제시한다. 다만 여러 진입 서버가 허용량을 나눠 쓰거나 대기자가 동시에 재시도할 때의 제어 방식은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "진입 서버들이 처리 중 요청 수와 상한을 공유하고, 상한 미만일 때만 원자적으로 수를 늘려 요청을 전달한다. 완료는 요청 ID로 한 번만 차감한다. 거절된 클라이언트는 대기 간격에 임의 지연을 더하며, 재시도도 같은 진입 검사를 거치게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 모든 진입 서버가 공유 카운터를 갱신해 진입 판단 자체가 병목이 되는 상황을 분석한다. 전체 상한을 서버별로 나눠 관리하는 대안과 비교해 조정 비용·남는 용량의 활용·서버 장애 시 용량 회수의 상충을 설명하고 선택을 정당화한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C4",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "인기 공연에 조회·점유가 몰릴 때 서버 확장이 필요하다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회 서버와 점유 서버의 역할을 나누고, 공연별 요청을 여러 처리 서버로 분산해 부하를 나누는 흐름을 제시한다. 다만 인기 공연 하나에 요청이 집중될 때 요청과 점유 데이터를 함께 나눌 방법은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회는 읽기 복제본이나 캐시로 보내고, 점유 상태는 공연 ID·좌석군 기준으로 여러 저장소에 분할한다. 라우터는 분할표로 담당 저장소를 찾아 같은 좌석의 변경을 같은 곳으로 보낸다. 서버만 늘려도 남는 단일 쓰기 저장소 병목을 줄이는 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E05-03",
+              "descriptor": "2점에 더해, 확장 구조의 복잡한 상황과 잠재적 한계를 면밀히 분석하고 여러 분산 아키텍처의 Trade-off를 종합적으로 고려하여 적절한 설계 선택을 정당화한다."
+            }
+          ]
+        }
+      ],
+      "expected_4_1": {
+        "expected": "Fail",
+        "required_failure_evidence": [
+          {
+            "error_id": "E04-03",
+            "middle_criterion_id": "C1",
+            "senior_criterion_id": "C1",
+            "reason": "Middle 2점과 Senior 2점 사이에 어휘 이외의 추가 필수 역량이 없다."
+          },
+          {
+            "error_id": "E08-03",
+            "middle_criterion_id": "C2",
+            "senior_criterion_id": "C2",
+            "reason": "Senior 3점의 심화 판단 경계가 사라진다. Senior 2점이 상세하다는 이유로 보완된 것으로 보지 않는다."
+          },
+          {
+            "error_id": "E05-03",
+            "middle_criterion_id": "C4",
+            "senior_criterion_id": "C4",
+            "reason": "Senior 3점에 요구되는 심화 판단이 추상적인 표현에 그쳐 실제 추가 역량을 식별할 수 없다."
+          }
+        ],
+        "normal_comparisons": [
+          {
+            "middle_criterion_id": "C3",
+            "senior_criterion_id": "C3",
+            "expected": "Pass",
+            "reason": "대응 Level 1~3은 승인 정상본과 동일하다. Level 0의 동일함이나 다른 오류로부터 부정 판정을 전파하지 않는다."
+          }
+        ],
+        "note": "전체 판정만 맞아도 모든 오류를 검출한 것은 아니다. E01·E06은 3-5 검출을 주 정답으로 삼는다."
+      }
+    },
+    {
+      "case_id": "08",
+      "kind_for_reviewer_only": "multi_error",
+      "files": {
+        "middle": "cases/08/middle.md",
+        "senior": "cases/08/senior.md"
+      },
+      "sha256": {
+        "middle": "f45df38b3031da3eaf615ade96d8d2202520ccc4d0a201104a7168d7bae14ba2",
+        "senior": "10f803b646a59d1190d368c9dd7d8b0decdbbc078cbad13bc80dfc34df7bf693"
+      },
+      "normal_variant": null,
+      "direct_error_ids": [
+        "E06-03",
+        "E07-03",
+        "E02-03",
+        "E03-03"
+      ],
+      "criterion_mapping": [
+        {
+          "middle": "C1",
+          "senior": "C1"
+        },
+        {
+          "middle": "C2",
+          "senior": "C2"
+        },
+        {
+          "middle": "C3",
+          "senior": "C3"
+        },
+        {
+          "middle": "C4",
+          "senior": "C4"
+        }
+      ],
+      "expected_3_5": [
+        {
+          "seniority": "Middle",
+          "criterion_id": "C1",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "같은 좌석을 여러 사용자가 동시에 점유해 중복 예매될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E06-03",
+              "descriptor": "좌석 저장소가 경쟁 중인 요청 하나에만 점유를 허용하며, 점유한 사용자를 확인한 다음 결제 결과에 맞춰 확정 또는 해제로 상태를 바꾸는 과정을 설명한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 상태를 관리하는 저장소에서 한 요청만 점유에 성공하게 하고, 점유자 확인 후 결제 결과에 따라 확정하거나 해제하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 늦은 결제 응답이 만료된 점유를 확정할 수 있다는 한계를 설명한다. 확정 전에 점유 유효성을 다시 확인하는 기본 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C2",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "접수한 주문이 처리 중 장애로 유실될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "장애 후 재시도하겠다고 제안하지만, 어떤 주문을 어디에 저장하고 누가 다시 처리하는지 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문을 지속 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 후 완료 상태를 기록하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 완료 기록 전에 장애가 나면 주문이 다시 처리될 수 있다는 한계를 설명한다. 기존 처리 결과를 확인해 중복 확정을 피하는 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C3",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "예매 오픈 때 처리 능력을 넘는 요청으로 내부 작업이 무제한 쌓일 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "요청을 대기시키거나 제한하겠다고 하지만, 제한 지점과 초과 요청의 처리 흐름을 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E02-03",
+              "descriptor": "유입 제한·대기·거절의 기본 흐름과 함께, 공유 카운터 갱신 병목과 진입 서버 장애 시 상한 회수의 정합성을 분석한다. 중앙 집계와 서버별 허용량 분할을 비교해 전체 상한 보장·남는 용량 활용·조정 비용의 상충과 선택 근거를 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Fail",
+              "label_basis": "inherited",
+              "error_id": "E02-03",
+              "descriptor": "2점에 더해, 대기 중인 사용자의 재시도가 동시에 몰려 다시 과부하가 생기는 한계를 설명한다. 재시도 시점을 분산하는 기본 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "인기 공연에 조회·점유가 몰릴 때 서버 확장이 필요하다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "서버를 늘리겠다고 제안하지만, 조회·점유 요청을 여러 서버에 어떻게 분산하는지 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회 서버와 점유 서버의 역할을 구분하고, 공연별 요청을 여러 처리 서버로 나눠 부하를 분담하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 인기 공연 하나에 요청이 집중되면 공연별 분산만으로 병목이 남는 한계를 설명한다. 좌석군처럼 더 작은 단위로 점유 요청을 분산하는 개선 방안을 제시한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C1",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "같은 좌석을 여러 사용자가 동시에 점유해 중복 예매될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "좌석 저장소에서 한 요청만 점유하게 하고, 점유자를 확인해 결제 결과에 따라 확정하거나 해제하는 흐름을 제시한다. 다만 확인 이후 만료·재점유가 끼어들 때 변경을 막는 구체적인 조건은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "가용 좌석에 점유 ID·만료 시각을 원자적으로 기록한다. 확정은 점유 ID 일치·대기 상태·미만료 조건에서, 해제는 같은 ID·대기 상태에서 만료나 결제 실패 조건으로 원자 갱신해 오래된 응답이 새 점유나 확정을 바꾸지 못하게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 만료 해제·재점유·이전 결제 응답의 순서가 달라도 새 점유가 유지되는 근거를 분석한다. 좌석별 잠금과 조건부 갱신을 비교해 잠금 대기·충돌 재시도 비용을 설명하고, 외부 결제 대기와 좌석 변경의 처리 경계를 정당화한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C2",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "접수한 주문이 처리 중 장애로 유실될 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "주문과 진행 상태를 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 뒤 완료로 기록하는 흐름을 제시한다. 다만 같은 주문이 다시 처리될 때 중복 확정을 막는 구체적인 조건은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E07-03",
+              "descriptor": "주문을 지속 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 후 완료 상태를 기록하는 기본 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 결제 성공 후 내부 기록 전에 장애가 난 상황에서 기존 결제 식별자로 외부 결과를 대조해 복구하는 흐름을 분석한다. 외부 결제까지 로컬 트랜잭션으로 묶을 수 없는 한계를 짚고, 대사 주기에 따른 복구 지연·조회 부하와 선택 근거를 설명한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "예매 오픈 때 처리 능력을 넘는 요청으로 내부 작업이 무제한 쌓일 수 있다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "앞단에서 처리 가능한 수만 점유·주문 서비스로 보내고 초과 요청은 대기시키거나 거절하는 흐름을 제시한다. 다만 여러 진입 서버가 허용량을 나눠 쓰거나 대기자가 동시에 재시도할 때의 제어 방식은 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "진입 서버들이 처리 중 요청 수와 상한을 공유하고, 상한 미만일 때만 원자적으로 수를 늘려 요청을 전달한다. 완료는 요청 ID로 한 번만 차감한다. 거절된 클라이언트는 대기 간격에 임의 지연을 더하며, 재시도도 같은 진입 검사를 거치게 한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 모든 진입 서버가 공유 카운터를 갱신해 진입 판단 자체가 병목이 되는 상황을 분석한다. 전체 상한을 서버별로 나눠 관리하는 대안과 비교해 조정 비용·남는 용량의 활용·서버 장애 시 용량 회수의 상충을 설명하고 선택을 정당화한다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C4",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "인기 공연에 조회·점유가 몰릴 때 서버 확장이 필요하다는 문제를 고려하지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Fail",
+              "label_basis": "direct",
+              "error_id": "E03-03",
+              "descriptor": "서버를 늘리겠다고 제안하지만, 조회·점유 요청을 여러 서버에 어떻게 분산하는지 설명하지 못한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "조회는 읽기 복제본이나 캐시로 보내고, 점유 상태는 공연 ID·좌석군 기준으로 여러 저장소에 분할한다. 라우터는 분할표로 담당 저장소를 찾아 같은 좌석의 변경을 같은 곳으로 보낸다. 서버만 늘려도 남는 단일 쓰기 저장소 병목을 줄이는 흐름을 설명한다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 좌석군 재배치 중 이전·새 저장소가 동시에 점유를 받는 위험을 분석한다. 쓰기를 멈춰 복사한 뒤 라우팅을 전환하는 방식과, 변경분을 복제한 뒤 쓰기 담당을 전환하는 방식을 비교해 중단 시간·상태 동기화 비용과 선택 근거를 설명한다."
+            }
+          ]
+        }
+      ],
+      "expected_4_1": {
+        "expected": "Fail",
+        "required_failure_evidence": [
+          {
+            "error_id": "E07-03",
+            "middle_criterion_id": "C2",
+            "senior_criterion_id": "C2",
+            "reason": "Middle 2점과 Senior 2점의 필수 설명이 문자상으로도 동일하다."
+          },
+          {
+            "error_id": "E02-03",
+            "middle_criterion_id": "C3",
+            "senior_criterion_id": "C3",
+            "reason": "Middle 2점이 Senior 1점의 기본 흐름 수준보다 현저히 높아 상대적 난이도 관계가 깨진다."
+          },
+          {
+            "error_id": "E03-03",
+            "middle_criterion_id": "C4",
+            "senior_criterion_id": "C4",
+            "reason": "Senior 1점이 Middle 1점과 같으며 Middle 2점에 대응하는 기본 흐름 수준에 도달하지 못한다."
+          }
+        ],
+        "normal_comparisons": [],
+        "note": "전체 판정만 맞아도 모든 오류를 검출한 것은 아니다. E01·E06은 3-5 검출을 주 정답으로 삼는다."
+      }
+    }
+  ],
+  "injected_errors": [
+    {
+      "error_id": "E01-01",
+      "error_type": "E01",
+      "error_name": "Level 0에 문제 인식·해결 시도 배치",
+      "case_id": "02",
+      "file": "cases/02/middle.md",
+      "seniority": "Middle",
+      "criterion_id": "C1",
+      "level": 0,
+      "before": "같은 좌석을 여러 사용자가 동시에 점유해 중복 예매될 수 있다는 문제를 고려하지 않는다.",
+      "after": "좌석 중복 예매 문제를 인식하고 잠금 사용을 제안하지만, 점유와 결제 확정으로 이어지는 처리 흐름은 설명하지 못한다.",
+      "expected_3_5": "Fail",
+      "reason": "문제 미고려가 아니라 문제를 인식하고 해결 방향을 제안하는 답변을 0점 조건으로 둔다.",
+      "detection_evidence_required": "해당 Level 0에 문제 인식 또는 해결 제안이 들어 있어 0점 경계를 어겼음을 지적한다.",
+      "pair_comparison_note": "Level 0은 연차 차이의 대상이 아니다. 이 오류 하나만으로 4-1 Fail을 요구하지 않는다.",
+      "required_metrics": [
+        "3-5"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E02-01",
+      "error_type": "E02",
+      "error_name": "Middle 2점에 심층 분석·기술 선택 필수화",
+      "case_id": "02",
+      "file": "cases/02/middle.md",
+      "seniority": "Middle",
+      "criterion_id": "C2",
+      "level": 2,
+      "before": "주문을 지속 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 후 완료 상태를 기록하는 기본 흐름을 설명한다.",
+      "after": "주문 보존·재개 흐름에 더해, 결제 성공·내부 기록 실패·중복 통지가 교차하는 순서별 복구 결과를 분석한다. 외부 결제와 내부 저장의 분산 원자성 한계를 설명하고, 대사·재시도 대안을 복구 지연·중복 위험·운영 비용으로 비교해 선택을 정당화한다.",
+      "expected_3_5": "Fail",
+      "reason": "기본 구성·흐름을 넘어 복합 상황의 보장 분석과 대안의 비용·선택 정당화를 Middle 2점에 필수화한다.",
+      "detection_evidence_required": "단순 기술 이름이나 원자성 언급 때문이 아니라, 실제로 요구한 복합 상황 분석·대안 판단이 Middle 2점의 깊이를 넘는다고 지적한다.",
+      "pair_comparison_note": "Middle 2점이 Senior 1점의 기본 흐름 수준보다 현저히 높아 상대적 난이도 관계가 깨진다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": [
+        {
+          "metric": "3-5",
+          "seniority": "Middle",
+          "criterion_id": "C2",
+          "level": 3,
+          "expected": "Fail",
+          "reason": "Level 3의 「2점에 더해」가 과도하게 높은 Level 2 요구를 누적 상속한다. 직접 변경한 새 오류가 아니라 같은 주입의 파급 효과다."
+        }
+      ]
+    },
+    {
+      "error_id": "E03-01",
+      "error_type": "E03",
+      "error_name": "Senior 1점에 미완성 제안만 배치",
+      "case_id": "02",
+      "file": "cases/02/senior.md",
+      "seniority": "Senior",
+      "criterion_id": "C3",
+      "level": 1,
+      "before": "앞단에서 처리 가능한 수만 점유·주문 서비스로 보내고 초과 요청은 대기시키거나 거절하는 흐름을 제시한다. 다만 여러 진입 서버가 허용량을 나눠 쓰거나 대기자가 동시에 재시도할 때의 제어 방식은 설명하지 못한다.",
+      "after": "요청을 대기시키거나 제한하겠다고 하지만, 제한 지점과 초과 요청의 처리 흐름을 설명하지 못한다.",
+      "expected_3_5": "Fail",
+      "reason": "승인된 Middle 1점 문장을 Senior 1점으로 복사하여 기본 구성과 정상 처리 흐름도 충족하지 못하게 한다.",
+      "detection_evidence_required": "Senior 1점이 기술·방향 제안에 그치고 정상 처리 흐름을 설명하지 못하여 Middle 2점 수준에 못 미친다고 지적한다.",
+      "pair_comparison_note": "Senior 1점이 Middle 1점과 같으며 Middle 2점에 대응하는 기본 흐름 수준에 도달하지 못한다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E04-01",
+      "error_type": "E04",
+      "error_name": "Senior 2점의 기본 흐름을 고급 어휘로 포장",
+      "case_id": "02",
+      "file": "cases/02/senior.md",
+      "seniority": "Senior",
+      "criterion_id": "C4",
+      "level": 2,
+      "before": "조회는 읽기 복제본이나 캐시로 보내고, 점유 상태는 공연 ID·좌석군 기준으로 여러 저장소에 분할한다. 라우터는 분할표로 담당 저장소를 찾아 같은 좌석의 변경을 같은 곳으로 보낸다. 서버만 늘려도 남는 단일 쓰기 저장소 병목을 줄이는 흐름을 설명한다.",
+      "after": "조회 계층과 점유 계층을 분리한 분산 아키텍처를 제시하고, 공연 단위 요청을 다중 처리 노드에 배분하는 수평 확장 메커니즘을 상세히 설명한다.",
+      "expected_3_5": "Fail",
+      "reason": "Middle 2점의 기본 흐름에 아키텍처·메커니즘·정교함 등 표현만 추가하고 필수 처리 조건이나 주요 문제 대응은 추가하지 않는다.",
+      "detection_evidence_required": "말이 어려워졌지만 Middle 2점의 최소 답변으로도 충족되고, Senior 2점 고유의 조건·동작·문제 대응이 없음을 지적한다.",
+      "pair_comparison_note": "Middle 2점과 Senior 2점 사이에 어휘 이외의 추가 필수 역량이 없다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E05-01",
+      "error_type": "E05",
+      "error_name": "Senior 3점에 추상적인 분석·Trade-off만 추가",
+      "case_id": "03",
+      "file": "cases/03/senior.md",
+      "seniority": "Senior",
+      "criterion_id": "C1",
+      "level": 3,
+      "before": "2점에 더해, 만료 해제·재점유·이전 결제 응답의 순서가 달라도 새 점유가 유지되는 근거를 분석한다. 좌석별 잠금과 조건부 갱신을 비교해 잠금 대기·충돌 재시도 비용을 설명하고, 외부 결제 대기와 좌석 변경의 처리 경계를 정당화한다.",
+      "after": "2점에 더해, 좌석 상태 전이의 복잡한 예외와 심층적인 한계를 분석하고 고도화된 아키텍처의 Trade-off를 종합적으로 검토하여 최적의 설계를 정당화한다.",
+      "expected_3_5": "Fail",
+      "reason": "어떤 상황·한계·상충 관계를 분석할지 없이 심층 분석과 Trade-off라는 표현만으로 3점을 구분한다.",
+      "detection_evidence_required": "분석·Trade-off라는 말은 있으나 구체적으로 평가할 한계·상황·이득과 비용이 없음을 지적한다.",
+      "pair_comparison_note": "Senior 3점에 요구되는 심화 판단이 추상적인 표현에 그쳐 실제 추가 역량을 식별할 수 없다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E06-01",
+      "error_type": "E06",
+      "error_name": "Middle 1점에 완성된 기본 흐름 배치",
+      "case_id": "03",
+      "file": "cases/03/middle.md",
+      "seniority": "Middle",
+      "criterion_id": "C2",
+      "level": 1,
+      "before": "장애 후 재시도하겠다고 제안하지만, 어떤 주문을 어디에 저장하고 누가 다시 처리하는지 설명하지 못한다.",
+      "after": "주문을 계속 보관할 저장소에 기록하고 나서 접수 성공을 알린다. 이후 작업자가 처리되지 않은 주문을 찾아 실행하고, 끝난 주문의 상태를 완료로 남기는 절차를 설명한다.",
+      "expected_3_5": "Fail",
+      "reason": "Middle 2점과 같은 완성된 기본 흐름을 표현만 바꿔 1점에 배치하여 미흡한 시도와 동작하는 설계의 경계를 없앤다.",
+      "detection_evidence_required": "Middle 1점이 이미 기본 역할·정상 처리 흐름을 완비해 2점과 같음을 지적한다.",
+      "pair_comparison_note": "주 판정은 3-5의 Level 1 경계다. 이 오류만을 근거로 4-1 판정을 일률적으로 강제하지 않는다.",
+      "required_metrics": [
+        "3-5"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E07-01",
+      "error_type": "E07",
+      "error_name": "Senior 2점에 Middle 2점 기본 흐름 그대로 배치",
+      "case_id": "03",
+      "file": "cases/03/senior.md",
+      "seniority": "Senior",
+      "criterion_id": "C3",
+      "level": 2,
+      "before": "진입 서버들이 처리 중 요청 수와 상한을 공유하고, 상한 미만일 때만 원자적으로 수를 늘려 요청을 전달한다. 완료는 요청 ID로 한 번만 차감한다. 거절된 클라이언트는 대기 간격에 임의 지연을 더하며, 재시도도 같은 진입 검사를 거치게 한다.",
+      "after": "진입 요청을 앞단에서 제한해 처리 가능한 수만 점유·주문 서비스로 보내고, 나머지는 대기시키거나 거절하는 기본 흐름을 설명한다.",
+      "expected_3_5": "Fail",
+      "reason": "Middle 2점 원문을 그대로 옮겨 Senior 2점에 필요한 구체적인 조건·문제 대응을 제거한다.",
+      "detection_evidence_required": "구성·흐름만 반복되며 Senior 2점의 추가 필수 메커니즘과 주요 문제 대응이 없음을 지적한다.",
+      "pair_comparison_note": "Middle 2점과 Senior 2점의 필수 설명이 문자상으로도 동일하다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E08-01",
+      "error_type": "E08",
+      "error_name": "Senior 3점에 구체적 예외 대응을 추가하지만 대안 비교·선택 근거가 부족",
+      "case_id": "03",
+      "file": "cases/03/senior.md",
+      "seniority": "Senior",
+      "criterion_id": "C4",
+      "level": 3,
+      "before": "2점에 더해, 좌석군 재배치 중 이전·새 저장소가 동시에 점유를 받는 위험을 분석한다. 쓰기를 멈춰 복사한 뒤 라우팅을 전환하는 방식과, 변경분을 복제한 뒤 쓰기 담당을 전환하는 방식을 비교해 중단 시간·상태 동기화 비용과 선택 근거를 설명한다.",
+      "after": "2점에 더해, 좌석군을 다른 저장소로 재배치할 때 이전 경로로 점유 쓰기가 들어와 두 저장소가 동시에 같은 좌석을 변경할 수 있음을 지적한다. 이를 막기 위해 해당 좌석군의 쓰기를 잠시 중단하고 데이터를 복사한 뒤 라우팅을 전환하는 절차를 제시한다.",
+      "expected_3_5": "Fail",
+      "reason": "Senior 2점보다 구체적인 장애·병목 상황과 단일 대응 방안을 추가했지만 대안의 이득·비용, 상충 관계, 선택 근거까지는 요구하지 않는다.",
+      "detection_evidence_required": "Senior 3점에 새로운 예외 상황과 한 가지 개선 방안은 있으나 대안 간 보장·비용 비교와 설계 선택의 근거가 부족함을 지적한다. Senior 2점과 문장이 비슷하다는 이유만으로 실패 처리하지 않는다.",
+      "pair_comparison_note": "Senior 2점에 비해 심화된 상황은 추가되지만, Senior 3점 고유의 대안 비교·판단 역량을 검증할 만큼 구체적인 Trade-off가 부족하다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E03-02",
+      "error_type": "E03",
+      "error_name": "Senior 1점에 미완성 제안만 배치",
+      "case_id": "05",
+      "file": "cases/05/senior.md",
+      "seniority": "Senior",
+      "criterion_id": "C1",
+      "level": 1,
+      "before": "좌석 저장소에서 한 요청만 점유하게 하고, 점유자를 확인해 결제 결과에 따라 확정하거나 해제하는 흐름을 제시한다. 다만 확인 이후 만료·재점유가 끼어들 때 변경을 막는 구체적인 조건은 설명하지 못한다.",
+      "after": "좌석 잠금이나 상태 확인을 제안하지만, 경쟁 요청 중 누가 점유하는지와 결제 후 확정하는 흐름을 설명하지 못한다.",
+      "expected_3_5": "Fail",
+      "reason": "승인된 Middle 1점 문장을 Senior 1점으로 복사하여 기본 구성과 정상 처리 흐름도 충족하지 못하게 한다.",
+      "detection_evidence_required": "Senior 1점이 기술·방향 제안에 그치고 정상 처리 흐름을 설명하지 못하여 Middle 2점 수준에 못 미친다고 지적한다.",
+      "pair_comparison_note": "Senior 1점이 Middle 1점과 같으며 Middle 2점에 대응하는 기본 흐름 수준에 도달하지 못한다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E01-02",
+      "error_type": "E01",
+      "error_name": "Level 0에 문제 인식·해결 시도 배치",
+      "case_id": "05",
+      "file": "cases/05/middle.md",
+      "seniority": "Middle",
+      "criterion_id": "C2",
+      "level": 0,
+      "before": "접수한 주문이 처리 중 장애로 유실될 수 있다는 문제를 고려하지 않는다.",
+      "after": "주문이 장애로 사라질 수 있음을 인식하고 지속 저장과 재시도를 제안하지만, 보존 시점과 재개할 주문을 찾는 흐름은 설명하지 못한다.",
+      "expected_3_5": "Fail",
+      "reason": "문제 미고려가 아니라 문제를 인식하고 해결 방향을 제안하는 답변을 0점 조건으로 둔다.",
+      "detection_evidence_required": "해당 Level 0에 문제 인식 또는 해결 제안이 들어 있어 0점 경계를 어겼음을 지적한다.",
+      "pair_comparison_note": "Level 0은 연차 차이의 대상이 아니다. 이 오류 하나만으로 4-1 Fail을 요구하지 않는다.",
+      "required_metrics": [
+        "3-5"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E05-02",
+      "error_type": "E05",
+      "error_name": "Senior 3점에 추상적인 분석·Trade-off만 추가",
+      "case_id": "05",
+      "file": "cases/05/senior.md",
+      "seniority": "Senior",
+      "criterion_id": "C3",
+      "level": 3,
+      "before": "2점에 더해, 모든 진입 서버가 공유 카운터를 갱신해 진입 판단 자체가 병목이 되는 상황을 분석한다. 전체 상한을 서버별로 나눠 관리하는 대안과 비교해 조정 비용·남는 용량의 활용·서버 장애 시 용량 회수의 상충을 설명하고 선택을 정당화한다.",
+      "after": "2점에 더해, 유입 제어의 다양한 장애와 병목을 심층적으로 검토하고 성능과 안정성의 Trade-off를 종합적으로 분석하여 최적의 제어 정책을 정당화한다.",
+      "expected_3_5": "Fail",
+      "reason": "어떤 상황·한계·상충 관계를 분석할지 없이 심층 분석과 Trade-off라는 표현만으로 3점을 구분한다.",
+      "detection_evidence_required": "분석·Trade-off라는 말은 있으나 구체적으로 평가할 한계·상황·이득과 비용이 없음을 지적한다.",
+      "pair_comparison_note": "Senior 3점에 요구되는 심화 판단이 추상적인 표현에 그쳐 실제 추가 역량을 식별할 수 없다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E07-02",
+      "error_type": "E07",
+      "error_name": "Senior 2점에 Middle 2점 기본 흐름 그대로 배치",
+      "case_id": "05",
+      "file": "cases/05/senior.md",
+      "seniority": "Senior",
+      "criterion_id": "C4",
+      "level": 2,
+      "before": "조회는 읽기 복제본이나 캐시로 보내고, 점유 상태는 공연 ID·좌석군 기준으로 여러 저장소에 분할한다. 라우터는 분할표로 담당 저장소를 찾아 같은 좌석의 변경을 같은 곳으로 보낸다. 서버만 늘려도 남는 단일 쓰기 저장소 병목을 줄이는 흐름을 설명한다.",
+      "after": "조회 서버와 점유 서버의 역할을 구분하고, 공연별 요청을 여러 처리 서버로 나눠 부하를 분담하는 기본 흐름을 설명한다.",
+      "expected_3_5": "Fail",
+      "reason": "Middle 2점 원문을 그대로 옮겨 Senior 2점에 필요한 구체적인 조건·문제 대응을 제거한다.",
+      "detection_evidence_required": "구성·흐름만 반복되며 Senior 2점의 추가 필수 메커니즘과 주요 문제 대응이 없음을 지적한다.",
+      "pair_comparison_note": "Middle 2점과 Senior 2점의 필수 설명이 문자상으로도 동일하다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E02-02",
+      "error_type": "E02",
+      "error_name": "Middle 2점에 심층 분석·기술 선택 필수화",
+      "case_id": "06",
+      "file": "cases/06/middle.md",
+      "seniority": "Middle",
+      "criterion_id": "C1",
+      "level": 2,
+      "before": "좌석 상태를 관리하는 저장소에서 한 요청만 점유에 성공하게 하고, 점유자 확인 후 결제 결과에 따라 확정하거나 해제하는 기본 흐름을 설명한다.",
+      "after": "좌석 점유·확정 흐름을 제시하고, 만료·재점유·이전 결제 응답이 교차하는 순서마다 허용되는 전이를 검증한다. 잠금 대기와 조건부 갱신의 충돌 재시도 비용을 비교하고, 외부 결제 대기를 포함할 처리 경계의 보장 한계와 선택 근거를 설명한다.",
+      "expected_3_5": "Fail",
+      "reason": "기본 구성·흐름을 넘어 복합 상황의 보장 분석과 대안의 비용·선택 정당화를 Middle 2점에 필수화한다.",
+      "detection_evidence_required": "단순 기술 이름이나 원자성 언급 때문이 아니라, 실제로 요구한 복합 상황 분석·대안 판단이 Middle 2점의 깊이를 넘는다고 지적한다.",
+      "pair_comparison_note": "Middle 2점이 Senior 1점의 기본 흐름 수준보다 현저히 높아 상대적 난이도 관계가 깨진다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": [
+        {
+          "metric": "3-5",
+          "seniority": "Middle",
+          "criterion_id": "C1",
+          "level": 3,
+          "expected": "Fail",
+          "reason": "Level 3의 「2점에 더해」가 과도하게 높은 Level 2 요구를 누적 상속한다. 직접 변경한 새 오류가 아니라 같은 주입의 파급 효과다."
+        }
+      ]
+    },
+    {
+      "error_id": "E04-02",
+      "error_type": "E04",
+      "error_name": "Senior 2점의 기본 흐름을 고급 어휘로 포장",
+      "case_id": "06",
+      "file": "cases/06/senior.md",
+      "seniority": "Senior",
+      "criterion_id": "C2",
+      "level": 2,
+      "before": "주문 접수·재개 흐름에서 주문 ID별 확정 기록에 유일성 제약을 두고, 확정 결과와 완료 상태를 같은 트랜잭션으로 저장한다. 재처리·중복 결제 통지는 기존 기록이 있으면 결과를 재사용하고, 없으면 새로 반영하되 경합한 작업 중 한 건만 커밋되게 한다.",
+      "after": "주문 정보를 내구성 저장 계층에 보존한 뒤 접수 성공을 반환한다. 실행 워커가 미완료 주문을 탐색·처리하고 완료 상태를 반영하는 장애 복구 아키텍처와 처리 메커니즘을 정교하게 설명한다.",
+      "expected_3_5": "Fail",
+      "reason": "Middle 2점의 기본 흐름에 아키텍처·메커니즘·정교함 등 표현만 추가하고 필수 처리 조건이나 주요 문제 대응은 추가하지 않는다.",
+      "detection_evidence_required": "말이 어려워졌지만 Middle 2점의 최소 답변으로도 충족되고, Senior 2점 고유의 조건·동작·문제 대응이 없음을 지적한다.",
+      "pair_comparison_note": "Middle 2점과 Senior 2점 사이에 어휘 이외의 추가 필수 역량이 없다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E08-02",
+      "error_type": "E08",
+      "error_name": "Senior 3점에 구체적 예외 대응을 추가하지만 대안 비교·선택 근거가 부족",
+      "case_id": "06",
+      "file": "cases/06/senior.md",
+      "seniority": "Senior",
+      "criterion_id": "C3",
+      "level": 3,
+      "before": "2점에 더해, 모든 진입 서버가 공유 카운터를 갱신해 진입 판단 자체가 병목이 되는 상황을 분석한다. 전체 상한을 서버별로 나눠 관리하는 대안과 비교해 조정 비용·남는 용량의 활용·서버 장애 시 용량 회수의 상충을 설명하고 선택을 정당화한다.",
+      "after": "2점에 더해, 진입 서버들이 공유 카운터를 빈번히 갱신하면 입장 판단 자체가 병목이 될 수 있음을 지적한다. 각 서버에 일정 허용량을 미리 배정하고 소진되면 중앙에서 다시 배분받아 카운터 접근을 줄이는 절차를 제시한다.",
+      "expected_3_5": "Fail",
+      "reason": "Senior 2점보다 구체적인 장애·병목 상황과 단일 대응 방안을 추가했지만 대안의 이득·비용, 상충 관계, 선택 근거까지는 요구하지 않는다.",
+      "detection_evidence_required": "Senior 3점에 새로운 예외 상황과 한 가지 개선 방안은 있으나 대안 간 보장·비용 비교와 설계 선택의 근거가 부족함을 지적한다. Senior 2점과 문장이 비슷하다는 이유만으로 실패 처리하지 않는다.",
+      "pair_comparison_note": "Senior 2점에 비해 심화된 상황은 추가되지만, Senior 3점 고유의 대안 비교·판단 역량을 검증할 만큼 구체적인 Trade-off가 부족하다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E06-02",
+      "error_type": "E06",
+      "error_name": "Middle 1점에 완성된 기본 흐름 배치",
+      "case_id": "06",
+      "file": "cases/06/middle.md",
+      "seniority": "Middle",
+      "criterion_id": "C4",
+      "level": 1,
+      "before": "서버를 늘리겠다고 제안하지만, 조회·점유 요청을 여러 서버에 어떻게 분산하는지 설명하지 못한다.",
+      "after": "조회와 좌석 점유를 담당할 서버를 따로 두고, 공연별로 들어온 요청을 여러 처리 서버에 나누어 보내 부하를 분담하는 방식을 설명한다.",
+      "expected_3_5": "Fail",
+      "reason": "Middle 2점과 같은 완성된 기본 흐름을 표현만 바꿔 1점에 배치하여 미흡한 시도와 동작하는 설계의 경계를 없앤다.",
+      "detection_evidence_required": "Middle 1점이 이미 기본 역할·정상 처리 흐름을 완비해 2점과 같음을 지적한다.",
+      "pair_comparison_note": "주 판정은 3-5의 Level 1 경계다. 이 오류만을 근거로 4-1 판정을 일률적으로 강제하지 않는다.",
+      "required_metrics": [
+        "3-5"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E04-03",
+      "error_type": "E04",
+      "error_name": "Senior 2점의 기본 흐름을 고급 어휘로 포장",
+      "case_id": "07",
+      "file": "cases/07/senior.md",
+      "seniority": "Senior",
+      "criterion_id": "C1",
+      "level": 2,
+      "before": "가용 좌석에 점유 ID·만료 시각을 원자적으로 기록한다. 확정은 점유 ID 일치·대기 상태·미만료 조건에서, 해제는 같은 ID·대기 상태에서 만료나 결제 실패 조건으로 원자 갱신해 오래된 응답이 새 점유나 확정을 바꾸지 못하게 한다.",
+      "after": "좌석 상태 관리 계층에서 단일 요청의 점유를 성립시키고, 소유자 검증 후 결제 결과를 반영해 확정 또는 해제하는 동시성 제어 아키텍처와 상태 전이 메커니즘을 정교하게 설명한다.",
+      "expected_3_5": "Fail",
+      "reason": "Middle 2점의 기본 흐름에 아키텍처·메커니즘·정교함 등 표현만 추가하고 필수 처리 조건이나 주요 문제 대응은 추가하지 않는다.",
+      "detection_evidence_required": "말이 어려워졌지만 Middle 2점의 최소 답변으로도 충족되고, Senior 2점 고유의 조건·동작·문제 대응이 없음을 지적한다.",
+      "pair_comparison_note": "Middle 2점과 Senior 2점 사이에 어휘 이외의 추가 필수 역량이 없다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E08-03",
+      "error_type": "E08",
+      "error_name": "Senior 3점에 구체적 예외 대응을 추가하지만 대안 비교·선택 근거가 부족",
+      "case_id": "07",
+      "file": "cases/07/senior.md",
+      "seniority": "Senior",
+      "criterion_id": "C2",
+      "level": 3,
+      "before": "2점에 더해, 결제 성공 후 내부 기록 전에 장애가 난 상황에서 기존 결제 식별자로 외부 결과를 대조해 복구하는 흐름을 분석한다. 외부 결제까지 로컬 트랜잭션으로 묶을 수 없는 한계를 짚고, 대사 주기에 따른 복구 지연·조회 부하와 선택 근거를 설명한다.",
+      "after": "2점에 더해, 결제는 성공했지만 내부 확정 결과를 기록하기 전에 장애가 나면 주문이 미완료로 남는 상황을 설명한다. 재개 작업자가 결제 식별자로 외부 결과를 다시 조회해 내부 확정 기록을 복구하는 절차를 제시한다.",
+      "expected_3_5": "Fail",
+      "reason": "Senior 2점보다 구체적인 장애·병목 상황과 단일 대응 방안을 추가했지만 대안의 이득·비용, 상충 관계, 선택 근거까지는 요구하지 않는다.",
+      "detection_evidence_required": "Senior 3점에 새로운 예외 상황과 한 가지 개선 방안은 있으나 대안 간 보장·비용 비교와 설계 선택의 근거가 부족함을 지적한다. Senior 2점과 문장이 비슷하다는 이유만으로 실패 처리하지 않는다.",
+      "pair_comparison_note": "Senior 2점에 비해 심화된 상황은 추가되지만, Senior 3점 고유의 대안 비교·판단 역량을 검증할 만큼 구체적인 Trade-off가 부족하다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E01-03",
+      "error_type": "E01",
+      "error_name": "Level 0에 문제 인식·해결 시도 배치",
+      "case_id": "07",
+      "file": "cases/07/middle.md",
+      "seniority": "Middle",
+      "criterion_id": "C3",
+      "level": 0,
+      "before": "예매 오픈 때 처리 능력을 넘는 요청으로 내부 작업이 무제한 쌓일 수 있다는 문제를 고려하지 않는다.",
+      "after": "요청 폭증에 따른 적체 문제를 인식하고 대기열이나 요청 제한을 제안하지만, 제어 위치와 초과 요청의 처리 흐름은 설명하지 못한다.",
+      "expected_3_5": "Fail",
+      "reason": "문제 미고려가 아니라 문제를 인식하고 해결 방향을 제안하는 답변을 0점 조건으로 둔다.",
+      "detection_evidence_required": "해당 Level 0에 문제 인식 또는 해결 제안이 들어 있어 0점 경계를 어겼음을 지적한다.",
+      "pair_comparison_note": "Level 0은 연차 차이의 대상이 아니다. 이 오류 하나만으로 4-1 Fail을 요구하지 않는다.",
+      "required_metrics": [
+        "3-5"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E05-03",
+      "error_type": "E05",
+      "error_name": "Senior 3점에 추상적인 분석·Trade-off만 추가",
+      "case_id": "07",
+      "file": "cases/07/senior.md",
+      "seniority": "Senior",
+      "criterion_id": "C4",
+      "level": 3,
+      "before": "2점에 더해, 좌석군 재배치 중 이전·새 저장소가 동시에 점유를 받는 위험을 분석한다. 쓰기를 멈춰 복사한 뒤 라우팅을 전환하는 방식과, 변경분을 복제한 뒤 쓰기 담당을 전환하는 방식을 비교해 중단 시간·상태 동기화 비용과 선택 근거를 설명한다.",
+      "after": "2점에 더해, 확장 구조의 복잡한 상황과 잠재적 한계를 면밀히 분석하고 여러 분산 아키텍처의 Trade-off를 종합적으로 고려하여 적절한 설계 선택을 정당화한다.",
+      "expected_3_5": "Fail",
+      "reason": "어떤 상황·한계·상충 관계를 분석할지 없이 심층 분석과 Trade-off라는 표현만으로 3점을 구분한다.",
+      "detection_evidence_required": "분석·Trade-off라는 말은 있으나 구체적으로 평가할 한계·상황·이득과 비용이 없음을 지적한다.",
+      "pair_comparison_note": "Senior 3점에 요구되는 심화 판단이 추상적인 표현에 그쳐 실제 추가 역량을 식별할 수 없다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E06-03",
+      "error_type": "E06",
+      "error_name": "Middle 1점에 완성된 기본 흐름 배치",
+      "case_id": "08",
+      "file": "cases/08/middle.md",
+      "seniority": "Middle",
+      "criterion_id": "C1",
+      "level": 1,
+      "before": "좌석 잠금이나 상태 확인을 제안하지만, 경쟁 요청 중 누가 점유하는지와 결제 후 확정하는 흐름을 설명하지 못한다.",
+      "after": "좌석 저장소가 경쟁 중인 요청 하나에만 점유를 허용하며, 점유한 사용자를 확인한 다음 결제 결과에 맞춰 확정 또는 해제로 상태를 바꾸는 과정을 설명한다.",
+      "expected_3_5": "Fail",
+      "reason": "Middle 2점과 같은 완성된 기본 흐름을 표현만 바꿔 1점에 배치하여 미흡한 시도와 동작하는 설계의 경계를 없앤다.",
+      "detection_evidence_required": "Middle 1점이 이미 기본 역할·정상 처리 흐름을 완비해 2점과 같음을 지적한다.",
+      "pair_comparison_note": "주 판정은 3-5의 Level 1 경계다. 이 오류만을 근거로 4-1 판정을 일률적으로 강제하지 않는다.",
+      "required_metrics": [
+        "3-5"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E07-03",
+      "error_type": "E07",
+      "error_name": "Senior 2점에 Middle 2점 기본 흐름 그대로 배치",
+      "case_id": "08",
+      "file": "cases/08/senior.md",
+      "seniority": "Senior",
+      "criterion_id": "C2",
+      "level": 2,
+      "before": "주문 접수·재개 흐름에서 주문 ID별 확정 기록에 유일성 제약을 두고, 확정 결과와 완료 상태를 같은 트랜잭션으로 저장한다. 재처리·중복 결제 통지는 기존 기록이 있으면 결과를 재사용하고, 없으면 새로 반영하되 경합한 작업 중 한 건만 커밋되게 한다.",
+      "after": "주문을 지속 저장한 뒤 접수 성공을 반환하고, 작업자가 미완료 주문을 찾아 처리한 후 완료 상태를 기록하는 기본 흐름을 설명한다.",
+      "expected_3_5": "Fail",
+      "reason": "Middle 2점 원문을 그대로 옮겨 Senior 2점에 필요한 구체적인 조건·문제 대응을 제거한다.",
+      "detection_evidence_required": "구성·흐름만 반복되며 Senior 2점의 추가 필수 메커니즘과 주요 문제 대응이 없음을 지적한다.",
+      "pair_comparison_note": "Middle 2점과 Senior 2점의 필수 설명이 문자상으로도 동일하다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    },
+    {
+      "error_id": "E02-03",
+      "error_type": "E02",
+      "error_name": "Middle 2점에 심층 분석·기술 선택 필수화",
+      "case_id": "08",
+      "file": "cases/08/middle.md",
+      "seniority": "Middle",
+      "criterion_id": "C3",
+      "level": 2,
+      "before": "진입 요청을 앞단에서 제한해 처리 가능한 수만 점유·주문 서비스로 보내고, 나머지는 대기시키거나 거절하는 기본 흐름을 설명한다.",
+      "after": "유입 제한·대기·거절의 기본 흐름과 함께, 공유 카운터 갱신 병목과 진입 서버 장애 시 상한 회수의 정합성을 분석한다. 중앙 집계와 서버별 허용량 분할을 비교해 전체 상한 보장·남는 용량 활용·조정 비용의 상충과 선택 근거를 설명한다.",
+      "expected_3_5": "Fail",
+      "reason": "기본 구성·흐름을 넘어 복합 상황의 보장 분석과 대안의 비용·선택 정당화를 Middle 2점에 필수화한다.",
+      "detection_evidence_required": "단순 기술 이름이나 원자성 언급 때문이 아니라, 실제로 요구한 복합 상황 분석·대안 판단이 Middle 2점의 깊이를 넘는다고 지적한다.",
+      "pair_comparison_note": "Middle 2점이 Senior 1점의 기본 흐름 수준보다 현저히 높아 상대적 난이도 관계가 깨진다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": [
+        {
+          "metric": "3-5",
+          "seniority": "Middle",
+          "criterion_id": "C3",
+          "level": 3,
+          "expected": "Fail",
+          "reason": "Level 3의 「2점에 더해」가 과도하게 높은 Level 2 요구를 누적 상속한다. 직접 변경한 새 오류가 아니라 같은 주입의 파급 효과다."
+        }
+      ]
+    },
+    {
+      "error_id": "E03-03",
+      "error_type": "E03",
+      "error_name": "Senior 1점에 미완성 제안만 배치",
+      "case_id": "08",
+      "file": "cases/08/senior.md",
+      "seniority": "Senior",
+      "criterion_id": "C4",
+      "level": 1,
+      "before": "조회 서버와 점유 서버의 역할을 나누고, 공연별 요청을 여러 처리 서버로 분산해 부하를 나누는 흐름을 제시한다. 다만 인기 공연 하나에 요청이 집중될 때 요청과 점유 데이터를 함께 나눌 방법은 설명하지 못한다.",
+      "after": "서버를 늘리겠다고 제안하지만, 조회·점유 요청을 여러 서버에 어떻게 분산하는지 설명하지 못한다.",
+      "expected_3_5": "Fail",
+      "reason": "승인된 Middle 1점 문장을 Senior 1점으로 복사하여 기본 구성과 정상 처리 흐름도 충족하지 못하게 한다.",
+      "detection_evidence_required": "Senior 1점이 기술·방향 제안에 그치고 정상 처리 흐름을 설명하지 못하여 Middle 2점 수준에 못 미친다고 지적한다.",
+      "pair_comparison_note": "Senior 1점이 Middle 1점과 같으며 Middle 2점에 대응하는 기본 흐름 수준에 도달하지 못한다.",
+      "required_metrics": [
+        "3-5",
+        "4-1"
+      ],
+      "counting": "직접 주입 오류 1건으로 집계",
+      "dependent_effects": []
+    }
+  ],
+  "counting_notes": [
+    "주입 오류는 24건. 3-5의 직접 Fail 위치는 24개, E02의 상속 영향을 포함한 Fail 위치는 27개.",
+    "하나의 주입이 3-5와 4-1 양쪽에서 탐지되거나 여러 번 언급되어도 전체 주입 오류 탐지는 한 건으로 센다.",
+    "E04와 E07은 같은 Senior 2점 깊이 부족의 어휘 포장형·직접 복사형 테스트 변형이다. 독립적인 실제 오류 분포를 대표하지 않는다.",
+    "정상 04는 01의 순서/ID 변형이며 새로운 주제나 독립적으로 작성한 정상 표본이 아니다."
+  ]
+}

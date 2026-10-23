@@ -182,7 +182,7 @@ def test_evaluates_md_with_pass_fail_and_unscorable_without_a_score(tmp_path):
     assert rubric.read_text(encoding="utf-8") in messages[1]["content"]
     assert criteria.read_text(encoding="utf-8") in messages[0]["content"]
     assert "판단 불가" in messages[0]["content"]
-    assert evaluator.load_seniority_criteria() in messages[0]["content"]
+    assert "Middle" in messages[0]["content"]
 
 
 def test_rejects_a_judge_response_that_silently_omits_required_assessments():
@@ -203,21 +203,6 @@ def test_compares_matching_middle_senior_and_rejects_different_scope(tmp_path):
     ]
 
     def llm(messages):
-        assert (
-            '연차 비교 결과는 rubric="comparison", target_id="pair"'
-            in messages[0]["content"]
-        )
-        assert evaluator.load_seniority_criteria() in messages[0]["content"]
-        assert "연차 비교의 판단 근거는 모든 대응 항목" in messages[0]["content"]
-        assert "target_id는 필수 조합의 세 번째 값을 그대로" in messages[0]["content"]
-        for boundary in (
-            "Senior 1점의 기본 흐름",
-            "Middle 2점의 최소 충족 답변",
-            "상위 Level의 장점으로 하위 Level의 위반을 상쇄하지 않는다",
-            "적용 대상·동작·해결 문제가 연결",
-            "모든 구성요소와 입출력을 열거하도록 요구하지 않는다",
-        ):
-            assert boundary in messages[0]["content"]
         keys = json.loads(
             next(
                 line

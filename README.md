@@ -29,6 +29,9 @@ archgen harnesses      # 현재는 골격 상태를 출력
 pytest                 # CLI 골격 검증
 ```
 
+평가기 검증 데이터와 정답표는 [resources/evaluator](resources/evaluator/README.md),
+실험 결과는 [평가기 실험 기록](docs/evaluator/experiments/error-detection-before-tuning/README.md)에서 관리합니다.
+
 TUI 에서 질문에 답하다가 `Ctrl+G` 또는 `/done` 으로 생성을 시작합니다.
 
 ## 목표 파이프라인 (LangGraph)

@@ -1,0 +1,201 @@
+{
+  "baseline": "docs/evaluator/experiments/error-detection-before-tuning",
+  "changed_variable": "3-5 평가 기준만 수정. 4-1·평가 프롬프트·코드·입력·연차 정책·모델 설정 고정.",
+  "actual_model_calls": 9,
+  "unscorable": 0,
+  "strict_direct_error_detection": {
+    "detected": 27,
+    "total": 32,
+    "percentage": 84.38
+  },
+  "pair_error_detection": {
+    "detected": 0,
+    "total": 7,
+    "percentage": 0.0
+  },
+  "normal_controls_acceptance": {
+    "matched": 18,
+    "total": 18,
+    "percentage": 100.0
+  },
+  "verdict_agreement": {
+    "matched": 72,
+    "total": 81,
+    "percentage": 88.89
+  },
+  "baseline_metrics": {
+    "reference_labels": "user_confirmed_including_review_required",
+    "label_approval": "resources/evaluator/label-approval.json",
+    "actual_model_calls": 9,
+    "additional_model_calls_for_reaggregation": 0,
+    "datasets": [
+      "seniority-error-injection",
+      "ticket-rubric-review"
+    ],
+    "strict_direct_error_detection": {
+      "detected": 20,
+      "total": 32,
+      "percentage": 62.5
+    },
+    "pair_error_detection": {
+      "detected": 0,
+      "total": 7,
+      "percentage": 0.0
+    },
+    "normal_controls_acceptance": {
+      "matched": 18,
+      "total": 18,
+      "percentage": 100.0
+    },
+    "verdict_agreement": {
+      "matched": 65,
+      "total": 81,
+      "percentage": 80.25
+    },
+    "normal_control_scope": "seniority-error-injection의 정상 2쌍. 실제 티켓에는 별도 정상 대조군 없음.",
+    "counting": "직접 원인만 합산하고 동일 원인의 상속 영향은 제외. 판정 일치는 근거가 틀린 Fail도 포함할 수 있으므로 원인 검출과 구분.",
+    "limitations": [
+      "두 데이터셋은 연차 정책이 다르므로 합산은 관측 건수 요약이다.",
+      "단일 티켓 주제·각 사례 1회 평가."
+    ]
+  },
+  "datasets": {
+    "seniority-error-injection": {
+      "reference_labels": "user_confirmed_including_review_required",
+      "baseline": "docs/evaluator/experiments/error-detection-before-tuning/seniority-error-injection",
+      "actual_model_calls": 8,
+      "strict_direct_error_detection": {
+        "detected": 24,
+        "total": 24,
+        "percentage": 100.0
+      },
+      "pair_error_detection": {
+        "detected": 0,
+        "total": 6,
+        "percentage": 0.0
+      },
+      "verdict_agreement": {
+        "matched": 66,
+        "total": 72,
+        "percentage": 91.67
+      },
+      "expected_normal_acceptance": {
+        "matched": 42,
+        "total": 42,
+        "percentage": 100.0
+      },
+      "normal_controls_acceptance": {
+        "matched": 18,
+        "total": 18,
+        "percentage": 100.0
+      },
+      "semantic_review": "assistant_semantic_review",
+      "by_error_type": {
+        "E01": {
+          "detected": 3,
+          "total": 3,
+          "percentage": 100.0
+        },
+        "E02": {
+          "detected": 3,
+          "total": 3,
+          "percentage": 100.0
+        },
+        "E03": {
+          "detected": 3,
+          "total": 3,
+          "percentage": 100.0
+        },
+        "E04": {
+          "detected": 3,
+          "total": 3,
+          "percentage": 100.0
+        },
+        "E05": {
+          "detected": 3,
+          "total": 3,
+          "percentage": 100.0
+        },
+        "E06": {
+          "detected": 3,
+          "total": 3,
+          "percentage": 100.0
+        },
+        "E07": {
+          "detected": 3,
+          "total": 3,
+          "percentage": 100.0
+        },
+        "E08": {
+          "detected": 3,
+          "total": 3,
+          "percentage": 100.0
+        }
+      }
+    },
+    "ticket-rubric-review": {
+      "reference_labels": "user_confirmed_including_review_required",
+      "baseline": "docs/evaluator/experiments/error-detection-before-tuning/ticket-rubric-review",
+      "actual_model_calls": 1,
+      "strict_direct_error_detection": {
+        "detected": 3,
+        "total": 8,
+        "percentage": 37.5
+      },
+      "pair_error_detection": {
+        "detected": 0,
+        "total": 1,
+        "percentage": 0.0
+      },
+      "verdict_agreement": {
+        "matched": 6,
+        "total": 9,
+        "percentage": 66.67
+      },
+      "expected_normal_acceptance": {
+        "matched": 2,
+        "total": 2,
+        "percentage": 100.0
+      },
+      "normal_controls_acceptance": null,
+      "semantic_review": "assistant_semantic_review",
+      "inherited_effect_detection": {
+        "detected": 1,
+        "total": 3,
+        "percentage": 33.33
+      },
+      "all_level_issue_detection": {
+        "detected": 4,
+        "total": 11,
+        "percentage": 36.36
+      },
+      "newly_detected_direct_issues": [
+        "T08",
+        "T10"
+      ],
+      "previously_detected_now_missed_direct_issues": [
+        "T09"
+      ],
+      "additional_wrong_level_citation": {
+        "seniority": "Senior",
+        "criterion_id": "C2",
+        "level": 1,
+        "reference_level_verdict": "Pass",
+        "reference_label_user_confirmed": true,
+        "evaluator_criterion_verdict": "Fail",
+        "evaluator_reason": "1점은 ‘주문 상태를 저장하고 실패한 처리를 재시도’하는 흐름만 요구하며, 재시작 후 처리 대상 식별을 기본 흐름의 필수 요소로 명시하지 않는다. 따라서 보존한 미완료 주문을 찾아 재개하는 연결이 없어도 충족될 수 있어 시니어 1점의 기본 복구 설계 기준에 미달한다.",
+        "note": "정답상 적합한 1점에 복구 대상 식별을 추가 필수화했다. 해당 Criterion의 실제 오류인 2점은 놓쳤다. Criterion 판정 일치는 원인 검출과 다르다."
+      }
+    }
+  },
+  "cost": {
+    "conservative_additional_cost_usd": 0.43713500000000005,
+    "cumulative_upper_usd": 46.904682200000025
+  },
+  "limitations": [
+    "각 사례 1회 평가이며 단일 티켓 주제다.",
+    "두 데이터셋의 연차 정책이 달라 합산은 관측 건수 요약이다. 각 데이터셋 전후 정책은 동일하다.",
+    "정답표는 사용자 확인, 근거와 원인의 의미 대조는 보조자 검토다.",
+    "추가 정상 Level 오지적 1건이 있고, Criterion 판정 일치와 올바른 원인 검출은 다르다."
+  ]
+}

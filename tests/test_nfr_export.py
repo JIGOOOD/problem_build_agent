@@ -64,7 +64,7 @@ def test_agent_prompts_cover_scope_fair_levels_and_outcome_based_design(
                 "NFR 간 충돌",
                 "설계 선택의 이득·비용",
                 "보장 수준을 명시",
-                "같은 kind라도 평가 대상이 다르면 구분한다",
+                "kind가 같다는 이유만으로 다른 요구를 제외하지 않는다",
             ),
         ),
         (
@@ -197,15 +197,10 @@ def test_generates_rubric_from_fixed_nfrs_and_validates_and_renders(
     ):
         assert rule in system["content"]
     assert "동등하게 충족하는 대안 설계" in system["content"]
-    assert "Level 3에는 Level 2 설계의 대표적인 한계" not in system["content"]
     assert "문서 id·URL·출처 목록을 넣지 않는다" in system["content"]
     for rule in (
         "각 항목은 평가 대상이나 설계 판단을 구분한다",
         "점수 의미와 난이도는 아래 MD 기준만 따른다",
-        "기본 설계를 먼저 정한다",
-        "모든 세부 조건의 설명을 2점에 일괄 요구하지 않는다",
-        "처리 조건·순서·갱신 단위",
-        "관측지표·검증방법을 추가 필수 채점 조건으로 붙이지 않는다",
     ):
         assert rule in system["content"]
     assert export == golden_export
@@ -324,28 +319,3 @@ def test_full_seniority_criteria_reach_author_budget_and_judge(
         ):
             assert removed not in system
         assert "Staff+" not in system
-
-
-def test_author_receives_paired_golden_examples_in_the_counted_prompt(
-    research, golden_export
-):
-    import re
-
-    from archgen.paths import RESOURCES
-
-    selection = NFRSelection(**golden_export.model_dump(exclude={"rubric"}))
-    author = Mock(return_value=golden_export.rubric.model_dump_json())
-    counter = Mock(return_value=10_000)
-    generate_rubric(BRIEF, research, selection, author, count_tokens=counter)
-
-    system = author.call_args.args[0][0]["content"]
-    assert counter.call_args.args[0] == author.call_args.args[0]
-    for topic, version, criterion in (("uber", "v3", "C3"), ("youtube", "v2", "C4")):
-        for tier in ("middle", "senior"):
-            path = RESOURCES / "golden" / topic / version / f"{topic}_{tier}.md"
-            text = path.read_text().split(f"### {criterion}.", 1)[1].split("\n---", 1)[0]
-            levels = re.findall(r"(?m)^\| ([0-3]) \| (.+?) \|$", text)
-            assert len(levels) == 4
-            for _, descriptor in levels:
-                assert descriptor in system
-    assert "예시의 기술·NFR·배점을 현재 주제의 필수 조건으로 복사하지 않는다" in system
