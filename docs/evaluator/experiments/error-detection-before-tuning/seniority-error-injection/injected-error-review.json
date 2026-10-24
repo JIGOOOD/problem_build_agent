@@ -11,8 +11,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "근거에서 0점의 문제 인식·해결 제안이 문제 미고려 정의와 맞지 않음을 지적했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/0"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/0"
   },
   {
     "error_id": "E02-01",
@@ -26,8 +26,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "근거에서 Middle 2점의 복합 상황·대안 비교·선택 정당화가 기본 흐름 수준을 넘는다고 지적했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/1"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/1"
   },
   {
     "error_id": "E03-01",
@@ -41,8 +41,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "검출 사례는 Senior 1점의 처리 흐름 부족을 지적했다. 미검출 사례는 2·3점의 구체성만 근거로 Pass였다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/2"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/2"
   },
   {
     "error_id": "E04-01",
@@ -56,8 +56,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "근거에서 고급 어휘 외에 기본 흐름을 넘는 처리 조건·대응이 없음을 지적했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/3"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/3"
   },
   {
     "error_id": "E05-01",
@@ -71,8 +71,8 @@
     "strict_detection": false,
     "review_method": "assistant_semantic_review",
     "review_note": "추상적인 분석·상충·정당화 표현을 실질적인 Senior 3점 요구로 인정하여 Pass였다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/03/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/4"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/03/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/4"
   },
   {
     "error_id": "E06-01",
@@ -86,8 +86,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "검출 사례는 완성된 기본 흐름을 1점에 두어 2점과 겹침을 지적했다. 미검출 사례는 2·3점의 적합성만 설명했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/03/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/5"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/03/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/5"
   },
   {
     "error_id": "E07-01",
@@ -101,8 +101,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "근거에서 Senior 2점이 기본 흐름만 반복하며 주요 문제의 구체적 처리 조건이 빠졌다고 지적했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/03/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/6"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/03/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/6"
   },
   {
     "error_id": "E08-01",
@@ -116,8 +116,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "근거에서 구체적 상황과 한 가지 개선만으로는 대안의 비용·상충·선택 근거가 부족함을 지적했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/03/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/7"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/03/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/7"
   },
   {
     "error_id": "E03-02",
@@ -131,8 +131,8 @@
     "strict_detection": false,
     "review_method": "assistant_semantic_review",
     "review_note": "검출 사례는 Senior 1점의 처리 흐름 부족을 지적했다. 미검출 사례는 2·3점의 구체성만 근거로 Pass였다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/05/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/8"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/05/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/8"
   },
   {
     "error_id": "E01-02",
@@ -146,8 +146,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "근거에서 0점의 문제 인식·해결 제안이 문제 미고려 정의와 맞지 않음을 지적했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/05/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/9"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/05/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/9"
   },
   {
     "error_id": "E05-02",
@@ -161,8 +161,8 @@
     "strict_detection": false,
     "review_method": "assistant_semantic_review",
     "review_note": "추상적인 분석·상충·정당화 표현을 실질적인 Senior 3점 요구로 인정하여 Pass였다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/05/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/10"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/05/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/10"
   },
   {
     "error_id": "E07-02",
@@ -176,8 +176,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "근거에서 Senior 2점이 기본 흐름만 반복하며 주요 문제의 구체적 처리 조건이 빠졌다고 지적했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/05/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/11"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/05/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/11"
   },
   {
     "error_id": "E02-02",
@@ -191,8 +191,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "근거에서 Middle 2점의 복합 상황·대안 비교·선택 정당화가 기본 흐름 수준을 넘는다고 지적했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/06/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/12"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/12"
   },
   {
     "error_id": "E04-02",
@@ -206,8 +206,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "근거에서 고급 어휘 외에 기본 흐름을 넘는 처리 조건·대응이 없음을 지적했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/06/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/13"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/13"
   },
   {
     "error_id": "E08-02",
@@ -221,8 +221,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "근거에서 구체적 상황과 한 가지 개선만으로는 대안의 비용·상충·선택 근거가 부족함을 지적했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/06/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/14"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/14"
   },
   {
     "error_id": "E06-02",
@@ -236,8 +236,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "검출 사례는 완성된 기본 흐름을 1점에 두어 2점과 겹침을 지적했다. 미검출 사례는 2·3점의 적합성만 설명했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/06/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/15"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/15"
   },
   {
     "error_id": "E04-03",
@@ -251,8 +251,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "근거에서 고급 어휘 외에 기본 흐름을 넘는 처리 조건·대응이 없음을 지적했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/16"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/16"
   },
   {
     "error_id": "E08-03",
@@ -266,8 +266,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "근거에서 구체적 상황과 한 가지 개선만으로는 대안의 비용·상충·선택 근거가 부족함을 지적했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/17"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/17"
   },
   {
     "error_id": "E01-03",
@@ -281,8 +281,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "근거에서 0점의 문제 인식·해결 제안이 문제 미고려 정의와 맞지 않음을 지적했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/18"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/18"
   },
   {
     "error_id": "E05-03",
@@ -296,8 +296,8 @@
     "strict_detection": false,
     "review_method": "assistant_semantic_review",
     "review_note": "추상적인 분석·상충·정당화 표현을 실질적인 Senior 3점 요구로 인정하여 Pass였다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/19"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/19"
   },
   {
     "error_id": "E06-03",
@@ -311,8 +311,8 @@
     "strict_detection": false,
     "review_method": "assistant_semantic_review",
     "review_note": "검출 사례는 완성된 기본 흐름을 1점에 두어 2점과 겹침을 지적했다. 미검출 사례는 2·3점의 적합성만 설명했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/08/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/20"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/08/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/20"
   },
   {
     "error_id": "E07-03",
@@ -326,8 +326,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "근거에서 Senior 2점이 기본 흐름만 반복하며 주요 문제의 구체적 처리 조건이 빠졌다고 지적했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/08/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/21"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/08/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/21"
   },
   {
     "error_id": "E02-03",
@@ -341,8 +341,8 @@
     "strict_detection": true,
     "review_method": "assistant_semantic_review",
     "review_note": "근거에서 Middle 2점의 복합 상황·대안 비교·선택 정당화가 기본 흐름 수준을 넘는다고 지적했다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/08/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/22"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/08/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/22"
   },
   {
     "error_id": "E03-03",
@@ -356,7 +356,7 @@
     "strict_detection": false,
     "review_method": "assistant_semantic_review",
     "review_note": "검출 사례는 Senior 1점의 처리 흐름 부족을 지적했다. 미검출 사례는 2·3점의 구체성만 근거로 Pass였다.",
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/08/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/23"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/08/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/23"
   }
 ]

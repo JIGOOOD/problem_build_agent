@@ -1,0 +1,806 @@
+{
+  "dataset_id": "slack-rubric-validation",
+  "label_status": "uber_anchor_operational_labels",
+  "purpose": "slack 원문은 유지하고 Uber v4를 고정 정상 앵커로 Senior 1점·Middle 2점 운영 정답을 정리한 버전. 나머지 Level과 4-1 판정은 기존 버전 유지.",
+  "source_archive_sha256": "41319a3729c8e08df24e5ead5c8f9902df97a9cd9951bbabc5e4dec877b41025",
+  "source_files": {
+    "Middle": {
+      "archive_path": "slack/middle/nfr_rubric.md",
+      "file": "inputs/slack/middle/nfr_rubric.md",
+      "sha256": "caa65458f4f54db5d4be1fc21a2d75284bcc31b33a6684691281b4445a5a072a"
+    },
+    "Senior": {
+      "archive_path": "slack/senior/nfr_rubric.md",
+      "file": "inputs/slack/senior/nfr_rubric.md",
+      "sha256": "736ec928537c4ec9a5c7448517b1720c98863f659c0db3d60351027d9dea8b7b"
+    }
+  },
+  "evaluation_scope": [
+    "3-5",
+    "4-1"
+  ],
+  "scoring_policy": {
+    "grade_absolute": "3-5의 각 Level에 대한 연차 적합성 독립 판정",
+    "grade_relative": "4-1의 대응되는 핵심 Criterion별 역량 차이 판정",
+    "aggregate_3_5": "Level 중 하나라도 Fail이면 Criterion은 Fail",
+    "aggregate_4_1": "핵심 Criterion 하나에서 차이 부족 시 쌍은 Fail",
+    "middle_level_3_inheritance": "과도한 2점 요구를 상속하면 Middle 3점도 Fail",
+    "senior_level_3_independence": "Senior 3점 고유 심화 요구는 2점 결함과 별개 판정",
+    "note": "이번 운영 정답은 policy/uber_anchor_label_policy.md를 따른다. 우버·원문·Senior 2점의 기존 판정은 변경하지 않는다.",
+    "anchor": "Uber Golden v4 — frozen",
+    "human_reviewed": false,
+    "judge_executed": false,
+    "no_leakage": "inputs 루브릭만 평가기에 제공한다. policy/review/reference/README는 제외한다."
+  },
+  "cases": [
+    {
+      "case_id": "slack_uploaded",
+      "files": {
+        "middle": "inputs/slack/middle/nfr_rubric.md",
+        "senior": "inputs/slack/senior/nfr_rubric.md"
+      },
+      "expected_3_5": [
+        {
+          "case_id": "slack_uploaded",
+          "seniority": "Middle",
+          "evaluation_id": "3-5",
+          "criterion_id": "C1",
+          "title": "접수 메시지 보존과 누락 복구",
+          "expected": "Fail",
+          "failed_levels": [
+            2,
+            3
+          ],
+          "review_required": false,
+          "levels": [
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C1",
+              "level": 0,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "장애 후 보존·복구를 고려하지 않는 경우다.",
+              "source_file": "inputs/slack/middle/nfr_rubric.md",
+              "source_line": 36,
+              "descriptor": "접수 성공한 메시지의 장애 후 보존이나 연결 중단으로 놓친 메시지의 복구를 설계에서 고려하지 않는다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C1",
+              "level": 1,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "해결 방향만 있고 실제 보존·복구의 처리 흐름은 불완전하다.",
+              "source_file": "inputs/slack/middle/nfr_rubric.md",
+              "source_line": 37,
+              "descriptor": "저장과 재시도, 이력 조회로 유실을 막으려 하지만, 성공 응답과 기록 완료의 관계 또는 재접속 후 누락분을 찾는 흐름을 충분히 설명하지 못한다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C1",
+              "level": 2,
+              "expected": "Fail",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "기본 저장·응답에 결과 불명 요청의 재확인·재시도와 재접속 후 누락 복구까지 함께 필수화한다. 우버 앵커에서 기본 보존 흐름 뒤에 추가 실패 대응을 분리한 범위를 따라 Fail로 유지한다. 상세 복구 알고리즘을 원문이 요구한다고 추가 해석하지는 않는다.",
+              "source_file": "inputs/slack/middle/nfr_rubric.md",
+              "source_line": 38,
+              "descriptor": "접수 성공 시점과 보장할 장애 범위를 명시하고, 보존을 담당하는 구성요소와 기록·응답 흐름을 설명한다. 결과가 불확실한 요청의 재확인이나 재시도, 보존 범위 내 이력 기반 누락 복구 흐름도 설명한다.",
+              "historical_ambiguity": true,
+              "anchor_reference": "Uber Middle C3 L2/L3",
+              "judgment_clarity": "operational_anchor_decision",
+              "failure_origin": "direct"
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C1",
+              "level": 3,
+              "expected": "Fail",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "3점의 고유한 한계·개선 요구 자체는 적절하다는 기존 판단을 유지한다. 다만 우버 고정 앵커에서 과도하다고 판정한 2점의 필수 범위를 상속하므로 전체 3점은 Fail이다. 별도 직접 오류로 중복 계산하지 않는다.",
+              "source_file": "inputs/slack/middle/nfr_rubric.md",
+              "source_line": 39,
+              "descriptor": "2점 설계에 더해, 기록 완료 확인이 전달 대기를 늘리는 등 보존 방식의 대표적 한계를 짚고, 합의한 보존 수준을 낮추지 않으면서 대기를 줄이거나 복구 흐름을 개선하는 방안을 설명한다.",
+              "failure_origin": "inherited",
+              "inherited_from_level": 2
+            }
+          ]
+        },
+        {
+          "case_id": "slack_uploaded",
+          "seniority": "Middle",
+          "evaluation_id": "3-5",
+          "criterion_id": "C2",
+          "title": "채널 순서와 중복 없는 반영",
+          "expected": "Fail",
+          "failed_levels": [
+            2,
+            3
+          ],
+          "review_required": false,
+          "levels": [
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C2",
+              "level": 0,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "순서·중복 모두 고려하지 않는 경우다.",
+              "source_file": "inputs/slack/middle/nfr_rubric.md",
+              "source_line": 56,
+              "descriptor": "같은 채널에서 사용자나 조회 경로별로 순서가 달라지는 문제와 재시도·재접속으로 메시지가 중복 반영되는 문제를 고려하지 않는다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C2",
+              "level": 1,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "해결 방향은 있지만 흐름이 미완성이다.",
+              "source_file": "inputs/slack/middle/nfr_rubric.md",
+              "source_line": 57,
+              "descriptor": "채널별 정렬과 중복 제거를 제안하지만, 동시 전송의 순서 결정 기준이나 재시도 요청의 식별, 이력과 실시간 메시지를 합치는 흐름을 충분히 설명하지 못한다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C2",
+              "level": 2,
+              "expected": "Fail",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "기본 채널 순서 결정뿐 아니라 재시도 중복 반영 방지, 조회 겹침, 실시간·이력 병합의 수렴까지 2점 필수 조건으로 묶는다. 고정 우버 앵커에서 중복 처리 등의 추가 대응을 상위 단계로 분리한 기준을 적용한다.",
+              "source_file": "inputs/slack/middle/nfr_rubric.md",
+              "source_line": 58,
+              "descriptor": "채널별 확정 순서를 정하는 역할과 기준을 제시하고, 요청·메시지 식별을 이용해 재시도와 조회 구간 중첩을 중복 반영하지 않는 흐름을 설명한다. 이력과 실시간 수신이 같은 메시지 집합과 순서로 수렴하도록 설계한다.",
+              "historical_ambiguity": true,
+              "anchor_reference": "Uber Middle C3 L2/L3 및 Senior C3 L2",
+              "judgment_clarity": "operational_anchor_decision",
+              "failure_origin": "direct"
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C2",
+              "level": 3,
+              "expected": "Fail",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "3점의 고유한 한계·개선 요구 자체는 적절하다는 기존 판단을 유지한다. 다만 우버 고정 앵커에서 과도하다고 판정한 2점의 필수 범위를 상속하므로 전체 3점은 Fail이다. 별도 직접 오류로 중복 계산하지 않는다.",
+              "source_file": "inputs/slack/middle/nfr_rubric.md",
+              "source_line": 59,
+              "descriptor": "2점 설계에 더해, 이력 조회 중 실시간 메시지가 도착해 단순 병합의 경계가 흔들리는 등 대표적 한계를 설명하고, 조회 경계 조정이나 식별값 기반 재정렬 등으로 같은 순서에 수렴시키는 개선을 제시한다.",
+              "failure_origin": "inherited",
+              "inherited_from_level": 2
+            }
+          ]
+        },
+        {
+          "case_id": "slack_uploaded",
+          "seniority": "Middle",
+          "evaluation_id": "3-5",
+          "criterion_id": "C3",
+          "title": "온라인 전달 경로와 지연 관리",
+          "expected": "Pass",
+          "failed_levels": [],
+          "review_required": false,
+          "levels": [
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C3",
+              "level": 0,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "지연 문제 미고려다.",
+              "source_file": "inputs/slack/middle/nfr_rubric.md",
+              "source_line": 76,
+              "descriptor": "정상 연결된 온라인 수신자에게 메시지가 도달하기까지의 지연이나 전달 경로의 대기를 고려하지 않는다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C3",
+              "level": 1,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "방향은 있으나 역할·흐름은 미완성이다.",
+              "source_file": "inputs/slack/middle/nfr_rubric.md",
+              "source_line": 77,
+              "descriptor": "실시간 연결이나 비동기 전달로 지연을 줄이려 하지만, 전달 대상과 측정 구간 또는 저장·큐잉·팬아웃을 거치는 기본 흐름을 충분히 설명하지 못한다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C3",
+              "level": 2,
+              "expected": "Pass",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "대상·측정 구간과 저장·큐잉·팬아웃의 역할을 연결하는 기본 전달 경로를 요구한다.",
+              "source_file": "inputs/slack/middle/nfr_rubric.md",
+              "source_line": 78,
+              "descriptor": "온라인 전달 대상과 구독 정책, 송신 요청부터 수신까지의 측정 구간을 명시한다. 저장·큐잉·팬아웃 구성요소의 역할과 전달 흐름을 설명하고, 불필요한 대기로 대화가 장시간 정체되지 않도록 설계한다.",
+              "historical_ambiguity": false,
+              "anchor_reference": "Uber Middle C4 L2: 기본 요청 전달·처리 흐름",
+              "judgment_clarity": "operational_anchor_decision",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C3",
+              "level": 3,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "느린 수신자라는 대표적 한계와 기본 개선을 요구한다.",
+              "source_file": "inputs/slack/middle/nfr_rubric.md",
+              "source_line": 79,
+              "descriptor": "2점 설계에 더해, 느린 수신자나 큐 적체가 다른 수신자의 전달까지 늦추는 등 대표적 한계를 설명한다. 대기 구간을 구분해 확인하고, 필요한 전달과 메시지 보존을 유지하면서 대기를 분리하거나 줄이는 개선을 제시한다.",
+              "failure_origin": null
+            }
+          ]
+        },
+        {
+          "case_id": "slack_uploaded",
+          "seniority": "Middle",
+          "evaluation_id": "3-5",
+          "criterion_id": "C4",
+          "title": "대규모 채널의 전달 작업 분산",
+          "expected": "Fail",
+          "failed_levels": [
+            2,
+            3
+          ],
+          "review_required": false,
+          "levels": [
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C4",
+              "level": 0,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "확장 문제 미고려다.",
+              "source_file": "inputs/slack/middle/nfr_rubric.md",
+              "source_line": 96,
+              "descriptor": "채널 수나 온라인 수신자가 늘어날 때 전달 작업이 한 처리 주체에 집중되는 문제를 고려하지 않는다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C4",
+              "level": 1,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "제안만 있고 핵심 팬아웃의 분산 흐름은 미완성이므로 Middle 1점에 맞다.",
+              "source_file": "inputs/slack/middle/nfr_rubric.md",
+              "source_line": 97,
+              "descriptor": "서버 추가나 채널별 분할을 제안하지만, 단일 대규모 채널의 전달 작업을 여러 처리 주체에 나누는 기준과 흐름을 충분히 설명하지 못한다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C4",
+              "level": 2,
+              "expected": "Fail",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "채널 간 분산과 단일 대규모 채널 내부의 수신자별 분할 구조를 함께 필수화한다. 고정 우버 앵커의 기본 작업 분담을 넘어 집중 대상 내부 분할까지 2점에 묶은 범위로 판정한다. 순서·복구는 유지할 제약일 뿐이며 별도 심층 로직을 요구한다는 기존 근거는 사용하지 않는다.",
+              "source_file": "inputs/slack/middle/nfr_rubric.md",
+              "source_line": 98,
+              "descriptor": "채널 간 부하와 단일 대규모 채널의 수신자별 전달 작업을 추가 자원에 나누는 구조를 제시한다. 분할 기준, 구성요소의 역할과 전달 흐름을 설명하고, 분산 후에도 기존 순서·복구 경로가 유지됨을 설명한다.",
+              "historical_ambiguity": false,
+              "anchor_reference": "Uber Middle C4 L2/L3 및 Senior C4 L2",
+              "judgment_clarity": "operational_anchor_decision",
+              "failure_origin": "direct"
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C4",
+              "level": 3,
+              "expected": "Fail",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "3점의 고유한 한계·개선 요구 자체는 적절하다는 기존 판단을 유지한다. 다만 우버 고정 앵커에서 과도하다고 판정한 2점의 필수 범위를 상속하므로 전체 3점은 Fail이다. 별도 직접 오류로 중복 계산하지 않는다.",
+              "source_file": "inputs/slack/middle/nfr_rubric.md",
+              "source_line": 99,
+              "descriptor": "2점 설계에 더해, 분산해도 중계 지점이나 과도한 구독 상태 복제가 새 병목이 되는 등 대표적 한계를 설명한다. 순서·복구 요구를 유지하면서 분산 단위나 상태 배치를 조정하는 개선과 그에 따른 부담을 설명한다.",
+              "failure_origin": "inherited",
+              "inherited_from_level": 2
+            }
+          ]
+        },
+        {
+          "case_id": "slack_uploaded",
+          "seniority": "Senior",
+          "evaluation_id": "3-5",
+          "criterion_id": "C1",
+          "title": "성공 접수 메시지의 영속화와 누락 복구",
+          "expected": "Pass",
+          "failed_levels": [],
+          "review_required": false,
+          "levels": [
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C1",
+              "level": 0,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "핵심 문제 미고려에 맞다.",
+              "source_file": "inputs/slack/senior/nfr_rubric.md",
+              "source_line": 36,
+              "descriptor": "성공으로 접수한 메시지가 장애 뒤에도 남아 있어야 한다는 문제와 연결 중단 뒤 누락분을 복구하는 경로를 고려하지 않는다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C1",
+              "level": 1,
+              "expected": "Pass",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "저장→성공 응답→재접속 후 이력 조회라는 핵심 보존·복구 경로가 명시돼 있다. 우버 C3 L1을 Pass로 인정하면서 이 항목만 상세 영속화·장애 복구 부족으로 Fail할 수는 없어 예외적으로 Pass로 변경한다.",
+              "source_file": "inputs/slack/senior/nfr_rubric.md",
+              "source_line": 37,
+              "descriptor": "저장 후 성공 응답하고 재접속 시 이력을 조회하는 기본 설계를 제시하지만, 영속화 완료의 판단 기준이나 저장과 전달 사이 장애가 발생했을 때의 복구 처리를 구체적으로 설명하지 못한다.",
+              "historical_ambiguity": false,
+              "anchor_reference": "Uber Senior C3 L1: 기본 보관·처리와 상세 복구 구분",
+              "judgment_clarity": "operational_anchor_decision",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C1",
+              "level": 2,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "영속화 확인을 접수 성공의 조건으로 삼고 저장 기록으로 복구하는 처리 원리가 있어 Senior 2점으로 적절하다.",
+              "source_file": "inputs/slack/senior/nfr_rubric.md",
+              "source_line": 38,
+              "descriptor": "보장할 장애 범위를 명시하고 성공 응답을 영속화 확인과 연결하는 메커니즘을 설명한다. 저장과 전달 사이 장애에도 이력 조회가 가능하고, 일시적 연결 복원이 실패하면 저장된 메시지로 누락분을 복구하는 흐름을 제시한다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C1",
+              "level": 3,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "영속화 응답·전달 지연의 상충과 선택 근거가 구체적이다.",
+              "source_file": "inputs/slack/senior/nfr_rubric.md",
+              "source_line": 39,
+              "descriptor": "2점에 더해, 선택한 영속화·복구 경로의 한계와 개선을 설명한다. 영속화 확인 대기와 접수 응답 시간의 절충을 분석하고, 전달도 확인 뒤로 제한한다면 수신 지연에 미치는 영향까지 근거로 선택을 설명한다.",
+              "failure_origin": null
+            }
+          ]
+        },
+        {
+          "case_id": "slack_uploaded",
+          "seniority": "Senior",
+          "evaluation_id": "3-5",
+          "criterion_id": "C2",
+          "title": "논리 메시지 중복 방지와 채널 내 병합 순서",
+          "expected": "Fail",
+          "failed_levels": [
+            1
+          ],
+          "review_required": true,
+          "levels": [
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C2",
+              "level": 0,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "핵심 문제 미고려를 0점으로 정의한다.",
+              "source_file": "inputs/slack/senior/nfr_rubric.md",
+              "source_line": 56,
+              "descriptor": "재시도와 재전달이 논리 메시지를 중복 생성하는 문제나 실시간 수신과 이력·누락분의 순서가 어긋나는 문제를 고려하지 않는다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C2",
+              "level": 1,
+              "expected": "Fail",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "메시지 식별·채널 정렬을 사용한다는 방향만으로 채점될 여지가 있고, 식별값을 적용한 기본 반영·순서 확정 경로를 충분히 요구하지 않는다. 우버 C1/C4처럼 핵심 동작을 연결하는 설계가 필요하다는 기준으로 Fail을 유지한다. 동시 경합 알고리즘 부재 자체가 이유는 아니다.",
+              "source_file": "inputs/slack/senior/nfr_rubric.md",
+              "source_line": 57,
+              "descriptor": "메시지 식별과 채널 정렬을 이용하는 기본 설계를 제시하지만, 동시 재시도의 중복 저장 방지나 이력 조회 중 도착한 실시간 메시지의 병합 처리를 구체적으로 설명하지 못한다.",
+              "historical_ambiguity": false,
+              "anchor_reference": "Uber Senior C1 L1 및 C4 L1",
+              "judgment_clarity": "operational_anchor_decision",
+              "failure_origin": "direct"
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C2",
+              "level": 2,
+              "expected": "Pass",
+              "label_status": "user_directed_pass",
+              "review_required": false,
+              "reason": "논리 메시지 식별 범위, 중복 저장·표시 방지 메커니즘, 채널 내 순서 확정과 재전달·이력/실시간 수신 병합 흐름을 요구한다. 후보자에게 구체적인 중복 제어·순서 처리 원리를 설명하도록 하며 저장 방식 하나를 강제하지 않는다.",
+              "source_file": "inputs/slack/senior/nfr_rubric.md",
+              "source_line": 58,
+              "descriptor": "동일 논리 메시지의 식별 범위와 중복 저장·표시 방지 메커니즘을 설명한다. 동시 전송의 채널 내 순서 결정 기준을 정하고, 재전달·역순 도착·이력과 실시간 수신의 겹침을 처리하여 동기화 후 같은 순서로 병합하는 흐름을 제시한다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C2",
+              "level": 3,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": true,
+              "reason": "재시도·재접속 경계와 식별/순서 상태 관리 비용, 처리 효율의 상충·선택 근거를 요구하므로 Ticket Senior 3점과 유사하게 독립 Pass 후보. 복잡한 경계의 실제 사례가 얼마나 구체적인지는 검토 여지가 있다.",
+              "source_file": "inputs/slack/senior/nfr_rubric.md",
+              "source_line": 59,
+              "descriptor": "2점에 더해, 선택한 중복 판정이나 순서 병합 방식이 재시도·재접속의 복잡한 경계에서 갖는 한계를 분석하고 개선한다. 식별·순서 상태의 유지 부담이나 순서 확정 대기와 처리 효율 사이의 절충을 설명하고 선택 근거를 제시한다.",
+              "failure_origin": null
+            }
+          ]
+        },
+        {
+          "case_id": "slack_uploaded",
+          "seniority": "Senior",
+          "evaluation_id": "3-5",
+          "criterion_id": "C3",
+          "title": "온라인 수신자의 전달 경로와 지연 관리",
+          "expected": "Fail",
+          "failed_levels": [
+            1
+          ],
+          "review_required": false,
+          "levels": [
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C3",
+              "level": 0,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "핵심 문제 미고려다.",
+              "source_file": "inputs/slack/senior/nfr_rubric.md",
+              "source_line": 76,
+              "descriptor": "온라인 수신자가 메시지를 관찰하기까지 거치는 전달 경로나 그 과정에서 발생하는 대기와 지연을 고려하지 않는다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C3",
+              "level": 1,
+              "expected": "Fail",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "원문이 실시간 전달 경로를 요구한다는 점은 인정한다. 그러나 발신자 접수 응답과 수신자 관찰 시점을 구분하지 못하는 답변도 1점으로 허용해, 핵심 지연의 측정 대상 자체를 잘못 잡을 수 있다. 기존의 전달 경로가 없다는 근거는 폐기한다.",
+              "source_file": "inputs/slack/senior/nfr_rubric.md",
+              "source_line": 77,
+              "descriptor": "실시간 전달 경로와 지연을 줄이는 기본 방안을 제시하지만, 발신자 접수 응답과 수신자 관찰 시점을 구분하지 못하거나 주요 단계의 대기 원인과 처리 방안을 구체적으로 설명하지 못한다.",
+              "historical_ambiguity": true,
+              "anchor_reference": "Uber Senior C4 L1: 실제 결과 반영 지점까지 경로 명시",
+              "judgment_clarity": "operational_anchor_decision",
+              "failure_origin": "direct"
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C3",
+              "level": 2,
+              "expected": "Pass",
+              "label_status": "user_directed_pass",
+              "review_required": false,
+              "reason": "접수 응답과 관찰 시점의 구분, 전달 경로의 단계별 대기 및 대규모 채널의 꼬리 지연 원인 분석, 대기 감소·격리 메커니즘을 요구한다. 후보자가 구체적인 병목 대응을 설명하도록 하되 특정 큐 분할 방식은 고정하지 않는다.",
+              "source_file": "inputs/slack/senior/nfr_rubric.md",
+              "source_line": 78,
+              "descriptor": "접수 응답과 수신자 관찰을 구분하여 전달 경로의 단계별 처리·대기를 설명한다. 정상 부하와 대규모 채널에서 큐 적체나 전송 대기가 꼬리 지연을 키우는 지점을 짚고, 해당 대기를 줄이거나 격리하는 구체적인 메커니즘을 제시한다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C3",
+              "level": 3,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "느린 수신자/부하 쏠림과 자원·처리 효율 비용을 연결하므로 Senior 3점의 분석·선택 근거에 적절하다.",
+              "source_file": "inputs/slack/senior/nfr_rubric.md",
+              "source_line": 79,
+              "descriptor": "2점에 더해, 제시한 지연 개선이 부하 쏠림이나 느린 수신자 상황에서 갖는 한계를 분석하고 보완한다. 선택한 방식의 대기 감소와 자원 사용·처리 효율 사이 절충을 설명하고, 요청부터 관찰까지의 경로를 기준으로 개선 근거를 제시한다.",
+              "failure_origin": null
+            }
+          ]
+        },
+        {
+          "case_id": "slack_uploaded",
+          "seniority": "Senior",
+          "evaluation_id": "3-5",
+          "criterion_id": "C4",
+          "title": "단일 대규모 채널의 전달 용량 확장",
+          "expected": "Fail",
+          "failed_levels": [
+            1
+          ],
+          "review_required": false,
+          "levels": [
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C4",
+              "level": 0,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "문제 미고려다.",
+              "source_file": "inputs/slack/senior/nfr_rubric.md",
+              "source_line": 96,
+              "descriptor": "채널·연결 증가나 단일 대규모 채널의 수신자 증가에 따라 전달 작업이 특정 처리 주체에 집중되는 문제를 고려하지 않는다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C4",
+              "level": 1,
+              "expected": "Fail",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "채널별 분산은 제시하지만 핵심 요구인 단일 대규모 채널의 전달 작업이 추가 자원을 활용하는 방식을 설명하지 못해도 통과할 수 있다. 상세 상태 이동 알고리즘이 아니라 대상 내부의 기본 분산 경로가 부족하다.",
+              "source_file": "inputs/slack/senior/nfr_rubric.md",
+              "source_line": 97,
+              "descriptor": "채널이나 연결을 여러 처리 주체에 나누는 기본 설계를 제시하지만, 단일 대규모 채널이 추가 자원을 활용하는 방식이나 확장 시 구독 상태를 배치·이동하는 흐름을 구체적으로 설명하지 못한다.",
+              "historical_ambiguity": true,
+              "anchor_reference": "Uber Senior C4 L1: 실제 작업 분배·반영 경로",
+              "judgment_clarity": "operational_anchor_decision",
+              "failure_origin": "direct"
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C4",
+              "level": 2,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "**분산 단위와 전달 경로, 구독 상태 복제·이동의 부하 대응**을 함께 명시해 Ticket Senior C4에서 빠진 라우팅·상태 배치 요구를 상당 부분 채운다.",
+              "source_file": "inputs/slack/senior/nfr_rubric.md",
+              "source_line": 98,
+              "descriptor": "채널·연결의 분산 단위와 전달 경로를 설명하고, 단일 대규모 채널의 전달 작업도 여러 자원에 나누는 메커니즘을 제시한다. 자원을 추가할 때 구독 상태의 복제·이동과 작업 재배치가 만드는 병목을 짚고 대응 방안을 설명한다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "slack_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C4",
+              "level": 3,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "확장 한계, 상태 이동·조정 비용, 선택 근거가 분명하다.",
+              "source_file": "inputs/slack/senior/nfr_rubric.md",
+              "source_line": 99,
+              "descriptor": "2점에 더해, 분산 이후에도 남는 집중 지점이나 구독 상태 복제·이동 비용이 확장을 제한하는 상황을 분석하고 개선한다. 분산 단위와 상태 배치 선택에 따른 작업 균형·조정 부담·이동 비용의 절충을 비교하고 선택 근거를 설명한다.",
+              "failure_origin": null
+            }
+          ]
+        }
+      ],
+      "expected_4_1": {
+        "target_id": "pair",
+        "expected": "Fail",
+        "reason": "비교 가능한 핵심 Criterion에서 기본 난도 역전 또는 기술적 깊이 부족이 나타나며 상위 Level의 장점으로 상쇄하지 않는다.",
+        "criterion_comparisons": [
+          {
+            "criterion_id": "C1",
+            "middle_criterion_ids": [
+              "C1"
+            ],
+            "senior_criterion_ids": [
+              "C1"
+            ],
+            "expected": "Fail",
+            "reason": "Middle 2점이 결과 불명 요청과 누락 복구를 함께 요구하고 Senior 2점도 같은 보존·복구 범위에 머물러, 같은 2점에서의 추가 역량이 충분히 구분되지 않는다는 기존 비교 판정을 유지한다. Senior 1점의 기본 보존 흐름 부족은 더 이상 근거로 사용하지 않는다."
+          },
+          {
+            "criterion_id": "C2",
+            "middle_criterion_ids": [
+              "C2"
+            ],
+            "senior_criterion_ids": [
+              "C2"
+            ],
+            "expected": "Fail",
+            "reason": "Middle 2는 순서 확정·중복 방지·이력 병합을 요구하지만, Senior 1은 메시지 식별과 정렬의 선언만으로 기본 처리 흐름이 충분히 성립하지 않는다."
+          },
+          {
+            "criterion_id": "C3",
+            "middle_criterion_ids": [
+              "C3"
+            ],
+            "senior_criterion_ids": [
+              "C3"
+            ],
+            "expected": "Fail",
+            "reason": "Middle 2점은 수신까지의 측정 구간을 필수로 요구하지만 Senior 1점은 접수 응답과 수신 관찰 시점을 구분하지 못하는 경우까지 인정한다는 기존 난도 경계의 문제를 기록한다. 원문에 전달 경로가 없다고 주장하지 않는다."
+          },
+          {
+            "criterion_id": "C4",
+            "middle_criterion_ids": [
+              "C4"
+            ],
+            "senior_criterion_ids": [
+              "C4"
+            ],
+            "expected": "Fail",
+            "reason": "Middle 2점은 채널 간 분산과 단일 채널 내부 작업 분산을 함께 필수화하지만 Senior 1점은 단일 대규모 채널의 추가 자원 활용 방식을 설명하지 못해도 인정한다. 순서·복구는 제약이며 별도 심층 로직 요구를 비교 근거로 삼지 않는다."
+          }
+        ]
+      }
+    }
+  ],
+  "user_directed_fail_overrides": [
+    {
+      "seniority": "Middle",
+      "criterion_id": "C4",
+      "level": 2,
+      "expected": "Fail",
+      "reason": "채널 간 분산과 단일 대규모 채널 내부의 수신자별 분할 구조를 함께 필수화한다. 고정 우버 앵커의 기본 작업 분담을 넘어 집중 대상 내부 분할까지 2점에 묶은 범위로 판정한다. 순서·복구는 유지할 제약일 뿐이며 별도 심층 로직을 요구한다는 기존 근거는 사용하지 않는다."
+    },
+    {
+      "seniority": "Middle",
+      "criterion_id": "C4",
+      "level": 3,
+      "expected": "Fail",
+      "reason": "3점의 고유한 한계·개선 요구 자체는 적절하다는 기존 판단을 유지한다. 다만 우버 고정 앵커에서 과도하다고 판정한 2점의 필수 범위를 상속하므로 전체 3점은 Fail이다. 별도 직접 오류로 중복 계산하지 않는다."
+    },
+    {
+      "seniority": "Senior",
+      "criterion_id": "C2",
+      "level": 1,
+      "expected": "Fail",
+      "reason": "메시지 식별·채널 정렬을 사용한다는 방향만으로 채점될 여지가 있고, 식별값을 적용한 기본 반영·순서 확정 경로를 충분히 요구하지 않는다. 우버 C1/C4처럼 핵심 동작을 연결하는 설계가 필요하다는 기준으로 Fail을 유지한다. 동시 경합 알고리즘 부재 자체가 이유는 아니다."
+    }
+  ],
+  "user_directed_pass_overrides": [
+    {
+      "seniority": "Senior",
+      "criterion_id": "C2",
+      "level": 2,
+      "previous_expected": "Fail",
+      "expected": "Pass",
+      "reason": "논리 메시지 식별 범위, 중복 저장·표시 방지 메커니즘, 채널 내 순서 확정과 재전달·이력/실시간 수신 병합 흐름을 요구한다. 후보자에게 구체적인 중복 제어·순서 처리 원리를 설명하도록 하며 저장 방식 하나를 강제하지 않는다."
+    },
+    {
+      "seniority": "Senior",
+      "criterion_id": "C3",
+      "level": 2,
+      "previous_expected": "Fail",
+      "expected": "Pass",
+      "reason": "접수 응답과 관찰 시점의 구분, 전달 경로의 단계별 대기 및 대규모 채널의 꼬리 지연 원인 분석, 대기 감소·격리 메커니즘을 요구한다. 후보자가 구체적인 병목 대응을 설명하도록 하되 특정 큐 분할 방식은 고정하지 않는다."
+    },
+    {
+      "seniority": "Senior",
+      "criterion_id": "C1",
+      "level": 1,
+      "previous_expected": "Fail",
+      "expected": "Pass",
+      "reason": "저장→성공 응답→재접속 후 이력 조회라는 핵심 보존·복구 경로가 명시돼 있다. 우버 C3 L1을 Pass로 인정하면서 이 항목만 상세 영속화·장애 복구 부족으로 Fail할 수는 없어 예외적으로 Pass로 변경한다.",
+      "decision_basis": "사용자가 허용한 우버 동일 흐름의 예외"
+    }
+  ],
+  "revision": {
+    "version": "uber_anchor_v1",
+    "source_archive": "slack_gold_labels_senior2_pass.zip",
+    "source_sha256": "0bdb0db727f48f47a0ef716b3d903c3df05af77d14b8ba76aa966a0db338259d",
+    "scope": [
+      "Senior L1",
+      "Middle L2",
+      "related Middle L3 inheritance"
+    ],
+    "independent_review_completed": false,
+    "evaluator_executed": false
+  },
+  "summary": {
+    "level_3_5": {
+      "total": 32,
+      "proposed_pass": 23,
+      "proposed_fail": 9,
+      "direct_fail": 6,
+      "inherited_fail": 3,
+      "interpretation_review_rows": 1
+    },
+    "criterion_3_5": {
+      "Middle": {
+        "total": 4,
+        "proposed_pass": 1,
+        "proposed_fail": 3
+      },
+      "Senior": {
+        "total": 4,
+        "proposed_pass": 1,
+        "proposed_fail": 3
+      }
+    },
+    "pair_4_1": {
+      "total": 1,
+      "proposed_pass": 0,
+      "proposed_fail": 1,
+      "reason": "비교 가능한 핵심 Criterion에서 기본 난도 역전 또는 기술적 깊이 부족이 나타나며 상위 Level의 장점으로 상쇄하지 않는다."
+    },
+    "warning": "우버 고정 앵커에 따른 운영 정답. 독립 검토·평가기 재실행 결과가 아님."
+  }
+}

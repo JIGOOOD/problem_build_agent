@@ -14,8 +14,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/0"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/0"
   },
   {
     "error_id": "E02-01",
@@ -32,8 +32,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/1"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/1"
   },
   {
     "error_id": "E03-01",
@@ -50,8 +50,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/2"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/2"
   },
   {
     "error_id": "E04-01",
@@ -68,8 +68,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/3"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/3"
   },
   {
     "error_id": "E05-01",
@@ -86,8 +86,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/03/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/4"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/03/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/4"
   },
   {
     "error_id": "E06-01",
@@ -104,8 +104,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/03/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/5"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/03/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/5"
   },
   {
     "error_id": "E07-01",
@@ -122,8 +122,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/03/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/6"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/03/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/6"
   },
   {
     "error_id": "E08-01",
@@ -140,8 +140,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/03/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/7"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/03/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/7"
   },
   {
     "error_id": "E03-02",
@@ -158,8 +158,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/05/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/8"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/05/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/8"
   },
   {
     "error_id": "E01-02",
@@ -176,8 +176,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/05/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/9"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/05/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/9"
   },
   {
     "error_id": "E05-02",
@@ -194,8 +194,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/05/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/10"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/05/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/10"
   },
   {
     "error_id": "E07-02",
@@ -212,8 +212,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/05/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/11"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/05/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/11"
   },
   {
     "error_id": "E02-02",
@@ -230,8 +230,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/06/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/12"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/12"
   },
   {
     "error_id": "E04-02",
@@ -248,8 +248,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/06/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/13"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/13"
   },
   {
     "error_id": "E08-02",
@@ -266,8 +266,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/06/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/14"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/14"
   },
   {
     "error_id": "E06-02",
@@ -284,8 +284,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/06/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/15"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/15"
   },
   {
     "error_id": "E04-03",
@@ -302,8 +302,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/16"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/16"
   },
   {
     "error_id": "E08-03",
@@ -320,8 +320,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/17"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/17"
   },
   {
     "error_id": "E01-03",
@@ -338,8 +338,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/18"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/18"
   },
   {
     "error_id": "E05-03",
@@ -356,8 +356,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/19"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/19"
   },
   {
     "error_id": "E06-03",
@@ -374,8 +374,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/08/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/20"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/08/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/20"
   },
   {
     "error_id": "E07-03",
@@ -392,8 +392,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/08/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/21"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/08/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/21"
   },
   {
     "error_id": "E02-03",
@@ -410,8 +410,8 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/08/middle.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/22"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/08/middle.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/22"
   },
   {
     "error_id": "E03-03",
@@ -428,7 +428,7 @@
     "baseline_strict_detection": true,
     "status": "reviewed_against_user_confirmed_label",
     "reference_label_user_confirmed": true,
-    "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/08/senior.md",
-    "source_label": "resources/evaluator/datasets/seniority-error-injection/review/expected_labels.json#/injected_errors/23"
+    "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/08/senior.md",
+    "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/23"
   }
 ]

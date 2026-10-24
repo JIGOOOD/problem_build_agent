@@ -10,7 +10,7 @@
         "reason": "0점의 중복 예매 문제 미고려에서 1점의 잠금 제안, 2점의 단일 점유와 결제 결과 반영 흐름으로 요구 역량이 높아진다. 3점의 '확정 전에 점유 유효성을 다시 확인'은 지연 결제라는 대표적인 한계에 대한 기본 개선이며, 복잡한 동시성 제어까지 요구하지 않는다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/middle.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/middle.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/middle.md",
@@ -21,7 +21,7 @@
         "reason": "1점은 재시도 제안에 머물고, 2점은 '주문을 지속 저장한 뒤 접수 성공을 반환'하고 작업자가 재개하는 기본 설계를 요구한다. 3점은 완료 기록 전 장애로 인한 재처리를 인식하고 기존 결과를 확인하는 개선으로, 복잡한 복구 메커니즘이나 선택의 상충관계 분석을 필수로 요구하지 않는다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/middle.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/middle.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/middle.md",
@@ -32,7 +32,7 @@
         "reason": "0점의 '적체 문제를 인식하고 대기열이나 요청 제한을 제안'은 이미 문제 인식과 기본 해결 방향을 포함하므로 0점 기준에 맞지 않는다. 또한 1점도 제한 위치와 초과 요청 흐름을 설명하지 못하는 수준이어서 두 단계의 요구 역량이 사실상 같다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/middle.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/middle.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/middle.md",
@@ -43,7 +43,7 @@
         "reason": "1점의 서버 증설 제안에서 2점의 조회·점유 서버 역할 구분과 요청 분산 흐름으로 발전한다. 3점의 '공연별 분산만으로 병목이 남는 한계'와 좌석군 단위 분산은 대표적인 문제와 개선이며, 구체적인 데이터 재배치나 복잡한 장애 대응까지 요구하지 않는다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/middle.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/middle.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/senior.md",
@@ -54,7 +54,7 @@
         "reason": "2점의 '동시성 제어 아키텍처와 상태 전이 메커니즘을 정교하게 설명'은 단일 점유와 소유자 확인이라는 기본 흐름에 추상적인 설명 요구를 덧붙인 수준이다. 1점에서 지적한 확인 이후 만료·재점유 경합을 막는 구체적 조건이나 대응 방식이 2점의 필수 기준에 제시되지 않았다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/senior.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/senior.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/senior.md",
@@ -65,7 +65,7 @@
         "reason": "3점은 '결제는 성공했지만 내부 확정 결과를 기록하기 전에 장애'가 발생하는 상황과 외부 결과 재조회 절차를 구체적으로 요구한다. 그러나 해당 복구 방식의 이점·비용 또는 위험과 선택 근거를 요구하지 않아, 상위 수준의 기술적 의사결정 기준이 누락되어 있다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/senior.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/senior.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/senior.md",
@@ -76,7 +76,7 @@
         "reason": "1점은 앞단의 유입 제한 흐름을, 2점은 공유 상한의 원자적 갱신·중복 차감 방지·재시도 분산을 요구한다. 3점은 공유 카운터 병목을 분석하고 서버별 상한 분배와 비교해 '조정 비용·남는 용량의 활용·서버 장애 시 용량 회수'의 상충과 선택 근거를 요구하므로 기술적 깊이가 적합하다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/senior.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/senior.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/senior.md",
@@ -87,7 +87,7 @@
         "reason": "3점의 '복잡한 상황과 잠재적 한계를 면밀히 분석'과 '적절한 설계 선택을 정당화'는 분석할 한계나 선택별 이점·비용·위험을 구체화하지 않는다. 따라서 2점의 저장소 분할과 라우팅을 넘어 요구하는 설계 판단이 추상적 표현에 머문다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/senior.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/senior.md"
       },
       {
         "rubric": "comparison",

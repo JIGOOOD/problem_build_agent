@@ -1,0 +1,1702 @@
+{
+  "dataset_id": "heldout_injected_errors_v1",
+  "label_status": "author_expected_not_model_measured",
+  "contract": {
+    "metrics": [
+      "3-5",
+      "4-1"
+    ],
+    "relative_levels": [
+      "Middle 2 ≈ Senior 1",
+      "Middle 3 ≈ Senior 2"
+    ],
+    "scope": "3-5 Level·Criterion 독립 판정과 4-1 대응 Criterion별 연차 차이만을 채점한다.",
+    "inheritance": "Middle L2가 과도하고 L3이 '2점에 더해'라면 L3도 Fail. 직접 오류 수에 중복 포함하지 않음.",
+    "four_one_independence": "각 루브릭의 3-5 Fail을 4-1에 자동 전파하지 않음. 핵심 대응 Criterion에서 실질적인 연차 구분 부족일 때만 4-1 Fail.",
+    "no_leakage": "review 폴더와 README는 Evaluator 입력으로 전달하지 않음. cases.json에 명시된 두 MD만 사용.",
+    "holdout": "공연 티켓 주입·자연발생 오류를 재사용하지 않고 신규 두 주제에서 만든 변형 네 쌍. 같은 주제 변형끼리는 독립 표본이 아님."
+  },
+  "summary": {
+    "topics": 2,
+    "pairs": 4,
+    "rubrics": 8,
+    "direct_errors": 12,
+    "inherited_level_fails": 2,
+    "level_total": 128,
+    "level_pass": 114,
+    "level_fail": 14,
+    "criterion_total": 32,
+    "criterion_pass": 20,
+    "criterion_fail": 12,
+    "pair_four_one_pass": 2,
+    "pair_four_one_fail": 2
+  },
+  "cases": [
+    {
+      "case_id": "01",
+      "topic": "스마트 공장 센서 측정 모니터링",
+      "kind_for_reviewer_only": "heldout_injected_error",
+      "files": {
+        "middle": "cases/01/middle.md",
+        "senior": "cases/01/senior.md"
+      },
+      "sha256": {
+        "middle": "7d03e7bdd0b1628563c354ca59e08fc7e7094a3c1d5d7b3b807ba3ec23ec06dd",
+        "senior": "48996f9be53e5047a7ec555c23791930a2ea16fb944eba905e1c1f6a1544b1ea"
+      },
+      "direct_error_ids": [
+        "H01",
+        "H02",
+        "H03"
+      ],
+      "criterion_mapping": [
+        {
+          "middle": "C1",
+          "senior": "C1"
+        },
+        {
+          "middle": "C2",
+          "senior": "C2"
+        },
+        {
+          "middle": "C3",
+          "senior": "C3"
+        },
+        {
+          "middle": "C4",
+          "senior": "C4"
+        }
+      ],
+      "expected_3_5": [
+        {
+          "seniority": "Middle",
+          "criterion_id": "C1",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "오래된 측정값이 최신 측정값처럼 조회될 수 있다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "센서가 보낸 측정값을 서버에 저장해 조회하는 방안을 제안하지만, 수집한 측정값이 저장소와 조회 화면까지 전달되는 역할과 흐름을 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "센서 장치에서 측정값을 보내면 수집 서버가 센서별 최근 측정값을 저장하고, 조회 서버가 그 값을 읽어 화면에 전달하는 흐름을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 일정 시간 갱신되지 않은 측정값이 현재 측정값으로 오인될 수 있음을 설명하고 마지막 수신 시간을 표시하거나 오래된 측정값임을 알려 주는 개선 방안을 제시한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C2",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "측정값 전송이 몰릴 때 수집 처리량이 부족해질 수 있다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Fail",
+              "label_basis": "direct_mutation",
+              "error_id": "H01",
+              "descriptor": "수집 서버가 측정값 이벤트를 접수해 큐에 기록하면 여러 작업자가 이를 읽어 센서별 최근 측정값 저장소를 갱신하고, 조회 서버가 갱신된 측정값을 제공하는 흐름을 설명한다.",
+              "reason": "수집 서버·큐·작업자·저장소·조회 서버의 역할과 정상 처리 흐름을 모두 완성해 Middle 2점의 최소 역량을 1점에 요구한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "수집 서버가 측정값 이벤트를 접수해 큐에 전달하고, 여러 작업자가 이벤트를 읽어 센서별 최근 측정값을 저장하는 흐름을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 저장 요청이 몰리면 큐가 길어져 측정값 반영이 늦어질 수 있음을 설명하고 짧은 시간에 몰린 동일 센서 갱신을 묶어 저장하는 개선을 제시한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "모니터링 사용자가 많아질 때 동일한 측정값 갱신을 여러 사용자에게 전달해야 한다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "측정값이 바뀌면 사용자에게 푸시로 알리자고 제안하지만, 어떤 서버가 구독 대상을 찾고 메시지를 전달하는지 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "모니터링 사용자의 센서 구독을 전달 서버가 관리하고, 수집된 새 측정값을 해당 센서를 보는 사용자 연결에 전송하는 흐름을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 종료된 연결이 구독 목록에 계속 남으면 불필요한 전달이 늘어나는 한계를 설명하고 끊어진 구독을 정리하는 개선을 제시한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "모니터링 사용자 연결이 끊긴 뒤 측정값 화면을 복구해야 한다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "재연결 시 측정값을 다시 조회하는 방안을 제시하지만, 현재 측정값을 어디에 보존하고 어떤 경로로 다시 받는지 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "서버가 센서별 최근 측정값을 보관하고, 모니터링 사용자가 재접속하면 보관된 현재 측정값을 다시 조회한 뒤 실시간 수신을 이어가는 흐름을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 재접속 중 구독 갱신이 늦으면 측정값 표시가 잠시 오래될 수 있음을 설명하고 현재 측정값을 다시 확인해 화면을 갱신하는 개선 방안을 제시한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C1",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Fail",
+              "label_basis": "direct_mutation",
+              "error_id": "H02",
+              "descriptor": "늦게 도착한 측정값이 최근 측정값을 덮어쓸 위험을 지적하고, 갱신 순서를 비교해 오래된 이벤트를 무시하는 해결 방향을 제시한다.",
+              "reason": "오래된 측정값이 최신값을 덮는 문제와 순서 비교 해결 방향을 이미 인식하므로 문제 미고려인 0점과 맞지 않는다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "장치의 측정값 이벤트를 받아 센서별 최신 측정값과 관측 시각을 저장하고, 조회 요청에 보관된 측정값을 반환하는 정상 처리 흐름을 설명한다. 늦게 도착한 이전 측정값의 갱신 순서를 판단하는 원리는 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "센서별 단조 증가 갱신 번호 등 순서를 판정할 기준을 유지하고, 저장된 번호보다 오래된 이벤트는 최근 측정값을 덮지 못하게 조건부 갱신한다. 조회는 마지막으로 승인된 측정값을 반환하며 갱신 역전과 오래된 측정값 문제에 대응한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 이벤트 재전송과 장치 재시작으로 갱신 번호가 초기화될 위험을 분석한다. 장치 세션별 번호 관리와 관측 시각 기반 판정의 장단점을 비교해 시계 오류·재전송 비용·정확성에 따른 선택 근거를 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C2",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "측정값 갱신 유입이 증가할 때 수집 처리량과 작업 적체 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "수집 서버가 측정값 이벤트를 접수하고 비동기 작업자에게 전달해 센서별 최신 측정값을 저장하는 기본 경로를 설명한다. 처리량 초과 시 큐 적체를 제어하는 방식은 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "센서 식별자로 측정값 이벤트를 분할해 같은 센서의 갱신 순서를 유지하고, 큐 길이나 작업자 지연을 관찰해 수집 요청을 제한하거나 병합하는 역압 처리를 설명한다. 병목 상황에서도 무제한 적체를 막는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 특정 센서 갱신이 한 파티션에 집중되거나 과도한 병합이 측정값 최신성을 낮추는 한계를 분석한다. 분할 단위와 병합·제한 임계값을 비교하고 수집 지연·손실 위험·운영 비용의 상충으로 선택을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "센서별 모니터링 사용자가 급증할 때 한 전달 서버의 연결·전송 부하가 병목이 되는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "센서별 구독을 유지하고 새 측정값이 도착하면 해당 센서를 보는 연결에 변경을 보내는 기본 경로를 설명한다. 모니터링 사용자가 한 서버의 전송 용량을 넘길 때의 처리 메커니즘은 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "동일 센서의 모니터링 사용자 연결도 여러 전달 서버에 분산하고, 구독 경로를 통해 각 서버에 측정값 갱신을 전달한다. 느린 모니터링 사용자 연결의 전송 대기가 다른 연결을 막지 않도록 연결별 버퍼나 최신값 교체 등 격리 방안을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 모니터링 사용자가 몰린 센서에서 팬아웃 복제가 네트워크와 메모리를 소모하는 한계를 분석한다. 전송 단위 묶기와 즉시 푸시를 비교해 전달 지연·메모리·대역폭 비용에 따른 선택 근거를 제시한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C4",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "모니터링 사용자의 접속이 끊긴 뒤 현재 측정값과 후속 갱신을 다시 확보해야 한다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Fail",
+              "label_basis": "direct_mutation",
+              "error_id": "H03",
+              "descriptor": "재접속 시 현재 측정값을 조회하고 변경 구독을 복구하는 흐름에 더해, 스냅샷과 실시간 스트림 전환의 원자성 및 만료된 이력의 복구 보장을 설명한다. 이력 보관 기간별 재생 비용·저장 비용을 비교해 선택 근거까지 제시한다.",
+              "reason": "정상 재접속 흐름을 넘어 스냅샷·스트림 원자적 전환과 이력 보관 비용 비교·선택 근거까지 요구해 Senior 1점의 기본 설계 범위를 넘는다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "재접속 시 저장된 마지막 수신 갱신 번호를 기준으로 누락 이벤트를 재전송하거나, 복구 이력이 없으면 최신 스냅샷과 그 이후의 변경을 연결해 이어받는다. 스냅샷과 구독 전환 사이에 누락이 생기지 않도록 기준 갱신 번호를 사용한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 긴 이력 보관은 비용을 늘리고 짧은 보관은 스냅샷 복구 빈도를 늘리는 한계를 분석한다. 보관 기간과 스냅샷 주기를 비교해 저장 비용·복구 대역폭·복구 지연의 상충을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        }
+      ],
+      "expected_4_1": {
+        "expected": "Pass",
+        "required_failure_evidence": [],
+        "normal_comparisons": [
+          {
+            "middle_criterion_id": "C1",
+            "senior_criterion_id": "C1",
+            "expected": "Pass",
+            "reason": "Senior 2점의 순서 판정·조건부 최신 측정값 갱신과 3점의 번호 초기화 대응·선택 근거가 Middle의 저장·오래된 측정값 표시보다 깊다."
+          },
+          {
+            "middle_criterion_id": "C2",
+            "senior_criterion_id": "C2",
+            "expected": "Pass",
+            "reason": "Senior 2점의 센서별 분할·큐 지연 관측·역압과 3점의 파티션 쏠림 비용 판단이 Middle의 큐·작업자 흐름과 기본 병합 개선보다 깊다."
+          },
+          {
+            "middle_criterion_id": "C3",
+            "senior_criterion_id": "C3",
+            "expected": "Pass",
+            "reason": "Senior 2점의 동일 센서 구독자 분산·느린 연결 격리 및 3점 팬아웃 복제 비용 판단이 Middle의 기본 푸시와 구독 정리보다 깊다."
+          },
+          {
+            "middle_criterion_id": "C4",
+            "senior_criterion_id": "C4",
+            "expected": "Pass",
+            "reason": "Senior 2점의 복구 갱신 번호·스냅샷 전환과 3점의 보관 기간·비용 판단이 Middle의 재조회·오래된 상태 갱신보다 깊다."
+          }
+        ],
+        "note": "Middle C2 1점 과상향·Senior C1 0점 오배치·Senior C4 1점 과상향은 각각 3-5 문제다. M2↔S1·M3↔S2/3의 추가 역량 자체는 남아 있다."
+      }
+    },
+    {
+      "case_id": "02",
+      "topic": "스마트 공장 센서 측정 모니터링",
+      "kind_for_reviewer_only": "heldout_injected_error",
+      "files": {
+        "middle": "cases/02/middle.md",
+        "senior": "cases/02/senior.md"
+      },
+      "sha256": {
+        "middle": "6f6474f13a7d7cb0035608046a1d33e6a1d809318ee890aaa29fad5441a43a53",
+        "senior": "6618a98365cfdceeeca02efce8337d5f0e80fd790e22139162f979f7b4ae324c"
+      },
+      "direct_error_ids": [
+        "H04",
+        "H05",
+        "H06"
+      ],
+      "criterion_mapping": [
+        {
+          "middle": "C1",
+          "senior": "C1"
+        },
+        {
+          "middle": "C2",
+          "senior": "C2"
+        },
+        {
+          "middle": "C3",
+          "senior": "C3"
+        },
+        {
+          "middle": "C4",
+          "senior": "C4"
+        }
+      ],
+      "expected_3_5": [
+        {
+          "seniority": "Middle",
+          "criterion_id": "C1",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "오래된 측정값이 최신 측정값처럼 조회될 수 있다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "센서가 보낸 측정값을 서버에 저장해 조회하는 방안을 제안하지만, 수집한 측정값이 저장소와 조회 화면까지 전달되는 역할과 흐름을 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Fail",
+              "label_basis": "direct_mutation",
+              "error_id": "H04",
+              "descriptor": "장치·수집 서버·최근 측정값 저장소·조회 서버의 처리 흐름을 설명한다. 이에 더해 장치 시계 오류, 재시작 후 번호 초기화, 순서가 뒤바뀐 재전송이 함께 발생할 때의 정합성을 분석하고, 세션별 번호와 관측 시각을 사용하는 대안의 지연·오판 위험·처리 비용을 비교해 선택 근거를 제시한다.",
+              "reason": "시계 오류·번호 초기화·재전송이 겹치는 복잡한 상황과 대안별 비용·위험 판단을 기본 처리 흐름인 Middle 2점에 필수화한다."
+            },
+            {
+              "level": 3,
+              "expected": "Fail",
+              "label_basis": "inherited_from_level_2",
+              "error_id": "H04",
+              "descriptor": "2점에 더해, 일정 시간 갱신되지 않은 측정값이 현재 측정값으로 오인될 수 있음을 설명하고 마지막 수신 시간을 표시하거나 오래된 측정값임을 알려 주는 개선 방안을 제시한다.",
+              "reason": "3점이 '2점에 더해'로 과도한 2점 조건을 필수로 상속한다. 새로운 직접 주입으로 중복 계산하지 않는다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C2",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "측정값 전송이 몰릴 때 수집 처리량이 부족해질 수 있다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "측정값 이벤트를 비동기로 처리하자고 제안하지만, 이벤트 접수와 실제 저장을 담당하는 구성요소의 역할이나 처리 순서를 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "수집 서버가 측정값 이벤트를 접수해 큐에 전달하고, 여러 작업자가 이벤트를 읽어 센서별 최근 측정값을 저장하는 흐름을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 저장 요청이 몰리면 큐가 길어져 측정값 반영이 늦어질 수 있음을 설명하고 짧은 시간에 몰린 동일 센서 갱신을 묶어 저장하는 개선을 제시한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "모니터링 사용자가 많아질 때 동일한 측정값 갱신을 여러 사용자에게 전달해야 한다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "측정값이 바뀌면 사용자에게 푸시로 알리자고 제안하지만, 어떤 서버가 구독 대상을 찾고 메시지를 전달하는지 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "모니터링 사용자의 센서 구독을 전달 서버가 관리하고, 수집된 새 측정값을 해당 센서를 보는 사용자 연결에 전송하는 흐름을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 종료된 연결이 구독 목록에 계속 남으면 불필요한 전달이 늘어나는 한계를 설명하고 끊어진 구독을 정리하는 개선을 제시한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "모니터링 사용자 연결이 끊긴 뒤 측정값 화면을 복구해야 한다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "재연결 시 측정값을 다시 조회하는 방안을 제시하지만, 현재 측정값을 어디에 보존하고 어떤 경로로 다시 받는지 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "서버가 센서별 최근 측정값을 보관하고, 모니터링 사용자가 재접속하면 보관된 현재 측정값을 다시 조회한 뒤 실시간 수신을 이어가는 흐름을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 재접속 중 구독 갱신이 늦으면 측정값 표시가 잠시 오래될 수 있음을 설명하고 현재 측정값을 다시 확인해 화면을 갱신하는 개선 방안을 제시한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C1",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "오래된 측정값이 나중에 도착해 최신 측정값을 덮어쓸 수 있다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "장치의 측정값 이벤트를 받아 센서별 최신 측정값과 관측 시각을 저장하고, 조회 요청에 보관된 측정값을 반환하는 정상 처리 흐름을 설명한다. 늦게 도착한 이전 측정값의 갱신 순서를 판단하는 원리는 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "센서별 단조 증가 갱신 번호 등 순서를 판정할 기준을 유지하고, 저장된 번호보다 오래된 이벤트는 최근 측정값을 덮지 못하게 조건부 갱신한다. 조회는 마지막으로 승인된 측정값을 반환하며 갱신 역전과 오래된 측정값 문제에 대응한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 이벤트 재전송과 장치 재시작으로 갱신 번호가 초기화될 위험을 분석한다. 장치 세션별 번호 관리와 관측 시각 기반 판정의 장단점을 비교해 시계 오류·재전송 비용·정확성에 따른 선택 근거를 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C2",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "측정값 갱신 유입이 증가할 때 수집 처리량과 작업 적체 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "수집 서버가 측정값 이벤트를 접수하고 비동기 작업자에게 전달해 센서별 최신 측정값을 저장하는 기본 경로를 설명한다. 처리량 초과 시 큐 적체를 제어하는 방식은 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Fail",
+              "label_basis": "direct_mutation",
+              "error_id": "H05",
+              "descriptor": "이벤트 수집 계층을 수평 확장하고 비동기 작업자 기반의 유연한 처리 파이프라인을 구성해 유입 부하를 효율적으로 분산하며, 적체를 관리하고 병목을 최소화하는 설계를 설명한다.",
+              "reason": "수평 확장과 효율적인 적체 관리를 선언하지만 센서별 분할 조건, 큐 길이 기준, 제한·병합 등 역압이 실제 작동하는 원리를 요구하지 않는다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 특정 센서 갱신이 한 파티션에 집중되거나 과도한 병합이 측정값 최신성을 낮추는 한계를 분석한다. 분할 단위와 병합·제한 임계값을 비교하고 수집 지연·손실 위험·운영 비용의 상충으로 선택을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C3",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "센서별 모니터링 사용자가 급증할 때 한 전달 서버의 연결·전송 부하가 병목이 되는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "센서별 구독을 유지하고 새 측정값이 도착하면 해당 센서를 보는 연결에 변경을 보내는 기본 경로를 설명한다. 모니터링 사용자가 한 서버의 전송 용량을 넘길 때의 처리 메커니즘은 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "동일 센서의 모니터링 사용자 연결도 여러 전달 서버에 분산하고, 구독 경로를 통해 각 서버에 측정값 갱신을 전달한다. 느린 모니터링 사용자 연결의 전송 대기가 다른 연결을 막지 않도록 연결별 버퍼나 최신값 교체 등 격리 방안을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Fail",
+              "label_basis": "direct_mutation",
+              "error_id": "H06",
+              "descriptor": "2점에 더해, 팬아웃 확장 시 발생하는 다양한 문제를 심층 분석하고 트레이드오프를 종합적으로 고려해 최적의 전달 구조를 선택한다.",
+              "reason": "팬아웃의 어떤 병목, 지연·메모리·대역폭의 어떤 상충과 선택 조건을 분석해야 하는지 없어 구체적으로 채점할 수 없다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "모니터링 사용자의 접속이 끊긴 뒤 현재 측정값과 후속 갱신을 다시 확보해야 한다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "센서별 현재 측정값을 지속 저장하고, 재접속 시 보관된 측정값을 받아 다시 실시간 변경을 구독하는 흐름을 설명한다. 재구독 사이에 빠진 변경의 처리 원리는 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "재접속 시 저장된 마지막 수신 갱신 번호를 기준으로 누락 이벤트를 재전송하거나, 복구 이력이 없으면 최신 스냅샷과 그 이후의 변경을 연결해 이어받는다. 스냅샷과 구독 전환 사이에 누락이 생기지 않도록 기준 갱신 번호를 사용한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 긴 이력 보관은 비용을 늘리고 짧은 보관은 스냅샷 복구 빈도를 늘리는 한계를 분석한다. 보관 기간과 스냅샷 주기를 비교해 저장 비용·복구 대역폭·복구 지연의 상충을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        }
+      ],
+      "expected_4_1": {
+        "expected": "Fail",
+        "required_failure_evidence": [
+          {
+            "error_id": "H04",
+            "middle_criterion_id": "C1",
+            "senior_criterion_id": "C1",
+            "reason": "Middle 2점이 장치 재시작·시계 오류의 복합 순서 판단과 비용 비교까지 요구해 Senior 1점의 기본 저장·조회보다 깊다."
+          },
+          {
+            "error_id": "H05",
+            "middle_criterion_id": "C2",
+            "senior_criterion_id": "C2",
+            "reason": "Senior 2점은 분산·적체 관리를 선언할 뿐 구체적 분할·역압이 없어 Middle 3점의 갱신 병합보다 높은 문제 해결 원리를 요구하지 않는다."
+          },
+          {
+            "error_id": "H06",
+            "middle_criterion_id": "C3",
+            "senior_criterion_id": "C3",
+            "reason": "Senior 3점의 심층 분석과 Trade-off가 추상적이어서 Middle 3점의 구독 정리 개선을 넘어서는 선택 근거를 판단할 수 없다."
+          }
+        ],
+        "normal_comparisons": [
+          {
+            "middle_criterion_id": "C4",
+            "senior_criterion_id": "C4",
+            "expected": "Pass",
+            "reason": "Senior 2점의 복구 갱신 번호·스냅샷 전환과 3점의 보관 기간·비용 판단이 Middle의 재조회·오래된 상태 갱신보다 깊다."
+          }
+        ],
+        "note": "세 핵심 Criterion의 실질적 연차 차이 부족을 다른 Criterion의 깊이로 상쇄하지 않는다."
+      }
+    },
+    {
+      "case_id": "03",
+      "topic": "온라인 시험 답안 저장·제출",
+      "kind_for_reviewer_only": "heldout_injected_error",
+      "files": {
+        "middle": "cases/03/middle.md",
+        "senior": "cases/03/senior.md"
+      },
+      "sha256": {
+        "middle": "6ada6a948b1926c9ad3932c5ff0a78b4aadd0ebd06de2a9d85c4067a39d23ec5",
+        "senior": "14ad4473717dbfbb0468a6cdea173348602af96ecf4eb2cb055d9e9699f5c9fc"
+      },
+      "direct_error_ids": [
+        "H07",
+        "H08",
+        "H09"
+      ],
+      "criterion_mapping": [
+        {
+          "middle": "C1",
+          "senior": "C1"
+        },
+        {
+          "middle": "C2",
+          "senior": "C2"
+        },
+        {
+          "middle": "C3",
+          "senior": "C3"
+        },
+        {
+          "middle": "C4",
+          "senior": "C4"
+        }
+      ],
+      "expected_3_5": [
+        {
+          "seniority": "Middle",
+          "criterion_id": "C1",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "응시 도중 연결이 끊기면 입력한 답안이 유실될 수 있다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "답안을 주기적으로 저장하자고 제안하지만, 저장 요청을 어디서 받아 보관하고 재접속 때 어떻게 읽는지는 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "브라우저가 변경된 답안을 저장 API로 보내고 서버가 응시자별 초안을 지속 저장한 뒤, 재접속 시 저장된 초안을 조회해 입력 화면을 복원하는 흐름을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 여러 탭에서 동시에 수정하면 이전 화면의 초안이 나중에 저장될 수 있음을 설명하고 마지막 저장 시각이나 버전을 보여 주어 충돌을 알리는 개선을 제시한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C2",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "제출 버튼을 여러 번 누르거나 응답이 유실되어 같은 제출 요청이 반복될 수 있다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "최종 제출 결과를 서버에 보관하자고 제안하지만, 제출 답안과 제출 완료 상태를 어떤 순서로 저장하고 응시자가 어떻게 확인하는지 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Fail",
+              "label_basis": "direct_mutation",
+              "error_id": "H07",
+              "descriptor": "최종 답안·제출 완료 상태 저장과 재접속 후 결과 조회 흐름을 설명한다. 이에 더해 동시 제출·응답 유실·처리 도중 장애가 겹치는 상황에서 멱등 키·원자적 상태 전환·중복 요청 보관을 결합하고, 여러 중복 제거 방식의 경합 비용과 복구 위험을 비교해 선택 근거를 제시한다.",
+              "reason": "동시 제출·응답 유실·처리 장애를 결합한 멱등성·원자화 설계와 경합 비용·복구 위험 비교까지 기본 설계에 강제한다."
+            },
+            {
+              "level": 3,
+              "expected": "Fail",
+              "label_basis": "inherited_from_level_2",
+              "error_id": "H07",
+              "descriptor": "2점에 더해, 응답이 늦어 제출 버튼을 다시 누를 수 있음을 설명하고 이미 완료된 제출을 확인해 같은 결과를 보여 주는 기본 개선을 제시한다.",
+              "reason": "3점이 '2점에 더해'로 과도한 2점 조건을 필수로 상속한다. 새로운 직접 주입으로 중복 계산하지 않는다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "시험 종료 후 제출을 제한해야 한다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "마감 시간이 지나면 제출을 막자고 제안하지만, 마감 여부를 어느 서버의 시간으로 어떻게 판단할지는 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "제출 API가 서버 기준의 마감 시각과 요청 접수 시각을 비교하고, 마감 전 접수된 제출만 저장하며 마감 후 요청은 거절하는 흐름을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 사용자 기기 시각이 달라 마감 오해가 생길 수 있음을 설명하고 서버 기준 남은 시간을 화면에 안내하는 개선 방안을 제시한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "다수 응시자의 자동 저장 요청이 한꺼번에 몰리는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "저장 서버를 늘리거나 큐를 사용하자고 제안하지만, 접수된 답안이 어떤 경로로 안전하게 보관되는지는 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "로드밸런서가 여러 저장 API에 요청을 나누고, 각 API가 저장 요청을 지속 저장소 또는 내구성 있는 작업 큐에 기록한 뒤 성공을 반환하는 기본 흐름을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 같은 응시자가 짧은 시간에 연속 저장하면 불필요한 쓰기가 많아지는 한계를 설명하고 저장 주기를 조정하거나 연속 변경을 묶는 개선을 제시한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C1",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "저장 완료 전에 연결이 끊기거나 오래된 초안이 나중에 도착할 수 있다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "응시자별 초안을 지속 저장한 뒤 성공 응답을 반환하고, 재접속 시 저장한 버전을 조회해 복원하는 기본 경로를 설명한다. 서로 다른 탭의 오래된 쓰기를 구분하는 방법은 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "초안에 버전 번호를 부여하고 이전 버전과 일치할 때만 갱신하는 조건부 쓰기로 오래된 요청의 덮어쓰기를 막는다. 저장이 확정된 이후에만 성공 응답을 주고 버전 불일치에는 최신 초안을 다시 조회하도록 한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 빈번한 자동 저장의 동기 확인이 지연과 쓰기 부하를 늘리는 한계를 분석한다. 저장 간격과 조건부 쓰기 빈도를 조정하는 대안을 비교하고 초안 유실 위험·응답 지연·저장 비용의 상충에 따라 선택 근거를 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C2",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "제출 요청 재시도와 완료 응답 유실로 같은 응시자의 제출이 중복 확정될 수 있다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Fail",
+              "label_basis": "direct_mutation",
+              "error_id": "H08",
+              "descriptor": "중복 제출에는 멱등 키를 도입하거나 재시도를 제한하는 방안을 제안하지만, 최종 답안과 제출 완료 상태를 어떤 순서로 저장하고 응시자가 성공 여부를 어디서 확인하는지는 설명하지 못한다.",
+              "reason": "멱등 키·재시도 제한이라는 기술 제안만으로도 충족되며, 답안·완료 상태의 저장과 재조회라는 기본 정상 처리 흐름을 설명하지 않는다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "응시자·시험별 제출 식별자를 사용하고 유일성 제약 또는 원자적 상태 전환으로 동시 중복 요청 중 하나만 제출 상태를 확정한다. 완료 응답이 유실돼 같은 요청이 재시도되면 이미 확정된 결과를 조회해 동일하게 반환한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 중복 확정을 막는 강한 쓰기 조정이 마감 직전 부하에서 대기를 늘리는 한계를 분석한다. 단일 제출 레코드의 원자적 갱신과 별도 중복 요청 기록 방식을 비교해 정합성·쓰기 경합·보관 비용을 근거로 선택한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C3",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "서로 다른 서버의 시각이나 지연된 요청 때문에 마감 이후 제출이 허용될 수 있다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "서버가 정한 마감 시각을 제출 접수 요청과 비교해 마감 전 요청만 저장하고, 마감 후에는 거절하는 기본 경로를 설명한다. 경계에서 동시 접수된 요청의 판정 일관성은 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Fail",
+              "label_basis": "direct_mutation",
+              "error_id": "H09",
+              "descriptor": "마감 전후의 제출을 일관되게 처리할 트랜잭션 구조를 채택하고, 경계 시각에 동시에 들어오는 요청도 공정하게 승인하거나 거절하도록 관리하는 메커니즘을 설명한다.",
+              "reason": "트랜잭션·일관성·공정성 용어를 사용하지만 접수 시각 고정, 마감 판단과 제출 확정의 원자적 결합 조건을 구체화하지 않는다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 접수 시각과 완료 시각 사이의 차이나 분산 서버 시계 오차가 형평성과 처리 지연에 미치는 영향을 분석한다. 엄격한 서버 접수 기준과 제한적 유예 기준을 비교해 공정성·피크 처리량·운영 복잡도의 절충으로 선택을 정당화한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "동시에 자동 저장이 몰려 저장 대기열과 DB 쓰기가 병목이 되는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "여러 API가 저장 요청을 받아 내구성 있는 큐나 저장소에 기록한 후 성공을 응답하고, 작업자가 저장 내용을 반영하는 기본 경로를 설명한다. 저장 용량이 넘쳤을 때의 제한 방식은 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "응시자 키로 작업을 분할해 서로 다른 응시자의 쓰기를 여러 작업자에 분산하고, 큐 길이와 저장 지연을 감시해 요청률을 제한하거나 재시도 지시로 역압을 건다. 성공 응답 전에 요청이 내구성 있게 보존되는 조건을 유지한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 대규모 시험의 특정 파티션에 요청이 집중되거나 과도한 역압으로 저장 성공까지의 시간이 늘어나는 한계를 분석한다. 분할 방식과 수용 제한 임계값을 비교해 지연·자원 비용·보존 보장의 상충에 따른 선택 근거를 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        }
+      ],
+      "expected_4_1": {
+        "expected": "Fail",
+        "required_failure_evidence": [
+          {
+            "error_id": "H07",
+            "middle_criterion_id": "C2",
+            "senior_criterion_id": "C2",
+            "reason": "Middle 2점이 멱등성·경합 처리와 대안 비용 비교까지 요구해 Senior 1점의 기본 설계보다 어렵다."
+          },
+          {
+            "error_id": "H08",
+            "middle_criterion_id": "C2",
+            "senior_criterion_id": "C2",
+            "reason": "Senior 1점은 저장·성공 응답·결과 조회의 정상 흐름 없이 해결 방향만 말해도 충족되어 Middle 2점과 역전된다."
+          },
+          {
+            "error_id": "H09",
+            "middle_criterion_id": "C3",
+            "senior_criterion_id": "C3",
+            "reason": "Senior 2점은 실제 마감 시각 판정·제출 확정 조건 없이 일관성을 선언해 Middle 3점의 기본 마감 안내보다 구체적인 고급 처리를 요구하지 않는다."
+          }
+        ],
+        "normal_comparisons": [
+          {
+            "middle_criterion_id": "C1",
+            "senior_criterion_id": "C1",
+            "expected": "Pass",
+            "reason": "Senior 2점의 조건부 버전 갱신과 3점의 저장 간격·유실 위험·비용 판단이 Middle의 초안 저장·충돌 안내보다 깊다."
+          },
+          {
+            "middle_criterion_id": "C4",
+            "senior_criterion_id": "C4",
+            "expected": "Pass",
+            "reason": "Senior 2점의 응시자 키 분할·역압·내구성 응답 경계 및 3점의 파티션 쏠림·비용 판단이 Middle의 로드 분산·쓰기 묶기보다 깊다."
+          }
+        ],
+        "note": "C2와 C3에서 연차 차이가 없거나 역전되며 Senior의 다른 상위 Level로 상쇄하지 않는다."
+      }
+    },
+    {
+      "case_id": "04",
+      "topic": "온라인 시험 답안 저장·제출",
+      "kind_for_reviewer_only": "heldout_injected_error",
+      "files": {
+        "middle": "cases/04/middle.md",
+        "senior": "cases/04/senior.md"
+      },
+      "sha256": {
+        "middle": "850fe3bea45d4b33df7495130e2580e54ceb11b355d4c1651bff7cb4226f9fce",
+        "senior": "054bce594ea63193cd1f75152781dc0b956181dcef65d028324356508296e931"
+      },
+      "direct_error_ids": [
+        "H10",
+        "H11",
+        "H12"
+      ],
+      "criterion_mapping": [
+        {
+          "middle": "C1",
+          "senior": "C1"
+        },
+        {
+          "middle": "C2",
+          "senior": "C2"
+        },
+        {
+          "middle": "C3",
+          "senior": "C3"
+        },
+        {
+          "middle": "C4",
+          "senior": "C4"
+        }
+      ],
+      "expected_3_5": [
+        {
+          "seniority": "Middle",
+          "criterion_id": "C1",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "응시 도중 연결이 끊기면 입력한 답안이 유실될 수 있다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Fail",
+              "label_basis": "direct_mutation",
+              "error_id": "H10",
+              "descriptor": "브라우저가 변경된 답안을 저장 API로 전송하면 서버가 응시자별 초안을 지속 저장하고, 연결이 끊겼다가 돌아온 사용자는 해당 초안을 조회해 입력 화면을 복원하는 흐름을 설명한다.",
+              "reason": "브라우저·저장 API·응시자별 영속 저장·재접속 조회의 기본 흐름을 이미 완성해 Middle 1점의 미완성 방향 제시를 초과한다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "브라우저가 변경된 답안을 저장 API로 보내고 서버가 응시자별 초안을 지속 저장한 뒤, 재접속 시 저장된 초안을 조회해 입력 화면을 복원하는 흐름을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 여러 탭에서 동시에 수정하면 이전 화면의 초안이 나중에 저장될 수 있음을 설명하고 마지막 저장 시각이나 버전을 보여 주어 충돌을 알리는 개선을 제시한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C2",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "제출 버튼을 여러 번 누르거나 응답이 유실되어 같은 제출 요청이 반복될 수 있다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "최종 제출 결과를 서버에 보관하자고 제안하지만, 제출 답안과 제출 완료 상태를 어떤 순서로 저장하고 응시자가 어떻게 확인하는지 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "서버가 최종 답안과 응시자의 제출 완료 상태를 저장한 뒤 성공을 응답하고, 재접속한 응시자가 제출 여부와 결과를 조회하는 기본 흐름을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 응답이 늦어 제출 버튼을 다시 누를 수 있음을 설명하고 이미 완료된 제출을 확인해 같은 결과를 보여 주는 기본 개선을 제시한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "시험 종료 후 제출을 제한해야 한다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "마감 시간이 지나면 제출을 막자고 제안하지만, 마감 여부를 어느 서버의 시간으로 어떻게 판단할지는 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "제출 API가 서버 기준의 마감 시각과 요청 접수 시각을 비교하고, 마감 전 접수된 제출만 저장하며 마감 후 요청은 거절하는 흐름을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 사용자 기기 시각이 달라 마감 오해가 생길 수 있음을 설명하고 서버 기준 남은 시간을 화면에 안내하는 개선 방안을 제시한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "다수 응시자의 자동 저장 요청이 한꺼번에 몰리는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "저장 서버를 늘리거나 큐를 사용하자고 제안하지만, 접수된 답안이 어떤 경로로 안전하게 보관되는지는 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "로드밸런서가 여러 저장 API에 요청을 나누고, 각 API가 저장 요청을 지속 저장소 또는 내구성 있는 작업 큐에 기록한 뒤 성공을 반환하는 기본 흐름을 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 같은 응시자가 짧은 시간에 연속 저장하면 불필요한 쓰기가 많아지는 한계를 설명하고 저장 주기를 조정하거나 연속 변경을 묶는 개선을 제시한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C1",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "저장 완료 전에 연결이 끊기거나 오래된 초안이 나중에 도착할 수 있다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Fail",
+              "label_basis": "direct_mutation",
+              "error_id": "H11",
+              "descriptor": "응시자별 초안 저장·복원에 더해, 여러 탭의 동시 쓰기를 버전별 조건부 갱신으로 중재하고 저장 주기에 따른 유실 위험·응답 지연·쓰기 비용을 비교해 어떤 정책을 선택할지 근거를 제시한다.",
+              "reason": "버전별 조건부 갱신은 Senior 2점의 동시성 메커니즘이며 저장 주기별 비용·위험 비교는 3점의 설계 판단이므로 1점에서 과도하다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "초안에 버전 번호를 부여하고 이전 버전과 일치할 때만 갱신하는 조건부 쓰기로 오래된 요청의 덮어쓰기를 막는다. 저장이 확정된 이후에만 성공 응답을 주고 버전 불일치에는 최신 초안을 다시 조회하도록 한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 빈번한 자동 저장의 동기 확인이 지연과 쓰기 부하를 늘리는 한계를 분석한다. 저장 간격과 조건부 쓰기 빈도를 조정하는 대안을 비교하고 초안 유실 위험·응답 지연·저장 비용의 상충에 따라 선택 근거를 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C2",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "제출 요청 재시도와 완료 응답 유실로 같은 응시자의 제출이 중복 확정될 수 있다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "최종 답안과 제출 상태를 서버에 함께 저장해 성공을 응답하고, 다시 조회하면 저장된 제출 결과를 반환하는 정상 흐름을 설명한다. 동시에 들어온 중복 제출의 확정 경쟁은 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "응시자·시험별 제출 식별자를 사용하고 유일성 제약 또는 원자적 상태 전환으로 동시 중복 요청 중 하나만 제출 상태를 확정한다. 완료 응답이 유실돼 같은 요청이 재시도되면 이미 확정된 결과를 조회해 동일하게 반환한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 중복 확정을 막는 강한 쓰기 조정이 마감 직전 부하에서 대기를 늘리는 한계를 분석한다. 단일 제출 레코드의 원자적 갱신과 별도 중복 요청 기록 방식을 비교해 정합성·쓰기 경합·보관 비용을 근거로 선택한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "서로 다른 서버의 시각이나 지연된 요청 때문에 마감 이후 제출이 허용될 수 있다는 문제를 고려하지 않는다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "서버가 정한 마감 시각을 제출 접수 요청과 비교해 마감 전 요청만 저장하고, 마감 후에는 거절하는 기본 경로를 설명한다. 경계에서 동시 접수된 요청의 판정 일관성은 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "요청이 접수된 시각과 마감 시각을 일관된 시간 기준으로 기록하고, 제출 상태 확정과 마감 허용 여부를 하나의 원자적 판정 경계에서 결정해 동시 요청이 서로 다른 결과를 만들지 않도록 한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 접수 시각과 완료 시각 사이의 차이나 분산 서버 시계 오차가 형평성과 처리 지연에 미치는 영향을 분석한다. 엄격한 서버 접수 기준과 제한적 유예 기준을 비교해 공정성·피크 처리량·운영 복잡도의 절충으로 선택을 정당화한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C4",
+          "expected": "Fail",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Fail",
+              "label_basis": "direct_mutation",
+              "error_id": "H12",
+              "descriptor": "자동 저장 요청이 몰리면 큐와 DB 쓰기가 병목이 될 수 있음을 인식하고, 저장 API를 늘리거나 요청을 작업 큐에 보내 처리량을 개선하는 방향을 제시한다.",
+              "reason": "자동 저장 큐·DB 병목을 지적하고 API 증설과 큐 투입까지 제안하므로 핵심 문제 미고려가 아니다."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "여러 API가 저장 요청을 받아 내구성 있는 큐나 저장소에 기록한 후 성공을 응답하고, 작업자가 저장 내용을 반영하는 기본 경로를 설명한다. 저장 용량이 넘쳤을 때의 제한 방식은 설명하지 못한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "응시자 키로 작업을 분할해 서로 다른 응시자의 쓰기를 여러 작업자에 분산하고, 큐 길이와 저장 지연을 감시해 요청률을 제한하거나 재시도 지시로 역압을 건다. 성공 응답 전에 요청이 내구성 있게 보존되는 조건을 유지한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "label_basis": "unchanged",
+              "error_id": null,
+              "descriptor": "2점에 더해, 대규모 시험의 특정 파티션에 요청이 집중되거나 과도한 역압으로 저장 성공까지의 시간이 늘어나는 한계를 분석한다. 분할 방식과 수용 제한 임계값을 비교해 지연·자원 비용·보존 보장의 상충에 따른 선택 근거를 설명한다.",
+              "reason": "원본의 해당 Level 요구가 대상 연차 기준에 맞다."
+            }
+          ]
+        }
+      ],
+      "expected_4_1": {
+        "expected": "Pass",
+        "required_failure_evidence": [],
+        "normal_comparisons": [
+          {
+            "middle_criterion_id": "C1",
+            "senior_criterion_id": "C1",
+            "expected": "Pass",
+            "reason": "Senior 2점의 조건부 버전 갱신과 3점의 저장 간격·유실 위험·비용 판단이 Middle의 초안 저장·충돌 안내보다 깊다."
+          },
+          {
+            "middle_criterion_id": "C2",
+            "senior_criterion_id": "C2",
+            "expected": "Pass",
+            "reason": "Senior 2점의 제출 유일성 제약·원자적 확정과 3점의 경합 비용 선택이 Middle의 제출 저장·단순 중복 확인보다 깊다."
+          },
+          {
+            "middle_criterion_id": "C3",
+            "senior_criterion_id": "C3",
+            "expected": "Pass",
+            "reason": "Senior 2점의 마감·제출 확정 원자적 판정과 3점의 공정성·유예 기준 선택이 Middle의 서버 시간 비교·안내보다 깊다."
+          },
+          {
+            "middle_criterion_id": "C4",
+            "senior_criterion_id": "C4",
+            "expected": "Pass",
+            "reason": "Senior 2점의 응시자 키 분할·역압·내구성 응답 경계 및 3점의 파티션 쏠림·비용 판단이 Middle의 로드 분산·쓰기 묶기보다 깊다."
+          }
+        ],
+        "note": "Middle C1 1점 과상향·Senior C4 0점 오배치·Senior C1 1점 과상향은 3-5의 내부 난도 오류다. 다만 대응되는 고급 처리는 Senior 2·3점이 여전히 더 구체적으로 요구한다."
+      }
+    }
+  ],
+  "direct_errors": [
+    {
+      "id": "H01",
+      "case_id": "01",
+      "role": "middle",
+      "criterion": "C2",
+      "level": 1,
+      "name": "Middle 1점에 완성된 수집 설계 배치",
+      "reason": "수집 서버·큐·작업자·저장소·조회 서버의 역할과 정상 처리 흐름을 모두 완성해 Middle 2점의 최소 역량을 1점에 요구한다.",
+      "before": "측정값 이벤트를 비동기로 처리하자고 제안하지만, 이벤트 접수와 실제 저장을 담당하는 구성요소의 역할이나 처리 순서를 설명하지 못한다.",
+      "after": "수집 서버가 측정값 이벤트를 접수해 큐에 기록하면 여러 작업자가 이를 읽어 센서별 최근 측정값 저장소를 갱신하고, 조회 서버가 갱신된 측정값을 제공하는 흐름을 설명한다."
+    },
+    {
+      "id": "H02",
+      "case_id": "01",
+      "role": "senior",
+      "criterion": "C1",
+      "level": 0,
+      "name": "Senior 0점에 문제 인식·해결 시도 배치",
+      "reason": "오래된 측정값이 최신값을 덮는 문제와 순서 비교 해결 방향을 이미 인식하므로 문제 미고려인 0점과 맞지 않는다.",
+      "before": "오래된 측정값이 나중에 도착해 최신 측정값을 덮어쓸 수 있다는 문제를 고려하지 않는다.",
+      "after": "늦게 도착한 측정값이 최근 측정값을 덮어쓸 위험을 지적하고, 갱신 순서를 비교해 오래된 이벤트를 무시하는 해결 방향을 제시한다."
+    },
+    {
+      "id": "H03",
+      "case_id": "01",
+      "role": "senior",
+      "criterion": "C4",
+      "level": 1,
+      "name": "Senior 1점에 복구 원자성과 비용 분석 요구",
+      "reason": "정상 재접속 흐름을 넘어 스냅샷·스트림 원자적 전환과 이력 보관 비용 비교·선택 근거까지 요구해 Senior 1점의 기본 설계 범위를 넘는다.",
+      "before": "센서별 현재 측정값을 지속 저장하고, 재접속 시 보관된 측정값을 받아 다시 실시간 변경을 구독하는 흐름을 설명한다. 재구독 사이에 빠진 변경의 처리 원리는 설명하지 못한다.",
+      "after": "재접속 시 현재 측정값을 조회하고 변경 구독을 복구하는 흐름에 더해, 스냅샷과 실시간 스트림 전환의 원자성 및 만료된 이력의 복구 보장을 설명한다. 이력 보관 기간별 재생 비용·저장 비용을 비교해 선택 근거까지 제시한다."
+    },
+    {
+      "id": "H04",
+      "case_id": "02",
+      "role": "middle",
+      "criterion": "C1",
+      "level": 2,
+      "name": "Middle 2점에 복합 순서 오류와 설계 대안 비교 요구",
+      "reason": "시계 오류·번호 초기화·재전송이 겹치는 복잡한 상황과 대안별 비용·위험 판단을 기본 처리 흐름인 Middle 2점에 필수화한다.",
+      "before": "센서 장치에서 측정값을 보내면 수집 서버가 센서별 최근 측정값을 저장하고, 조회 서버가 그 값을 읽어 화면에 전달하는 흐름을 설명한다.",
+      "after": "장치·수집 서버·최근 측정값 저장소·조회 서버의 처리 흐름을 설명한다. 이에 더해 장치 시계 오류, 재시작 후 번호 초기화, 순서가 뒤바뀐 재전송이 함께 발생할 때의 정합성을 분석하고, 세션별 번호와 관측 시각을 사용하는 대안의 지연·오판 위험·처리 비용을 비교해 선택 근거를 제시한다."
+    },
+    {
+      "id": "H05",
+      "case_id": "02",
+      "role": "senior",
+      "criterion": "C2",
+      "level": 2,
+      "name": "Senior 2점의 적체 제어 메커니즘 부재",
+      "reason": "수평 확장과 효율적인 적체 관리를 선언하지만 센서별 분할 조건, 큐 길이 기준, 제한·병합 등 역압이 실제 작동하는 원리를 요구하지 않는다.",
+      "before": "센서 식별자로 측정값 이벤트를 분할해 같은 센서의 갱신 순서를 유지하고, 큐 길이나 작업자 지연을 관찰해 수집 요청을 제한하거나 병합하는 역압 처리를 설명한다. 병목 상황에서도 무제한 적체를 막는다.",
+      "after": "이벤트 수집 계층을 수평 확장하고 비동기 작업자 기반의 유연한 처리 파이프라인을 구성해 유입 부하를 효율적으로 분산하며, 적체를 관리하고 병목을 최소화하는 설계를 설명한다."
+    },
+    {
+      "id": "H06",
+      "case_id": "02",
+      "role": "senior",
+      "criterion": "C3",
+      "level": 3,
+      "name": "Senior 3점의 추상적인 심층 분석·Trade-off",
+      "reason": "팬아웃의 어떤 병목, 지연·메모리·대역폭의 어떤 상충과 선택 조건을 분석해야 하는지 없어 구체적으로 채점할 수 없다.",
+      "before": "2점에 더해, 모니터링 사용자가 몰린 센서에서 팬아웃 복제가 네트워크와 메모리를 소모하는 한계를 분석한다. 전송 단위 묶기와 즉시 푸시를 비교해 전달 지연·메모리·대역폭 비용에 따른 선택 근거를 제시한다.",
+      "after": "2점에 더해, 팬아웃 확장 시 발생하는 다양한 문제를 심층 분석하고 트레이드오프를 종합적으로 고려해 최적의 전달 구조를 선택한다."
+    },
+    {
+      "id": "H07",
+      "case_id": "03",
+      "role": "middle",
+      "criterion": "C2",
+      "level": 2,
+      "name": "Middle 2점에 다중 장애·중복 제거 전략 비교 요구",
+      "reason": "동시 제출·응답 유실·처리 장애를 결합한 멱등성·원자화 설계와 경합 비용·복구 위험 비교까지 기본 설계에 강제한다.",
+      "before": "서버가 최종 답안과 응시자의 제출 완료 상태를 저장한 뒤 성공을 응답하고, 재접속한 응시자가 제출 여부와 결과를 조회하는 기본 흐름을 설명한다.",
+      "after": "최종 답안·제출 완료 상태 저장과 재접속 후 결과 조회 흐름을 설명한다. 이에 더해 동시 제출·응답 유실·처리 도중 장애가 겹치는 상황에서 멱등 키·원자적 상태 전환·중복 요청 보관을 결합하고, 여러 중복 제거 방식의 경합 비용과 복구 위험을 비교해 선택 근거를 제시한다."
+    },
+    {
+      "id": "H08",
+      "case_id": "03",
+      "role": "senior",
+      "criterion": "C2",
+      "level": 1,
+      "name": "Senior 1점에 동작하는 제출 흐름 부족",
+      "reason": "멱등 키·재시도 제한이라는 기술 제안만으로도 충족되며, 답안·완료 상태의 저장과 재조회라는 기본 정상 처리 흐름을 설명하지 않는다.",
+      "before": "최종 답안과 제출 상태를 서버에 함께 저장해 성공을 응답하고, 다시 조회하면 저장된 제출 결과를 반환하는 정상 흐름을 설명한다. 동시에 들어온 중복 제출의 확정 경쟁은 설명하지 못한다.",
+      "after": "중복 제출에는 멱등 키를 도입하거나 재시도를 제한하는 방안을 제안하지만, 최종 답안과 제출 완료 상태를 어떤 순서로 저장하고 응시자가 성공 여부를 어디서 확인하는지는 설명하지 못한다."
+    },
+    {
+      "id": "H09",
+      "case_id": "03",
+      "role": "senior",
+      "criterion": "C3",
+      "level": 2,
+      "name": "Senior 2점의 마감 경계 판정 원리 부족",
+      "reason": "트랜잭션·일관성·공정성 용어를 사용하지만 접수 시각 고정, 마감 판단과 제출 확정의 원자적 결합 조건을 구체화하지 않는다.",
+      "before": "요청이 접수된 시각과 마감 시각을 일관된 시간 기준으로 기록하고, 제출 상태 확정과 마감 허용 여부를 하나의 원자적 판정 경계에서 결정해 동시 요청이 서로 다른 결과를 만들지 않도록 한다.",
+      "after": "마감 전후의 제출을 일관되게 처리할 트랜잭션 구조를 채택하고, 경계 시각에 동시에 들어오는 요청도 공정하게 승인하거나 거절하도록 관리하는 메커니즘을 설명한다."
+    },
+    {
+      "id": "H10",
+      "case_id": "04",
+      "role": "middle",
+      "criterion": "C1",
+      "level": 1,
+      "name": "Middle 1점에 완성된 초안 저장·복원 흐름 배치",
+      "reason": "브라우저·저장 API·응시자별 영속 저장·재접속 조회의 기본 흐름을 이미 완성해 Middle 1점의 미완성 방향 제시를 초과한다.",
+      "before": "답안을 주기적으로 저장하자고 제안하지만, 저장 요청을 어디서 받아 보관하고 재접속 때 어떻게 읽는지는 설명하지 못한다.",
+      "after": "브라우저가 변경된 답안을 저장 API로 전송하면 서버가 응시자별 초안을 지속 저장하고, 연결이 끊겼다가 돌아온 사용자는 해당 초안을 조회해 입력 화면을 복원하는 흐름을 설명한다."
+    },
+    {
+      "id": "H11",
+      "case_id": "04",
+      "role": "senior",
+      "criterion": "C1",
+      "level": 1,
+      "name": "Senior 1점에 버전 경합 제어와 기술 선택 분석 요구",
+      "reason": "버전별 조건부 갱신은 Senior 2점의 동시성 메커니즘이며 저장 주기별 비용·위험 비교는 3점의 설계 판단이므로 1점에서 과도하다.",
+      "before": "응시자별 초안을 지속 저장한 뒤 성공 응답을 반환하고, 재접속 시 저장한 버전을 조회해 복원하는 기본 경로를 설명한다. 서로 다른 탭의 오래된 쓰기를 구분하는 방법은 설명하지 못한다.",
+      "after": "응시자별 초안 저장·복원에 더해, 여러 탭의 동시 쓰기를 버전별 조건부 갱신으로 중재하고 저장 주기에 따른 유실 위험·응답 지연·쓰기 비용을 비교해 어떤 정책을 선택할지 근거를 제시한다."
+    },
+    {
+      "id": "H12",
+      "case_id": "04",
+      "role": "senior",
+      "criterion": "C4",
+      "level": 0,
+      "name": "Senior 0점에 처리량 문제 인식·해결 시도 배치",
+      "reason": "자동 저장 큐·DB 병목을 지적하고 API 증설과 큐 투입까지 제안하므로 핵심 문제 미고려가 아니다.",
+      "before": "동시에 자동 저장이 몰려 저장 대기열과 DB 쓰기가 병목이 되는 문제를 고려하지 않는다.",
+      "after": "자동 저장 요청이 몰리면 큐와 DB 쓰기가 병목이 될 수 있음을 인식하고, 저장 API를 늘리거나 요청을 작업 큐에 보내 처리량을 개선하는 방향을 제시한다."
+    }
+  ]
+}

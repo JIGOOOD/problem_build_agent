@@ -1,0 +1,10 @@
+{
+  "dataset_id": "heldout_injected_errors_v1",
+  "metrics": ["3-5", "4-1"],
+  "cases": [
+    {"case_id": "01", "topic": "스마트 공장 센서 측정 모니터링", "middle": "cases/01/middle.md", "senior": "cases/01/senior.md"},
+    {"case_id": "02", "topic": "스마트 공장 센서 측정 모니터링", "middle": "cases/02/middle.md", "senior": "cases/02/senior.md"},
+    {"case_id": "03", "topic": "온라인 시험 답안 저장·제출", "middle": "cases/03/middle.md", "senior": "cases/03/senior.md"},
+    {"case_id": "04", "topic": "온라인 시험 답안 저장·제출", "middle": "cases/04/middle.md", "senior": "cases/04/senior.md"}
+  ]
+}

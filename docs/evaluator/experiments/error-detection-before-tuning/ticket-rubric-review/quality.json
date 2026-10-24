@@ -10,7 +10,7 @@
         "reason": "2점의 '소유권·유효성을 확인'하는 일관된 정책은 좌석 상태 전이를 성립시키는 공통 조건이며, 예외별 심층 대응 메커니즘까지 요구하지 않는다. 3점은 이전 결제나 오래된 만료 작업이 현재 상태를 덮어쓰는 대표적인 한계와 이를 막는 기본 개선을 요구한다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/middle.md",
@@ -21,7 +21,7 @@
         "reason": "2점은 주문 보존·재개에 더해 '요청·이벤트 재처리의 중복 효과' 방지와 결제 결과 불명 주문의 미결 추적·외부 대사를 모두 필수로 요구하여 기본 복구보다 대응 범위가 넓다. 3점도 '2점에 더해'로 이 과도한 요구를 상속한다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/middle.md",
@@ -32,7 +32,7 @@
         "reason": "2점은 '처리 능력에 맞춰 유입을 제어'하는 구성요소와 초과 요청 처리, 내부 적체 제한이라는 기본 흐름을 요구한다. 3점은 고정 수용 기준의 한계를 짚고 관찰 결과에 따라 유입량이나 재시도 안내를 조정하도록 하며, 복잡한 상호작용이나 대안 간 상충 분석은 요구하지 않는다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/middle.md",
@@ -43,7 +43,7 @@
         "reason": "2점의 '인기 공연 내부에도 추가 자원이 효과를 내는 처리 단위'와 충돌 판정 유지, 병목·부하 검증은 확장 설계의 기본 성립 여부를 확인하는 요구다. 3점은 부하 편중이나 공통 처리 지점이라는 대표적인 한계에 맞춘 개선을 요구하며, 복잡한 교차 분석이나 비용 비교를 필수화하지 않는다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/senior.md",
@@ -54,7 +54,7 @@
         "reason": "2점은 '현재 소유권·상태·만료를 검증하며 배타적으로 전이'하는 메커니즘과 이전 요청·재시도의 처리 조건을 요구한다. 3점은 만료·재점유 사이에 이전 요청이 끼어드는 경합을 추적하고, 검증 경계·전이 순서 개선 및 경합 대기와 재시도 부담을 조정한 선택 근거까지 요구한다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/senior.md",
@@ -65,7 +65,7 @@
         "reason": "2점은 '진행 상태와 외부 작업 식별 정보'의 지속 보존, 재개 대상 탐색, 기존 결제 대조와 현재 소유권 검증으로 복구의 처리 원리를 요구한다. 3점은 외부 성공 후 내부 기록 전 장애와 복구·결과 수신의 경합을 추적하고, 결과 대조를 선택하는 조건과 처리 지연의 상충을 설명하도록 한다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/senior.md",
@@ -76,7 +76,7 @@
         "reason": "2점은 '부하 검증 방법'과 유입 한도 산정 절차를 구체화하지만, '핵심 경로에 전달되는 작업량을 제한'하는 부분은 결과만 요구하여 유입·대기 요청의 실제 진입과 내부 전달량을 통제하는 원리가 빠져 있다. 3점의 관찰·조정과 선택 근거도 상속한 2점의 메커니즘 요구 누락을 해소하지 못한다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/ticket-v2/01/senior.md",
@@ -87,7 +87,7 @@
         "reason": "3점의 '개선의 효과와 제약' 및 '확장 이득과 제약을 비교'는 상충 분석을 요구하지만, 어떤 부하·운영 조건 때문에 해당 분산·조회 방식을 선택하는지는 필수로 요구하지 않는다. 따라서 장단점을 설명하되 선택 근거를 제시하지 않아도 3점을 받을 수 있다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md"
       },
       {
         "rubric": "comparison",

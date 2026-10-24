@@ -10,7 +10,7 @@
         "reason": "0점이 ‘좌석 중복 예매 문제를 인식하고 잠금 사용을 제안’하는 수준으로 정의되어, 이미 문제 인식과 기본 해결 방향을 요구한다. 이는 중간 연차 1점에 해당하는 역량이므로 0점의 연차별 기준에 맞지 않는다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/middle.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/middle.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/middle.md",
@@ -21,7 +21,7 @@
         "reason": "2점에서 ‘순서별 복구 결과를 분석’하고 ‘분산 원자성 한계’를 설명하며, 대안을 ‘복구 지연·중복 위험·운영 비용’으로 비교해 정당화하도록 요구한다. 이는 주문 보존·재개의 기본 설계를 넘어 복잡한 장애 분석과 기술적 의사결정까지 필수화하므로 중간 연차에 과도하다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/middle.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/middle.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/middle.md",
@@ -32,7 +32,7 @@
         "reason": "0점은 적체 문제 미고려, 1점은 대기·제한 제안, 2점은 ‘앞단에서 제한’하여 서비스로 전달하거나 대기·거절하는 기본 흐름을 요구한다. 3점도 재시도 집중이라는 대표 한계와 ‘재시도 시점을 분산’하는 개선에 한정되어 대상 연차에 적합하다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/middle.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/middle.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/middle.md",
@@ -43,7 +43,7 @@
         "reason": "0점의 확장 문제 미고려에서 1점의 서버 증설 제안, 2점의 조회·점유 서버 역할 구분과 요청 분산 흐름으로 역량이 높아진다. 3점은 ‘공연별 분산만으로 병목이 남는 한계’와 좌석군 단위 분산 개선을 요구할 뿐, 복잡한 재배치나 기술 선택의 비용 분석까지 요구하지 않는다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/middle.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/middle.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/senior.md",
@@ -54,7 +54,7 @@
         "reason": "1점은 단일 점유와 결제 후 확정·해제의 기본 흐름, 2점은 ‘점유 ID 일치·대기 상태·미만료’ 조건의 원자 갱신으로 경합에 대응하는 구체적 처리를 요구한다. 3점은 만료·재점유·이전 응답의 순서 분석과 잠금 대기·충돌 재시도 비용 및 처리 경계의 선택 근거까지 요구하므로 적합하다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/senior.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/senior.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/senior.md",
@@ -65,7 +65,7 @@
         "reason": "1점은 주문 저장 후 접수 성공과 미완료 주문 재개, 2점은 ‘유일성 제약’과 ‘같은 트랜잭션’ 및 기존 결과 재사용으로 중복 처리를 막는 메커니즘을 요구한다. 3점은 결제 성공 후 내부 기록 전 장애의 복구와 외부 결제를 묶을 수 없는 한계를 분석하고, 대사 주기의 복구 지연·조회 부하 및 선택 근거를 요구한다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/senior.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/senior.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/senior.md",
@@ -76,7 +76,7 @@
         "reason": "1점은 ‘요청을 대기시키거나 제한하겠다고’ 제안하면서도 ‘제한 지점과 초과 요청의 처리 흐름을 설명하지 못’하는 수준이다. 기본 유입 제어 설계 없이 방향 제시만으로 충족되므로 상위 연차 1점 기준보다 낮다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/senior.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/senior.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/02/senior.md",
@@ -87,7 +87,7 @@
         "reason": "2점의 ‘공연 단위 요청을 다중 처리 노드에 배분’은 기본 분산 흐름이며, 1점에서 지적한 인기 공연의 요청·점유 데이터 분할 문제를 해결하도록 요구하지 않는다. ‘수평 확장 메커니즘을 상세히 설명’한다는 문구만으로는 해당 병목의 구체적인 대응이 필수화되지 않는다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/02/senior.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/senior.md"
       },
       {
         "rubric": "comparison",

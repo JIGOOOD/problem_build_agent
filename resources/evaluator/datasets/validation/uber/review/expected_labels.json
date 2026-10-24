@@ -1,0 +1,262 @@
+{
+  "dataset_id": "uber-rubric-validation",
+  "label_status": "user_confirmed_all_pass",
+  "evaluation_scope": [
+    "3-5",
+    "4-1"
+  ],
+  "user_confirmation": {
+    "date": "2026-10-24",
+    "statement": "우버는 전부 pass야 그거 반영해서다시줘."
+  },
+  "source_files": {
+    "Middle": {
+      "file": "uber_middle.md",
+      "sha256": "771a013acc1c9897abd68854054106e5677dc9d18f3d44492b942079c412febf"
+    },
+    "Senior": {
+      "file": "uber_senior.md",
+      "sha256": "5c8fa7a658e279236077784d58b960ead222a6943edacd7e74ec669a31f9be03"
+    }
+  },
+  "cases": [
+    {
+      "case_id": "uber",
+      "files": {
+        "Middle": "uber_middle.md",
+        "Senior": "uber_senior.md"
+      },
+      "expected_3_5": [
+        {
+          "seniority": "Middle",
+          "criterion_id": "C1",
+          "expected": "Pass",
+          "reason": "사용자가 정상 기준 사례로 전체 Pass임을 확인했다.",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C2",
+          "expected": "Pass",
+          "reason": "사용자가 정상 기준 사례로 전체 Pass임을 확인했다.",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "reason": "사용자가 정상 기준 사례로 전체 Pass임을 확인했다.",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            }
+          ]
+        },
+        {
+          "seniority": "Middle",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "reason": "사용자가 정상 기준 사례로 전체 Pass임을 확인했다.",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C1",
+          "expected": "Pass",
+          "reason": "사용자가 정상 기준 사례로 전체 Pass임을 확인했다.",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C2",
+          "expected": "Pass",
+          "reason": "사용자가 정상 기준 사례로 전체 Pass임을 확인했다.",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C3",
+          "expected": "Pass",
+          "reason": "사용자가 정상 기준 사례로 전체 Pass임을 확인했다.",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            }
+          ]
+        },
+        {
+          "seniority": "Senior",
+          "criterion_id": "C4",
+          "expected": "Pass",
+          "reason": "사용자가 정상 기준 사례로 전체 Pass임을 확인했다.",
+          "levels": [
+            {
+              "level": 0,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 1,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 2,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            },
+            {
+              "level": 3,
+              "expected": "Pass",
+              "reason": "사용자 확인 정상 기준."
+            }
+          ]
+        }
+      ],
+      "expected_4_1": {
+        "target_id": "pair",
+        "expected": "Pass",
+        "reason": "사용자가 연차 비교를 포함해 전체 Pass임을 확인했다."
+      }
+    }
+  ]
+}

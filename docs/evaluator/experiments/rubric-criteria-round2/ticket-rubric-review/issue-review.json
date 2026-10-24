@@ -15,8 +15,8 @@
     "reference_label_user_confirmed": true,
     "included_in_metrics": true,
     "baseline_strict_detection": false,
-    "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md",
-    "source_label": "resources/evaluator/datasets/ticket-rubric-review/review/expected_labels.json#/known_issue_candidates/0"
+    "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md",
+    "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/0"
   },
   {
     "issue_id": "T02",
@@ -34,8 +34,8 @@
     "reference_label_user_confirmed": true,
     "included_in_metrics": true,
     "baseline_strict_detection": false,
-    "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md",
-    "source_label": "resources/evaluator/datasets/ticket-rubric-review/review/expected_labels.json#/known_issue_candidates/1"
+    "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md",
+    "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/1"
   },
   {
     "issue_id": "T03",
@@ -53,8 +53,8 @@
     "reference_label_user_confirmed": true,
     "included_in_metrics": true,
     "baseline_strict_detection": true,
-    "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md",
-    "source_label": "resources/evaluator/datasets/ticket-rubric-review/review/expected_labels.json#/known_issue_candidates/2"
+    "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md",
+    "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/2"
   },
   {
     "issue_id": "T04",
@@ -72,8 +72,8 @@
     "reference_label_user_confirmed": true,
     "included_in_metrics": true,
     "baseline_strict_detection": true,
-    "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md",
-    "source_label": "resources/evaluator/datasets/ticket-rubric-review/review/expected_labels.json#/known_issue_candidates/3"
+    "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md",
+    "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/3"
   },
   {
     "issue_id": "T05",
@@ -91,8 +91,8 @@
     "reference_label_user_confirmed": true,
     "included_in_metrics": true,
     "baseline_strict_detection": false,
-    "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md",
-    "source_label": "resources/evaluator/datasets/ticket-rubric-review/review/expected_labels.json#/known_issue_candidates/4"
+    "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md",
+    "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/4"
   },
   {
     "issue_id": "T06",
@@ -110,8 +110,8 @@
     "reference_label_user_confirmed": true,
     "included_in_metrics": true,
     "baseline_strict_detection": false,
-    "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md",
-    "source_label": "resources/evaluator/datasets/ticket-rubric-review/review/expected_labels.json#/known_issue_candidates/5"
+    "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md",
+    "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/5"
   },
   {
     "issue_id": "T07",
@@ -129,8 +129,8 @@
     "reference_label_user_confirmed": true,
     "included_in_metrics": true,
     "baseline_strict_detection": false,
-    "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md",
-    "source_label": "resources/evaluator/datasets/ticket-rubric-review/review/expected_labels.json#/known_issue_candidates/6"
+    "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md",
+    "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/6"
   },
   {
     "issue_id": "T08",
@@ -148,8 +148,8 @@
     "reference_label_user_confirmed": true,
     "included_in_metrics": true,
     "baseline_strict_detection": true,
-    "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md",
-    "source_label": "resources/evaluator/datasets/ticket-rubric-review/review/expected_labels.json#/known_issue_candidates/7"
+    "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md",
+    "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/7"
   },
   {
     "issue_id": "T09",
@@ -167,8 +167,8 @@
     "reference_label_user_confirmed": true,
     "included_in_metrics": true,
     "baseline_strict_detection": false,
-    "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md",
-    "source_label": "resources/evaluator/datasets/ticket-rubric-review/review/expected_labels.json#/known_issue_candidates/8"
+    "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md",
+    "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/8"
   },
   {
     "issue_id": "T10",
@@ -186,8 +186,8 @@
     "reference_label_user_confirmed": true,
     "included_in_metrics": true,
     "baseline_strict_detection": true,
-    "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md",
-    "source_label": "resources/evaluator/datasets/ticket-rubric-review/review/expected_labels.json#/known_issue_candidates/9"
+    "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md",
+    "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/9"
   },
   {
     "issue_id": "T11",
@@ -205,7 +205,7 @@
     "reference_label_user_confirmed": true,
     "included_in_metrics": true,
     "baseline_strict_detection": false,
-    "source_rubric": "resources/evaluator/datasets/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md",
-    "source_label": "resources/evaluator/datasets/ticket-rubric-review/review/expected_labels.json#/known_issue_candidates/10"
+    "source_rubric": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md",
+    "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/10"
   }
 ]

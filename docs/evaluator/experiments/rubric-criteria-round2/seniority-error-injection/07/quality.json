@@ -10,7 +10,7 @@
         "reason": "0단계는 중복 예매 문제를 고려하지 않고, 1단계는 잠금·상태 확인 제안, 2단계는 단일 점유와 결제 결과에 따른 확정·해제 흐름을 요구한다. 3단계도 ‘늦은 결제 응답’의 한계와 ‘점유 유효성을 다시 확인’하는 기본 개선까지만 요구하므로 중급에 적합하다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/middle.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/middle.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/middle.md",
@@ -21,7 +21,7 @@
         "reason": "0단계의 주문 유실 미고려에서 1단계의 재시도 제안, 2단계의 ‘주문을 지속 저장한 뒤 접수 성공’과 작업자 재처리 흐름으로 발전한다. 3단계는 완료 기록 전 장애에 따른 재처리 가능성과 ‘기존 처리 결과를 확인’하는 개선을 요구하며, 복잡한 복구 메커니즘이나 선택 비용 분석까지 필수로 요구하지 않는다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/middle.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/middle.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/middle.md",
@@ -32,7 +32,7 @@
         "reason": "0단계가 ‘적체 문제를 인식하고 대기열이나 요청 제한을 제안’하도록 되어 있어, 핵심 문제를 고려하지 않는 수준이라는 기준과 어긋난다. 또한 제어 위치와 초과 요청 흐름을 설명하지 못한다는 점까지 1단계와 사실상 같아 두 단계의 역량 구분이 성립하지 않는다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/middle.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/middle.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/middle.md",
@@ -43,7 +43,7 @@
         "reason": "0단계의 확장 필요성 미고려에서 1단계의 서버 증설 제안, 2단계의 조회·점유 역할 구분과 요청 분산 흐름으로 요구가 높아진다. 3단계는 ‘공연별 분산만으로 병목이 남는 한계’와 ‘좌석군처럼 더 작은 단위’의 분산을 요구할 뿐, 복잡한 재분배나 장애 복구까지 요구하지 않는다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/middle.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/middle.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/senior.md",
@@ -54,7 +54,7 @@
         "reason": "2단계의 ‘동시성 제어 아키텍처와 상태 전이 메커니즘을 정교하게 설명’은 구체적인 갱신 조건 없이 단일 점유와 소유자 확인 흐름을 반복한다. 1단계에서 한계로 지적한 ‘확인 이후 만료·재점유’의 개입을 어떻게 막는지 명시하지 않아, 기본 흐름만으로 충족되는 것을 배제할 기준이 부족하다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/senior.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/senior.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/senior.md",
@@ -65,7 +65,7 @@
         "reason": "2단계의 ‘유일성 제약’과 ‘같은 트랜잭션’은 구체적인 중복 처리 대응이지만, 3단계는 ‘외부 결과를 다시 조회해 내부 확정 기록을 복구’하는 절차만 추가한다. 이 복구 방식의 이점·비용 또는 위험과 선택 근거를 요구하지 않아 고급 최상위 단계의 필수 설계 판단이 누락되었다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/senior.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/senior.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/senior.md",
@@ -76,7 +76,7 @@
         "reason": "1단계는 앞단 제한과 초과 요청의 대기·거절 흐름이며, 2단계는 ‘원자적으로 수를 늘려’ 공유 상한을 지키고 요청별 단일 차감과 재시도 분산을 요구한다. 3단계는 공유 카운터 병목과 서버별 상한 배분을 비교하여 조정 비용·남는 용량·장애 시 회수의 상충 및 선택 근거까지 요구하므로 고급에 적합하다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/senior.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/senior.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/07/senior.md",
@@ -87,7 +87,7 @@
         "reason": "3단계의 ‘확장 구조의 복잡한 상황과 잠재적 한계를 면밀히 분석’과 ‘적절한 설계 선택을 정당화’는 분석할 상황과 비교할 선택지를 특정하지 않는다. 구체적인 이점·비용·위험의 비교 기준 없이 상충 관계를 종합적으로 고려한다는 추상적 요구에 그쳐 고급 3단계 기준을 충족하지 못한다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/07/senior.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/senior.md"
       },
       {
         "rubric": "comparison",

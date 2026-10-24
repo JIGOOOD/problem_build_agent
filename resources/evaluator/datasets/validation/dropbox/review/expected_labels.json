@@ -1,0 +1,782 @@
+{
+  "dataset_id": "dropbox-rubric-validation",
+  "label_status": "uber_anchor_operational_labels",
+  "purpose": "dropbox 원문은 유지하고 Uber v4를 고정 정상 앵커로 Senior 1점·Middle 2점 운영 정답을 정리한 버전. 나머지 Level과 4-1 판정은 기존 버전 유지.",
+  "source_archive_sha256": "a4402ee98aee8c8c78a1a496034edfd1a76c8fa232e8af640e6f1922cdf604e9",
+  "source_files": {
+    "Middle": {
+      "archive_path": "dropbox/middle/nfr_rubric.md",
+      "file": "inputs/dropbox/middle/nfr_rubric.md",
+      "sha256": "977ca3be7ac6dcabbcea7bef0a956c1c05ebb31a80780caaa7c67b28e16a27c2"
+    },
+    "Senior": {
+      "archive_path": "dropbox/senior/nfr_rubric.md",
+      "file": "inputs/dropbox/senior/nfr_rubric.md",
+      "sha256": "d017645f73943e6b8a90003ad4fab047930f4b00c3de25780eac1874c6d978e3"
+    }
+  },
+  "evaluation_scope": [
+    "3-5",
+    "4-1"
+  ],
+  "scoring_policy": {
+    "grade_absolute": "3-5의 각 Level에 대한 연차 적합성 독립 판정",
+    "grade_relative": "4-1의 대응되는 핵심 Criterion별 역량 차이 판정",
+    "aggregate_3_5": "Level 중 하나라도 Fail이면 Criterion은 Fail",
+    "aggregate_4_1": "핵심 Criterion 하나에서 차이 부족 시 쌍은 Fail",
+    "middle_level_3_inheritance": "과도한 2점 요구를 상속하면 Middle 3점도 Fail",
+    "senior_level_3_independence": "Senior 3점 고유 심화 요구는 2점 결함과 별개 판정",
+    "note": "이번 운영 정답은 policy/uber_anchor_label_policy.md를 따른다. 우버·원문·Senior 2점의 기존 판정은 변경하지 않는다.",
+    "anchor": "Uber Golden v4 — frozen",
+    "human_reviewed": false,
+    "judge_executed": false,
+    "no_leakage": "inputs 루브릭만 평가기에 제공한다. policy/review/reference/README는 제외한다."
+  },
+  "cases": [
+    {
+      "case_id": "dropbox_uploaded",
+      "files": {
+        "middle": "inputs/dropbox/middle/nfr_rubric.md",
+        "senior": "inputs/dropbox/senior/nfr_rubric.md"
+      },
+      "expected_3_5": [
+        {
+          "case_id": "dropbox_uploaded",
+          "seniority": "Middle",
+          "evaluation_id": "3-5",
+          "criterion_id": "C1",
+          "title": "파일 내용과 완료 버전의 일치",
+          "expected": "Pass",
+          "failed_levels": [],
+          "review_required": false,
+          "levels": [
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C1",
+              "level": 0,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "문제 미고려를 정확히 0점으로 둔다.",
+              "source_file": "inputs/dropbox/middle/nfr_rubric.md",
+              "source_line": 36,
+              "descriptor": "완료 버전의 메타데이터가 실제로 확보된 파일 내용과 일치해야 한다는 문제를 고려하지 않는다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C1",
+              "level": 1,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "방안은 있으나 필수 흐름이 미완성이므로 Middle 1점.",
+              "source_file": "inputs/dropbox/middle/nfr_rubric.md",
+              "source_line": 37,
+              "descriptor": "내용을 저장한 뒤 버전을 공개하는 기본 방안을 제시하지만, 내용 저장소와 메타데이터 관리의 역할이나 누락·검증 실패 시 처리 흐름을 충분히 설명하지 못한다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C1",
+              "level": 2,
+              "expected": "Pass",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "내용 저장→확보·검증→완료 공개→조회라는 하나의 핵심 동작 경로를 요구한다.",
+              "source_file": "inputs/dropbox/middle/nfr_rubric.md",
+              "source_line": 38,
+              "descriptor": "내용 저장과 버전 메타데이터 관리의 역할을 구분하고, 해당 버전의 전체 내용 확보와 검증 후 완료 상태를 공개하여 다른 기기가 대응하는 내용을 조회하는 기본 흐름을 설명한다.",
+              "historical_ambiguity": false,
+              "anchor_reference": "Uber Middle C3 L2: 보관·처리·완료 기본 경로",
+              "judgment_clarity": "operational_anchor_decision",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C1",
+              "level": 3,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "단계 사이 실패라는 대표적 한계·개선으로 Middle 3점에 맞다.",
+              "source_file": "inputs/dropbox/middle/nfr_rubric.md",
+              "source_line": 39,
+              "descriptor": "2점에 더해, 내용 저장 후 메타데이터 갱신이 실패하는 등 단계 사이 중단의 한계를 설명하고, 미완료 상태를 정상 버전과 구분하면서 재확인 후 공개하는 개선 방안을 제시한다.",
+              "failure_origin": null
+            }
+          ]
+        },
+        {
+          "case_id": "dropbox_uploaded",
+          "seniority": "Middle",
+          "evaluation_id": "3-5",
+          "criterion_id": "C2",
+          "title": "연결 중단 후 부분 전송 재사용",
+          "expected": "Pass",
+          "failed_levels": [],
+          "review_required": false,
+          "levels": [
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C2",
+              "level": 0,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "재개의 핵심 문제를 고려하지 않는다.",
+              "source_file": "inputs/dropbox/middle/nfr_rubric.md",
+              "source_line": 56,
+              "descriptor": "연결 중단 후 완료된 전송 부분을 식별하고 재사용해야 한다는 문제를 고려하지 않는다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C2",
+              "level": 1,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "해결 방향은 있으나 동작 흐름은 미완성이다.",
+              "source_file": "inputs/dropbox/middle/nfr_rubric.md",
+              "source_line": 57,
+              "descriptor": "전송을 나누고 실패한 부분을 재시도하는 방안을 제시하지만, 완료 부분을 기록·확인하는 역할이나 재연결 후 이어 보내는 흐름을 충분히 설명하지 못한다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C2",
+              "level": 2,
+              "expected": "Pass",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "대상 버전과 진행 상태 식별, 완료 부분 재사용, 나머지 전송은 재개 기능의 기본 경로다.",
+              "source_file": "inputs/dropbox/middle/nfr_rubric.md",
+              "source_line": 58,
+              "descriptor": "클라이언트와 서버가 전송 대상 버전과 진행 상태를 식별하는 역할을 설명하고, 유효한 상태에서 확인된 완료 부분은 재전송하지 않으며 나머지를 전송한 뒤 원래 버전과 일치하는지 확인하는 흐름을 제시한다.",
+              "historical_ambiguity": false,
+              "anchor_reference": "Uber Middle C3 L2: 미완료 작업 재처리",
+              "judgment_clarity": "operational_anchor_decision",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C2",
+              "level": 3,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "대표적 응답 유실 상황과 개선이다.",
+              "source_file": "inputs/dropbox/middle/nfr_rubric.md",
+              "source_line": 59,
+              "descriptor": "2점에 더해, 완료 응답 유실로 양측의 진행 기록이 달라질 수 있음을 설명하고, 실제 완료 부분을 다시 확인하여 불필요한 재전송이나 잘못된 완료 판정을 줄이는 개선 방안을 제시한다.",
+              "failure_origin": null
+            }
+          ]
+        },
+        {
+          "case_id": "dropbox_uploaded",
+          "seniority": "Middle",
+          "evaluation_id": "3-5",
+          "criterion_id": "C3",
+          "title": "오프라인·동시 변경의 충돌 조정",
+          "expected": "Pass",
+          "failed_levels": [],
+          "review_required": false,
+          "levels": [
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C3",
+              "level": 0,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "충돌 미고려다.",
+              "source_file": "inputs/dropbox/middle/nfr_rubric.md",
+              "source_line": 76,
+              "descriptor": "오프라인 또는 동시 수정·삭제가 같은 파일에 충돌하는 상황과 이를 조정할 필요를 고려하지 않는다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C3",
+              "level": 1,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "정책 제안까지만 있는 Middle 1점이다.",
+              "source_file": "inputs/dropbox/middle/nfr_rubric.md",
+              "source_line": 77,
+              "descriptor": "충돌 시 선택이나 보존 같은 기본 정책을 제시하지만, 변경의 기준 상태를 비교하는 방법이나 조정 결과를 다른 기기에 반영하는 흐름을 충분히 설명하지 못한다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C3",
+              "level": 2,
+              "expected": "Pass",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "충돌 규칙과 조정 결과 전파는 이 항목의 기본 기능이다. 지연된 과거 변경의 재조정은 다음 Level로 분리되어 있어 기존 Pass를 유지한다.",
+              "source_file": "inputs/dropbox/middle/nfr_rubric.md",
+              "source_line": 78,
+              "descriptor": "변경의 기준 버전 등으로 충돌을 판정하고 수정·삭제에 적용할 규칙을 설명하며, 기기와 서버의 역할 및 조정 결과의 전파 흐름을 통해 조건 충족 시 유효한 동일 상태로 수렴함을 설명한다.",
+              "historical_ambiguity": false,
+              "anchor_reference": "Uber Middle C1 L2/L3: 기본 상태 변경과 추가 예외 구분",
+              "judgment_clarity": "operational_anchor_decision",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C3",
+              "level": 3,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "대표적인 늦은 변경과 개선으로 적절하다.",
+              "source_file": "inputs/dropbox/middle/nfr_rubric.md",
+              "source_line": 79,
+              "descriptor": "2점에 더해, 늦게 도착한 과거 변경이 조정된 상태를 다시 뒤집을 수 있는 한계를 설명하고, 변경의 선후 관계 확인 등으로 기존 규칙에 맞게 재조정하는 개선 방안을 제시한다.",
+              "failure_origin": null
+            }
+          ]
+        },
+        {
+          "case_id": "dropbox_uploaded",
+          "seniority": "Middle",
+          "evaluation_id": "3-5",
+          "criterion_id": "C4",
+          "title": "변경 탐지와 동기화 부하 제어",
+          "expected": "Fail",
+          "failed_levels": [
+            2,
+            3
+          ],
+          "review_required": false,
+          "levels": [
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C4",
+              "level": 0,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "기본 과부하 미고려다.",
+              "source_file": "inputs/dropbox/middle/nfr_rubric.md",
+              "source_line": 96,
+              "descriptor": "반복적인 전체 조회와 제한 없는 동기화·재시도가 유효한 변경 처리를 방해할 수 있다는 문제를 고려하지 않는다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C4",
+              "level": 1,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "제안은 있으나 역할·흐름이 부족한 단계다.",
+              "source_file": "inputs/dropbox/middle/nfr_rubric.md",
+              "source_line": 97,
+              "descriptor": "증분 탐지나 실행량 제한 같은 기본 방안을 제시하지만, 변경 탐지부터 대기 작업 처리까지의 역할이나 부하 제한 시 재시도 흐름을 충분히 설명하지 못한다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C4",
+              "level": 2,
+              "expected": "Fail",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "변경 탐지의 기본 경로에 실행량·재시도·임시 데이터 증가·대기 변경 처리의 제어까지 필수로 묶는다. 고정 우버 앵커의 기본 작업 분담 범위를 넘는 통합 부하 관리 요구로 판정한다. 자원 제어 알고리즘까지 원문에 적혀 있다고 주장하지 않는다.",
+              "source_file": "inputs/dropbox/middle/nfr_rubric.md",
+              "source_line": 98,
+              "descriptor": "전체 스캔 의존을 줄이는 변경 탐지 흐름과 주요 구성요소의 역할을 설명하고, 실행량·재시도·임시 데이터 증가를 제어하면서 대기 변경을 계속 처리하는 기본 설계를 제시한다.",
+              "historical_ambiguity": true,
+              "anchor_reference": "Uber Middle C4 L2/L3 및 Senior C4 L2",
+              "judgment_clarity": "operational_anchor_decision",
+              "failure_origin": "direct"
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Middle",
+              "evaluation_id": "3-5",
+              "criterion_id": "C4",
+              "level": 3,
+              "expected": "Fail",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "3점의 고유한 한계·개선 요구 자체는 적절하다는 기존 판단을 유지한다. 다만 우버 고정 앵커에서 과도하다고 판정한 2점의 필수 범위를 상속하므로 전체 3점은 Fail이다. 별도 직접 오류로 중복 계산하지 않는다.",
+              "source_file": "inputs/dropbox/middle/nfr_rubric.md",
+              "source_line": 99,
+              "descriptor": "2점에 더해, 여러 기기가 동시에 재연결하면 실행량을 제한해도 대기 요청이 몰릴 수 있음을 설명하고, 요청 시점 분산이나 유입 속도 조절 등으로 적체를 완화하는 개선 방안을 제시한다.",
+              "failure_origin": "inherited",
+              "inherited_from_level": 2
+            }
+          ]
+        },
+        {
+          "case_id": "dropbox_uploaded",
+          "seniority": "Senior",
+          "evaluation_id": "3-5",
+          "criterion_id": "C1",
+          "title": "버전 공개와 충돌 조정의 정합성",
+          "expected": "Fail",
+          "failed_levels": [
+            1
+          ],
+          "review_required": true,
+          "levels": [
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C1",
+              "level": 0,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "버전·충돌 모두 미고려하는 경우다.",
+              "source_file": "inputs/dropbox/senior/nfr_rubric.md",
+              "source_line": 36,
+              "descriptor": "완성된 파일 내용과 공개 버전의 대응 관계를 고려하지 않고, 오프라인·동시 변경의 충돌을 판정하거나 조정하는 설계도 제시하지 않는다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C1",
+              "level": 1,
+              "expected": "Fail",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "버전 저장·공개는 연결되지만 충돌 조정의 핵심 규칙과 결과 반영 흐름은 구체화하지 못해도 통과할 수 있다. 우버 C1처럼 핵심 상태 변경 경로를 식별할 수 있어야 한다는 기준으로 Fail을 유지한다. 특정 충돌 알고리즘을 고정하는 것은 아니다.",
+              "source_file": "inputs/dropbox/senior/nfr_rubric.md",
+              "source_line": 37,
+              "descriptor": "내용 저장 후 버전을 공개하고 충돌을 처리하는 기본 설계를 제시하지만, 저장 실패나 동시 갱신에서 공개 경계를 지키는 방법 또는 수정·삭제 충돌의 처리 흐름을 구체화하지 못한다.",
+              "historical_ambiguity": true,
+              "anchor_reference": "Uber Senior C1 L1: 핵심 상태 전이와 결과 반영",
+              "judgment_clarity": "operational_anchor_decision",
+              "failure_origin": "direct"
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C1",
+              "level": 2,
+              "expected": "Pass",
+              "label_status": "user_directed_pass",
+              "review_required": false,
+              "reason": "버전 공개 제어와 실패 처리, 기준 버전에 따른 충돌 판정·조정 정책, 변경 소실 방지 및 수렴 흐름을 요구한다. 후보자가 구체적 처리 메커니즘을 설명하도록 하므로 특정 충돌 집행 알고리즘을 루브릭에서 고정할 필요는 없다.",
+              "source_file": "inputs/dropbox/senior/nfr_rubric.md",
+              "source_line": 38,
+              "descriptor": "완성된 내용만 가리키도록 버전 공개를 제어하는 메커니즘과 실패 시 처리를 설명한다. 기준 버전 등으로 충돌을 판정하고 수정·삭제를 포함한 조정 정책을 명시하며, 조용한 변경 소실을 막고 연결 복구 후 변경이 멎으면 기기들이 수렴하는 흐름을 제시한다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C1",
+              "level": 3,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": true,
+              "reason": "지연 변경의 교차와 정합성·처리 비용을 연결한 Trade-off가 있다. Ticket Senior C4 3점과 마찬가지로 독립 Pass 후보이나 **선택 근거를 얼마나 강제하는지는 경계**다.",
+              "source_file": "inputs/dropbox/senior/nfr_rubric.md",
+              "source_line": 39,
+              "descriptor": "2점에 더해, 오래된 기기의 변경이 조정 중 다시 도착하는 등 복잡한 순서에서 정책의 한계를 분석하고 개선을 설명한다. 선택한 공개·조정 경계가 주는 정합성과 처리 비용의 절충을 비교하며, 여러 샤드의 원자적 변경을 택한 경우에만 그 조정 비용까지 다룬다.",
+              "failure_origin": null
+            }
+          ]
+        },
+        {
+          "case_id": "dropbox_uploaded",
+          "seniority": "Senior",
+          "evaluation_id": "3-5",
+          "criterion_id": "C2",
+          "title": "중단된 전송의 진행 확인과 재개",
+          "expected": "Pass",
+          "failed_levels": [],
+          "review_required": false,
+          "levels": [
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C2",
+              "level": 0,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "문제 미고려에 맞다.",
+              "source_file": "inputs/dropbox/senior/nfr_rubric.md",
+              "source_line": 56,
+              "descriptor": "전송 중단이나 완료 응답 유실을 고려하지 않으며, 확인된 진행 상태를 이용해 미완료 부분을 재개하는 설계를 제시하지 않는다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C2",
+              "level": 1,
+              "expected": "Pass",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "진행 위치 기록과 재시도라는 기본 재개 경로를 요구한다. 송수신 상태 불일치·완료 불명·무효 세션 처리의 상세 부족은 우버 C3 L1과 같이 상위 점수에 남긴다.",
+              "source_file": "inputs/dropbox/senior/nfr_rubric.md",
+              "source_line": 57,
+              "descriptor": "진행 위치를 기록하고 재시도하는 기본 설계를 제시하지만, 송신량과 실제 수신량의 차이, 완료 여부가 불명확한 경우 또는 재개 상태가 무효인 경우의 처리 절차를 설명하지 못한다.",
+              "historical_ambiguity": true,
+              "anchor_reference": "Uber Senior C3 L1",
+              "judgment_clarity": "operational_anchor_decision",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C2",
+              "level": 2,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "**수신 측 확인 상태를 우선**하고 응답 불명 시 재확인하는 판정 조건·복구 분기를 요구한다.",
+              "source_file": "inputs/dropbox/senior/nfr_rubric.md",
+              "source_line": 58,
+              "descriptor": "업로드·다운로드에서 재개 대상과 수신 측이 확인한 진행 상태를 연결하고 미완료 부분을 이어가는 메커니즘을 설명한다. 응답 유실 시 상태를 확인해 완료를 판정하고, 미완성을 완료로 취급하지 않으며, 만료·무효 상태를 감지해 안전하게 재동기화한다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C2",
+              "level": 3,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "반복 중단의 비용, 복구 단위·확인 빈도 선택의 Trade-off를 명확히 요구한다.",
+              "source_file": "inputs/dropbox/senior/nfr_rubric.md",
+              "source_line": 59,
+              "descriptor": "2점에 더해, 반복 중단이나 진행 기록과 실제 수신 상태의 차이로 생기는 재전송·확인 비용을 분석하고 개선안을 제시한다. 복구 단위와 확인 빈도가 재전송 부담, 추가 요청, 메모리 사용에 미치는 영향을 비교해 선택 근거를 설명한다.",
+              "failure_origin": null
+            }
+          ]
+        },
+        {
+          "case_id": "dropbox_uploaded",
+          "seniority": "Senior",
+          "evaluation_id": "3-5",
+          "criterion_id": "C3",
+          "title": "변경 추적과 감시 부하의 확장",
+          "expected": "Fail",
+          "failed_levels": [
+            1
+          ],
+          "review_required": false,
+          "levels": [
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C3",
+              "level": 0,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "확장 미고려다.",
+              "source_file": "inputs/dropbox/senior/nfr_rubric.md",
+              "source_line": 76,
+              "descriptor": "파일과 기기가 늘어날 때 전체 목록 반복 조회나 감시 연결 증가가 만드는 부하를 고려하지 않고, 변경 추적을 확장하는 설계를 제시하지 않는다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C3",
+              "level": 1,
+              "expected": "Fail",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "기본 설계로 요구하는 범위는 변경 탐지까지이며, 감시 연결과 변경 처리 부하를 집계·분산하는 핵심 확장 흐름은 없어도 통과할 수 있다. 상세 만료 복구 절차가 없다는 이유가 아니라 평가 초점의 기본 확장 경로가 부족하다는 이유다.",
+              "source_file": "inputs/dropbox/senior/nfr_rubric.md",
+              "source_line": 77,
+              "descriptor": "증분 조회와 알림 등으로 변경을 탐지하는 기본 설계를 제시하지만, 감시 범위별 연결 증가나 변경 처리 집중을 제어하는 방법 또는 추적 상태 만료 후 복구 흐름을 구체화하지 못한다.",
+              "historical_ambiguity": false,
+              "anchor_reference": "Uber Senior C4 L1",
+              "judgment_clarity": "operational_anchor_decision",
+              "failure_origin": "direct"
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C3",
+              "level": 2,
+              "expected": "Pass",
+              "label_status": "user_directed_pass",
+              "review_required": false,
+              "reason": "증분 조회 메커니즘과 감시 연결·변경 처리 부하의 집계 또는 분산, 알림·조회 역할 구분 및 추적 상태 만료 후 재확보 흐름을 요구한다. 후보자의 구체적 확장 설계를 평가하되 분할·라우팅 방식 하나를 필수로 고정하지 않는다.",
+              "source_file": "inputs/dropbox/senior/nfr_rubric.md",
+              "source_line": 78,
+              "descriptor": "초기 열거 후 변경량에 대응하는 증분 조회 메커니즘을 설명하고, 감시 연결과 변경 처리 부하를 집계하거나 분산한다. 알림과 실제 변경 조회의 역할을 구분하며, 추적 상태 만료 시 누락 없이 기준 상태와 후속 변경 추적을 다시 확보하는 흐름을 제시한다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C3",
+              "level": 3,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "핫스팟·재열거 집중이라는 상황, 비용 축, 선택 근거가 있다. 2점 Fail을 상속해 자동 Fail시키지 않는다.",
+              "source_file": "inputs/dropbox/senior/nfr_rubric.md",
+              "source_line": 79,
+              "descriptor": "2점에 더해, 특정 감시 범위로의 부하 편중이나 재열거 집중 등 선택한 설계의 확장 한계를 분석하고 개선안을 제시한다. 감시 범위 집계나 분산 단위 조정이 연결 수, 불필요한 조회, 상태 관리 복잡도에 주는 절충과 선택 근거를 설명한다.",
+              "failure_origin": null
+            }
+          ]
+        },
+        {
+          "case_id": "dropbox_uploaded",
+          "seniority": "Senior",
+          "evaluation_id": "3-5",
+          "criterion_id": "C4",
+          "title": "자원 한계 내 동기화 처리량",
+          "expected": "Pass",
+          "failed_levels": [],
+          "review_required": false,
+          "levels": [
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C4",
+              "level": 0,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "자원 경합 문제 미고려다.",
+              "source_file": "inputs/dropbox/senior/nfr_rubric.md",
+              "source_line": 96,
+              "descriptor": "대량 변경과 동시 전송이 저장장치·네트워크·연산 자원을 경쟁하는 문제를 고려하지 않고, 병렬 작업이나 대기 작업량을 제어하는 설계를 제시하지 않는다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C4",
+              "level": 1,
+              "expected": "Pass",
+              "label_status": "uber_anchor_operational_labels",
+              "review_required": false,
+              "reason": "병렬 처리·작업 대기열을 사용하는 기본 작업 처리 구성을 요구한다. 실제 병목 자원·메모리 영향과 적체 해소의 상세 조절은 상위 단계로 남기는 것으로 기존 Pass를 유지한다.",
+              "source_file": "inputs/dropbox/senior/nfr_rubric.md",
+              "source_line": 97,
+              "descriptor": "병렬 처리나 작업 대기열을 사용하는 기본 설계를 제시하지만, 병렬성 증가가 실제 병목 자원과 메모리에 미치는 영향 또는 일시적 작업 집중 후 적체를 해소하는 방법을 구체화하지 못한다.",
+              "historical_ambiguity": false,
+              "anchor_reference": "Uber Senior C3 L1 및 C4 L1",
+              "judgment_clarity": "operational_anchor_decision",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C4",
+              "level": 2,
+              "expected": "Pass",
+              "label_status": "user_directed_pass",
+              "review_required": false,
+              "reason": "읽기·해시·전송·쓰기 병목 분석과 병렬성·작업량·유입 제어 메커니즘, 적체 해소 흐름을 요구한다. 후보자가 자원 제어 방식을 설명해야 하며, 허용·대기·거절의 특정 구현 조건을 루브릭에 미리 열거할 필요는 없다.",
+              "source_file": "inputs/dropbox/senior/nfr_rubric.md",
+              "source_line": 98,
+              "descriptor": "자원과 부하 가정을 명시하고 읽기·해시·전송·쓰기 중 관련 병목을 분석한다. 병렬성과 진행 중·대기 작업량을 제한하거나 유입을 제어하는 메커니즘으로 자원 사용의 무제한 증가를 막고, 작업 집중 후 잔여 자원에 맞춰 적체를 해소하는 흐름을 설명한다.",
+              "failure_origin": null
+            },
+            {
+              "case_id": "dropbox_uploaded",
+              "seniority": "Senior",
+              "evaluation_id": "3-5",
+              "criterion_id": "C4",
+              "level": 3,
+              "expected": "Pass",
+              "label_status": "analyst_proposed",
+              "review_required": false,
+              "reason": "고정 설정의 한계, 관측 기반 조정, 비용·선택 근거가 있다.",
+              "source_file": "inputs/dropbox/senior/nfr_rubric.md",
+              "source_line": 99,
+              "descriptor": "2점에 더해, 고정된 병렬성이나 전송 단위가 자원 경합 변화에 대응하지 못하는 한계를 분석하고 관측 결과에 따른 조정 방안을 설명한다. 전송 단위·진행 확인 빈도·병렬성 선택에 따른 처리량, 메모리, 재전송 비용의 절충과 선택 근거를 제시한다.",
+              "failure_origin": null
+            }
+          ]
+        }
+      ],
+      "expected_4_1": {
+        "target_id": "pair",
+        "expected": "Fail",
+        "reason": "비교 가능한 핵심 Criterion에서 기본 난도 역전 또는 기술적 깊이 부족이 나타나며 상위 Level의 장점으로 상쇄하지 않는다.",
+        "criterion_comparisons": [
+          {
+            "criterion_id": "C1",
+            "middle_criterion_ids": [
+              "C1"
+            ],
+            "senior_criterion_ids": [
+              "C1"
+            ],
+            "expected": "Fail",
+            "reason": "Middle 2의 내용 확보·검증 흐름보다 Senior 1의 버전 공개·충돌 처리 기본 보장이 약하다."
+          },
+          {
+            "criterion_id": "C2",
+            "middle_criterion_ids": [
+              "C2"
+            ],
+            "senior_criterion_ids": [
+              "C2"
+            ],
+            "expected": "Pass",
+            "reason": "Middle의 기본 재개 대비 Senior는 수신 측 확인 상태, 응답 유실·무효 상태 분기, 복구 비용 판단이 추가된다."
+          },
+          {
+            "criterion_id": "C3",
+            "middle_criterion_ids": [
+              "C3"
+            ],
+            "senior_criterion_ids": [
+              "C1"
+            ],
+            "expected": "Fail",
+            "reason": "Middle 2는 충돌 규칙과 조정 결과 전파를 요구하지만, Senior 1은 충돌 처리의 기본 규칙과 반영 흐름이 충분하지 않아 낮은 Level의 역량 차이가 약하다."
+          },
+          {
+            "criterion_id": "C4",
+            "middle_criterion_ids": [
+              "C4"
+            ],
+            "senior_criterion_ids": [
+              "C3",
+              "C4"
+            ],
+            "expected": "Fail",
+            "reason": "Middle 2는 복수의 부하 제어를 필수화하지만 Senior C3 1은 이 Criterion의 핵심인 감시 연결·변경 처리 부하를 다루는 기본 확장 흐름이 부족하다."
+          }
+        ]
+      }
+    }
+  ],
+  "user_directed_fail_overrides": [
+    {
+      "seniority": "Senior",
+      "criterion_id": "C3",
+      "level": 1,
+      "expected": "Fail",
+      "reason": "기본 설계로 요구하는 범위는 변경 탐지까지이며, 감시 연결과 변경 처리 부하를 집계·분산하는 핵심 확장 흐름은 없어도 통과할 수 있다. 상세 만료 복구 절차가 없다는 이유가 아니라 평가 초점의 기본 확장 경로가 부족하다는 이유다."
+    }
+  ],
+  "user_directed_pass_overrides": [
+    {
+      "seniority": "Senior",
+      "criterion_id": "C1",
+      "level": 2,
+      "previous_expected": "Fail",
+      "expected": "Pass",
+      "reason": "버전 공개 제어와 실패 처리, 기준 버전에 따른 충돌 판정·조정 정책, 변경 소실 방지 및 수렴 흐름을 요구한다. 후보자가 구체적 처리 메커니즘을 설명하도록 하므로 특정 충돌 집행 알고리즘을 루브릭에서 고정할 필요는 없다."
+    },
+    {
+      "seniority": "Senior",
+      "criterion_id": "C3",
+      "level": 2,
+      "previous_expected": "Fail",
+      "expected": "Pass",
+      "reason": "증분 조회 메커니즘과 감시 연결·변경 처리 부하의 집계 또는 분산, 알림·조회 역할 구분 및 추적 상태 만료 후 재확보 흐름을 요구한다. 후보자의 구체적 확장 설계를 평가하되 분할·라우팅 방식 하나를 필수로 고정하지 않는다."
+    },
+    {
+      "seniority": "Senior",
+      "criterion_id": "C4",
+      "level": 2,
+      "previous_expected": "Fail",
+      "expected": "Pass",
+      "reason": "읽기·해시·전송·쓰기 병목 분석과 병렬성·작업량·유입 제어 메커니즘, 적체 해소 흐름을 요구한다. 후보자가 자원 제어 방식을 설명해야 하며, 허용·대기·거절의 특정 구현 조건을 루브릭에 미리 열거할 필요는 없다."
+    }
+  ],
+  "revision": {
+    "version": "uber_anchor_v1",
+    "source_archive": "dropbox_gold_labels_senior2_pass.zip",
+    "source_sha256": "b849d15fa1945ca44e18b2510ee683b099b3ee1adc1e1b5402c2e937e1246a0d",
+    "scope": [
+      "Senior L1",
+      "Middle L2",
+      "related Middle L3 inheritance"
+    ],
+    "independent_review_completed": false,
+    "evaluator_executed": false
+  },
+  "summary": {
+    "level_3_5": {
+      "total": 32,
+      "proposed_pass": 28,
+      "proposed_fail": 4,
+      "direct_fail": 3,
+      "inherited_fail": 1,
+      "interpretation_review_rows": 1
+    },
+    "criterion_3_5": {
+      "Middle": {
+        "total": 4,
+        "proposed_pass": 3,
+        "proposed_fail": 1
+      },
+      "Senior": {
+        "total": 4,
+        "proposed_pass": 2,
+        "proposed_fail": 2
+      }
+    },
+    "pair_4_1": {
+      "total": 1,
+      "proposed_pass": 0,
+      "proposed_fail": 1,
+      "reason": "비교 가능한 핵심 Criterion에서 기본 난도 역전 또는 기술적 깊이 부족이 나타나며 상위 Level의 장점으로 상쇄하지 않는다."
+    },
+    "warning": "우버 고정 앵커에 따른 운영 정답. 독립 검토·평가기 재실행 결과가 아님."
+  }
+}

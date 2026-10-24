@@ -10,7 +10,7 @@
         "reason": "2점의 '교차하는 순서마다 허용되는 전이를 검증'과 '잠금 대기와 조건부 갱신의 충돌 재시도 비용을 비교'는 기본 설계를 넘어선 경합 분석과 기술적 판단을 요구한다. 외부 결제 처리 경계의 보장 한계와 선택 근거까지 요구하므로 중간 연차 2점의 범위를 초과한다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/06/middle.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/middle.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/06/middle.md",
@@ -21,7 +21,7 @@
         "reason": "1점은 재시도 방향만 제안하고, 2점은 '주문을 지속 저장한 뒤 접수 성공'과 작업자의 미완료 주문 처리·완료 기록으로 기본 흐름을 요구한다. 3점은 완료 기록 전 장애로 인한 재처리와 '기존 처리 결과를 확인'하는 개선 방안을 요구하여 대표적인 문제 해결 범위에 머문다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/06/middle.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/middle.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/06/middle.md",
@@ -32,7 +32,7 @@
         "reason": "1점의 대기·제한 제안에서 2점의 '앞단에서 제한'하고 초과 요청을 대기·거절하는 흐름으로 구체화된다. 3점은 동시 재시도로 인한 과부하와 '재시도 시점을 분산'하는 개선을 요구하여 복잡한 제어 메커니즘까지 필수화하지 않는다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/06/middle.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/middle.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/06/middle.md",
@@ -43,7 +43,7 @@
         "reason": "1점에서 이미 '조회와 좌석 점유를 담당할 서버를 따로 두고' 공연별 요청을 여러 서버에 분산하는 방식을 설명하도록 요구한다. 이는 2점의 '조회 서버와 점유 서버의 역할을 구분'하고 요청을 분산하는 기본 흐름과 사실상 같아 단계별 역량 상승이 없다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/06/middle.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/middle.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/06/senior.md",
@@ -54,7 +54,7 @@
         "reason": "1점은 단일 점유와 결제 결과에 따른 확정·해제 흐름을, 2점은 '점유 ID 일치·대기 상태·미만료 조건'의 원자 갱신으로 오래된 응답을 차단하는 메커니즘을 요구한다. 3점은 사건 순서별 안전성 분석, 잠금 대기·충돌 재시도 비용 비교, 외부 결제와 좌석 변경의 처리 경계 정당화까지 요구한다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/06/senior.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/senior.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/06/senior.md",
@@ -65,7 +65,7 @@
         "reason": "2점의 '내구성 저장 계층에 보존'과 '미완료 주문을 탐색·처리하고 완료 상태를 반영'은 1점의 저장·재처리·완료 기록 흐름을 반복한다. '정교하게 설명'이라는 표현 외에 중복 확정 방지 조건이나 장애 구간별 복구 방법이 없어 구체적인 메커니즘과 주요 문제 대응이 필수화되지 않는다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/06/senior.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/senior.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/06/senior.md",
@@ -76,7 +76,7 @@
         "reason": "3점은 공유 카운터 병목을 지적하고 '각 서버에 일정 허용량을 미리 배정'하여 중앙 접근을 줄이는 개선 절차를 요구한다. 그러나 허용량 사전 배정의 비용이나 위험, 해당 방식을 선택하는 근거는 요구하지 않아 최고점의 필수 설계 판단 설명이 누락되어 있다.",
         "score": 0,
         "percentage": 0.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/06/senior.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/senior.md"
       },
       {
         "rubric": "/home/jiyeon/problem_build_agent/.archgen/m7-followup/v5-ticket-v2-baseline-20261024/inputs/v5/06/senior.md",
@@ -87,7 +87,7 @@
         "reason": "1점의 역할 분리·요청 분산에서 2점의 읽기 복제본·캐시, 좌석군별 저장소 분할, 분할표 기반 라우팅으로 발전하여 단일 쓰기 저장소 병목에 대응한다. 3점은 '이전·새 저장소가 동시에 점유를 받는 위험'을 분석하고 두 전환 방식의 '중단 시간·상태 동기화 비용과 선택 근거'를 요구한다.",
         "score": 1,
         "percentage": 100.0,
-        "source_rubric": "resources/evaluator/datasets/seniority-error-injection/cases/06/senior.md"
+        "source_rubric": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/senior.md"
       },
       {
         "rubric": "comparison",
