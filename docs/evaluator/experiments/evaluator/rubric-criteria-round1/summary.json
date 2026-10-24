@@ -1,5 +1,5 @@
 {
-  "baseline": "docs/evaluator/experiments/error-detection-before-tuning",
+  "baseline": "docs/evaluator/experiments/evaluator/error-detection-before-tuning",
   "changed_variable": "3-5 평가 기준만 수정. 4-1·평가 프롬프트·코드·입력·연차 정책·모델 설정 고정.",
   "actual_model_calls": 9,
   "unscorable": 0,
@@ -62,7 +62,7 @@
   "datasets": {
     "seniority-error-injection": {
       "reference_labels": "user_confirmed_including_review_required",
-      "baseline": "docs/evaluator/experiments/error-detection-before-tuning/seniority-error-injection",
+      "baseline": "docs/evaluator/experiments/evaluator/error-detection-before-tuning/seniority-error-injection",
       "actual_model_calls": 8,
       "strict_direct_error_detection": {
         "detected": 24,
@@ -135,7 +135,7 @@
     },
     "ticket-rubric-review": {
       "reference_labels": "user_confirmed_including_review_required",
-      "baseline": "docs/evaluator/experiments/error-detection-before-tuning/ticket-rubric-review",
+      "baseline": "docs/evaluator/experiments/evaluator/error-detection-before-tuning/ticket-rubric-review",
       "actual_model_calls": 1,
       "strict_direct_error_detection": {
         "detected": 3,

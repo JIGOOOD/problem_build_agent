@@ -1,6 +1,6 @@
 {
   "reference_labels": "user_confirmed_including_review_required",
-  "baseline": "docs/evaluator/experiments/rubric-criteria-round2/ticket-rubric-review",
+  "baseline": "docs/evaluator/experiments/evaluator/rubric-criteria-round2/ticket-rubric-review",
   "actual_model_calls": 1,
   "strict_direct_error_detection": {
     "detected": 5,

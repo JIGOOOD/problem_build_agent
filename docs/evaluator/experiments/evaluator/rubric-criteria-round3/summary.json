@@ -1,12 +1,12 @@
 {
-  "baseline": "docs/evaluator/experiments/rubric-criteria-round2",
+  "baseline": "docs/evaluator/experiments/evaluator/rubric-criteria-round2",
   "changed_variable": "4-1 판정 방법2·3만 수정: 점수별 요구 비교와 다른 Level에 의한 상쇄 금지. 나머지 전송 메시지 동일.",
   "actual_model_calls": 9,
   "unscorable": 0,
   "datasets": {
     "seniority-error-injection": {
       "reference_labels": "user_confirmed_including_review_required",
-      "baseline": "docs/evaluator/experiments/rubric-criteria-round2/seniority-error-injection",
+      "baseline": "docs/evaluator/experiments/evaluator/rubric-criteria-round2/seniority-error-injection",
       "actual_model_calls": 8,
       "strict_direct_error_detection": {
         "detected": 24,
@@ -79,7 +79,7 @@
     },
     "ticket-rubric-review": {
       "reference_labels": "user_confirmed_including_review_required",
-      "baseline": "docs/evaluator/experiments/rubric-criteria-round2/ticket-rubric-review",
+      "baseline": "docs/evaluator/experiments/evaluator/rubric-criteria-round2/ticket-rubric-review",
       "actual_model_calls": 1,
       "strict_direct_error_detection": {
         "detected": 5,

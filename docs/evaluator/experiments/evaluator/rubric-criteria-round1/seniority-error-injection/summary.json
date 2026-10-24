@@ -1,6 +1,6 @@
 {
   "reference_labels": "user_confirmed_including_review_required",
-  "baseline": "docs/evaluator/experiments/rubric-criteria-round2/seniority-error-injection",
+  "baseline": "docs/evaluator/experiments/evaluator/error-detection-before-tuning/seniority-error-injection",
   "actual_model_calls": 8,
   "strict_direct_error_detection": {
     "detected": 24,
@@ -8,14 +8,14 @@
     "percentage": 100.0
   },
   "pair_error_detection": {
-    "detected": 6,
+    "detected": 0,
     "total": 6,
-    "percentage": 100.0
+    "percentage": 0.0
   },
   "verdict_agreement": {
-    "matched": 72,
+    "matched": 66,
     "total": 72,
-    "percentage": 100.0
+    "percentage": 91.67
   },
   "expected_normal_acceptance": {
     "matched": 42,
