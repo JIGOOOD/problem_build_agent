@@ -1,0 +1,3146 @@
+{
+  "experiment": "동일 검증셋으로 평가기 튜닝 전·1~4차 3회 비교",
+  "rules": [
+    "3-5",
+    "4-1"
+  ],
+  "positive_class": "Fail",
+  "fixed_configuration": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "high",
+    "max_output_tokens": 16000,
+    "language_retries_max": 2,
+    "common_seniority_criteria": "git:e33b730:resources/seniority-criteria.md",
+    "common_seniority_criteria_sha256": "ac4aabeb05f45606afe6e1a3e526832147fdd705fc4fa53d23b459f28fc6c07d",
+    "evaluation_code": "git:e33b730:src/archgen/evaluation.py",
+    "labels_in_model_input": false,
+    "neutral_input_paths": true
+  },
+  "dataset": {
+    "unique_pairs": 8,
+    "unique_rubrics": 16,
+    "unique_assessments": 72,
+    "fail_labels": 25,
+    "pass_labels": 47,
+    "cases": {
+      "case-01": {
+        "dataset": "dropbox",
+        "case_id": "dropbox_uploaded",
+        "labels": "resources/evaluator/datasets/validation/dropbox/review/expected_labels.json",
+        "label_case_index": 0,
+        "files": {
+          "middle": "resources/evaluator/datasets/validation/dropbox/inputs/dropbox/middle/nfr_rubric.md",
+          "senior": "resources/evaluator/datasets/validation/dropbox/inputs/dropbox/senior/nfr_rubric.md"
+        },
+        "labels_sha256": "6342f2ec2afef3ae6c0a34ea7854bc505247eb97b5efccf753d1ecd3979f2ac3",
+        "file_sha256": {
+          "middle": "977ca3be7ac6dcabbcea7bef0a956c1c05ebb31a80780caaa7c67b28e16a27c2",
+          "senior": "d017645f73943e6b8a90003ad4fab047930f4b00c3de25780eac1874c6d978e3"
+        }
+      },
+      "case-02": {
+        "dataset": "slack",
+        "case_id": "slack_uploaded",
+        "labels": "resources/evaluator/datasets/validation/slack/review/expected_labels.json",
+        "label_case_index": 0,
+        "files": {
+          "middle": "resources/evaluator/datasets/validation/slack/inputs/slack/middle/nfr_rubric.md",
+          "senior": "resources/evaluator/datasets/validation/slack/inputs/slack/senior/nfr_rubric.md"
+        },
+        "labels_sha256": "86923b9caaa435604a904960dda1e41b43e71870e365a7c8a4164d5bf409ba76",
+        "file_sha256": {
+          "middle": "caa65458f4f54db5d4be1fc21a2d75284bcc31b33a6684691281b4445a5a072a",
+          "senior": "736ec928537c4ec9a5c7448517b1720c98863f659c0db3d60351027d9dea8b7b"
+        }
+      },
+      "case-03": {
+        "dataset": "youtube",
+        "case_id": "youtube_v5",
+        "labels": "resources/evaluator/datasets/validation/youtube/review/expected_labels.json",
+        "label_case_index": 0,
+        "files": {
+          "middle": "resources/evaluator/datasets/validation/youtube/inputs/youtube/middle/nfr_rubric.md",
+          "senior": "resources/evaluator/datasets/validation/youtube/inputs/youtube/senior/nfr_rubric.md"
+        },
+        "labels_sha256": "9da1861b9a01d56365b787619cbc427f57721f4b2858033de12e6d57edeb506b",
+        "file_sha256": {
+          "middle": "0317d2f9f12a2c6b2cda43939df1a43c47230d7787ddd8d1a6017dc99198db87",
+          "senior": "bf187abcf75e9c3fc85aaac3bc76306279216a7ebea60cf944955cd9af2a8c33"
+        }
+      },
+      "case-04": {
+        "dataset": "uber",
+        "case_id": "uber",
+        "labels": "resources/evaluator/datasets/validation/uber/review/expected_labels.json",
+        "label_case_index": 0,
+        "files": {
+          "middle": "resources/evaluator/datasets/validation/uber/uber_middle.md",
+          "senior": "resources/evaluator/datasets/validation/uber/uber_senior.md"
+        },
+        "labels_sha256": "49a3b87ea66a3bfb2be02b71189bd7c72b8f4d5d585fb5fba204efe50467c6d6",
+        "file_sha256": {
+          "middle": "771a013acc1c9897abd68854054106e5677dc9d18f3d44492b942079c412febf",
+          "senior": "5c8fa7a658e279236077784d58b960ead222a6943edacd7e74ec669a31f9be03"
+        }
+      },
+      "case-05": {
+        "dataset": "injected-errors",
+        "case_id": "01",
+        "labels": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json",
+        "label_case_index": 0,
+        "files": {
+          "middle": "resources/evaluator/datasets/validation/injected-errors/cases/01/middle.md",
+          "senior": "resources/evaluator/datasets/validation/injected-errors/cases/01/senior.md"
+        },
+        "labels_sha256": "7a7af32f50889fc7200b86dbffc2381de085da8cc1b404cb596ac986a9da4a98",
+        "file_sha256": {
+          "middle": "7d03e7bdd0b1628563c354ca59e08fc7e7094a3c1d5d7b3b807ba3ec23ec06dd",
+          "senior": "48996f9be53e5047a7ec555c23791930a2ea16fb944eba905e1c1f6a1544b1ea"
+        }
+      },
+      "case-06": {
+        "dataset": "injected-errors",
+        "case_id": "02",
+        "labels": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json",
+        "label_case_index": 1,
+        "files": {
+          "middle": "resources/evaluator/datasets/validation/injected-errors/cases/02/middle.md",
+          "senior": "resources/evaluator/datasets/validation/injected-errors/cases/02/senior.md"
+        },
+        "labels_sha256": "7a7af32f50889fc7200b86dbffc2381de085da8cc1b404cb596ac986a9da4a98",
+        "file_sha256": {
+          "middle": "6f6474f13a7d7cb0035608046a1d33e6a1d809318ee890aaa29fad5441a43a53",
+          "senior": "6618a98365cfdceeeca02efce8337d5f0e80fd790e22139162f979f7b4ae324c"
+        }
+      },
+      "case-07": {
+        "dataset": "injected-errors",
+        "case_id": "03",
+        "labels": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json",
+        "label_case_index": 2,
+        "files": {
+          "middle": "resources/evaluator/datasets/validation/injected-errors/cases/03/middle.md",
+          "senior": "resources/evaluator/datasets/validation/injected-errors/cases/03/senior.md"
+        },
+        "labels_sha256": "7a7af32f50889fc7200b86dbffc2381de085da8cc1b404cb596ac986a9da4a98",
+        "file_sha256": {
+          "middle": "6ada6a948b1926c9ad3932c5ff0a78b4aadd0ebd06de2a9d85c4067a39d23ec5",
+          "senior": "14ad4473717dbfbb0468a6cdea173348602af96ecf4eb2cb055d9e9699f5c9fc"
+        }
+      },
+      "case-08": {
+        "dataset": "injected-errors",
+        "case_id": "04",
+        "labels": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json",
+        "label_case_index": 3,
+        "files": {
+          "middle": "resources/evaluator/datasets/validation/injected-errors/cases/04/middle.md",
+          "senior": "resources/evaluator/datasets/validation/injected-errors/cases/04/senior.md"
+        },
+        "labels_sha256": "7a7af32f50889fc7200b86dbffc2381de085da8cc1b404cb596ac986a9da4a98",
+        "file_sha256": {
+          "middle": "850fe3bea45d4b33df7495130e2580e54ceb11b355d4c1651bff7cb4226f9fce",
+          "senior": "054bce594ea63193cd1f75152781dc0b956181dcef65d028324356508296e931"
+        }
+      }
+    }
+  },
+  "repeats": 3,
+  "versions": {
+    "baseline": {
+      "criteria": "git:e33b730:docs/evaluator/rubric.md",
+      "evaluated_sections_sha256": "e9599ffc6c1a0f3ba06e17c31831978cfc56513f129d6556fc89bf6e1bec3db5",
+      "runs": [
+        {
+          "repeat": 1,
+          "model_calls": 8,
+          "source": "직전 완료된 40회 실제 실행 출력의 집계. 원시 기록은 당시 사용자 요청에 따라 삭제됨.",
+          "item_assessments_available": false,
+          "metrics": {
+            "counts": {
+              "TP": 10,
+              "FP": 0,
+              "FN": 15,
+              "TN": 47
+            },
+            "n": 72,
+            "TPR": {
+              "numerator": 10,
+              "denominator": 25,
+              "percentage": 40.0
+            },
+            "TNR": {
+              "numerator": 47,
+              "denominator": 47,
+              "percentage": 100.0
+            },
+            "precision": {
+              "numerator": 10,
+              "denominator": 10,
+              "percentage": 100.0
+            },
+            "accuracy": {
+              "numerator": 57,
+              "denominator": 72,
+              "percentage": 79.17
+            }
+          },
+          "by_rule": {
+            "3-5": {
+              "counts": {
+                "TP": 10,
+                "FP": 0,
+                "FN": 11,
+                "TN": 43
+              },
+              "n": 64,
+              "TPR": {
+                "numerator": 10,
+                "denominator": 21,
+                "percentage": 47.62
+              },
+              "TNR": {
+                "numerator": 43,
+                "denominator": 43,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 10,
+                "denominator": 10,
+                "percentage": 100.0
+              },
+              "accuracy": {
+                "numerator": 53,
+                "denominator": 64,
+                "percentage": 82.81
+              }
+            },
+            "4-1": {
+              "counts": {
+                "TP": 0,
+                "FP": 0,
+                "FN": 4,
+                "TN": 4
+              },
+              "n": 8,
+              "TPR": {
+                "numerator": 0,
+                "denominator": 4,
+                "percentage": 0.0
+              },
+              "TNR": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 0,
+                "denominator": 0,
+                "percentage": null
+              },
+              "accuracy": {
+                "numerator": 4,
+                "denominator": 8,
+                "percentage": 50.0
+              }
+            }
+          }
+        },
+        {
+          "repeat": 2,
+          "model_calls": 8,
+          "item_assessments_available": true,
+          "metrics": {
+            "counts": {
+              "TP": 11,
+              "FP": 0,
+              "FN": 14,
+              "TN": 47
+            },
+            "n": 72,
+            "TPR": {
+              "numerator": 11,
+              "denominator": 25,
+              "percentage": 44.0
+            },
+            "TNR": {
+              "numerator": 47,
+              "denominator": 47,
+              "percentage": 100.0
+            },
+            "precision": {
+              "numerator": 11,
+              "denominator": 11,
+              "percentage": 100.0
+            },
+            "accuracy": {
+              "numerator": 58,
+              "denominator": 72,
+              "percentage": 80.56
+            }
+          },
+          "by_rule": {
+            "3-5": {
+              "counts": {
+                "TP": 11,
+                "FP": 0,
+                "FN": 10,
+                "TN": 43
+              },
+              "n": 64,
+              "TPR": {
+                "numerator": 11,
+                "denominator": 21,
+                "percentage": 52.38
+              },
+              "TNR": {
+                "numerator": 43,
+                "denominator": 43,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 11,
+                "denominator": 11,
+                "percentage": 100.0
+              },
+              "accuracy": {
+                "numerator": 54,
+                "denominator": 64,
+                "percentage": 84.38
+              }
+            },
+            "4-1": {
+              "counts": {
+                "TP": 0,
+                "FP": 0,
+                "FN": 4,
+                "TN": 4
+              },
+              "n": 8,
+              "TPR": {
+                "numerator": 0,
+                "denominator": 4,
+                "percentage": 0.0
+              },
+              "TNR": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 0,
+                "denominator": 0,
+                "percentage": null
+              },
+              "accuracy": {
+                "numerator": 4,
+                "denominator": 8,
+                "percentage": 50.0
+              }
+            }
+          },
+          "disagreements": [
+            {
+              "case": "case-01",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급은 변경 탐지와 부하 제어의 기본 설계를 평가하고, 3점에서 대표적인 부하 문제의 개선을 요구한다.",
+              "reason": "1~2점은 변경 탐지 구성요소의 역할과 실행량·재시도·임시 데이터 증가를 제어하는 기본 설계를 요구한다. 3점의 동시 재연결에 따른 요청 집중과 '요청 시점 분산이나 유입 속도 조절'은 대표적인 한계와 개선으로, 심층 성능 분석을 필수로 요구하지 않는다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "고급은 확장 메커니즘과 주요 문제 대응을 평가하고, 3점에서 확장 한계와 기술 선택의 절충을 요구한다.",
+              "reason": "2점은 증분 조회, 감시 부하의 집계·분산, 알림과 조회의 역할 구분 및 추적 상태 만료 후 복구를 구체적으로 요구한다. 3점은 부하 편중·재열거 집중의 한계를 분석하고, 집계·분산 단위에 따른 연결 수·조회량·상태 관리 복잡도의 절충과 선택 근거를 요구한다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "동일하거나 비교 가능한 문제에서 고급은 중급보다 기술적 깊이, 문제 해결 범위와 설계 판단 수준이 높아야 한다.",
+              "reason": "같은 파일 동기화 문제에서 중급은 기본 처리 흐름과 대표적인 개선을 요구하지만, 고급은 재개 상태의 만료·무효 복구, 변경 추적 복원, 자원별 병목 분석까지 요구한다. 평가 항목이 재편되었어도 고급의 복구 범위와 메커니즘, 비용 절충에 대한 판단 요구가 실질적으로 높아 단순한 용어·분량 차이가 아니다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C1",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급은 기본 설계와 구성요소의 역할·흐름을 평가하고, 3점에서 대표적 한계와 개선을 요구한다.",
+              "reason": "1점의 기록·응답 관계와 복구 흐름 설명 부족을 2점의 ‘보존을 담당하는 구성요소와 기록·응답 흐름’으로 보완한다. 3점은 기록 확인 대기라는 대표적 한계와 개선을 요구하므로 복잡한 장애 분석 없이 중급 역량을 평가한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급은 순서·중복 처리의 기본 역할과 흐름을 평가하고, 3점에서 대표적 경계 문제와 개선을 요구한다.",
+              "reason": "2점은 ‘채널별 확정 순서를 정하는 역할과 기준’과 식별값을 이용한 중복 방지 흐름을 요구하여 기본 설계를 평가한다. 3점의 조회 중 실시간 도착 문제와 조회 경계 조정·재정렬은 대표적 병합 한계의 개선이며, 복잡한 동시성 구현까지 필수로 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급은 작업 분산의 구조·역할·흐름을 평가하고, 3점에서 대표적 병목과 개선을 요구한다.",
+              "reason": "2점은 ‘분할 기준, 구성요소의 역할과 전달 흐름’을 설명하고 기존 순서·복구 경로의 유지를 확인하는 수준이다. 3점의 중계 지점 병목이나 과도한 상태 복제에 대한 분산 단위·상태 배치 개선은 대표적 한계 대응이며, 복잡한 상태 이동 구현이나 장애 분석을 필수로 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "상급은 구체적 중복 방지·순서 병합과 관련 문제 대응을 평가하고, 3점에서 한계·절충·선택 근거를 요구한다.",
+              "reason": "2점은 식별 범위와 중복 저장·표시 방지 메커니즘에 더해 ‘재전달·역순 도착·이력과 실시간 수신의 겹침’ 처리를 요구한다. 3점은 복잡한 재시도·재접속 경계의 한계를 분석하고 상태 유지 부담이나 순서 확정 대기와 처리 효율의 절충 및 선택 근거를 요구한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "상급은 단계별 지연 메커니즘과 병목 대응을 평가하고, 3점에서 개선의 한계·절충·근거를 요구한다.",
+              "reason": "2점은 접수 응답과 수신자 관찰을 구분하고, 정상·대규모 채널 부하에서 꼬리 지연을 만드는 대기를 줄이거나 격리하는 ‘구체적인 메커니즘’을 요구한다. 3점은 부하 쏠림·느린 수신자 상황의 한계와 보완, 대기 감소와 자원 사용·처리 효율의 절충 및 개선 근거까지 평가한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "상급은 구체적 분산 메커니즘과 확장 병목 대응을 평가하고, 3점에서 한계·절충·선택 근거를 요구한다.",
+              "reason": "2점은 단일 대규모 채널의 작업 분산 메커니즘과 ‘구독 상태의 복제·이동과 작업 재배치’가 만드는 병목 및 대응을 요구한다. 3점은 분산 후 남는 집중 지점과 상태 이동 비용의 한계를 분석하고, 작업 균형·조정 부담·이동 비용의 절충과 선택 근거를 요구하여 상급 수준에 부합한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "같은 설계 문제에서 상급이 중급보다 높은 기술적 깊이·문제 해결 범위·설계 판단 능력을 요구해야 한다.",
+              "reason": "중급은 구성요소의 역할·기본 흐름과 대표적 한계 개선을 중심으로 평가하지만, 상급은 영속화 확인 메커니즘, 동시 재시도·역순 도착 처리, 꼬리 지연 격리, 상태 복제·이동 병목 대응까지 요구한다. 상급 3점은 각 방식의 한계와 비용·성능 간 절충 및 선택 근거를 명시적으로 요구하므로 용어나 설명 길이만 다른 것이 아니다."
+            },
+            {
+              "case": "case-06",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "동일한 설계 문제에서 상위 연차가 기술적 깊이·문제 대응 범위·설계 판단을 실질적으로 확장해야 한다.",
+              "reason": "중간 연차의 구독·전송 및 재조회 흐름에 비해, 상위 연차는 연결별 전송 격리, 갱신 번호 기반 누락 없는 복구, 보관 비용과 복구 지연의 상충관계 판단을 요구한다. 최신값 조회 항목의 중간 연차 과잉 요구와 일부 상위 연차 기준의 추상성은 있지만, 두 문서의 차이는 용어나 설명 길이에 그치지 않는다."
+            },
+            {
+              "case": "case-07",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "상위 연차는 동시 요청·장애의 구체적인 처리와 기술 선택의 상충 관계를 평가한다.",
+              "reason": "2점은 제출 식별자와 유일성 제약 또는 원자적 상태 전환으로 중복 확정을 막고, 응답 유실 후 재시도에 동일 결과를 반환하도록 요구한다. 3점은 강한 쓰기 조정의 대기 증가를 분석하고 원자적 갱신과 별도 중복 기록을 정합성·경합·비용으로 비교하므로 상위 연차에 적합하다."
+            },
+            {
+              "case": "case-07",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "상위 연차는 경계 상황의 처리 원리와 설계 한계, 정책 선택의 근거를 요구한다.",
+              "reason": "2점은 트랜잭션 구조와 마감 경계의 동시 요청을 일관되게 승인·거절하는 메커니즘을 요구해 단순한 시간 비교를 넘어선다. 3점은 접수·완료 시각 차이와 서버 시계 오차를 분석하고 엄격한 접수 기준과 제한적 유예를 공정성·처리량·운영 복잡도로 비교한다."
+            },
+            {
+              "case": "case-07",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "동일 설계 문제에서 상위 연차가 실질적으로 더 깊은 처리 원리·문제 대응·설계 판단을 요구해야 한다.",
+              "reason": "초안 충돌 안내에서 조건부 쓰기로, 기본 저장 분산에서 키 기반 분할·역압으로, 단순 마감 비교에서 경계 동시성·시계 오차 분석으로 요구 역량이 심화된다. 중간 연차 C2의 과도한 요구는 예외지만, 나머지 항목에서 상위 연차의 문제 대응 범위와 선택 근거 요구가 실질적으로 강화되어 단순한 용어·분량 차이는 아니다."
+            }
+          ]
+        },
+        {
+          "repeat": 3,
+          "model_calls": 8,
+          "item_assessments_available": true,
+          "metrics": {
+            "counts": {
+              "TP": 11,
+              "FP": 0,
+              "FN": 14,
+              "TN": 47
+            },
+            "n": 72,
+            "TPR": {
+              "numerator": 11,
+              "denominator": 25,
+              "percentage": 44.0
+            },
+            "TNR": {
+              "numerator": 47,
+              "denominator": 47,
+              "percentage": 100.0
+            },
+            "precision": {
+              "numerator": 11,
+              "denominator": 11,
+              "percentage": 100.0
+            },
+            "accuracy": {
+              "numerator": 58,
+              "denominator": 72,
+              "percentage": 80.56
+            }
+          },
+          "by_rule": {
+            "3-5": {
+              "counts": {
+                "TP": 11,
+                "FP": 0,
+                "FN": 10,
+                "TN": 43
+              },
+              "n": 64,
+              "TPR": {
+                "numerator": 11,
+                "denominator": 21,
+                "percentage": 52.38
+              },
+              "TNR": {
+                "numerator": 43,
+                "denominator": 43,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 11,
+                "denominator": 11,
+                "percentage": 100.0
+              },
+              "accuracy": {
+                "numerator": 54,
+                "denominator": 64,
+                "percentage": 84.38
+              }
+            },
+            "4-1": {
+              "counts": {
+                "TP": 0,
+                "FP": 0,
+                "FN": 4,
+                "TN": 4
+              },
+              "n": 8,
+              "TPR": {
+                "numerator": 0,
+                "denominator": 4,
+                "percentage": 0.0
+              },
+              "TNR": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 0,
+                "denominator": 0,
+                "percentage": null
+              },
+              "accuracy": {
+                "numerator": 4,
+                "denominator": 8,
+                "percentage": 50.0
+              }
+            }
+          },
+          "disagreements": [
+            {
+              "case": "case-01",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급은 부하 제어의 기본 구성과 처리 흐름을 평가하고, 3점에서 대표적인 집중 부하의 개선을 요구해야 한다.",
+              "reason": "2점은 변경 탐지의 구성요소와 실행량·재시도·임시 데이터 제어를 포함한 기본 설계를 요구한다. 3점은 동시 재연결에 따른 요청 집중을 설명하고 요청 시점 분산이나 유입 속도 조절을 제시하는 수준으로 중급에 적합하다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "고급은 구체적인 확장 메커니즘과 주요 문제 대응, 설계 한계 및 선택 근거를 요구해야 한다.",
+              "reason": "2점은 증분 조회 메커니즘, 감시 부하 집계·분산, 추적 상태 만료 후 누락 없는 복구를 요구한다. 3점은 부하 편중과 재열거 집중을 분석하고 집계·분산 단위에 따른 연결 수·조회·관리 복잡도의 절충과 선택 근거까지 요구한다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "동일하거나 비교 가능한 문제에서 고급이 더 깊은 기술 이해, 넓은 문제 대응 및 설계 판단을 요구해야 한다.",
+              "reason": "중급의 기본 재개 흐름과 부하 제어에 비해 고급은 재개 상태 만료·무효 복구, 변경 추적 만료 후 기준 상태 확보, 자원별 병목 분석까지 요구한다. 또한 복구 단위·감시 분산 단위·병렬성의 절충과 선택 근거를 평가하므로 용어나 설명량을 넘어 실질적인 역량 차이가 있다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C1",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급은 기본 설계와 처리 흐름을 평가하고, 3점에서는 대표 한계와 개선을 요구한다.",
+              "reason": "2점은 ‘보존을 담당하는 구성요소와 기록·응답 흐름’ 및 이력 기반 복구를 요구하여 기본 설계 역량을 평가한다. 3점은 기록 완료 확인에 따른 대기라는 대표 한계와 개선을 요구하며, 복잡한 장애 분석까지 필수로 삼지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급은 주요 역할과 기본 동작을 설명하고, 3점에서 대표적인 문제의 개선을 제시해야 한다.",
+              "reason": "2점은 ‘채널별 확정 순서를 정하는 역할과 기준’ 및 식별값을 이용한 중복 없는 병합 흐름을 요구한다. 3점도 이력 조회 중 실시간 도착이라는 대표 문제에 조회 경계 조정이나 재정렬을 제시하는 수준으로, 심층 구현을 필수로 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급은 분산 구조·역할·흐름을 설명하고, 3점에서 대표 병목과 개선을 다뤄야 한다.",
+              "reason": "2점은 전달 작업의 ‘분할 기준, 구성요소의 역할과 전달 흐름’을 요구하여 상위 수준의 확장 설계를 평가한다. 3점은 중계 지점이나 구독 상태 복제의 대표 병목과 배치 개선을 요구하지만, 구체적인 상태 이동 구현이나 복잡한 장애 대응까지 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "고급은 동시성·병합 문제의 구체적 처리를 평가하고, 3점에서 한계와 기술적 판단을 요구한다.",
+              "reason": "2점은 식별 범위와 중복 저장·표시 방지 메커니즘, ‘재전달·역순 도착·이력과 실시간 수신의 겹침’ 처리를 요구한다. 3점은 복잡한 경계의 한계를 분석하고 상태 유지 부담이나 순서 확정 대기와 처리 효율의 절충 및 선택 근거를 설명하도록 한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "고급은 지연 발생 원인과 구체적 대응을 평가하고, 3점에서 개선의 한계와 절충을 요구한다.",
+              "reason": "2점은 단계별 처리·대기를 설명하고 정상 부하와 대규모 채널에서 꼬리 지연을 줄이거나 격리하는 ‘구체적인 메커니즘’을 요구한다. 3점은 부하 쏠림·느린 수신자 상황의 한계를 분석하고 대기 감소와 자원 사용·처리 효율의 절충 및 개선 근거를 요구한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "고급은 확장 메커니즘과 병목 대응을 평가하고, 3점에서 설계 한계·절충·선택 근거를 요구한다.",
+              "reason": "2점은 단일 대규모 채널의 작업 분산 메커니즘뿐 아니라 ‘구독 상태의 복제·이동과 작업 재배치’의 병목 대응을 요구한다. 3점은 잔여 집중 지점과 상태 이동 비용의 한계를 분석하고 작업 균형·조정 부담·이동 비용의 절충을 비교하여 선택 근거를 제시하도록 한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "동일 설계 문제에서 고급이 중급보다 높은 기술적 깊이·문제 해결 범위·설계 판단을 요구해야 한다.",
+              "reason": "중급 C2는 순서 결정 역할과 기본 병합 흐름을 중심으로 평가하지만, 고급 C2는 동시 재시도·역순 도착의 처리 메커니즘과 상태 유지 비용의 절충까지 요구한다. 중급 C4의 분할 구조·대표 병목 개선과 달리 고급 C4는 자원 추가 시 상태 복제·이동 및 재배치 병목 대응과 배치 선택 근거를 요구하여 실질적인 역량 차이가 있다."
+            },
+            {
+              "case": "case-06",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "동일 문제에서 고연차가 더 깊은 메커니즘·문제 대응·설계 판단을 요구해야 한다.",
+              "reason": "중간 연차의 구독 전달·재조회 흐름과 달리 고연차는 연결별 전송 격리, 갱신 번호 기반 누락 방지, 이력 보관 비용의 상충을 요구해 실질적인 역량 차이가 있다. 중간 연차 C1의 과도한 난도와 고연차 C2·C3의 설명 누락은 있으나, 두 문서 전체가 사실상 같은 역량을 요구하는 것은 아니다."
+            },
+            {
+              "case": "case-07",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "고급은 중복·장애 대응의 구체적 원리와 설계 대안의 한계 및 선택 근거를 요구한다.",
+              "reason": "2점은 제출 식별자와 ‘유일성 제약 또는 원자적 상태 전환’으로 동시 중복 확정을 막고 응답 유실 시 동일 결과를 반환하는 메커니즘을 요구한다. 3점은 강한 쓰기 조정의 대기 문제를 분석하고 두 기록 방식의 정합성·경합·보관 비용을 비교하도록 하므로 고급에 적합하다."
+            },
+            {
+              "case": "case-07",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "고급은 기본 시간 비교를 넘어 경계 상황의 처리 메커니즘과 정책 선택의 절충 근거를 요구한다.",
+              "reason": "2점은 ‘트랜잭션 구조’와 마감 경계의 동시 요청을 일관되게 판정하는 메커니즘을 요구하여 기본 시간 비교와 구분된다. 3점은 접수·완료 시각 차이와 서버 시계 오차를 분석하고 엄격한 접수 기준과 유예 기준을 비교하도록 하므로 고급의 분석·판단 수준에 부합한다."
+            },
+            {
+              "case": "case-07",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "동일 설계 문제에서 고급이 중급보다 실질적으로 깊은 처리 메커니즘, 문제 대응 및 설계 판단을 요구해야 한다.",
+              "reason": "고급은 중급의 기본 복원·마감 비교·저장 분산을 넘어 조건부 쓰기, 경계 요청의 동시성 처리, 분할·역압을 요구하고 각 대안의 절충 근거까지 평가한다. 중급 C2가 과도하게 심화되어 해당 항목의 난도 역전은 있지만, 두 문서 전체의 역량 차이가 용어나 설명 분량에만 머물지는 않는다."
+            }
+          ]
+        }
+      ],
+      "pooled": {
+        "counts": {
+          "TP": 32,
+          "FP": 0,
+          "FN": 43,
+          "TN": 141
+        },
+        "n": 216,
+        "TPR": {
+          "numerator": 32,
+          "denominator": 75,
+          "percentage": 42.67
+        },
+        "TNR": {
+          "numerator": 141,
+          "denominator": 141,
+          "percentage": 100.0
+        },
+        "precision": {
+          "numerator": 32,
+          "denominator": 32,
+          "percentage": 100.0
+        },
+        "accuracy": {
+          "numerator": 173,
+          "denominator": 216,
+          "percentage": 80.09
+        }
+      },
+      "pooled_by_rule": {
+        "3-5": {
+          "counts": {
+            "TP": 32,
+            "FP": 0,
+            "FN": 31,
+            "TN": 129
+          },
+          "n": 192,
+          "TPR": {
+            "numerator": 32,
+            "denominator": 63,
+            "percentage": 50.79
+          },
+          "TNR": {
+            "numerator": 129,
+            "denominator": 129,
+            "percentage": 100.0
+          },
+          "precision": {
+            "numerator": 32,
+            "denominator": 32,
+            "percentage": 100.0
+          },
+          "accuracy": {
+            "numerator": 161,
+            "denominator": 192,
+            "percentage": 83.85
+          }
+        },
+        "4-1": {
+          "counts": {
+            "TP": 0,
+            "FP": 0,
+            "FN": 12,
+            "TN": 12
+          },
+          "n": 24,
+          "TPR": {
+            "numerator": 0,
+            "denominator": 12,
+            "percentage": 0.0
+          },
+          "TNR": {
+            "numerator": 12,
+            "denominator": 12,
+            "percentage": 100.0
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "percentage": null
+          },
+          "accuracy": {
+            "numerator": 12,
+            "denominator": 24,
+            "percentage": 50.0
+          }
+        }
+      }
+    },
+    "round1": {
+      "criteria": "git:6afe893:docs/evaluator/experiments/evaluator/rubric-criteria-round1/evaluation-criteria.md",
+      "evaluated_sections_sha256": "37c11257a6118afd102e00ebe1c35e8888113ff3ea103903ee261e9d349c31ac",
+      "runs": [
+        {
+          "repeat": 1,
+          "model_calls": 8,
+          "source": "직전 완료된 40회 실제 실행 출력의 집계. 원시 기록은 당시 사용자 요청에 따라 삭제됨.",
+          "item_assessments_available": false,
+          "metrics": {
+            "counts": {
+              "TP": 14,
+              "FP": 0,
+              "FN": 11,
+              "TN": 47
+            },
+            "n": 72,
+            "TPR": {
+              "numerator": 14,
+              "denominator": 25,
+              "percentage": 56.0
+            },
+            "TNR": {
+              "numerator": 47,
+              "denominator": 47,
+              "percentage": 100.0
+            },
+            "precision": {
+              "numerator": 14,
+              "denominator": 14,
+              "percentage": 100.0
+            },
+            "accuracy": {
+              "numerator": 61,
+              "denominator": 72,
+              "percentage": 84.72
+            }
+          },
+          "by_rule": {
+            "3-5": {
+              "counts": {
+                "TP": 14,
+                "FP": 0,
+                "FN": 7,
+                "TN": 43
+              },
+              "n": 64,
+              "TPR": {
+                "numerator": 14,
+                "denominator": 21,
+                "percentage": 66.67
+              },
+              "TNR": {
+                "numerator": 43,
+                "denominator": 43,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 14,
+                "denominator": 14,
+                "percentage": 100.0
+              },
+              "accuracy": {
+                "numerator": 57,
+                "denominator": 64,
+                "percentage": 89.06
+              }
+            },
+            "4-1": {
+              "counts": {
+                "TP": 0,
+                "FP": 0,
+                "FN": 4,
+                "TN": 4
+              },
+              "n": 8,
+              "TPR": {
+                "numerator": 0,
+                "denominator": 4,
+                "percentage": 0.0
+              },
+              "TNR": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 0,
+                "denominator": 0,
+                "percentage": null
+              },
+              "accuracy": {
+                "numerator": 4,
+                "denominator": 8,
+                "percentage": 50.0
+              }
+            }
+          }
+        },
+        {
+          "repeat": 2,
+          "model_calls": 8,
+          "item_assessments_available": true,
+          "metrics": {
+            "counts": {
+              "TP": 16,
+              "FP": 1,
+              "FN": 9,
+              "TN": 46
+            },
+            "n": 72,
+            "TPR": {
+              "numerator": 16,
+              "denominator": 25,
+              "percentage": 64.0
+            },
+            "TNR": {
+              "numerator": 46,
+              "denominator": 47,
+              "percentage": 97.87
+            },
+            "precision": {
+              "numerator": 16,
+              "denominator": 17,
+              "percentage": 94.12
+            },
+            "accuracy": {
+              "numerator": 62,
+              "denominator": 72,
+              "percentage": 86.11
+            }
+          },
+          "by_rule": {
+            "3-5": {
+              "counts": {
+                "TP": 16,
+                "FP": 1,
+                "FN": 5,
+                "TN": 42
+              },
+              "n": 64,
+              "TPR": {
+                "numerator": 16,
+                "denominator": 21,
+                "percentage": 76.19
+              },
+              "TNR": {
+                "numerator": 42,
+                "denominator": 43,
+                "percentage": 97.67
+              },
+              "precision": {
+                "numerator": 16,
+                "denominator": 17,
+                "percentage": 94.12
+              },
+              "accuracy": {
+                "numerator": 58,
+                "denominator": 64,
+                "percentage": 90.62
+              }
+            },
+            "4-1": {
+              "counts": {
+                "TP": 0,
+                "FP": 0,
+                "FN": 4,
+                "TN": 4
+              },
+              "n": 8,
+              "TPR": {
+                "numerator": 0,
+                "denominator": 4,
+                "percentage": 0.0
+              },
+              "TNR": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 0,
+                "denominator": 0,
+                "percentage": null
+              },
+              "accuracy": {
+                "numerator": 4,
+                "denominator": 8,
+                "percentage": 50.0
+              }
+            }
+          },
+          "disagreements": [
+            {
+              "case": "case-01",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급은 기본 부하 제어 설계와 대표적인 요청 집중의 개선을 요구한다.",
+              "reason": "0점의 부하 문제 미고려, 1점의 증분 탐지·실행량 제한 제안, 2점의 구성요소 역할과 대기 변경 처리 흐름이 중급 수준에 맞게 구분된다. 3점은 '여러 기기가 동시에 재연결'하는 상황에 요청 시점 분산이나 유입 속도 조절을 제시하도록 하여 대표적인 문제 해결 범위에 해당한다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "고급은 구체적인 확장·복구 메커니즘과 확장 한계 및 선택 근거를 요구한다.",
+              "reason": "0점의 확장 문제 미고려에서 1점의 증분 조회·알림 기반 설계, 2점의 감시 부하 집계·분산과 추적 상태 만료 후 복구로 요구 역량이 높아진다. 3점은 '부하 편중이나 재열거 집중'을 분석하고 집계·분산 단위가 연결 수·불필요한 조회·상태 관리 복잡도에 미치는 절충과 선택 근거를 요구한다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "비교 가능한 문제에서 고급이 더 깊은 메커니즘·대응 범위·설계 판단을 요구해야 한다.",
+              "reason": "중급의 부분 전송 재사용과 대표적인 응답 유실 개선에 비해 고급은 재개 상태 만료·무효 복구 및 복구 단위·확인 빈도의 비용 비교까지 요구한다. 변경 탐지와 부하 제어도 고급에서는 감시 부하 분산·추적 상태 복구·자원 병목 분석·관측 기반 조정으로 확장되어, 표현의 차이가 아닌 실질적인 역량 차이가 있다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C1",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 기본 구성과 처리 흐름을 설명하고, 최고점에서 대표적 한계와 개선을 제시해야 한다.",
+              "reason": "2점은 보존 담당 구성요소와 기록·응답, 재시도 및 이력 기반 복구의 기본 흐름을 요구한다. 3점의 '기록 완료 확인이 전달 대기를 늘리는' 한계와 개선도 복잡한 장애 분석이나 기술적 절충 판단까지 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 핵심 요구를 충족하는 기본 흐름과 대표적인 문제의 개선을 요구해야 한다.",
+              "reason": "2점은 채널 순서 결정 역할과 요청·메시지 식별에 따른 중복 없는 반영 흐름을 요구하며, 복잡한 동시성 제어까지 필수로 삼지 않는다. 3점의 '이력 조회 중 실시간 메시지가 도착'하는 문제와 조회 경계 조정은 해당 설계의 대표적 한계와 개선에 해당한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "상급 연차는 기본 전달 경로에 이어 병목 대응 메커니즘과 구체적인 절충 판단을 요구해야 한다.",
+              "reason": "1점은 실시간 전달 경로와 기본 지연 완화 방안을, 2점은 큐 적체·전송 대기를 줄이거나 격리하는 구체적 메커니즘을 요구한다. 3점은 부하 쏠림·느린 수신자에서의 한계를 분석하고 대기 감소와 자원 사용·처리 효율 사이의 절충 및 개선 근거를 설명하도록 한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "동일한 설계 문제에서 상급 연차가 더 깊은 메커니즘, 문제 대응과 설계 판단을 요구해야 한다.",
+              "reason": "중간 연차는 구성요소·기본 흐름과 대표적 한계 개선을 중심으로 하지만, 상급 연차는 영속화 확인, 동시 재시도, 꼬리 지연 격리, 구독 상태 이동의 구체적 대응을 요구한다. 또한 상급 연차의 3점은 응답 대기·상태 유지·자원 사용·이동 비용 등의 절충과 선택 근거를 요구하여 실질적인 기술적 깊이 차이가 있다."
+            },
+            {
+              "case": "case-04",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Pass",
+              "verdict": "Fail",
+              "applied_rule": "시니어 1점도 핵심 요구사항을 충족하는 요청 보존·재처리의 기본 설계를 요구해야 한다.",
+              "reason": "1점의 ‘큐를 통한 요청 보관과 처리 흐름’에는 내구성 있는 보관이나 미완료 요청의 장애 후 재처리라는 기본 흐름이 필수로 명시되지 않았다. 접수 완료 요청의 유실 방지와 장애 후 재처리가 핵심 요구사항이므로, 이 기본 설계 없이도 1점이 가능해 부적합하다."
+            },
+            {
+              "case": "case-06",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "동일한 설계 문제에서 고급이 더 깊은 처리 원리, 문제 대응 범위와 설계 판단을 요구해야 한다.",
+              "reason": "중급의 구독 전달·종료 구독 정리에 비해 고급은 동일 센서 연결의 서버 간 분산과 느린 연결의 격리를 요구한다. 복구에서도 중급의 현재값 재조회보다 고급의 갱신 번호 기반 누락 복구와 이력 보관 비용 비교가 깊어, 일부 단계의 부적합과 별개로 연차 간 실질적인 역량 차이는 존재한다."
+            },
+            {
+              "case": "case-07",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "두 연차는 용어나 설명량이 아니라 기술적 깊이와 설계 판단에서 실질적으로 달라야 한다.",
+              "reason": "C1은 Middle의 '충돌을 알리는 개선'에서 Senior의 조건부 쓰기와 유실 위험·지연·비용 비교로, C4는 기본 분산에서 키별 분할·역압과 선택 근거 분석으로 깊어진다. C2의 연차 역전은 있으나, 두 문서 전체의 차이가 용어나 설명량에만 머무르지는 않는다."
+            }
+          ]
+        },
+        {
+          "repeat": 3,
+          "model_calls": 8,
+          "item_assessments_available": true,
+          "metrics": {
+            "counts": {
+              "TP": 14,
+              "FP": 1,
+              "FN": 11,
+              "TN": 46
+            },
+            "n": 72,
+            "TPR": {
+              "numerator": 14,
+              "denominator": 25,
+              "percentage": 56.0
+            },
+            "TNR": {
+              "numerator": 46,
+              "denominator": 47,
+              "percentage": 97.87
+            },
+            "precision": {
+              "numerator": 14,
+              "denominator": 15,
+              "percentage": 93.33
+            },
+            "accuracy": {
+              "numerator": 60,
+              "denominator": 72,
+              "percentage": 83.33
+            }
+          },
+          "by_rule": {
+            "3-5": {
+              "counts": {
+                "TP": 14,
+                "FP": 1,
+                "FN": 7,
+                "TN": 42
+              },
+              "n": 64,
+              "TPR": {
+                "numerator": 14,
+                "denominator": 21,
+                "percentage": 66.67
+              },
+              "TNR": {
+                "numerator": 42,
+                "denominator": 43,
+                "percentage": 97.67
+              },
+              "precision": {
+                "numerator": 14,
+                "denominator": 15,
+                "percentage": 93.33
+              },
+              "accuracy": {
+                "numerator": 56,
+                "denominator": 64,
+                "percentage": 87.5
+              }
+            },
+            "4-1": {
+              "counts": {
+                "TP": 0,
+                "FP": 0,
+                "FN": 4,
+                "TN": 4
+              },
+              "n": 8,
+              "TPR": {
+                "numerator": 0,
+                "denominator": 4,
+                "percentage": 0.0
+              },
+              "TNR": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 0,
+                "denominator": 0,
+                "percentage": null
+              },
+              "accuracy": {
+                "numerator": 4,
+                "denominator": 8,
+                "percentage": 50.0
+              }
+            }
+          },
+          "disagreements": [
+            {
+              "case": "case-01",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급은 기본 부하 제어 설계와 대표적 요청 집중 문제의 개선을 요구한다.",
+              "reason": "2점은 '전체 스캔 의존을 줄이는 변경 탐지 흐름'과 구성요소의 역할, 실행량·재시도·임시 데이터의 기본 제어를 요구한다. 3점은 동시 재연결로 인한 요청 집중에 시점 분산이나 유입 조절을 제시하는 수준으로, 심층 병목 분석이나 복잡한 제어 메커니즘까지 요구하지 않는다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "시니어는 구체적인 확장·복구 메커니즘과 확장 한계, 절충 및 선택 근거를 요구한다.",
+              "reason": "1점의 증분 조회·알림 기본 설계에서 2점의 감시 부하 집계·분산과 '추적 상태 만료 시 누락 없이' 기준 상태 및 후속 추적을 복구하는 메커니즘으로 심화된다. 3점은 부하 편중·재열거 집중을 분석하고 집계·분산 단위에 따른 연결 수, 불필요한 조회, 상태 관리 복잡도의 절충과 선택 근거를 요구한다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "동일하거나 비교 가능한 문제에서 시니어가 더 깊은 메커니즘·문제 대응·설계 판단을 요구해야 한다.",
+              "reason": "중급의 전송 재개는 유효 상태에서 완료 부분 재사용과 응답 유실 개선까지지만, 시니어는 만료·무효 상태 복구와 복구 단위·확인 빈도의 비용 및 선택 근거까지 요구한다. 변경 탐지·부하 제어도 중급의 기본 흐름과 요청 분산에서 시니어의 감시 구조 확장, 추적 상태 복구, 자원 병목 분석과 조정으로 심화되어 실질적 역량 차이가 있다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C1",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 기본 보존·복구 흐름과 대표적인 한계의 개선을 요구해야 한다.",
+              "reason": "1점은 저장·재시도의 방향 제시, 2점은 '보존을 담당하는 구성요소와 기록·응답 흐름' 및 이력 기반 복구를 요구하여 기본 설계 수준에 부합한다. 3점도 기록 확인에 따른 대기라는 대표적 한계와 개선을 요구할 뿐, 복잡한 장애 복구 분석이나 선택 간 절충을 필수로 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 순서·중복 처리의 기본 흐름과 대표적인 병합 문제의 개선을 요구해야 한다.",
+              "reason": "2점의 '채널별 확정 순서를 정하는 역할과 기준' 및 식별값을 이용한 중복 없는 반영은 핵심 요구를 충족하는 기본 설계에 해당한다. 3점의 '이력 조회 중 실시간 메시지가 도착'하는 경계 문제와 조회 경계 조정·재정렬은 대표적 한계의 개선이며, 복잡한 동시성 제어 분석까지 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 작업 분산의 기본 구조와 대표적인 확장 한계의 개선을 요구해야 한다.",
+              "reason": "2점은 '분할 기준, 구성요소의 역할과 전달 흐름'을 요구하고 순서·복구는 기존 경로의 유지 여부만 확인하므로 복잡한 재구성 처리를 필수화하지 않는다. 3점의 중계 병목·구독 상태 복제와 '개선과 그에 따른 부담'은 대표적 한계와 개선의 영향을 설명하는 수준이며, 대안 간 절충 비교와 선택 근거까지 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "상위 연차는 기본 순서·식별 설계에서 동시성 대응과 상태·처리 효율의 절충 분석으로 심화되어야 한다.",
+              "reason": "1점은 '메시지 식별과 채널 정렬을 이용하는 기본 설계'를 요구하고, 2점은 중복 저장·표시 방지 메커니즘과 재전달·역순 도착·이력 중첩의 처리 흐름을 요구한다. 3점은 복잡한 재시도·재접속 경계의 한계를 분석하고 상태 유지 부담이나 순서 확정 대기와 처리 효율의 절충 및 선택 근거를 제시하도록 한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "상위 연차는 기본 전달 경로에서 병목 대응 메커니즘과 지연·자원 비용의 절충 분석으로 심화되어야 한다.",
+              "reason": "1점은 '실시간 전달 경로와 지연을 줄이는 기본 방안'을 요구하며, 2점은 부하별 큐 적체·전송 대기를 짚고 이를 줄이거나 격리하는 구체적 메커니즘을 요구한다. 3점은 부하 쏠림·느린 수신자에서의 한계와 대기 감소에 따른 자원 사용·처리 효율의 절충을 분석하고 개선 근거를 제시하도록 한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "동일 설계 문제에서 상위 연차가 더 깊은 처리 메커니즘, 문제 대응 범위와 선택 판단을 요구해야 한다.",
+              "reason": "중간 연차는 기본 흐름과 대표적 한계의 개선을 중심으로 하지만, 상위 연차는 역순 도착·중복 저장 방지 메커니즘, 부하별 꼬리 지연 대응, 자원 추가 시 구독 상태 이동·작업 재배치까지 요구한다. 또한 영속화 대기와 응답 시간, 작업 균형·조정 부담·이동 비용의 절충 및 선택 근거를 필수화하므로 실질적인 역량 차이가 있다."
+            },
+            {
+              "case": "case-04",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Pass",
+              "verdict": "Fail",
+              "applied_rule": "고급 1점도 핵심 요구사항을 충족하는 기본 설계를 요구해야 하며, 필수 설명 누락은 실패로 판단한다.",
+              "reason": "1점은 '큐를 통한 요청 보관과 처리 흐름'만 요구하고 접수 시 보존 여부와 장애 후 복구 방안은 구체화하지 않아도 충족된다. 내구성 있는 보관과 미완료 요청의 재처리라는 핵심 기본 설계가 명시되지 않아 고급 1점 기준에 미달한다."
+            },
+            {
+              "case": "case-06",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "같은 설계 문제에서 고급이 더 깊은 처리 메커니즘, 문제 대응 범위와 설계 판단을 요구하는지 비교한다.",
+              "reason": "중급의 '재조회 후 실시간 수신'과 달리 고급은 기준 갱신 번호로 복구 경계의 누락을 막고, 보관 기간·스냅샷 주기의 비용과 지연을 비교하도록 요구하며 전달에서도 서버 분산과 느린 연결 격리를 추가한다. C1의 난도 역전과 일부 고급 단계의 추상성은 있지만, 두 문서가 요구하는 역량 차이는 기술 용어나 설명 길이의 차이에 그치지 않는다."
+            },
+            {
+              "case": "case-07",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "동일한 설계 문제에서 시니어가 실질적으로 더 깊은 처리 기제와 설계 판단을 요구해야 한다.",
+              "reason": "초안 저장에서 중급은 충돌 안내를, 시니어는 버전 기반 조건부 쓰기와 유실 위험·비용의 상충 판단을 요구한다. 부하 확장에서도 기본 분산·저장 주기 개선과 달리 시니어는 작업 분할·역압·수용 임계값 선택을 요구하므로, 일부 항목의 연차 부적합과 별개로 두 문서의 역량 차이는 실질적이다."
+            }
+          ]
+        }
+      ],
+      "pooled": {
+        "counts": {
+          "TP": 44,
+          "FP": 2,
+          "FN": 31,
+          "TN": 139
+        },
+        "n": 216,
+        "TPR": {
+          "numerator": 44,
+          "denominator": 75,
+          "percentage": 58.67
+        },
+        "TNR": {
+          "numerator": 139,
+          "denominator": 141,
+          "percentage": 98.58
+        },
+        "precision": {
+          "numerator": 44,
+          "denominator": 46,
+          "percentage": 95.65
+        },
+        "accuracy": {
+          "numerator": 183,
+          "denominator": 216,
+          "percentage": 84.72
+        }
+      },
+      "pooled_by_rule": {
+        "3-5": {
+          "counts": {
+            "TP": 44,
+            "FP": 2,
+            "FN": 19,
+            "TN": 127
+          },
+          "n": 192,
+          "TPR": {
+            "numerator": 44,
+            "denominator": 63,
+            "percentage": 69.84
+          },
+          "TNR": {
+            "numerator": 127,
+            "denominator": 129,
+            "percentage": 98.45
+          },
+          "precision": {
+            "numerator": 44,
+            "denominator": 46,
+            "percentage": 95.65
+          },
+          "accuracy": {
+            "numerator": 171,
+            "denominator": 192,
+            "percentage": 89.06
+          }
+        },
+        "4-1": {
+          "counts": {
+            "TP": 0,
+            "FP": 0,
+            "FN": 12,
+            "TN": 12
+          },
+          "n": 24,
+          "TPR": {
+            "numerator": 0,
+            "denominator": 12,
+            "percentage": 0.0
+          },
+          "TNR": {
+            "numerator": 12,
+            "denominator": 12,
+            "percentage": 100.0
+          },
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "percentage": null
+          },
+          "accuracy": {
+            "numerator": 12,
+            "denominator": 24,
+            "percentage": 50.0
+          }
+        }
+      }
+    },
+    "round2": {
+      "criteria": "git:6afe893:docs/evaluator/experiments/evaluator/rubric-criteria-round2/evaluation-criteria.md",
+      "evaluated_sections_sha256": "8b778245d46ab99592aef584cecd00cfb85063eff1daa4b93ba61edfd996dd9d",
+      "runs": [
+        {
+          "repeat": 1,
+          "model_calls": 8,
+          "source": "직전 완료된 40회 실제 실행 출력의 집계. 원시 기록은 당시 사용자 요청에 따라 삭제됨.",
+          "item_assessments_available": false,
+          "metrics": {
+            "counts": {
+              "TP": 16,
+              "FP": 0,
+              "FN": 9,
+              "TN": 47
+            },
+            "n": 72,
+            "TPR": {
+              "numerator": 16,
+              "denominator": 25,
+              "percentage": 64.0
+            },
+            "TNR": {
+              "numerator": 47,
+              "denominator": 47,
+              "percentage": 100.0
+            },
+            "precision": {
+              "numerator": 16,
+              "denominator": 16,
+              "percentage": 100.0
+            },
+            "accuracy": {
+              "numerator": 63,
+              "denominator": 72,
+              "percentage": 87.5
+            }
+          },
+          "by_rule": {
+            "3-5": {
+              "counts": {
+                "TP": 14,
+                "FP": 0,
+                "FN": 7,
+                "TN": 43
+              },
+              "n": 64,
+              "TPR": {
+                "numerator": 14,
+                "denominator": 21,
+                "percentage": 66.67
+              },
+              "TNR": {
+                "numerator": 43,
+                "denominator": 43,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 14,
+                "denominator": 14,
+                "percentage": 100.0
+              },
+              "accuracy": {
+                "numerator": 57,
+                "denominator": 64,
+                "percentage": 89.06
+              }
+            },
+            "4-1": {
+              "counts": {
+                "TP": 2,
+                "FP": 0,
+                "FN": 2,
+                "TN": 4
+              },
+              "n": 8,
+              "TPR": {
+                "numerator": 2,
+                "denominator": 4,
+                "percentage": 50.0
+              },
+              "TNR": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 2,
+                "denominator": 2,
+                "percentage": 100.0
+              },
+              "accuracy": {
+                "numerator": 6,
+                "denominator": 8,
+                "percentage": 75.0
+              }
+            }
+          }
+        },
+        {
+          "repeat": 2,
+          "model_calls": 8,
+          "item_assessments_available": true,
+          "metrics": {
+            "counts": {
+              "TP": 15,
+              "FP": 0,
+              "FN": 10,
+              "TN": 47
+            },
+            "n": 72,
+            "TPR": {
+              "numerator": 15,
+              "denominator": 25,
+              "percentage": 60.0
+            },
+            "TNR": {
+              "numerator": 47,
+              "denominator": 47,
+              "percentage": 100.0
+            },
+            "precision": {
+              "numerator": 15,
+              "denominator": 15,
+              "percentage": 100.0
+            },
+            "accuracy": {
+              "numerator": 62,
+              "denominator": 72,
+              "percentage": 86.11
+            }
+          },
+          "by_rule": {
+            "3-5": {
+              "counts": {
+                "TP": 13,
+                "FP": 0,
+                "FN": 8,
+                "TN": 43
+              },
+              "n": 64,
+              "TPR": {
+                "numerator": 13,
+                "denominator": 21,
+                "percentage": 61.9
+              },
+              "TNR": {
+                "numerator": 43,
+                "denominator": 43,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 13,
+                "denominator": 13,
+                "percentage": 100.0
+              },
+              "accuracy": {
+                "numerator": 56,
+                "denominator": 64,
+                "percentage": 87.5
+              }
+            },
+            "4-1": {
+              "counts": {
+                "TP": 2,
+                "FP": 0,
+                "FN": 2,
+                "TN": 4
+              },
+              "n": 8,
+              "TPR": {
+                "numerator": 2,
+                "denominator": 4,
+                "percentage": 50.0
+              },
+              "TNR": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 2,
+                "denominator": 2,
+                "percentage": 100.0
+              },
+              "accuracy": {
+                "numerator": 6,
+                "denominator": 8,
+                "percentage": 75.0
+              }
+            }
+          },
+          "disagreements": [
+            {
+              "case": "case-01",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 기본 부하 제어 설계와 대표적 적체 문제의 개선 수준에 맞아야 한다.",
+              "reason": "1점은 증분 탐지나 실행량 제한의 기본 방향을, 2점은 변경 탐지의 역할과 실행량·재시도·임시 데이터 증가를 제어하는 기본 설계를 요구한다. 3점의 ‘여러 기기가 동시에 재연결’하는 문제와 요청 시점 분산·유입 속도 조절은 대표적 한계와 개선에 해당하며, 심층적인 자원 분석을 강제하지 않는다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "상급 연차는 구체적 확장 메커니즘과 주요 문제 대응, 확장 한계와 선택 근거를 요구해야 한다.",
+              "reason": "1점의 증분 조회·알림 기반 설계에서 2점의 감시 부하 집계·분산, 알림과 조회의 역할 구분, 추적 상태 만료 후 복구로 심화된다. 3점은 부하 편중·재열거 집중을 분석하고, 집계·분산 단위가 연결 수·불필요한 조회·상태 관리 복잡도에 주는 절충과 선택 근거를 요구한다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "대응하는 핵심 설계 문제마다 상급 연차의 처리 메커니즘, 문제 대응 또는 설계 판단이 실질적으로 심화되어야 한다.",
+              "reason": "중간 연차 C1·C3에 대응하는 상급 연차 C1은 공개 제어·실패 처리 메커니즘과 공개·조정 경계의 정합성·비용 비교를 추가하고, C2는 재개 상태 만료 복구와 복구 단위·확인 빈도의 비용 비교 및 선택 근거를 추가한다. 중간 연차 C4에 대응하는 상급 연차 C3·C4는 추적 만료 후 기준 상태 복구, 감시 집계·분산의 절충, 자원별 병목 분석과 관측 기반 병렬성 조정을 요구하여 핵심 문제별 실질적 차이가 확인된다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C1",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 문제 인식에서 기본 설계, 대표적 한계와 개선으로 발전해야 한다.",
+              "reason": "0점은 보존·복구 미고려, 1점은 저장·재시도 제안, 2점은 보존 구성요소와 기록·응답 및 이력 복구의 기본 흐름을 요구한다. 3점의 '기록 완료 확인이 전달 대기를 늘리는' 한계와 개선은 대표적 문제 해결 수준이며, 복잡한 장애 복구 메커니즘까지 필수로 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 핵심 요구를 충족하는 기본 흐름과 대표적 문제의 개선을 요구해야 한다.",
+              "reason": "1점은 정렬·중복 제거 제안에 머물고, 2점은 '채널별 확정 순서를 정하는 역할과 기준' 및 식별값을 이용한 기본 병합 흐름을 요구한다. 3점의 조회 중 실시간 도착 문제와 조회 경계 조정·재정렬은 대표적 한계의 개선이며, 복잡한 동시성 제어를 필수로 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 기본 분산 구조와 대표적 병목 개선까지 요구하되 복잡한 선택 분석은 필수로 요구하지 않아야 한다.",
+              "reason": "1점은 서버 추가·채널 분할 제안이고, 2점은 단일 대규모 채널까지 포함한 분할 기준과 구성요소·전달 흐름을 설명하는 기본 설계다. 3점의 '개선과 그에 따른 부담'은 대표적 병목 개선의 영향을 설명하는 수준이며, 대안별 절충 비교나 선택 근거 분석까지 필수로 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "고급 연차는 구체적 중복·순서 처리와 주요 경계 문제 대응, 선택 비용과 근거를 요구해야 한다.",
+              "reason": "1점은 메시지 식별·채널 정렬의 기본 설계이고, 2점은 식별 범위와 중복 저장·표시 방지 메커니즘 및 '재전달·역순 도착·이력과 실시간 수신의 겹침' 처리를 요구한다. 3점은 경계 상황의 한계뿐 아니라 식별·순서 상태 유지 부담이나 순서 확정 대기와 처리 효율의 절충 및 선택 근거까지 요구한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "고급 연차는 단계별 지연 메커니즘과 병목 대응, 개선의 한계 및 비용을 요구해야 한다.",
+              "reason": "1점은 실시간 전달 경로의 기본 설계이며, 2점은 접수 응답과 수신자 관찰을 구분하고 정상·대규모 부하의 꼬리 지연 원인과 구체적 완화·격리 메커니즘을 요구한다. 3점은 부하 쏠림·느린 수신자 상황의 한계와 '대기 감소와 자원 사용·처리 효율 사이 절충'을 개선 근거와 함께 설명하도록 한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "고급 연차는 구체적 확장 메커니즘과 상태 이동 병목 대응, 분산 선택의 절충과 근거를 요구해야 한다.",
+              "reason": "1점은 채널·연결 분산의 기본 설계이고, 2점은 단일 대규모 채널의 작업 분산 메커니즘과 구독 상태 복제·이동 및 작업 재배치 병목 대응을 요구한다. 3점은 남는 집중 지점과 상태 비용의 한계를 분석하고 '작업 균형·조정 부담·이동 비용의 절충'을 비교하여 선택 근거를 설명하도록 한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "대응되는 모든 핵심 평가 항목에서 고급 연차의 처리 메커니즘·문제 대응·선택 판단이 실질적으로 깊어야 한다.",
+              "reason": "C1은 중간 연차의 기록·응답 및 누락 복구 흐름에서 고급 연차의 저장·전달 사이 장애 대응과 영속화 대기 절충·선택 근거로, C2는 식별·기본 병합에서 식별 범위·역순 도착 처리와 상태 유지 비용·순서 확정 대기의 절충 판단으로 심화된다. C3도 대표적 대기 분리에서 부하별 꼬리 지연 메커니즘과 자원·처리 효율 판단으로, C4도 기본 작업 분산과 대표적 병목 개선에서 자원 추가 시 상태 복제·이동·재배치 대응 및 작업 균형·조정 부담·이동 비용의 비교와 선택 근거로 확장된다."
+            }
+          ]
+        },
+        {
+          "repeat": 3,
+          "model_calls": 8,
+          "item_assessments_available": true,
+          "metrics": {
+            "counts": {
+              "TP": 15,
+              "FP": 1,
+              "FN": 10,
+              "TN": 46
+            },
+            "n": 72,
+            "TPR": {
+              "numerator": 15,
+              "denominator": 25,
+              "percentage": 60.0
+            },
+            "TNR": {
+              "numerator": 46,
+              "denominator": 47,
+              "percentage": 97.87
+            },
+            "precision": {
+              "numerator": 15,
+              "denominator": 16,
+              "percentage": 93.75
+            },
+            "accuracy": {
+              "numerator": 61,
+              "denominator": 72,
+              "percentage": 84.72
+            }
+          },
+          "by_rule": {
+            "3-5": {
+              "counts": {
+                "TP": 13,
+                "FP": 1,
+                "FN": 8,
+                "TN": 42
+              },
+              "n": 64,
+              "TPR": {
+                "numerator": 13,
+                "denominator": 21,
+                "percentage": 61.9
+              },
+              "TNR": {
+                "numerator": 42,
+                "denominator": 43,
+                "percentage": 97.67
+              },
+              "precision": {
+                "numerator": 13,
+                "denominator": 14,
+                "percentage": 92.86
+              },
+              "accuracy": {
+                "numerator": 55,
+                "denominator": 64,
+                "percentage": 85.94
+              }
+            },
+            "4-1": {
+              "counts": {
+                "TP": 2,
+                "FP": 0,
+                "FN": 2,
+                "TN": 4
+              },
+              "n": 8,
+              "TPR": {
+                "numerator": 2,
+                "denominator": 4,
+                "percentage": 50.0
+              },
+              "TNR": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 2,
+                "denominator": 2,
+                "percentage": 100.0
+              },
+              "accuracy": {
+                "numerator": 6,
+                "denominator": 8,
+                "percentage": 75.0
+              }
+            }
+          },
+          "disagreements": [
+            {
+              "case": "case-01",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급은 기본 부하 제어 설계와 대표적인 적체 문제의 개선을 요구하되 심층적인 제어 기법은 필수로 삼지 않아야 한다.",
+              "reason": "1점의 증분 탐지·실행량 제한 제안에서 2점의 구성요소 역할, 변경 탐지, 재시도·임시 데이터 제어와 대기 작업 처리 흐름으로 발전한다. 3점은 '여러 기기가 동시에 재연결'할 때의 요청 집중에 대해 시점 분산이나 유입 조절을 제시하도록 하므로 대표적인 문제와 개선 수준에 해당한다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C1",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "시니어는 기본 설계에서 실패·동시성 대응으로 심화하고, 최상위 단계에서 한계와 기술적 선택의 근거를 설명해야 한다.",
+              "reason": "1점은 내용 저장 후 공개와 충돌 처리의 기본 설계를 요구하며, 2점은 '버전 공개를 제어하는 메커니즘과 실패 시 처리' 및 수정·삭제 충돌 조정과 수렴을 구체화한다. 3점은 오래된 변경의 재도착에 따른 정책 한계를 분석하고, 선택한 공개·조정 경계의 정합성과 처리 비용을 비교하도록 하여 경계 선택을 뒷받침하는 구체적인 설계 판단을 요구한다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "시니어는 구체적인 확장 메커니즘과 상태 복구를 설명하고, 확장 한계와 분산 선택의 근거를 분석해야 한다.",
+              "reason": "1점의 증분 조회·알림 기반 설계에서 2점의 감시 연결 집계·분산, 알림과 실제 조회의 역할 구분, 추적 상태 만료 후 누락 없는 복구로 심화한다. 3점은 '부하 편중이나 재열거 집중'을 분석하고 집계·분산 단위가 연결 수, 불필요한 조회, 상태 관리 복잡도에 주는 절충과 선택 근거를 요구한다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "대응하는 핵심 설계 문제마다 시니어가 구체적인 메커니즘, 문제 대응 및 기술적 선택 판단을 추가로 요구해야 한다.",
+              "reason": "중급 C1·C3에 대응하는 시니어 C1은 공개 제어·실패 처리와 공개·조정 경계의 정합성·처리 비용 비교를, 중급 C2에 대응하는 시니어 C2는 만료·무효 상태 복구와 복구 단위·확인 빈도의 비용 및 선택 근거를 추가로 요구한다. 중급 C4의 기본 탐지·부하 제어에 대응하는 시니어 C3·C4는 감시 집계·분산과 추적 만료 복구, 자원별 병목 분석, 관측 기반 조정 및 비용 절충을 요구하므로 핵심 문제별로 실질적인 역량 차이가 있다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C1",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 기본 보존·복구 흐름과 대표적 한계의 개선을 요구한다.",
+              "reason": "1점은 저장·재시도·이력 조회의 제안, 2점은 '보존을 담당하는 구성요소와 기록·응답 흐름' 및 기본적인 재확인·누락 복구를 요구한다. 3점도 기록 완료 확인에 따른 대기라는 대표적 한계와 개선에 머물며, 복잡한 장애 복구 절차나 선택지 비교를 필수로 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 순서·중복 처리의 기본 흐름과 대표적 병합 문제의 개선을 요구한다.",
+              "reason": "2점의 '채널별 확정 순서를 정하는 역할과 기준' 및 식별값을 이용한 중복 없는 병합은 핵심 요구를 충족하는 기본 설계 수준이다. 3점은 이력 조회 중 실시간 메시지가 도착하는 대표적 경계 문제와 조회 경계 조정·재정렬을 요구하지만, 구체적인 동시성 제어 절차나 복잡한 장애 분석까지 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 작업 분산의 기본 구조와 대표적 병목의 개선을 요구한다.",
+              "reason": "2점은 단일 대규모 채널을 포함한 분할 기준·구성요소 역할·전달 흐름을 요구하며, 순서·복구는 기존 경로의 유지 여부만 확인한다. 3점의 '분산 단위나 상태 배치를 조정하는 개선과 그에 따른 부담'은 대표적 병목과 개선 영향을 설명하는 범위이며, 복잡한 상태 이동 절차나 대안별 절충 비교·선택 근거까지 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "상급 연차는 중복·순서 처리 메커니즘과 경계 상황의 한계·비용·선택 근거를 요구한다.",
+              "reason": "1점의 메시지 식별·채널 정렬 기본 설계에서, 2점은 식별 범위와 중복 저장·표시 방지 메커니즘 및 재전달·역순 도착·조회 중첩 처리를 요구한다. 3점은 재시도·재접속 경계의 한계에 더해 '식별·순서 상태의 유지 부담이나 순서 확정 대기와 처리 효율 사이의 절충'과 선택 근거를 요구하여 추상적인 분석에 그치지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "상급 연차는 단계별 지연 원인·대응 메커니즘과 개선 비용의 판단을 요구한다.",
+              "reason": "1점은 실시간 전달 경로와 기본 개선안을, 2점은 접수 응답·수신자 관찰의 구분과 부하별 큐 적체·전송 대기의 구체적 완화·격리 메커니즘을 요구한다. 3점은 부하 쏠림·느린 수신자 상황의 한계와 '대기 감소와 자원 사용·처리 효율 사이 절충'을 분석하고 전체 전달 경로를 근거로 개선을 설명하도록 한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "대응하는 핵심 항목별로 상급 연차의 처리 깊이·문제 대응·선택 판단이 실질적으로 높아야 한다.",
+              "reason": "동일 번호끼리 대응하면, 중간 연차의 기본 흐름·대표 문제 개선에 비해 상급 연차는 C1에서 저장·전달 사이 장애와 영속화 대기 절충을, C2에서 식별 범위·역순 도착 처리와 상태 유지 비용·순서 확정 대기의 선택 근거를 추가로 요구한다. C3도 부하별 꼬리 지연의 구체적 격리와 자원·효율 절충으로, C4도 자원 추가 시 상태 복제·이동 및 작업 재배치 대응과 작업 균형·조정 부담·이동 비용의 비교·선택 근거로 심화되어 높은 점수의 요구 역량이 구분된다."
+            },
+            {
+              "case": "case-04",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Pass",
+              "verdict": "Fail",
+              "applied_rule": "고급 1점도 핵심 요구사항을 충족하는 기본 설계를 필수로 요구해야 한다.",
+              "reason": "1점의 ‘큐를 통한 요청 보관과 처리 흐름’에는 내구성 있는 보관과 장애 후 미완료 요청을 다시 처리하는 기본 경로가 필수로 명시되지 않는다. 접수 성공 시점의 보존 여부와 장애 후 복구를 설명하지 않아도 충족되므로, 요청 보존·재처리라는 핵심 요구사항을 만족하는 기본 설계가 보장되지 않는다."
+            }
+          ]
+        }
+      ],
+      "pooled": {
+        "counts": {
+          "TP": 46,
+          "FP": 1,
+          "FN": 29,
+          "TN": 140
+        },
+        "n": 216,
+        "TPR": {
+          "numerator": 46,
+          "denominator": 75,
+          "percentage": 61.33
+        },
+        "TNR": {
+          "numerator": 140,
+          "denominator": 141,
+          "percentage": 99.29
+        },
+        "precision": {
+          "numerator": 46,
+          "denominator": 47,
+          "percentage": 97.87
+        },
+        "accuracy": {
+          "numerator": 186,
+          "denominator": 216,
+          "percentage": 86.11
+        }
+      },
+      "pooled_by_rule": {
+        "3-5": {
+          "counts": {
+            "TP": 40,
+            "FP": 1,
+            "FN": 23,
+            "TN": 128
+          },
+          "n": 192,
+          "TPR": {
+            "numerator": 40,
+            "denominator": 63,
+            "percentage": 63.49
+          },
+          "TNR": {
+            "numerator": 128,
+            "denominator": 129,
+            "percentage": 99.22
+          },
+          "precision": {
+            "numerator": 40,
+            "denominator": 41,
+            "percentage": 97.56
+          },
+          "accuracy": {
+            "numerator": 168,
+            "denominator": 192,
+            "percentage": 87.5
+          }
+        },
+        "4-1": {
+          "counts": {
+            "TP": 6,
+            "FP": 0,
+            "FN": 6,
+            "TN": 12
+          },
+          "n": 24,
+          "TPR": {
+            "numerator": 6,
+            "denominator": 12,
+            "percentage": 50.0
+          },
+          "TNR": {
+            "numerator": 12,
+            "denominator": 12,
+            "percentage": 100.0
+          },
+          "precision": {
+            "numerator": 6,
+            "denominator": 6,
+            "percentage": 100.0
+          },
+          "accuracy": {
+            "numerator": 18,
+            "denominator": 24,
+            "percentage": 75.0
+          }
+        }
+      }
+    },
+    "round3": {
+      "criteria": "git:6afe893:docs/evaluator/experiments/evaluator/rubric-criteria-round3/evaluation-criteria.md",
+      "evaluated_sections_sha256": "050e0cf63519fb8c21830072ea8034de6374d6518edb8dae96c9728d90e05439",
+      "runs": [
+        {
+          "repeat": 1,
+          "model_calls": 8,
+          "source": "직전 완료된 40회 실제 실행 출력의 집계. 원시 기록은 당시 사용자 요청에 따라 삭제됨.",
+          "item_assessments_available": false,
+          "metrics": {
+            "counts": {
+              "TP": 16,
+              "FP": 2,
+              "FN": 9,
+              "TN": 45
+            },
+            "n": 72,
+            "TPR": {
+              "numerator": 16,
+              "denominator": 25,
+              "percentage": 64.0
+            },
+            "TNR": {
+              "numerator": 45,
+              "denominator": 47,
+              "percentage": 95.74
+            },
+            "precision": {
+              "numerator": 16,
+              "denominator": 18,
+              "percentage": 88.89
+            },
+            "accuracy": {
+              "numerator": 61,
+              "denominator": 72,
+              "percentage": 84.72
+            }
+          },
+          "by_rule": {
+            "3-5": {
+              "counts": {
+                "TP": 13,
+                "FP": 2,
+                "FN": 8,
+                "TN": 41
+              },
+              "n": 64,
+              "TPR": {
+                "numerator": 13,
+                "denominator": 21,
+                "percentage": 61.9
+              },
+              "TNR": {
+                "numerator": 41,
+                "denominator": 43,
+                "percentage": 95.35
+              },
+              "precision": {
+                "numerator": 13,
+                "denominator": 15,
+                "percentage": 86.67
+              },
+              "accuracy": {
+                "numerator": 54,
+                "denominator": 64,
+                "percentage": 84.38
+              }
+            },
+            "4-1": {
+              "counts": {
+                "TP": 3,
+                "FP": 0,
+                "FN": 1,
+                "TN": 4
+              },
+              "n": 8,
+              "TPR": {
+                "numerator": 3,
+                "denominator": 4,
+                "percentage": 75.0
+              },
+              "TNR": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 3,
+                "denominator": 3,
+                "percentage": 100.0
+              },
+              "accuracy": {
+                "numerator": 7,
+                "denominator": 8,
+                "percentage": 87.5
+              }
+            }
+          }
+        },
+        {
+          "repeat": 2,
+          "model_calls": 8,
+          "item_assessments_available": true,
+          "metrics": {
+            "counts": {
+              "TP": 17,
+              "FP": 1,
+              "FN": 8,
+              "TN": 46
+            },
+            "n": 72,
+            "TPR": {
+              "numerator": 17,
+              "denominator": 25,
+              "percentage": 68.0
+            },
+            "TNR": {
+              "numerator": 46,
+              "denominator": 47,
+              "percentage": 97.87
+            },
+            "precision": {
+              "numerator": 17,
+              "denominator": 18,
+              "percentage": 94.44
+            },
+            "accuracy": {
+              "numerator": 63,
+              "denominator": 72,
+              "percentage": 87.5
+            }
+          },
+          "by_rule": {
+            "3-5": {
+              "counts": {
+                "TP": 13,
+                "FP": 1,
+                "FN": 8,
+                "TN": 42
+              },
+              "n": 64,
+              "TPR": {
+                "numerator": 13,
+                "denominator": 21,
+                "percentage": 61.9
+              },
+              "TNR": {
+                "numerator": 42,
+                "denominator": 43,
+                "percentage": 97.67
+              },
+              "precision": {
+                "numerator": 13,
+                "denominator": 14,
+                "percentage": 92.86
+              },
+              "accuracy": {
+                "numerator": 55,
+                "denominator": 64,
+                "percentage": 85.94
+              }
+            },
+            "4-1": {
+              "counts": {
+                "TP": 4,
+                "FP": 0,
+                "FN": 0,
+                "TN": 4
+              },
+              "n": 8,
+              "TPR": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "TNR": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "accuracy": {
+                "numerator": 8,
+                "denominator": 8,
+                "percentage": 100.0
+              }
+            }
+          },
+          "disagreements": [
+            {
+              "case": "case-01",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급은 주요 구성요소와 부하 제어의 기본 흐름을 설명하고 대표적인 적체 문제를 개선하는 수준이어야 한다.",
+              "reason": "2점은 변경 탐지의 역할과 '실행량·재시도·임시 데이터 증가'를 제어하는 기본 설계를 요구하며, 구체적인 제어 알고리즘이나 병목 분석을 필수로 두지 않는다. 3점의 동시 재연결에 따른 요청 집중과 '요청 시점 분산이나 유입 속도 조절'은 대표적인 문제와 개선 방안에 해당한다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "고급 2점은 구체적인 확장 메커니즘과 주요 문제 대응을, 3점은 확장 한계와 선택 근거를 요구해야 한다.",
+              "reason": "1점의 증분 조회·알림 기반 기본 설계에서, 2점은 감시 부하 집계·분산과 '추적 상태 만료 시 누락 없이 기준 상태와 후속 변경 추적'을 확보하는 구체적인 대응으로 심화한다. 3점은 부하 편중·재열거 집중을 분석하고 연결 수·불필요한 조회·상태 관리 복잡도의 절충과 선택 근거까지 요구한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C1",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "미들은 기본 보존·복구 흐름과 대표적 한계의 개선을 요구한다.",
+              "reason": "1점은 저장·재시도·이력 조회의 기본 방향이고, 2점은 '보존을 담당하는 구성요소와 기록·응답 흐름' 및 이력 기반 복구를 설명하는 수준이다. 3점도 기록 확인에 따른 대기라는 대표적 한계와 개선을 요구할 뿐, 복잡한 장애 복구나 기술적 선택의 절충 분석까지 필수로 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "미들은 기본 순서·중복 처리 흐름과 대표적 병합 문제의 개선을 요구한다.",
+              "reason": "1점은 정렬과 중복 제거의 제안이며, 2점은 '확정 순서를 정하는 역할과 기준' 및 식별값을 이용한 기본 병합 흐름을 요구해 핵심 설계 수준에 맞는다. 3점의 조회 중 실시간 도착 문제와 조회 경계 조정·재정렬은 대표적 한계와 개선이며, 복잡한 동시성 제어의 구현까지 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "미들은 기본 작업 분산 구조와 대표적 확장 한계의 개선을 요구한다.",
+              "reason": "2점의 '분할 기준, 구성요소의 역할과 전달 흐름'은 단일 대규모 채널까지 포함하는 기본 분산 설계이며, 순서·복구는 기존 경로의 유지 여부만 확인한다. 3점은 중계 병목이나 구독 상태 복제의 한계와 개선에 따른 부담을 설명하지만, 복잡한 재배치 처리나 대안 간 절충 비교·선택 근거까지 필수화하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "시니어는 구체적 중복·순서 처리와 상태 비용·대기 절충의 판단을 요구한다.",
+              "reason": "1점은 식별과 채널 정렬을 이용한 기본 설계이고, 2점은 식별 범위와 저장·표시 중복 방지 메커니즘에 더해 재전달·역순 도착·조회 중첩 처리를 요구한다. 3점은 재시도·재접속 경계의 한계를 분석하고 '식별·순서 상태의 유지 부담'이나 순서 확정 대기와 처리 효율의 절충 및 선택 근거를 설명하도록 한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "시니어는 단계별 지연 메커니즘과 부하 대응 및 개선 비용의 판단을 요구한다.",
+              "reason": "1점은 실시간 전달 경로의 기본 설계이고, 2점은 정상·대규모 채널 부하에서 꼬리 지연을 키우는 지점과 '대기를 줄이거나 격리하는 구체적인 메커니즘'을 요구한다. 3점은 부하 쏠림·느린 수신자 상황의 한계와 대기 감소 대비 자원 사용·처리 효율의 절충을 분석하고 개선 근거를 제시하도록 한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "시니어는 분산 메커니즘과 확장 중 상태 관리 병목 및 배치 선택의 근거를 요구한다.",
+              "reason": "1점은 채널·연결 분산의 기본 설계이고, 2점은 단일 대규모 채널의 작업 분산 메커니즘과 '구독 상태의 복제·이동과 작업 재배치'가 만드는 병목 및 대응을 요구한다. 3점은 남는 집중 지점과 상태 이동 비용의 한계를 분석하고 작업 균형·조정 부담·이동 비용의 절충을 비교하여 선택 근거를 설명하도록 한다."
+            },
+            {
+              "case": "case-04",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Pass",
+              "verdict": "Fail",
+              "applied_rule": "상위 연차 1점에도 핵심 요구사항을 충족하는 기본 설계와 정상 처리 흐름이 필수다.",
+              "reason": "1점은 ‘큐를 통한 요청 보관과 처리 흐름’만 요구하면서 ‘접수 성공 시점의 보존 여부나 장애 후 복구’를 구체화하지 못해도 충족된다. 접수 요청의 내구성 있는 보존과 미완료 요청 재처리의 기본 흐름을 필수로 명시하지 않아 핵심 요구사항을 충족하지 않는 설계도 1점을 받을 수 있다."
+            }
+          ]
+        },
+        {
+          "repeat": 3,
+          "model_calls": 8,
+          "item_assessments_available": true,
+          "metrics": {
+            "counts": {
+              "TP": 16,
+              "FP": 1,
+              "FN": 9,
+              "TN": 46
+            },
+            "n": 72,
+            "TPR": {
+              "numerator": 16,
+              "denominator": 25,
+              "percentage": 64.0
+            },
+            "TNR": {
+              "numerator": 46,
+              "denominator": 47,
+              "percentage": 97.87
+            },
+            "precision": {
+              "numerator": 16,
+              "denominator": 17,
+              "percentage": 94.12
+            },
+            "accuracy": {
+              "numerator": 62,
+              "denominator": 72,
+              "percentage": 86.11
+            }
+          },
+          "by_rule": {
+            "3-5": {
+              "counts": {
+                "TP": 13,
+                "FP": 1,
+                "FN": 8,
+                "TN": 42
+              },
+              "n": 64,
+              "TPR": {
+                "numerator": 13,
+                "denominator": 21,
+                "percentage": 61.9
+              },
+              "TNR": {
+                "numerator": 42,
+                "denominator": 43,
+                "percentage": 97.67
+              },
+              "precision": {
+                "numerator": 13,
+                "denominator": 14,
+                "percentage": 92.86
+              },
+              "accuracy": {
+                "numerator": 55,
+                "denominator": 64,
+                "percentage": 85.94
+              }
+            },
+            "4-1": {
+              "counts": {
+                "TP": 3,
+                "FP": 0,
+                "FN": 1,
+                "TN": 4
+              },
+              "n": 8,
+              "TPR": {
+                "numerator": 3,
+                "denominator": 4,
+                "percentage": 75.0
+              },
+              "TNR": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 3,
+                "denominator": 3,
+                "percentage": 100.0
+              },
+              "accuracy": {
+                "numerator": 7,
+                "denominator": 8,
+                "percentage": 87.5
+              }
+            }
+          },
+          "disagreements": [
+            {
+              "case": "case-01",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급은 부하 제어의 기본 설계와 대표적인 병목 완화 방안을 요구해야 한다.",
+              "reason": "2점은 '주요 구성요소의 역할'과 실행량·재시도·임시 데이터 증가를 제어하는 '기본 설계'를 요구한다. 3점은 동시 재연결에 따른 요청 집중을 인식하고 '요청 시점 분산이나 유입 속도 조절'을 제시하는 수준으로, 복잡한 분석이나 기술적 절충의 정당화까지 요구하지 않는다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "고급은 구체적인 확장·복구 메커니즘과 설계 한계, 절충 및 선택 근거를 요구해야 한다.",
+              "reason": "2점은 증분 조회 메커니즘, 감시 부하의 집계·분산, 알림과 조회의 역할 구분 및 추적 상태 만료 후 누락 없는 복구를 요구한다. 3점은 '부하 편중이나 재열거 집중'을 분석하고 연결 수·불필요한 조회·상태 관리 복잡도의 절충과 선택 근거까지 설명하도록 한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C1",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 문제 인식에서 기본 설계와 대표적 한계 개선으로 발전해야 한다.",
+              "reason": "0점은 보존·복구 미고려, 1점은 저장·재시도 제안, 2점은 보존 구성요소와 기록·응답 및 이력 복구 흐름으로 구분된다. 3점의 '기록 완료 확인이 전달 대기를 늘리는' 한계와 개선은 대표적 문제 해결이며, 복잡한 장애 복구나 선택 간 절충 분석을 필수로 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차의 2점은 기본 처리 흐름, 3점은 대표적 경계 문제와 개선을 요구한다.",
+              "reason": "1점의 정렬·중복 제거 제안에서 2점의 순서 결정 역할·기준과 식별값 기반 중복 없는 병합 흐름으로 발전하며, 복잡한 동시성 제어까지 요구하지 않는다. 3점은 '이력 조회 중 실시간 메시지가 도착'하는 대표적 경계 문제를 조회 경계 조정이나 재정렬로 개선하는 수준이다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 기본 분산 구조를 설명하고 대표적 확장 한계를 개선하는 수준이어야 한다.",
+              "reason": "2점은 '분할 기준, 구성요소의 역할과 전달 흐름'을 요구하며, 순서·복구는 기존 경로의 유지 여부만 확인하므로 복잡한 재배치·복구 구현을 요구하지 않는다. 3점의 중계 병목이나 구독 상태 복제 문제와 분산 단위·상태 배치 개선 및 그 부담은 대표적 한계 개선 범위에 해당한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "상위 연차는 중복·순서의 구체적 처리와 경계 상황의 한계 및 선택 비용을 설명해야 한다.",
+              "reason": "1점은 식별·정렬을 이용한 기본 설계이고, 2점은 식별 범위와 중복 저장·표시 방지 메커니즘 및 '재전달·역순 도착·이력과 실시간 수신의 겹침' 처리를 요구한다. 3점은 복잡한 재시도·재접속 경계의 한계 분석에 더해 상태 유지 부담이나 순서 확정 대기·처리 효율의 절충과 선택 근거를 요구한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "상위 연차는 단계별 지연 메커니즘과 병목 대응, 개선의 한계 및 비용을 요구한다.",
+              "reason": "1점은 실시간 전달 경로와 기본 개선안을 제시하고, 2점은 접수 응답과 수신자 관찰을 구분하여 큐 적체·전송 대기의 꼬리 지연 원인과 구체적인 완화·격리 메커니즘을 설명한다. 3점은 부하 쏠림·느린 수신자에서의 한계를 분석하고 '대기 감소와 자원 사용·처리 효율 사이 절충' 및 경로에 근거한 개선 이유를 요구한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "상위 연차는 분산 메커니즘과 확장 병목 대응, 상태 배치의 절충과 선택 근거를 요구한다.",
+              "reason": "1점은 채널·연결을 여러 처리 주체에 나누는 기본 설계이고, 2점은 단일 대규모 채널의 분산 메커니즘과 구독 상태 복제·이동 및 작업 재배치의 병목 대응까지 요구한다. 3점은 남는 집중 지점과 상태 이동 비용의 한계를 분석하고 '작업 균형·조정 부담·이동 비용의 절충'을 비교하여 선택 근거를 설명하도록 한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "대응되는 모든 핵심 항목에서 2점의 처리 깊이와 3점의 설계 판단이 실질적으로 심화되어야 한다.",
+              "reason": "중간 연차의 2점이 기록·응답 흐름, 식별값 기반 병합, 전달 구성요소, 수신자별 분산 구조에 중점을 두는 반면, 상위 연차는 각각 영속화 확인과 저장·전달 사이 장애 대응, 역순·중첩 처리 메커니즘, 꼬리 지연의 구체적 격리, 상태 이동·재배치 병목 대응을 추가로 요구한다. 3점도 대표적 한계의 개선에서 영속화 대기·응답 시간, 순서 상태·처리 효율, 지연·자원 사용, 작업 균형·조정·이동 비용의 절충과 선택 근거로 심화되어 네 항목 모두 실질적인 차이가 있다."
+            },
+            {
+              "case": "case-04",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Pass",
+              "verdict": "Fail",
+              "applied_rule": "고급 1점도 핵심 요구사항을 충족하는 기본 설계를 필수로 요구해야 한다.",
+              "reason": "1점의 '큐를 통한 요청 보관과 처리 흐름'만으로는 내구성 있는 보관과 미완료 요청의 장애 후 재처리가 필수인지 드러나지 않으며, '접수 성공 시점의 보존 여부나 장애 후 복구'도 구체화하지 않아도 충족된다. 따라서 접수된 요청의 유실 방지와 복구 후 재처리라는 핵심 요구사항을 충족하는 기본 설계가 보장되지 않는다."
+            }
+          ]
+        }
+      ],
+      "pooled": {
+        "counts": {
+          "TP": 49,
+          "FP": 4,
+          "FN": 26,
+          "TN": 137
+        },
+        "n": 216,
+        "TPR": {
+          "numerator": 49,
+          "denominator": 75,
+          "percentage": 65.33
+        },
+        "TNR": {
+          "numerator": 137,
+          "denominator": 141,
+          "percentage": 97.16
+        },
+        "precision": {
+          "numerator": 49,
+          "denominator": 53,
+          "percentage": 92.45
+        },
+        "accuracy": {
+          "numerator": 186,
+          "denominator": 216,
+          "percentage": 86.11
+        }
+      },
+      "pooled_by_rule": {
+        "3-5": {
+          "counts": {
+            "TP": 39,
+            "FP": 4,
+            "FN": 24,
+            "TN": 125
+          },
+          "n": 192,
+          "TPR": {
+            "numerator": 39,
+            "denominator": 63,
+            "percentage": 61.9
+          },
+          "TNR": {
+            "numerator": 125,
+            "denominator": 129,
+            "percentage": 96.9
+          },
+          "precision": {
+            "numerator": 39,
+            "denominator": 43,
+            "percentage": 90.7
+          },
+          "accuracy": {
+            "numerator": 164,
+            "denominator": 192,
+            "percentage": 85.42
+          }
+        },
+        "4-1": {
+          "counts": {
+            "TP": 10,
+            "FP": 0,
+            "FN": 2,
+            "TN": 12
+          },
+          "n": 24,
+          "TPR": {
+            "numerator": 10,
+            "denominator": 12,
+            "percentage": 83.33
+          },
+          "TNR": {
+            "numerator": 12,
+            "denominator": 12,
+            "percentage": 100.0
+          },
+          "precision": {
+            "numerator": 10,
+            "denominator": 10,
+            "percentage": 100.0
+          },
+          "accuracy": {
+            "numerator": 22,
+            "denominator": 24,
+            "percentage": 91.67
+          }
+        }
+      }
+    },
+    "round4": {
+      "criteria": "git:bee5375:docs/evaluator/rubric.md",
+      "evaluated_sections_sha256": "fca6261866bdcdf811def742e61343f4cf8a4ff844cf35dd4d6835e08b2af574",
+      "runs": [
+        {
+          "repeat": 1,
+          "model_calls": 8,
+          "source": "직전 완료된 40회 실제 실행 출력의 집계. 원시 기록은 당시 사용자 요청에 따라 삭제됨.",
+          "item_assessments_available": false,
+          "metrics": {
+            "counts": {
+              "TP": 20,
+              "FP": 4,
+              "FN": 5,
+              "TN": 43
+            },
+            "n": 72,
+            "TPR": {
+              "numerator": 20,
+              "denominator": 25,
+              "percentage": 80.0
+            },
+            "TNR": {
+              "numerator": 43,
+              "denominator": 47,
+              "percentage": 91.49
+            },
+            "precision": {
+              "numerator": 20,
+              "denominator": 24,
+              "percentage": 83.33
+            },
+            "accuracy": {
+              "numerator": 63,
+              "denominator": 72,
+              "percentage": 87.5
+            }
+          },
+          "by_rule": {
+            "3-5": {
+              "counts": {
+                "TP": 17,
+                "FP": 4,
+                "FN": 4,
+                "TN": 39
+              },
+              "n": 64,
+              "TPR": {
+                "numerator": 17,
+                "denominator": 21,
+                "percentage": 80.95
+              },
+              "TNR": {
+                "numerator": 39,
+                "denominator": 43,
+                "percentage": 90.7
+              },
+              "precision": {
+                "numerator": 17,
+                "denominator": 21,
+                "percentage": 80.95
+              },
+              "accuracy": {
+                "numerator": 56,
+                "denominator": 64,
+                "percentage": 87.5
+              }
+            },
+            "4-1": {
+              "counts": {
+                "TP": 3,
+                "FP": 0,
+                "FN": 1,
+                "TN": 4
+              },
+              "n": 8,
+              "TPR": {
+                "numerator": 3,
+                "denominator": 4,
+                "percentage": 75.0
+              },
+              "TNR": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 3,
+                "denominator": 3,
+                "percentage": 100.0
+              },
+              "accuracy": {
+                "numerator": 7,
+                "denominator": 8,
+                "percentage": 87.5
+              }
+            }
+          }
+        },
+        {
+          "repeat": 2,
+          "model_calls": 8,
+          "item_assessments_available": true,
+          "metrics": {
+            "counts": {
+              "TP": 20,
+              "FP": 3,
+              "FN": 5,
+              "TN": 44
+            },
+            "n": 72,
+            "TPR": {
+              "numerator": 20,
+              "denominator": 25,
+              "percentage": 80.0
+            },
+            "TNR": {
+              "numerator": 44,
+              "denominator": 47,
+              "percentage": 93.62
+            },
+            "precision": {
+              "numerator": 20,
+              "denominator": 23,
+              "percentage": 86.96
+            },
+            "accuracy": {
+              "numerator": 64,
+              "denominator": 72,
+              "percentage": 88.89
+            }
+          },
+          "by_rule": {
+            "3-5": {
+              "counts": {
+                "TP": 17,
+                "FP": 3,
+                "FN": 4,
+                "TN": 40
+              },
+              "n": 64,
+              "TPR": {
+                "numerator": 17,
+                "denominator": 21,
+                "percentage": 80.95
+              },
+              "TNR": {
+                "numerator": 40,
+                "denominator": 43,
+                "percentage": 93.02
+              },
+              "precision": {
+                "numerator": 17,
+                "denominator": 20,
+                "percentage": 85.0
+              },
+              "accuracy": {
+                "numerator": 57,
+                "denominator": 64,
+                "percentage": 89.06
+              }
+            },
+            "4-1": {
+              "counts": {
+                "TP": 3,
+                "FP": 0,
+                "FN": 1,
+                "TN": 4
+              },
+              "n": 8,
+              "TPR": {
+                "numerator": 3,
+                "denominator": 4,
+                "percentage": 75.0
+              },
+              "TNR": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 3,
+                "denominator": 3,
+                "percentage": 100.0
+              },
+              "accuracy": {
+                "numerator": 7,
+                "denominator": 8,
+                "percentage": 87.5
+              }
+            }
+          },
+          "disagreements": [
+            {
+              "case": "case-01",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 기본 부하 제어와 대표적인 적체 개선까지 요구할 수 있다.",
+              "reason": "2점의 '실행량·재시도·임시 데이터 증가' 제어는 변경 탐지부터 대기 작업 처리까지 기본 부하 제어를 요구하며, 독립적인 여러 장애 시나리오의 분석을 필수화하지 않는다. 3점도 동시 재연결에 따른 요청 집중과 요청 시점 분산 등의 개선에 한정되어 연차에 적합하다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Pass",
+              "verdict": "Fail",
+              "applied_rule": "상위 연차 1점은 부분 전송 재사용을 성립시키는 정상 처리 흐름을 요구해야 한다.",
+              "reason": "1점의 '진행 위치를 기록하고 재시도하는 기본 설계'에는 기록한 위치를 재개 대상과 연결하여 미완료 부분부터 이어가는 흐름이 필수로 명시되지 않았다. 따라서 진행 위치를 기록만 하고 전체를 다시 보내는 설계도 배제하지 못하며, 이는 세부 장애 대응 이전의 핵심 기능 누락이다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Pass",
+              "verdict": "Fail",
+              "applied_rule": "상위 연차 1점은 핵심 자원 제약을 충족하는 기본 처리 설계를 요구해야 한다.",
+              "reason": "1점의 '병렬 처리나 작업 대기열을 사용하는 기본 설계'는 처리 수단의 제안만으로 충족되며, 자원 한계에 맞춰 작업을 투입하고 계속 처리하는 흐름을 요구하지 않는다. 제한 없는 병렬 실행이나 무제한 대기열도 배제하지 못하므로 핵심 요구사항을 충족하는 기본 설계가 보장되지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C1",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급 2점은 핵심 보장에 필요한 구성과 기본 흐름을, 3점은 대표적 한계와 개선을 요구한다.",
+              "reason": "2점의 '접수 성공 시점과 보장할 장애 범위', '기록·응답 흐름', 불확실한 요청의 재확인과 이력 복구는 메시지 보존을 성립시키는 기본 조건이며 복잡한 장애 복구 구현을 요구하지 않는다. 3점도 기록 완료 확인에 따른 대기라는 대표적 한계와 이를 줄이는 개선을 요구하여 중급 수준에 적합하다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급은 순서·중복 처리의 기본 흐름과 대표적인 병합 문제의 개선까지 요구할 수 있다.",
+              "reason": "2점은 '채널별 확정 순서를 정하는 역할과 기준'과 식별값을 이용한 중복 없는 반영 흐름을 요구하지만, 구체적인 동시성 제어 구현까지 필수화하지 않는다. 3점의 이력 조회 중 실시간 도착 문제와 조회 경계 조정·재정렬은 대표적 병합 한계와 개선에 해당한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "대응 항목마다 선임 2점의 처리 메커니즘·문제 대응과 3점의 절충 분석·선택 근거가 실질적으로 추가되어야 한다.",
+              "reason": "같은 번호끼리 비교하면 중급 2점의 역할·기본 흐름에 비해 선임 2점은 C1의 영속화 확인 메커니즘과 저장·전달 사이 장애 대응, C2의 식별 범위와 역순 도착 병합, C3의 단계별 대기 격리 메커니즘, C4의 구독 상태 복제·이동 및 작업 재배치 병목 대응을 추가로 요구한다. 선임 3점은 중급의 개선 제시와 부담 언급을 넘어 각각 응답·수신 지연, 식별·순서 상태 유지, 자원·처리 효율, 작업 균형·이동 비용의 절충을 분석하고 선택 근거까지 설명하도록 하여 판단 역량도 구분된다."
+            },
+            {
+              "case": "case-04",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Pass",
+              "verdict": "Fail",
+              "applied_rule": "고급 1점도 핵심 요구사항을 충족하는 보존·처리·복구의 기본 연결을 필수로 요구해야 한다.",
+              "reason": "1점은 ‘큐를 통한 요청 보관과 처리 흐름’만으로 충족되며, 접수 성공 시점의 보존 여부나 장애 후 복구 방안이 불명확한 경우도 허용한다. 따라서 접수된 요청이 보존되고 장애 뒤 미완료 요청이 다시 처리되는 기본 흐름을 필수로 요구하지 않아, 단순히 구체적인 장애 대응 기법이 부족한 수준을 넘어 핵심 설계 설명이 누락되어 있다."
+            },
+            {
+              "case": "case-07",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "상급 연차는 기본 판정 흐름에 더해 동시성 처리와 구체적인 한계·선택 근거를 요구한다.",
+              "reason": "1점은 서버 기준의 저장·거절 흐름을, 2점은 '트랜잭션 구조'와 경계 시각 동시 요청의 승인·거절 메커니즘을 요구한다. 3점은 접수·완료 시각 차이와 시계 오차의 영향을 분석하고 엄격한 접수 기준과 제한적 유예를 공정성·처리량·운영 복잡도로 비교하도록 한다."
+            }
+          ]
+        },
+        {
+          "repeat": 3,
+          "model_calls": 8,
+          "item_assessments_available": true,
+          "metrics": {
+            "counts": {
+              "TP": 19,
+              "FP": 4,
+              "FN": 6,
+              "TN": 43
+            },
+            "n": 72,
+            "TPR": {
+              "numerator": 19,
+              "denominator": 25,
+              "percentage": 76.0
+            },
+            "TNR": {
+              "numerator": 43,
+              "denominator": 47,
+              "percentage": 91.49
+            },
+            "precision": {
+              "numerator": 19,
+              "denominator": 23,
+              "percentage": 82.61
+            },
+            "accuracy": {
+              "numerator": 62,
+              "denominator": 72,
+              "percentage": 86.11
+            }
+          },
+          "by_rule": {
+            "3-5": {
+              "counts": {
+                "TP": 16,
+                "FP": 4,
+                "FN": 5,
+                "TN": 39
+              },
+              "n": 64,
+              "TPR": {
+                "numerator": 16,
+                "denominator": 21,
+                "percentage": 76.19
+              },
+              "TNR": {
+                "numerator": 39,
+                "denominator": 43,
+                "percentage": 90.7
+              },
+              "precision": {
+                "numerator": 16,
+                "denominator": 20,
+                "percentage": 80.0
+              },
+              "accuracy": {
+                "numerator": 55,
+                "denominator": 64,
+                "percentage": 85.94
+              }
+            },
+            "4-1": {
+              "counts": {
+                "TP": 3,
+                "FP": 0,
+                "FN": 1,
+                "TN": 4
+              },
+              "n": 8,
+              "TPR": {
+                "numerator": 3,
+                "denominator": 4,
+                "percentage": 75.0
+              },
+              "TNR": {
+                "numerator": 4,
+                "denominator": 4,
+                "percentage": 100.0
+              },
+              "precision": {
+                "numerator": 3,
+                "denominator": 3,
+                "percentage": 100.0
+              },
+              "accuracy": {
+                "numerator": 7,
+                "denominator": 8,
+                "percentage": 87.5
+              }
+            }
+          },
+          "disagreements": [
+            {
+              "case": "case-01",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "기본 부하 관리의 구성과 보장 조건은 허용하되, 여러 독립 상황의 심층 대응을 필수화하지 않아야 한다.",
+              "reason": "2점의 '실행량·재시도·임시 데이터 증가를 제어'는 변경 탐지부터 대기 작업 처리까지의 기본 부하 관리 조건이며, 상황별 상세 메커니즘이나 추가 검증을 요구하지 않는다. 3점은 동시 재연결에 따른 요청 집중이라는 대표적인 한계와 요청 분산 등의 개선을 요구한다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Pass",
+              "verdict": "Fail",
+              "applied_rule": "고급 1점은 진행 기록의 제안을 넘어 완료 부분을 재사용하는 기본 재개 흐름을 요구해야 한다.",
+              "reason": "1점의 '진행 위치를 기록하고 재시도'만으로는 기록을 전송 대상에 연결하고, 그 위치까지의 완료 부분을 재사용해 나머지를 이어 보내는 흐름이 필수화되지 않는다. 이는 응답 유실이나 만료 복구의 상세 메커니즘 부족이 아니라, 핵심인 부분 전송 재사용의 기본 흐름 누락이다."
+            },
+            {
+              "case": "case-01",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Pass",
+              "verdict": "Fail",
+              "applied_rule": "고급 1점에서도 자원 한계 안에서 작업을 처리하는 기본 설계가 필요하다.",
+              "reason": "1점의 '병렬 처리나 작업 대기열을 사용하는 기본 설계'는 실행량이나 대기량을 제한하지 않는 구성도 허용한다. 자원 사용을 제한하면서 대기 작업을 계속 처리하는 연결이 없어, 상세 병목 분석의 부족을 넘어 핵심 요구사항을 충족하는 기본 설계가 보장되지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C1",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급은 기본 보존·복구 흐름과 대표 한계의 개선을 요구해야 한다.",
+              "reason": "1점은 저장·재시도·이력 조회라는 해결 방향을, 2점은 보존 구성요소와 기록·응답 및 누락 복구의 기본 흐름을 요구한다. 3점의 '기록 완료 확인이 전달 대기를 늘리는' 한계와 개선은 대표 문제에 대한 대응이며, 복잡한 장애 복구나 기술적 선택의 절충 분석까지 필수화하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급 2점은 순서·중복 처리의 기본 흐름, 3점은 대표 경계 문제의 개선 수준이어야 한다.",
+              "reason": "2점의 '확정 순서를 정하는 역할과 기준'과 식별값을 이용한 중복 없는 병합은 핵심 요구사항을 성립시키는 기본 설계이며, 상세한 경합 제어까지 요구하지 않는다. 3점은 이력 조회 중 실시간 메시지가 도착하는 대표 경계 문제와 조회 경계 조정·재정렬 개선을 요구하므로 적합하다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급은 기본 분산 구조와 대표 병목의 개선을 요구하되 복잡한 확장 대응을 필수화하지 않아야 한다.",
+              "reason": "2점의 '분할 기준, 구성요소의 역할과 전달 흐름'은 단일 대규모 채널을 분산하는 기본 설계이며, 순서·복구는 유지 조건으로만 확인한다. 3점은 중계 지점이나 구독 상태 복제라는 대표 병목의 개선과 수반 부담을 설명하는 수준으로, 선택지 간 절충 비교와 선택 근거까지 요구하지 않는다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "고급은 기본 전달 경로에서 구체적인 대기 대응과 개선 비용의 분석으로 심화되어야 한다.",
+              "reason": "1점의 '실시간 전달 경로와 지연을 줄이는 기본 방안'은 온라인 전달의 기본 설계를 요구하고, 2점은 단계별 대기와 큐 적체·전송 대기에 대한 구체적인 완화·격리 메커니즘을 요구한다. 3점은 부하 쏠림·느린 수신자에서의 한계를 분석하고 대기 감소와 자원 사용·처리 효율의 절충 및 개선 근거를 요구한다."
+            },
+            {
+              "case": "case-02",
+              "seniority": "comparison",
+              "rule": "4-1",
+              "target": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "대응 항목마다 고급의 처리 메커니즘·문제 대응과 상위 수준의 절충·선택 근거가 실질적으로 추가되어야 한다.",
+              "reason": "중급 2점의 기록·응답 흐름과 식별값 기반 병합에 비해 고급 2점은 영속화 확인 메커니즘·저장과 전달 사이 장애 대응, 중복 저장·표시 방지 메커니즘과 역순 도착 처리를 추가하며, 전달·확장에서도 꼬리 지연 격리와 구독 상태 이동·작업 재배치의 병목 대응을 요구한다. 중급 3점의 대표 한계와 개선에 비해 고급 3점은 영속화 대기·상태 유지·자원 사용·조정 및 이동 비용의 구체적인 절충과 선택 근거를 요구하여 네 대응 항목 모두 실질적인 차이가 있다."
+            },
+            {
+              "case": "case-04",
+              "seniority": "Senior",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Pass",
+              "verdict": "Fail",
+              "applied_rule": "고급 1점도 요청 보존과 장애 후 재처리라는 핵심 요구를 충족하는 기본 흐름을 필수로 해야 한다.",
+              "reason": "1점의 ‘큐를 통한 요청 보관과 처리 흐름’만으로는 내구성 있는 보관과 장애 후 미완료 요청 재처리의 기본 연결이 필수화되지 않는다. 특히 ‘접수 성공 시점의 보존 여부나 장애 후 복구’를 설명하지 못하는 경우까지 허용하므로, 단순한 세부 메커니즘 부족을 넘어 핵심 요구 충족이 불명확하다."
+            },
+            {
+              "case": "case-06",
+              "seniority": "Middle",
+              "rule": "3-5",
+              "target": "C3",
+              "expected": "Pass",
+              "verdict": "Fail",
+              "applied_rule": "중간 연차 2점은 해당 항목의 핵심 요구사항을 충족하는 기본 설계를 요구해야 한다.",
+              "reason": "2점은 '전달 서버가 관리'하는 구독과 사용자 연결로의 전송만 요구하여, 한 서버에 연결과 알림이 집중되지 않아야 한다는 핵심 요구사항을 충족하지 않는 설계도 허용한다. 3점의 끊어진 구독 정리도 여러 서버로 연결과 전달 부하를 분산하는 기본 구조의 누락을 보완하지 못한다."
+            }
+          ]
+        }
+      ],
+      "pooled": {
+        "counts": {
+          "TP": 59,
+          "FP": 11,
+          "FN": 16,
+          "TN": 130
+        },
+        "n": 216,
+        "TPR": {
+          "numerator": 59,
+          "denominator": 75,
+          "percentage": 78.67
+        },
+        "TNR": {
+          "numerator": 130,
+          "denominator": 141,
+          "percentage": 92.2
+        },
+        "precision": {
+          "numerator": 59,
+          "denominator": 70,
+          "percentage": 84.29
+        },
+        "accuracy": {
+          "numerator": 189,
+          "denominator": 216,
+          "percentage": 87.5
+        }
+      },
+      "pooled_by_rule": {
+        "3-5": {
+          "counts": {
+            "TP": 50,
+            "FP": 11,
+            "FN": 13,
+            "TN": 118
+          },
+          "n": 192,
+          "TPR": {
+            "numerator": 50,
+            "denominator": 63,
+            "percentage": 79.37
+          },
+          "TNR": {
+            "numerator": 118,
+            "denominator": 129,
+            "percentage": 91.47
+          },
+          "precision": {
+            "numerator": 50,
+            "denominator": 61,
+            "percentage": 81.97
+          },
+          "accuracy": {
+            "numerator": 168,
+            "denominator": 192,
+            "percentage": 87.5
+          }
+        },
+        "4-1": {
+          "counts": {
+            "TP": 9,
+            "FP": 0,
+            "FN": 3,
+            "TN": 12
+          },
+          "n": 24,
+          "TPR": {
+            "numerator": 9,
+            "denominator": 12,
+            "percentage": 75.0
+          },
+          "TNR": {
+            "numerator": 12,
+            "denominator": 12,
+            "percentage": 100.0
+          },
+          "precision": {
+            "numerator": 9,
+            "denominator": 9,
+            "percentage": 100.0
+          },
+          "accuracy": {
+            "numerator": 21,
+            "denominator": 24,
+            "percentage": 87.5
+          }
+        }
+      }
+    }
+  },
+  "limits": [
+    "3-5 Criterion 64개와 4-1 비교 쌍 8개의 Pass/Fail 일치만 측정한다. 오류 원인·Level 인용 정확성은 별도다.",
+    "동일 8쌍을 반복했으며 버전당 216판정은 독립된 216개 데이터가 아니다.",
+    "1회차는 당시 실행 집계만 보존되어 항목별 판정 근거를 재검토할 수 없다. 2·3회차 불일치 근거는 이 파일에 보존한다."
+  ]
+}

@@ -35,7 +35,7 @@ Criterion Fail만으로 해당 항목의 모든 Level 오류를 검출했다고 
 이전 실행의 입력 경로·해시는 당시 이력이며, 폴더 이동 후 현재 원본 참조만 갱신한다.
 [튜닝 실험 기록](../../docs/evaluator/experiments/evaluator/error-detection-before-tuning/README.md)을 함께 확인한다.
 
-현재 재평가 결과: [4차 튜닝](../../docs/evaluator/experiments/evaluator/rubric-criteria-round4/README.md) · [검증 결과](../../docs/evaluator/experiments/evaluator/validation-20261024/README.md).
+현재 재평가 결과: [4차 튜닝](../../docs/evaluator/experiments/evaluator/rubric-criteria-round4/README.md) · [동일 검증셋 3회 비교](../../docs/evaluator/experiments/evaluator/cross-version-validation/README.md).
 사용자 요청으로 이전 검증 결과·원시 응답은 삭제했으며 이번 검증 기록만 유지한다. 기존 round1~3 튜닝 기록과 검증 데이터는 유지한다.
 
 Uber는 사용자가 전체 Pass인 정상 기준으로 확인했으며 현재 검증 정확도에 포함한다. 실제 평가기의 Senior C3 Fail은 오탐으로 유지한다.
