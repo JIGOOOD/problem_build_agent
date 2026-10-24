@@ -24,7 +24,6 @@ policy·중복 정답 Markdown·템플릿·패키지 검증 리포트는 제거�
 입력 원문과 정답 판정·근거는 유지하며, 데이터셋 명칭과 사용하지 않는 기준 파일 참조만 정리했다.
 현재 정답표의 범위는 3-5·4-1이다. 정답 JSON은 평가 모델에 전달하지 않고 사후 대조에만 사용한다.
 
-이전 튜닝 데이터 두 세트의 사용자 정답 확인은 [확인 기록](label-approval.json)에 보존한다.
 티켓·Dropbox·Slack의 현재 정답은 `ticket_dropbox_slack_uber_anchor_v1.zip`의 수정본이다.
 입력은 기존과 같고, 정답 판정 변경은 Slack Senior C1 1점 Fail→Pass이며 그 밖에는 판단 근거를 정리했다.
 이전 튜닝의 티켓 정답은 [당시 정답](datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json)으로 고정하여 과거 기록을 보존한다.
