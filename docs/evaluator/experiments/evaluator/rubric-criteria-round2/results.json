@@ -1,0 +1,1298 @@
+{
+  "rules": [
+    "3-5",
+    "4-1"
+  ],
+  "review_method": "assistant_semantic_review",
+  "criteria": "git:6afe893:docs/evaluator/experiments/evaluator/rubric-criteria-round2/evaluation-criteria.md",
+  "metrics": {
+    "strict_direct_error_detection": {
+      "detected": 28,
+      "total": 32,
+      "percentage": 87.5
+    },
+    "pair_error_detection": {
+      "detected": 4,
+      "total": 7,
+      "percentage": 57.14
+    },
+    "verdict_agreement": {
+      "matched": 76,
+      "total": 81,
+      "percentage": 93.83
+    },
+    "normal_controls_acceptance": {
+      "matched": 18,
+      "total": 18,
+      "percentage": 100.0
+    }
+  },
+  "datasets": {
+    "seniority-error-injection": {
+      "labels": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json",
+      "labels_sha256": "2d0694b7d816904656ee34bce3c131d84bb23ebba79f832d75f03ca7e972e448",
+      "cases": {
+        "01": {
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/01/middle.md",
+            "senior": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/01/senior.md"
+          },
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "0점은 중복 예매 문제의 미고려, 1점은 ‘좌석 잠금이나 상태 확인’ 제안, 2점은 단일 점유와 점유자 확인 후 확정·해제의 기본 흐름으로 구분된다. 3점의 ‘점유 유효성을 다시 확인’은 늦은 결제 응답이라는 대표적 한계의 개선이며, 복잡한 동시성 제어나 기술 선택의 비용 분석까지 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/0/expected_3_5/0",
+              "applied_rule": "중간 연차는 문제 인식, 기본 설계, 대표적 한계와 개선의 순서로 심화해야 한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "0점은 주문 유실 문제의 미고려, 1점은 재시도 제안, 2점은 ‘주문을 지속 저장한 뒤 접수 성공’을 반환하고 작업자가 미완료 주문을 처리하는 기본 설계를 요구한다. 3점은 완료 기록 전 장애로 생기는 재처리와 ‘기존 처리 결과를 확인’하는 개선에 한정되어 복잡한 장애 복구 분석을 필수로 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/0/expected_3_5/1",
+              "applied_rule": "중간 연차는 기본 보존·재처리 흐름과 대표적 중복 처리 문제의 개선을 요구하는 수준이어야 한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "0점은 무제한 적체 문제의 미고려, 1점은 대기·제한 제안, 2점은 ‘앞단에서 제한’하고 초과 요청을 대기·거절하는 기본 흐름으로 구성된다. 3점의 동시 재시도 문제와 ‘재시도 시점을 분산’하는 개선은 대표적 한계 대응이며, 분산 허용량 조정 같은 심층 메커니즘을 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/0/expected_3_5/2",
+              "applied_rule": "중간 연차는 기본 유입 제어 흐름과 대표적 과부하 문제의 개선을 설명하면 충족되어야 한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "0점은 확장 필요성의 미고려, 1점은 서버 증설 제안, 2점은 조회·점유 서버의 역할과 요청 분산이라는 기본 설계를 요구한다. 3점은 ‘공연별 분산만으로 병목이 남는 한계’에 대해 좌석군 단위 분산을 제시하는 수준으로, 데이터 재배치의 복잡한 처리나 비용 비교를 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/0/expected_3_5/3",
+              "applied_rule": "중간 연차는 역할·분산 흐름을 설명하고 대표적 확장 한계의 개선을 제시하는 수준이어야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "0점은 중복 예매 문제의 미고려이며, 1점은 단일 점유와 결제 후 상태 전이의 기본 설계, 2점은 ‘점유 ID 일치·대기 상태·미만료’ 조건의 원자 갱신으로 경합에 대응하는 구체적 메커니즘을 요구한다. 3점은 만료·재점유·이전 응답의 순서 분석에 더해 ‘잠금 대기·충돌 재시도 비용’ 비교와 처리 경계의 정당화를 요구하므로 분석 내용과 선택 근거가 구체적이다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/0/expected_3_5/4",
+              "applied_rule": "상위 연차는 기본 설계, 구체적 정합성 제어, 한계와 선택 비용·근거 분석으로 심화해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "0점은 주문 유실 문제의 미고려, 1점은 저장 후 접수와 작업자 재개의 기본 설계이며, 2점은 ‘유일성 제약’과 ‘같은 트랜잭션’ 및 기존 결과 재사용으로 재처리 경합에 대응한다. 3점은 결제 성공 후 내부 기록 전 장애의 복구를 분석하고, 외부 결제의 트랜잭션 한계와 ‘복구 지연·조회 부하’ 및 대사 주기의 선택 근거까지 요구한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/0/expected_3_5/5",
+              "applied_rule": "상위 연차는 기본 복구 흐름을 넘어 중복 방지 메커니즘과 외부 연동의 한계·선택 근거를 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "0점은 무제한 적체 문제의 미고려, 1점은 기본 진입 제한 흐름이며, 2점은 공유 상한의 원자적 증가, 요청별 단일 차감, 임의 지연 재시도로 분산 진입과 재시도 문제에 대응한다. 3점은 공유 카운터 병목을 분석하고 서버별 상한 분배와 비교하여 ‘조정 비용·남는 용량의 활용·서버 장애 시 용량 회수’의 상충 및 선택 근거를 요구한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/0/expected_3_5/6",
+              "applied_rule": "상위 연차는 유입 제어의 구체적 동작과 병목 대응을 설명하고 대안의 비용·위험을 비교해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "0점은 확장 필요성의 미고려, 1점은 조회·점유 역할 분리와 요청 분산의 기본 설계이며, 2점은 읽기 분산, 좌석군별 저장소 분할과 분할표 라우팅으로 단일 쓰기 저장소 병목에 대응한다. 3점은 재배치 중 두 저장소가 동시에 점유를 받는 위험을 분석하고, 쓰기 중단 방식과 변경분 복제 방식의 ‘중단 시간·상태 동기화 비용’ 및 선택 근거를 요구한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/0/expected_3_5/7",
+              "applied_rule": "상위 연차는 구체적 분할·라우팅과 병목 대응을 넘어 재배치 위험 및 대안의 비용을 분석해야 한다."
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "C1은 중간 연차의 ‘점유 유효성을 다시 확인’에서 상위 연차의 조건부 원자 갱신과 잠금·재시도 비용 비교로, C2는 ‘기존 처리 결과를 확인’에서 유일성·트랜잭션 기반 중복 방지와 외부 결제 대사 주기의 비용 판단으로 심화된다. C3도 재시도 분산에서 공유 상한의 원자 제어와 서버별 분배의 상충 분석으로, C4도 좌석군 분산 제안에서 저장소 분할·라우팅과 재배치 방식의 중단 시간·동기화 비용 비교로 발전하므로 모든 대응 항목에서 실질적인 연차 차이가 확인된다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/0/expected_4_1",
+              "applied_rule": "대응되는 모든 핵심 평가 항목에서 상위 연차의 처리 메커니즘·문제 대응·설계 판단이 실질적으로 심화되어야 한다."
+            }
+          ],
+          "level_error_review": []
+        },
+        "02": {
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/middle.md",
+            "senior": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/senior.md"
+          },
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "0점이 '좌석 중복 예매 문제를 인식하고 잠금 사용을 제안'하는 수준으로 정의되어 있다. 이미 핵심 문제를 인식하고 기본 해결 방향까지 제시하므로, 문제를 고려하지 않는다는 0점 기준에 맞지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/1/expected_3_5/0",
+              "applied_rule": "0점은 핵심 설계 문제를 고려하지 않는 수준이어야 한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "2점은 '순서별 복구 결과를 분석'하고 '분산 원자성 한계'를 설명하며, 대사·재시도 대안을 복구 지연·중복 위험·운영 비용으로 비교해 선택을 정당화하도록 요구한다. 이는 기본적인 주문 보존·재개 흐름을 넘어 복잡한 장애 시나리오 분석과 기술적 선택 판단을 필수로 요구한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/1/expected_3_5/1",
+              "applied_rule": "중급 2점은 기본 설계 수준이며, 복잡한 장애 분석과 기술적 선택 정당화를 필수로 요구해서는 안 된다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "0점은 무제한 적체 문제를 고려하지 않고, 1점은 대기·제한 제안, 2점은 앞단 제한과 대기·거절의 기본 흐름을 요구한다. 3점의 '재시도 시점을 분산'은 동시 재시도라는 대표적인 한계의 기본 개선이며, 복잡한 제어 메커니즘까지 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/1/expected_3_5/2",
+              "applied_rule": "중급은 문제 미고려, 기본 방향, 기본 처리 흐름, 대표적인 한계와 개선 순으로 구성해야 한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "0점은 확장 문제 미고려, 1점은 서버 증설 제안, 2점은 조회·점유 서버의 역할과 요청 분산 흐름으로 구성되어 있다. 3점은 공연별 분산에 남는 인기 공연 병목을 설명하고 '좌석군처럼 더 작은 단위'로 분산하는 개선을 요구하므로 중급 범위에 적합하다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/1/expected_3_5/3",
+              "applied_rule": "중급은 주요 컴포넌트와 기본 흐름을 설명하고, 상위 점수에서 대표적인 병목과 개선을 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "0점은 중복 예매 문제 미고려, 1점은 단일 점유와 결제 후 확정·해제 흐름이며, 2점은 점유 식별자·상태·만료 조건을 이용한 원자 갱신을 요구한다. 3점은 만료·재점유·이전 응답의 순서 분석과 잠금 대기·충돌 재시도 비용 비교 및 처리 경계의 정당화를 요구해 구체적인 설계 판단까지 평가한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/1/expected_3_5/4",
+              "applied_rule": "고급은 기본 설계에서 구체적인 동시성 대응으로 발전하고, 상위 점수에서 한계·비용·선택 근거를 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "0점은 주문 유실 문제 미고려, 1점은 저장 후 접수 성공과 작업자의 재개 흐름이며, 2점은 주문별 유일성 제약과 확정·완료 상태의 동일 트랜잭션 저장으로 중복 처리를 제어한다. 3점은 결제 성공 후 내부 기록 전 장애의 외부 결과 대조와 분산 원자성 한계를 분석하고, 대사 주기의 복구 지연·조회 부하 및 선택 근거를 요구한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/1/expected_3_5/5",
+              "applied_rule": "고급은 기본 복구 설계, 구체적인 중복 방지 메커니즘, 장애 한계와 선택 근거를 단계적으로 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "1점은 '요청을 대기시키거나 제한하겠다고 하지만' 제한 지점과 초과 요청의 처리 흐름을 설명하지 못하는 수준이다. 따라서 기본적인 유입 제어 설계 없이 단순한 해결 방향 제안만으로 충족된다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/1/expected_3_5/6",
+              "applied_rule": "고급 1점은 단순한 제안이 아니라 핵심 요구를 충족하는 기본 설계와 처리 흐름을 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "2점은 '공연 단위 요청을 다중 처리 노드에 배분'하고 '수평 확장 메커니즘을 상세히 설명'하도록 하지만, 인기 공연에 집중된 요청·점유 데이터를 어떻게 나누는지 등 구체적인 병목 대응은 요구하지 않는다. 따라서 조회·점유 계층 분리와 기본적인 요청 분산 설명만으로 충족될 수 있다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/1/expected_3_5/7",
+              "applied_rule": "고급 2점은 기본 구성·흐름을 넘어 구체적인 처리 메커니즘과 주요 병목 대응을 요구해야 한다."
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "C2에서 중급 2점은 이미 '순서별 복구 결과'와 '분산 원자성 한계'를 분석하고 대사·재시도 대안을 지연·중복 위험·운영 비용으로 비교해 선택을 정당화하도록 하며, 이 요구는 3점에도 누적된다. 고급 3점의 외부 결제 대조, 로컬 트랜잭션의 한계, 대사 주기별 지연·조회 부하 판단은 같은 장애·선택 문제를 다루므로 상위 수준의 문제 대응과 설계 판단이 중급보다 실질적으로 높다고 보기 어렵다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/1/expected_4_1",
+              "applied_rule": "비교 가능한 핵심 항목마다 고급의 문제 대응과 설계 판단이 실질적으로 높아야 한다."
+            }
+          ],
+          "level_error_review": [
+            {
+              "issue_id": "E01-01",
+              "level": 0,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/0",
+              "assessment_index": 0,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "0점에 문제 인식·해결 제안이 포함된 경계 위반을 지적한다.",
+              "error_type": "E01"
+            },
+            {
+              "issue_id": "E02-01",
+              "level": 2,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/1",
+              "assessment_index": 1,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Middle 2점에서 심층 문제 분석·대안 비교·선택 근거를 필수화한 과도한 요구를 지적한다.",
+              "error_type": "E02"
+            },
+            {
+              "issue_id": "E03-01",
+              "level": 1,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/2",
+              "assessment_index": 6,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Senior 1점이 동작하는 기본 처리 흐름 없이 기술 방향 제안만으로 충족됨을 지적한다.",
+              "error_type": "E03"
+            },
+            {
+              "issue_id": "E04-01",
+              "level": 2,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/3",
+              "assessment_index": 7,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "고급 표현을 덧붙였지만 실제 처리 원리·주요 문제 대응이 없는 기본 흐름임을 지적한다.",
+              "error_type": "E04"
+            }
+          ]
+        },
+        "03": {
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/03/middle.md",
+            "senior": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/03/senior.md"
+          },
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 좌석 잠금이나 상태 확인의 제안, 2점은 단일 점유와 점유자 확인에 따른 확정·해제 흐름을 요구한다. 3점의 '점유 유효성을 다시 확인'은 지연 결제라는 대표적인 한계에 대한 기본 개선이며, 복잡한 동시성 제어까지 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/2/expected_3_5/0",
+              "applied_rule": "중간 연차는 문제 인식, 기본 처리 흐름, 대표적인 한계와 개선 방안으로 단계를 구분한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "1점부터 '저장소에 기록하고 나서 접수 성공'을 알리고 작업자가 미처리 주문을 실행한 뒤 완료 상태를 남기는 전체 기본 흐름을 요구한다. 이는 2점의 지속 저장·미완료 주문 처리·완료 기록과 사실상 같아, 1점이 기본 방향 제시 수준을 넘고 단계 간 역량 차이도 없다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/2/expected_3_5/1",
+              "applied_rule": "중간 연차 1점은 문제 인식과 기본 방향, 2점은 주요 역할과 기본 처리 흐름을 요구해야 한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 대기·제한 제안, 2점은 앞단 제한과 초과 요청의 대기·거절 흐름으로 구분된다. 3점의 '재시도 시점을 분산'은 동시 재시도에 따른 대표적인 과부하 문제의 기본 개선으로, 복잡한 분산 제어를 필수로 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/2/expected_3_5/2",
+              "applied_rule": "중간 연차는 기본 유입 제어 흐름과 대표적인 과부하 문제의 개선 방안까지 요구한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 서버 증설 제안, 2점은 조회·점유 서버의 역할 구분과 요청 분산 흐름을 요구한다. 3점은 인기 공연 집중이라는 한계를 짚고 '좌석군처럼 더 작은 단위'로 분산하도록 하며, 재배치 절차나 복잡한 장애 대응까지 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/2/expected_3_5/3",
+              "applied_rule": "중간 연차는 컴포넌트 역할과 분산 흐름을 설명하고 대표적인 확장 한계를 개선하는 수준이다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "3점의 '복잡한 예외와 심층적인 한계를 분석'과 '최적의 설계를 정당화'는 분석할 상황이나 판단할 기술적 선택을 구체화하지 않은 추상적 요구다. 2점의 원자 갱신 조건은 구체적이지만, 3점에는 선택의 이점·비용 또는 위험과 선택 근거에 관한 구체적인 필수 설명이 없다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/2/expected_3_5/4",
+              "applied_rule": "상위 연차 3점은 구체적인 한계와 기술적 선택의 득실·선택 근거를 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 주문 저장·재개 흐름을, 2점은 '유일성 제약'과 '같은 트랜잭션'을 통한 중복 확정 방지를 요구한다. 3점은 외부 결제와 내부 기록을 원자적으로 묶지 못하는 한계를 분석하고 대사 주기의 '복구 지연·조회 부하와 선택 근거'까지 요구한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/2/expected_3_5/5",
+              "applied_rule": "상위 연차는 기본 설계에서 구체적인 장애 대응으로, 다시 한계와 선택 근거의 분석으로 심화한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "2점의 '처리 가능한 수만 점유·주문 서비스로 보내고' 초과 요청을 대기·거절하는 내용은 기본 흐름에 머문다. 1점에서 부족하다고 명시한 여러 진입 서버의 허용량 조정이나 동시 재시도 제어를 보완하는 구체적인 메커니즘이 2점에 없다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/2/expected_3_5/6",
+              "applied_rule": "상위 연차 2점은 기본 흐름을 넘어 구체적인 처리 메커니즘과 주요 문제 대응을 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "3점은 '두 저장소가 동시에 같은 좌석을 변경'하는 위험과 쓰기를 중단한 뒤 복사·전환하는 대응 절차를 구체적으로 요구한다. 그러나 쓰기 중단이라는 선택의 가용성 비용이나 다른 이점·위험, 해당 방식을 선택한 근거를 설명하도록 요구하지 않아 설계 판단 기준이 부족하다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/2/expected_3_5/7",
+              "applied_rule": "상위 연차 3점은 한계와 대응 절차뿐 아니라 선택에 따른 득실과 선택 근거까지 요구해야 한다."
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "reason": "중간 연차의 유효성 재확인·기존 결과 확인에 비해 상위 연차는 C1에서 점유 식별자·상태·만료 조건의 원자 갱신을, C2에서 유일성 제약·트랜잭션과 외부 결제 대사를 요구한다. 또한 기본적인 재시도 분산·좌석군 분산에 비해 C3은 공유 카운터와 서버별 상한의 비용 비교를, C4는 분할표 라우팅과 재배치 중 쓰기 통제를 요구하므로 모든 대응 항목에서 실질적인 역량 차이가 있다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/2/expected_4_1",
+              "applied_rule": "모든 대응 항목에서 상위 연차가 구체적인 메커니즘·문제 대응 또는 설계 판단을 추가로 요구하는지 비교한다."
+            }
+          ],
+          "level_error_review": [
+            {
+              "issue_id": "E05-01",
+              "level": 3,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/4",
+              "assessment_index": 4,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Senior 3점의 추상적인 분석·선택 표현만으로 구체적 한계와 이득·비용 판단이 빠짐을 지적한다.",
+              "error_type": "E05"
+            },
+            {
+              "issue_id": "E06-01",
+              "level": 1,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/5",
+              "assessment_index": 1,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Middle 1점이 이미 완성된 기본 흐름을 요구해 2점과 구분되지 않음을 지적한다.",
+              "error_type": "E06"
+            },
+            {
+              "issue_id": "E07-01",
+              "level": 2,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/6",
+              "assessment_index": 6,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Senior 2점이 기본 흐름을 반복하여 구체적인 대응 메커니즘이 빠짐을 지적한다.",
+              "error_type": "E07"
+            },
+            {
+              "issue_id": "E08-01",
+              "level": 3,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/7",
+              "assessment_index": 7,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "구체적인 개선 절차는 있으나 비용·위험과 선택 근거가 요구되지 않음을 지적한다.",
+              "error_type": "E08"
+            }
+          ]
+        },
+        "04": {
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/04/middle.md",
+            "senior": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/04/senior.md"
+          },
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 ‘좌석 잠금이나 상태 확인’의 제안이고, 2점은 저장소에서 ‘한 요청만 점유에 성공’하게 하는 기본 처리 흐름을 요구한다. 3점은 늦은 결제라는 대표 한계와 ‘점유 유효성을 다시 확인’하는 개선을 요구하며, 복잡한 동시성 제어나 기술 선택의 비용 분석까지 필수화하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/3/expected_3_5/0",
+              "applied_rule": "중간급은 문제 인식에서 기본 설계, 대표 한계와 개선으로 발전해야 한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점의 단순 재시도 제안에서 2점의 ‘주문을 지속 저장한 뒤 접수 성공을 반환’하고 작업자가 재처리하는 기본 설계로 발전한다. 3점은 완료 기록 전 장애에 따른 재처리 가능성과 ‘기존 처리 결과를 확인’하는 개선 수준으로, 복잡한 복구 메커니즘이나 선택 비용 분석을 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/3/expected_3_5/1",
+              "applied_rule": "중간급은 기본 보존·재처리 흐름과 대표적인 장애 한계의 개선을 요구한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 대기·제한 제안에 머물고, 2점은 ‘앞단에서 제한’하여 허용 요청을 전달하고 나머지를 대기·거절하는 기본 흐름을 요구한다. 3점의 ‘재시도 시점을 분산’은 동시 재시도라는 대표 한계에 대한 기본 개선으로, 복잡한 분산 제어를 필수로 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/3/expected_3_5/2",
+              "applied_rule": "중간급은 기본 유입 제어 흐름과 대표적인 과부하 문제의 개선을 요구한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점의 서버 증설 제안에서 2점의 ‘조회 서버와 점유 서버의 역할’을 구분하고 공연별 요청을 분산하는 기본 설계로 발전한다. 3점은 인기 공연 집중이라는 한계를 설명하고 ‘좌석군처럼 더 작은 단위’로 분산하는 개선을 요구하므로 심층 구현이나 복잡한 장애 대응 수준을 넘지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/3/expected_3_5/3",
+              "applied_rule": "중간급은 컴포넌트 역할과 분산 흐름, 대표 병목의 개선을 요구한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 단일 점유와 결제 후 상태 전이의 기본 흐름을 제시하고, 2점은 ‘점유 ID 일치·대기 상태·미만료 조건’의 원자 갱신으로 만료·재점유 경합에 대응한다. 3점은 사건 순서가 바뀌어도 소유권이 유지되는 근거와 ‘잠금 대기·충돌 재시도 비용’, 외부 결제와 좌석 변경의 처리 경계를 설명하도록 하여 구체적인 분석과 판단을 요구한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/3/expected_3_5/4",
+              "applied_rule": "상위급은 기본 설계에 이어 구체적인 경합 제어와 선택 비용·근거를 요구한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 주문 저장과 미완료 주문 재개의 기본 설계이며, 2점은 ‘유일성 제약’과 ‘같은 트랜잭션’으로 재처리·중복 통지의 경합을 제어한다. 3점은 결제 성공 후 기록 전 장애를 외부 결과 대조로 복구하고, 로컬 트랜잭션의 한계와 ‘복구 지연·조회 부하’에 따른 대사 주기 선택 근거까지 요구한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/3/expected_3_5/5",
+              "applied_rule": "상위급은 구체적인 중복 방지·복구 메커니즘과 한계·비용에 근거한 판단을 요구한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 조회·점유 역할 분리와 요청 분산의 기본 설계이고, 2점은 ‘공연 ID·좌석군’별 저장소 분할과 ‘분할표’ 기반 라우팅으로 단일 쓰기 저장소 병목에 대응한다. 3점은 재배치 중 이중 점유 위험을 분석하고 쓰기 중단 방식과 변경분 복제 방식을 ‘중단 시간·상태 동기화 비용’으로 비교하여 선택 근거까지 요구한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/3/expected_3_5/6",
+              "applied_rule": "상위급은 구체적인 분할·라우팅과 재배치 위험, 대안의 비용 및 선택 근거를 요구한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 앞단 제한과 초과 요청 처리의 기본 설계이고, 2점은 공유 상한의 원자적 검사·증가, ‘요청 ID로 한 번만 차감’, 재시도 분산으로 경합과 과부하에 대응한다. 3점은 공유 카운터 병목을 분석하고 서버별 상한 배분과 비교하여 ‘조정 비용·남는 용량의 활용·서버 장애 시 용량 회수’의 상충과 선택 근거를 요구한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/3/expected_3_5/7",
+              "applied_rule": "상위급은 구체적인 분산 유입 제어와 병목 대안의 상충 관계·선택 근거를 요구한다."
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "좌석 정합성은 중간급 3점의 ‘점유 유효성을 다시 확인’에서 상위급의 원자 갱신·잠금 비용 비교로, 주문 복구는 ‘기존 처리 결과를 확인’에서 유일성 제약·동일 트랜잭션·외부 대사 비용 판단으로 심화된다. 중간급 C4와 상위급 C3의 확장은 좌석군 분산 제안과 재배치 위험·전환 비용 분석으로, 중간급 C3와 상위급 C4의 유입 제어는 재시도 분산과 공유 상한의 원자적 제어·서버별 배분의 상충 분석으로 구분된다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/3/expected_4_1",
+              "applied_rule": "대응되는 모든 핵심 항목에서 상위급의 메커니즘·문제 대응·설계 판단이 실질적으로 심화되어야 한다."
+            }
+          ],
+          "level_error_review": []
+        },
+        "05": {
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/05/middle.md",
+            "senior": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/05/senior.md"
+          },
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 잠금이나 상태 확인의 제안, 2점은 단일 점유 성공과 점유자 확인 후 확정·해제 흐름을 요구한다. 3점의 '확정 전에 점유 유효성을 다시 확인'은 지연 결제라는 대표적인 한계의 기본 개선이며, 복잡한 동시성 제어나 선택 비용 분석까지 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/4/expected_3_5/0",
+              "applied_rule": "중급은 문제 인식, 기본 처리 흐름, 대표적인 한계와 개선 방안으로 수준을 구분한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "0점의 '주문이 장애로 사라질 수 있음을 인식하고 지속 저장과 재시도를 제안'은 이미 문제 인식과 기본 해결 방향을 포함한다. 오히려 1점은 재시도 제안만 요구하므로, 0점의 연차별 기준과 단계적 역량 상승을 충족하지 못한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/4/expected_3_5/1",
+              "applied_rule": "0점은 핵심 문제를 고려하지 않는 수준이어야 하며, 상위 점수는 더 높은 역량을 요구해야 한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "2점은 '앞단에서 제한'하여 허용 요청만 전달하고 나머지를 대기·거절하는 기본 흐름을 요구한다. 3점은 동시 재시도로 과부하가 재발하는 한계와 '재시도 시점을 분산'하는 개선에 한정되어 중급에 적합하다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/4/expected_3_5/2",
+              "applied_rule": "중급 2점은 기본 유입 제어 흐름, 3점은 대표적인 과부하 원인과 개선 방안을 요구한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "2점은 조회·점유 서버의 역할 구분과 공연별 요청 분산이라는 기본 설계를 요구한다. 3점의 '좌석군처럼 더 작은 단위로 점유 요청을 분산'은 인기 공연 집중 병목의 개선이며, 재배치 구현이나 복잡한 장애 대응까지 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/4/expected_3_5/3",
+              "applied_rule": "중급은 컴포넌트 역할과 분산 흐름을 설명하고, 대표적인 확장 한계의 개선을 제시한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "1점은 '좌석 잠금이나 상태 확인을 제안'하면서도 점유 경쟁의 승자 결정과 '결제 후 확정하는 흐름을 설명하지 못한다'고 명시한다. 기본 설계 없이 단순한 해결 방향 제안만으로 1점을 받을 수 있어 고급 기준에 미달한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/4/expected_3_5/4",
+              "applied_rule": "고급 1점도 핵심 요구사항을 충족하는 기본 설계와 정상 처리 흐름을 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 저장 후 접수 응답과 작업자 재개 흐름을, 2점은 '유일성 제약'과 '같은 트랜잭션'을 통한 중복 확정 방지를 요구한다. 3점은 외부 결제와 내부 기록 사이의 장애를 분석하고 '대사 주기에 따른 복구 지연·조회 부하와 선택 근거'까지 요구한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/4/expected_3_5/5",
+              "applied_rule": "고급은 기본 복구 흐름에서 구체적인 중복 방지 메커니즘과 복구 선택의 비용 분석으로 심화해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "3점의 '다양한 장애와 병목을 심층적으로 검토'와 '성능과 안정성의 Trade-off를 종합적으로 분석'은 분석 대상과 비교 대안을 구체화하지 않은 추상적 요구다. 어떤 장애 원인이나 제어 방식의 비용·위험을 판단해야 하는지 명시하지 않아 고급 3점의 필수 설명이 부족하다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/4/expected_3_5/6",
+              "applied_rule": "고급 3점은 구체적인 한계와 기술적 선택의 이점·비용 또는 위험 및 선택 근거를 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "2점의 '공연별 요청을 여러 처리 서버로 나눠 부하를 분담하는 기본 흐름'은 1점과 사실상 동일한 기본 설계다. 인기 공연의 요청과 점유 데이터를 어떻게 분할하는지 등 구체적인 확장 메커니즘이나 집중 병목 대응을 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/4/expected_3_5/7",
+              "applied_rule": "고급 2점은 기본 구성·흐름을 넘어 구체적인 처리 메커니즘과 주요 병목 대응을 요구해야 한다."
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "C3의 중급 3점은 '재시도 시점을 분산'하는 개선을 요구하지만, 고급 3점은 '다양한 장애와 병목'과 'Trade-off를 종합적으로 분석'이라는 표현만으로 추가 분석 대상과 선택 기준을 구체화하지 않는다. 고급 2점의 공유 계수 제어는 더 깊지만, 최상위 단계에서 요구하는 구체적인 선택 판단의 차이가 부족하므로 다른 항목의 심화 요구만으로 통과시킬 수 없다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/4/expected_4_1",
+              "applied_rule": "핵심 항목별로 고급의 처리 메커니즘과 상위 수준의 구체적인 설계 판단이 중급과 구분되어야 한다."
+            }
+          ],
+          "level_error_review": [
+            {
+              "issue_id": "E03-02",
+              "level": 1,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/8",
+              "assessment_index": 4,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Senior 1점이 동작하는 기본 처리 흐름 없이 기술 방향 제안만으로 충족됨을 지적한다.",
+              "error_type": "E03"
+            },
+            {
+              "issue_id": "E01-02",
+              "level": 0,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/9",
+              "assessment_index": 1,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "0점에 문제 인식·해결 제안이 포함된 경계 위반을 지적한다.",
+              "error_type": "E01"
+            },
+            {
+              "issue_id": "E05-02",
+              "level": 3,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/10",
+              "assessment_index": 6,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Senior 3점의 추상적인 분석·선택 표현만으로 구체적 한계와 이득·비용 판단이 빠짐을 지적한다.",
+              "error_type": "E05"
+            },
+            {
+              "issue_id": "E07-02",
+              "level": 2,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/11",
+              "assessment_index": 7,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Senior 2점이 기본 흐름을 반복하여 구체적인 대응 메커니즘이 빠짐을 지적한다.",
+              "error_type": "E07"
+            }
+          ]
+        },
+        "06": {
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/middle.md",
+            "senior": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/senior.md"
+          },
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "2점에서 ‘만료·재점유·이전 결제 응답이 교차하는 순서마다’ 전이를 검증하고, 잠금과 조건부 갱신의 비용 및 처리 경계의 선택 근거까지 설명하도록 요구한다. 기본 처리 흐름을 넘어 고급 수준의 경합 분석과 기술적 판단을 필수화했다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/5/expected_3_5/0",
+              "applied_rule": "중급 2점은 기본 설계와 처리 흐름 수준이어야 하며, 복잡한 경합 분석이나 기술적 선택의 비용 비교를 필수로 요구하지 않는다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 장애 후 재시도 제안, 2점은 ‘주문을 지속 저장한 뒤 접수 성공을 반환’하고 작업자가 처리·완료를 기록하는 기본 흐름을 요구한다. 3점은 완료 기록 전 장애에 따른 재처리와 기존 결과 확인이라는 대표적인 문제·개선 수준으로 적절하다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/5/expected_3_5/1",
+              "applied_rule": "중급은 문제 인식에서 기본 처리 흐름으로 발전하고, 3점에서 대표적인 한계와 개선 방안을 요구한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점의 대기·제한 제안에서 2점의 ‘앞단에서 제한’하고 초과 요청을 대기·거절하는 흐름으로 요구 수준이 높아진다. 3점은 동시 재시도에 따른 과부하와 재시도 시점 분산을 요구하며, 복잡한 분산 제어까지 필수화하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/5/expected_3_5/2",
+              "applied_rule": "중급 2점은 주요 경로의 기본 흐름을, 3점은 대표적인 과부하 문제와 기본 개선 방안을 요구한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "1점부터 ‘조회와 좌석 점유를 담당할 서버를 따로 두고’ 요청을 여러 서버에 분산하는 방식을 설명하도록 요구한다. 이는 2점의 역할 구분·요청 분산 흐름과 사실상 같아, 1점이 기본 방향 수준을 넘고 단계별 역량 상승도 드러나지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/5/expected_3_5/3",
+              "applied_rule": "중급 1점은 문제 인식과 기본 해결 방향이며, 2점에서 역할과 처리 흐름을 설명하도록 역량이 상승해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 단일 점유와 결제 결과별 확정·해제 흐름을, 2점은 점유 식별자·상태·만료 조건에 따른 ‘원자 갱신’을 요구한다. 3점은 교차 실행에서도 소유권이 유지되는 근거와 잠금·조건부 갱신의 비용, 외부 결제와의 처리 경계를 정당화하도록 요구해 연차에 적합하다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/5/expected_3_5/4",
+              "applied_rule": "고급은 기본 설계, 구체적인 경합 제어, 한계·비용 분석과 선택 근거로 수준이 상승해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "2점의 ‘미완료 주문을 탐색·처리하고 완료 상태를 반영’은 1점의 저장·재처리·완료 기록 흐름과 실질적으로 같다. ‘정교하게 설명’이라는 표현만 추가했으며, 재처리 시 중복 확정을 막는 조건이나 구체적인 장애 대응 메커니즘을 필수로 명시하지 않았다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/5/expected_3_5/5",
+              "applied_rule": "고급 2점은 기본 복구 흐름을 넘어 구체적인 처리 메커니즘과 주요 장애 문제의 대응을 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "3점은 공유 카운터 병목을 지적하고 ‘일정 허용량을 미리 배정’해 접근을 줄이는 절차를 요구한다. 개선의 이점은 구체적이지만 사전 배정 방식의 비용·위험과 이를 감수하는 선택 근거를 요구하지 않아 고급 3점의 필수 설명이 부족하다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/5/expected_3_5/6",
+              "applied_rule": "고급 3점은 한계와 개선뿐 아니라 기술적 선택에 따른 비용 또는 위험과 선택 근거까지 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 조회·점유 역할 분리와 요청 분산을, 2점은 ‘공연 ID·좌석군 기준’ 분할과 분할표 라우팅으로 단일 쓰기 저장소 병목을 줄이는 메커니즘을 요구한다. 3점은 재배치 중 이중 점유 위험을 분석하고 두 전환 방식의 중단 시간·동기화 비용과 선택 근거를 비교하도록 요구한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/5/expected_3_5/7",
+              "applied_rule": "고급은 기본 분산 흐름에서 구체적인 분할·라우팅과 병목 대응으로 발전하고, 상위 단계에서 위험과 선택 비용을 분석해야 한다."
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "중급 C1은 2점부터 교차 순서별 전이 검증, 잠금·조건부 갱신의 비용 비교, 처리 경계의 선택 근거를 요구하며, 이는 고급 C1 3점의 순서 분석·비용 비교·처리 경계 정당화와 사실상 같다. 중급 3점도 이 요구를 계승하므로 핵심 정합성 항목의 상위 단계에서 실질적인 연차 차이가 부족하다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/5/expected_4_1",
+              "applied_rule": "비교 가능한 핵심 항목 중 하나라도 높은 단계의 요구 역량이 실질적으로 구분되지 않으면 연차 차이가 부족하다."
+            }
+          ],
+          "level_error_review": [
+            {
+              "issue_id": "E02-02",
+              "level": 2,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/12",
+              "assessment_index": 0,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Middle 2점에서 심층 문제 분석·대안 비교·선택 근거를 필수화한 과도한 요구를 지적한다.",
+              "error_type": "E02"
+            },
+            {
+              "issue_id": "E04-02",
+              "level": 2,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/13",
+              "assessment_index": 5,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "고급 표현을 덧붙였지만 실제 처리 원리·주요 문제 대응이 없는 기본 흐름임을 지적한다.",
+              "error_type": "E04"
+            },
+            {
+              "issue_id": "E08-02",
+              "level": 3,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/14",
+              "assessment_index": 6,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "구체적인 개선 절차는 있으나 비용·위험과 선택 근거가 요구되지 않음을 지적한다.",
+              "error_type": "E08"
+            },
+            {
+              "issue_id": "E06-02",
+              "level": 1,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/15",
+              "assessment_index": 3,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Middle 1점이 이미 완성된 기본 흐름을 요구해 2점과 구분되지 않음을 지적한다.",
+              "error_type": "E06"
+            }
+          ]
+        },
+        "07": {
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/middle.md",
+            "senior": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/senior.md"
+          },
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "0단계는 중복 예매 문제를 고려하지 않고, 1단계는 잠금·상태 확인 제안, 2단계는 단일 점유와 결제 결과에 따른 확정·해제 흐름을 요구한다. 3단계도 ‘늦은 결제 응답’의 한계와 ‘점유 유효성을 다시 확인’하는 기본 개선까지만 요구하므로 중급에 적합하다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/6/expected_3_5/0",
+              "applied_rule": "중급은 문제 인식, 기본 처리 흐름, 대표적 한계와 개선 방안으로 수준을 구분한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "0단계의 주문 유실 미고려에서 1단계의 재시도 제안, 2단계의 ‘주문을 지속 저장한 뒤 접수 성공’과 작업자 재처리 흐름으로 발전한다. 3단계는 완료 기록 전 장애에 따른 재처리 가능성과 ‘기존 처리 결과를 확인’하는 개선을 요구하며, 복잡한 복구 메커니즘이나 선택 비용 분석까지 필수로 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/6/expected_3_5/1",
+              "applied_rule": "중급은 기본적인 보존·재개 흐름과 대표적 중복 처리 문제의 개선을 요구한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "0단계가 ‘적체 문제를 인식하고 대기열이나 요청 제한을 제안’하도록 되어 있어, 핵심 문제를 고려하지 않는 수준이라는 기준과 어긋난다. 또한 제어 위치와 초과 요청 흐름을 설명하지 못한다는 점까지 1단계와 사실상 같아 두 단계의 역량 구분이 성립하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/6/expected_3_5/2",
+              "applied_rule": "중급 0단계는 핵심 문제 미고려, 1단계는 문제 인식과 기본 해결 방향 제시여야 한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "0단계의 확장 필요성 미고려에서 1단계의 서버 증설 제안, 2단계의 조회·점유 역할 구분과 요청 분산 흐름으로 요구가 높아진다. 3단계는 ‘공연별 분산만으로 병목이 남는 한계’와 ‘좌석군처럼 더 작은 단위’의 분산을 요구할 뿐, 복잡한 재분배나 장애 복구까지 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/6/expected_3_5/3",
+              "applied_rule": "중급은 컴포넌트 역할과 분산 흐름을 설명하고 대표적인 확장 한계를 개선하는 수준이다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "2단계의 ‘동시성 제어 아키텍처와 상태 전이 메커니즘을 정교하게 설명’은 구체적인 갱신 조건 없이 단일 점유와 소유자 확인 흐름을 반복한다. 1단계에서 한계로 지적한 ‘확인 이후 만료·재점유’의 개입을 어떻게 막는지 명시하지 않아, 기본 흐름만으로 충족되는 것을 배제할 기준이 부족하다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/6/expected_3_5/4",
+              "applied_rule": "고급 2단계는 기본 흐름을 넘어 구체적 처리 메커니즘과 주요 경합 대응을 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "2단계의 ‘유일성 제약’과 ‘같은 트랜잭션’은 구체적인 중복 처리 대응이지만, 3단계는 ‘외부 결과를 다시 조회해 내부 확정 기록을 복구’하는 절차만 추가한다. 이 복구 방식의 이점·비용 또는 위험과 선택 근거를 요구하지 않아 고급 최상위 단계의 필수 설계 판단이 누락되었다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/6/expected_3_5/5",
+              "applied_rule": "고급 3단계는 구체적 한계 분석에 더해 선택의 이점·비용 또는 위험과 선택 근거를 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1단계는 앞단 제한과 초과 요청의 대기·거절 흐름이며, 2단계는 ‘원자적으로 수를 늘려’ 공유 상한을 지키고 요청별 단일 차감과 재시도 분산을 요구한다. 3단계는 공유 카운터 병목과 서버별 상한 배분을 비교하여 조정 비용·남는 용량·장애 시 회수의 상충 및 선택 근거까지 요구하므로 고급에 적합하다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/6/expected_3_5/6",
+              "applied_rule": "고급은 기본 설계에서 구체적 제어 메커니즘, 병목 분석과 선택 근거로 심화되어야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "3단계의 ‘확장 구조의 복잡한 상황과 잠재적 한계를 면밀히 분석’과 ‘적절한 설계 선택을 정당화’는 분석할 상황과 비교할 선택지를 특정하지 않는다. 구체적인 이점·비용·위험의 비교 기준 없이 상충 관계를 종합적으로 고려한다는 추상적 요구에 그쳐 고급 3단계 기준을 충족하지 못한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/6/expected_3_5/7",
+              "applied_rule": "고급 3단계의 한계 분석과 기술적 선택은 추상적 표현이 아니라 구체적 판단 내용으로 규정해야 한다."
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "reason": "중급 3단계의 유효성 재확인·기존 결과 확인·재시도 분산에 비해, 고급은 C1의 상태 전이 순서 분석과 잠금 비용 비교, C2의 유일성 제약·원자적 저장·외부 결제 재조회, C3의 공유 상한 제어와 서버별 배분의 상충 분석을 추가로 요구한다. C4도 중급의 ‘좌석군처럼 더 작은 단위’로 요청을 분산하는 개선에서 고급 2단계의 점유 데이터 분할·분할표 기반 라우팅으로 구체화되므로, 개별 단계의 설명 부족과 별개로 모든 대응 항목에서 실질적인 연차 차이가 확인된다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/6/expected_4_1",
+              "applied_rule": "대응되는 모든 핵심 항목에서 고급이 추가로 요구하는 구체적 메커니즘·문제 대응·설계 판단을 비교한다."
+            }
+          ],
+          "level_error_review": [
+            {
+              "issue_id": "E04-03",
+              "level": 2,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/16",
+              "assessment_index": 4,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "고급 표현을 덧붙였지만 실제 처리 원리·주요 문제 대응이 없는 기본 흐름임을 지적한다.",
+              "error_type": "E04"
+            },
+            {
+              "issue_id": "E08-03",
+              "level": 3,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/17",
+              "assessment_index": 5,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "구체적인 개선 절차는 있으나 비용·위험과 선택 근거가 요구되지 않음을 지적한다.",
+              "error_type": "E08"
+            },
+            {
+              "issue_id": "E01-03",
+              "level": 0,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/18",
+              "assessment_index": 2,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "0점에 문제 인식·해결 제안이 포함된 경계 위반을 지적한다.",
+              "error_type": "E01"
+            },
+            {
+              "issue_id": "E05-03",
+              "level": 3,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/19",
+              "assessment_index": 7,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Senior 3점의 추상적인 분석·선택 표현만으로 구체적 한계와 이득·비용 판단이 빠짐을 지적한다.",
+              "error_type": "E05"
+            }
+          ]
+        },
+        "08": {
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/08/middle.md",
+            "senior": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/08/senior.md"
+          },
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "1점의 '경쟁 중인 요청 하나에만 점유를 허용'하고 결제 결과에 따라 확정·해제하는 과정은 2점의 단일 요청 점유와 확정·해제 흐름과 사실상 같다. 1점부터 완성된 기본 흐름을 요구하여 2점과의 역량 상승이 드러나지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/7/expected_3_5/0",
+              "applied_rule": "중간 연차의 1점은 문제 인식·기본 방향, 2점은 기본 설계·처리 흐름으로 구분해야 한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 재시도 제안에 머물고, 2점은 '주문을 지속 저장한 뒤 접수 성공'을 반환하는 순서와 작업자의 미완료 주문 처리·완료 기록을 요구한다. 3점은 완료 기록 전 장애로 인한 재처리라는 대표적 한계와 '기존 처리 결과를 확인'하는 개선을 요구하므로 적합하다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/7/expected_3_5/1",
+              "applied_rule": "중간 연차는 기본 보존·재처리 흐름과 대표적인 중복 처리 문제의 개선까지 요구한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "2점에서 '진입 서버 장애 시 상한 회수의 정합성을 분석'하고 중앙 집계와 서버별 허용량 분할의 상충·선택 근거까지 설명하도록 요구한다. 이는 기본 유입 제어 흐름을 넘어 장애 대응과 기술적 의사결정까지 필수화하므로 중간 연차의 요구 수준을 초과한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/7/expected_3_5/2",
+              "applied_rule": "중간 연차의 2점에 복잡한 장애 대응 분석이나 기술적 선택의 상충·선택 근거를 필수로 요구하면 안 된다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 증설 제안에 머물고, 2점은 조회·점유 서버의 역할과 공연별 요청 분산 흐름을 요구한다. 3점은 '공연별 분산만으로 병목이 남는 한계'와 좌석군 단위 분산이라는 개선을 요구하며 복잡한 재배치나 장애 대응까지 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/7/expected_3_5/3",
+              "applied_rule": "중간 연차는 기본 분산 흐름에서 대표적인 집중 부하의 한계와 개선 방안으로 발전해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 단일 요청 점유와 결제별 상태 전이의 기본 흐름을, 2점은 '점유 ID 일치·대기 상태·미만료 조건'에 따른 원자 갱신으로 오래된 응답을 차단하는 구체적 대응을 요구한다. 3점은 만료·재점유·응답 순서 분석과 잠금 대기·충돌 재시도 비용 비교 및 처리 경계의 정당화까지 요구한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/7/expected_3_5/4",
+              "applied_rule": "상급 연차는 기본 흐름에서 구체적 경합 제어, 한계 분석과 기술적 선택 근거로 심화되어야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "2점의 '주문을 지속 저장한 뒤 접수 성공' 반환과 미완료 주문 처리·완료 기록은 1점의 기본 흐름과 사실상 같다. 1점에서 부족하다고 명시한 중복 확정 방지 조건을 2점에서도 요구하지 않아 구체적 문제 대응 없이 2점을 받을 수 있다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/7/expected_3_5/5",
+              "applied_rule": "상급 연차의 2점은 기본 보존·처리 흐름을 넘어 구체적인 장애·중복 처리 대응을 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 허용량 이내 전달과 초과 요청 대기·거절을, 2점은 공유 상한의 원자적 증가·요청별 단일 차감과 임의 지연을 통한 재시도 분산을 요구한다. 3점은 공유 카운터 병목을 분석하고 서버별 분할과 비교하여 조정 비용·남는 용량 활용·장애 시 회수의 상충 및 선택 근거를 요구한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/7/expected_3_5/6",
+              "applied_rule": "상급 연차는 기본 유입 제어, 구체적 동시성·재시도 대응, 병목과 대안의 선택 근거를 단계적으로 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "1점이 '서버를 늘리겠다고 제안하지만' 요청을 여러 서버에 어떻게 분산하는지 설명하지 못하는 수준으로 정의되어 있다. 분산 구조와 기본 처리 흐름 없이 기술적 방향 제안만으로 충족되므로, 2·3점의 구체성과 별개로 상급 연차의 1점 기준에 미달한다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/7/expected_3_5/7",
+              "applied_rule": "상급 연차의 1점은 단순 증설 제안이 아니라 핵심 요구사항을 충족하는 기본 설계와 처리 흐름을 요구해야 한다."
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "중간 연차 C3의 2점은 이미 공유 카운터 병목·장애 시 상한 회수 분석과 중앙 집계·서버별 분할의 상충·선택 근거를 요구하여, 상급 연차 C3의 3점이 요구하는 핵심 분석과 판단에 도달한다. 중간 연차 3점의 재시도 분산도 상급 연차 2점의 임의 지연과 대응하므로, 상급 연차에 원자적 계수 조작의 구체화가 추가되더라도 높은 점수의 문제 해결 범위와 설계 판단이 충분히 구분되지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/7/expected_4_1",
+              "applied_rule": "비교 가능한 핵심 항목 하나라도 높은 점수에서 실질적인 기술적 깊이·문제 대응·설계 판단 차이가 부족하면 실패다."
+            }
+          ],
+          "level_error_review": [
+            {
+              "issue_id": "E06-03",
+              "level": 1,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/20",
+              "assessment_index": 0,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Middle 1점이 이미 완성된 기본 흐름을 요구해 2점과 구분되지 않음을 지적한다.",
+              "error_type": "E06"
+            },
+            {
+              "issue_id": "E07-03",
+              "level": 2,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/21",
+              "assessment_index": 5,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Senior 2점이 기본 흐름을 반복하여 구체적인 대응 메커니즘이 빠짐을 지적한다.",
+              "error_type": "E07"
+            },
+            {
+              "issue_id": "E02-03",
+              "level": 2,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/22",
+              "assessment_index": 2,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Middle 2점에서 심층 문제 분석·대안 비교·선택 근거를 필수화한 과도한 요구를 지적한다.",
+              "error_type": "E02"
+            },
+            {
+              "issue_id": "E03-03",
+              "level": 1,
+              "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/injected_errors/23",
+              "assessment_index": 7,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Senior 1점이 동작하는 기본 처리 흐름 없이 기술 방향 제안만으로 충족됨을 지적한다.",
+              "error_type": "E03"
+            }
+          ]
+        }
+      },
+      "seniority_policy": "프로젝트 연차 기준"
+    },
+    "ticket-rubric-review": {
+      "labels": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json",
+      "labels_sha256": "766af5d208231838f33116650cea43e7fa82b08bb8a215d88b56c18ae11821b5",
+      "cases": {
+        "ticket_uploaded": {
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md",
+            "senior": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md"
+          },
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "reason": "2점의 '권위 있는 판정 지점'과 '소유권·유효성' 확인은 좌석 충돌을 막는 기본 흐름이며, 여러 상황마다 별도의 복잡한 대응 메커니즘을 요구하지 않는다. 3점도 오래된 결제·만료 작업이 현재 상태를 덮어쓰는 대표적인 한계와 이를 막는 개선 수준이다.",
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/cases/0/expected_3_5/0",
+              "applied_rule": "중급은 기본 상태 판정 흐름과 대표적인 한계의 개선까지 요구할 수 있다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "2점은 주문·진행 상태의 보존과 재개뿐 아니라 '요청·이벤트 재처리의 중복 효과' 방지와 결제 결과 불명 주문의 '외부 상태와 대사'까지 모두 요구하여 기본 복구 설계보다 범위가 넓다. 3점도 '2점에 더해'로 이 과도한 요구를 상속한다.",
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/cases/0/expected_3_5/1",
+              "applied_rule": "중급 2점에서 기본 복구 외에 여러 독립적인 실패 상황의 대응을 필수화하면 부적합하다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "2점의 처리 능력에 맞춘 유입 제어, 초과 요청의 대기·제한, 내부 적체 제한은 접수한 작업을 보호하는 기본 설계에 해당한다. 3점의 '적체와 처리 상태를 관찰하여 유입량이나 재시도 안내를 조정'하는 요구도 고정 수용 기준의 대표적인 한계를 개선하는 수준이다.",
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/cases/0/expected_3_5/2",
+              "applied_rule": "중급은 동작하는 유입 제어 흐름과 대표적인 과부하 한계의 개선을 설명하는 수준이어야 한다."
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "reason": "2점의 '인기 공연 내부에도 추가 자원이 효과를 내는 처리 단위'와 충돌 판정 유지는 이 항목의 핵심 요구를 충족하는 기본 확장 조건이며, 병목·검증 설명도 복잡한 대응이나 비용 비교를 요구하지 않는다. 3점은 부하 편중이나 공통 처리 지점에 맞춰 분산 단위를 조정하는 대표적인 개선 수준이다.",
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/cases/0/expected_3_5/3",
+              "applied_rule": "중급은 확장을 성립시키는 기본 분산 구조와 대표적인 병목 개선까지 요구할 수 있다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "reason": "1점은 배타적 점유와 확정의 기본 흐름을 요구하고, 2점은 소유권·상태·만료 검증과 배타적 전이, 이전 요청 차단 및 재시도 효과 제한을 요구한다. 3점은 만료·재점유 사이의 경합을 추적하고 검증 경계나 전이 순서를 개선하면서 '경합 대기 또는 재시도 부담'에 대한 선택 근거까지 설명하게 한다.",
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/cases/0/expected_3_5/4",
+              "applied_rule": "고급은 기본 설계에서 구체적인 경합 제어를 거쳐 한계 분석과 선택 근거로 발전해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "1점은 '주문 상태를 저장하고 실패한 처리를 재시도'하는 흐름만으로 충족되며, 재시작 후 처리 대상 식별은 설명하지 못해도 허용한다. 접수 성공 전 보존과 재시작 후 미완료 주문 식별·재개가 기본 흐름으로 연결되지 않아 핵심 복구 요구를 충족하는 설계가 필수화되지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/cases/0/expected_3_5/5",
+              "applied_rule": "고급 1점도 접수 주문을 장애 후 찾아 재개할 수 있는 기본 복구 설계를 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "1점은 '실제 점유·주문 경로까지 전달되는 작업량을 통제하는 방법'을 설명하지 못해도 충족되어 핵심 보호 흐름이 빠질 수 있다. 2점도 부하 검증과 한도 산정 외에는 '핵심 경로에 전달되는 작업량을 제한'한다는 결과를 요구할 뿐, 한도를 집행하는 수용 판정 조건이나 적체 제한의 구체적인 처리 원리를 명시하지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/cases/0/expected_3_5/6",
+              "applied_rule": "고급 1점은 핵심 경로를 보호하는 기본 설계, 2점은 구체적인 통제 원리와 동작 조건을 요구해야 한다."
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "reason": "1점은 '조회 부하 분리나 처리 자원 증설'을 제시하면서 서로 다른 좌석의 작업 분산을 설명하지 못해도 충족된다. 또한 '자원 추가로 동일 좌석 경합도 해소된다고 가정'하는 경우까지 포함하여, 핵심 확장 구조와 배타적 처리 한계를 이해한 기본 설계가 필수화되지 않는다.",
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/cases/0/expected_3_5/7",
+              "applied_rule": "고급 1점은 자원 증설 제안만이 아니라 핵심 확장 요구를 충족하는 기본 분산 흐름을 요구해야 한다."
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "reason": "중급의 대표적인 한계 개선에 비해 고급 C1 3점은 경합의 전이 순서와 대기·재시도 부담을, C2 3점은 외부 결제 성공 후 기록 실패 및 복구·결과 수신 중첩과 대조 선택의 지연 비용을 추가로 요구한다. 기본 유입 제어와 분산 설명은 일부 겹치지만, 고급 C3 3점은 보호 강도와 대기·제한·용량 활용 사이의 선택 근거를, C4 3점은 확장 이득과 최신성 저하·점유 거절 등의 비용 비교를 요구하여 상위 수준의 설계 판단이 구분된다.",
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/cases/0/expected_4_1",
+              "applied_rule": "대응되는 핵심 항목의 높은 수준에서 문제 분석과 기술적 선택의 요구가 실질적으로 심화되어야 한다."
+            }
+          ],
+          "level_error_review": [
+            {
+              "issue_id": "T01",
+              "level": 2,
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/0",
+              "assessment_index": 0,
+              "causal_role": "direct_cause",
+              "detected": false,
+              "review_note": "Middle C1은 Pass다. 소유권·유효성 및 여러 예외를 기본 공통 흐름으로 인정해 과도한 범위를 지적하지 않았다."
+            },
+            {
+              "issue_id": "T02",
+              "level": 3,
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/1",
+              "assessment_index": 0,
+              "causal_role": "inherited_effect",
+              "detected": false,
+              "review_note": "Middle C1이 Pass이며 과도한 2점 요구의 상속 문제도 지적하지 않았다.",
+              "parent_issue_id": "T01"
+            },
+            {
+              "issue_id": "T03",
+              "level": 2,
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/2",
+              "assessment_index": 1,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "기본 보존·재개 외에 중복 효과 방지와 미결 결제 대사를 모두 필수화한 과도한 범위를 지적했다."
+            },
+            {
+              "issue_id": "T04",
+              "level": 3,
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/3",
+              "assessment_index": 1,
+              "causal_role": "inherited_effect",
+              "detected": true,
+              "review_note": "3점도 과도한 2점 요구를 상속한다고 명시했다. 직접 원인 T03과 중복 합산하지 않는다.",
+              "parent_issue_id": "T03"
+            },
+            {
+              "issue_id": "T05",
+              "level": 2,
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/4",
+              "assessment_index": 3,
+              "causal_role": "direct_cause",
+              "detected": false,
+              "review_note": "Middle C4는 Pass다. 추가 분할·정합성·병목·검증을 기본 조건으로 인정해 과도한 필수 범위를 지적하지 않았다."
+            },
+            {
+              "issue_id": "T06",
+              "level": 3,
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/5",
+              "assessment_index": 3,
+              "causal_role": "inherited_effect",
+              "detected": false,
+              "review_note": "Middle C4가 Pass이며 과도한 2점 요구의 상속도 지적하지 않았다.",
+              "parent_issue_id": "T05"
+            },
+            {
+              "issue_id": "T07",
+              "level": 2,
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/6",
+              "assessment_index": 5,
+              "causal_role": "direct_cause",
+              "detected": false,
+              "review_note": "Senior C2는 Fail이지만 근거는 1점에 한정된다. 실제 오류인 2점의 중복 효과 집행 원리 부족은 지적하지 않았다."
+            },
+            {
+              "issue_id": "T08",
+              "level": 1,
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/7",
+              "assessment_index": 6,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Senior C3 1점에서 실제 점유·주문 경로의 작업량 통제 없이도 충족되는 문제를 지적했다."
+            },
+            {
+              "issue_id": "T09",
+              "level": 2,
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/8",
+              "assessment_index": 6,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Senior C3 2점이 결과만 보장할 뿐 실제 한도 집행 조건과 적체 제한 처리 원리를 요구하지 않는다고 지적했다."
+            },
+            {
+              "issue_id": "T10",
+              "level": 1,
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/9",
+              "assessment_index": 7,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "Senior C4 1점의 기본 분산 흐름 누락과 증설만으로 동일 좌석 경합을 해소한다는 잘못된 가정을 지적했다."
+            },
+            {
+              "issue_id": "T11",
+              "level": 2,
+              "source_label": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels-before-anchor.json#/known_issue_candidates/10",
+              "assessment_index": 7,
+              "causal_role": "direct_cause",
+              "detected": false,
+              "review_note": "Senior C4는 Fail이지만 근거가 1점에 한정되어 2점의 분할·라우팅·상태 소유권 경계 부족은 지적하지 않았다."
+            }
+          ],
+          "additional_wrong_level_citations": [
+            {
+              "seniority": "Senior",
+              "target_id": "C2",
+              "level": 1,
+              "reference_expected": "Pass",
+              "assessment_index": 5,
+              "reason": "원래 적합한 1점에 접수 성공 전 보존과 재시작 대상 식별을 추가 필수화했다. 실제 결함인 2점은 지적하지 않았다."
+            }
+          ]
+        }
+      },
+      "seniority_policy": "당시 동봉 채점표. 프로젝트 연차 기준과 다른 조건."
+    }
+  },
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "high"
+}

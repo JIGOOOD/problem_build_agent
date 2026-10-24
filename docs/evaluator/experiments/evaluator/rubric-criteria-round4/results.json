@@ -1,35 +1,59 @@
 {
-  "partition": "tuning",
   "model": "gpt-6.1-sol",
   "reasoning_effort": "high",
   "rules": [
     "3-5",
     "4-1"
   ],
-  "evaluation_head": "d052b8e1f4c309e790d8799c6e7b7318a4aefc91",
-  "user_edited_criteria": true,
-  "criteria_sha256": "fca6261866bdcdf811def742e61343f4cf8a4ff844cf35dd4d6835e08b2af574",
-  "full_criteria_sha256": "a36bb3c5a210e0d7b363dbfdad3874a3a8446388f5250e62d34c6125f654c300",
-  "seniority_sha256": "ac4aabeb05f45606afe6e1a3e526832147fdd705fc4fa53d23b459f28fc6c07d",
-  "evaluator_sha256": "5a3535fa9012e4f7c4e27865ccdc341190c0b0eface2a61bed7fd74efd6f929a",
-  "labels_in_model_input": false,
-  "external_policy_injected": false,
-  "actual_model_calls": 9,
-  "labeled_pairs": 9,
-  "unlabeled_pairs": 0,
-  "unscorable": 0,
+  "review_method": "assistant_semantic_review",
+  "criteria": "git:bee5375:docs/evaluator/rubric.md",
+  "metrics": {
+    "strict_direct_error_detection": {
+      "detected": 28,
+      "total": 32,
+      "percentage": 87.5
+    },
+    "inherited_effect_detection": {
+      "detected": 0,
+      "total": 6,
+      "percentage": 0.0
+    },
+    "all_level_error_detection": {
+      "detected": 28,
+      "total": 38,
+      "percentage": 73.68
+    },
+    "criterion_error_detection": {
+      "detected": 29,
+      "total": 30,
+      "percentage": 96.67
+    },
+    "pair_error_detection": {
+      "detected": 7,
+      "total": 7,
+      "percentage": 100.0
+    },
+    "normal_item_acceptance": {
+      "matched": 44,
+      "total": 44,
+      "percentage": 100.0
+    },
+    "verdict_agreement": {
+      "matched": 80,
+      "total": 81,
+      "percentage": 98.77
+    }
+  },
   "datasets": {
     "seniority-error-injection": {
+      "labels": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json",
+      "labels_sha256": "2d0694b7d816904656ee34bce3c131d84bb23ebba79f832d75f03ca7e972e448",
       "cases": {
         "01": {
-          "case_id": "01",
           "source_rubrics": {
             "middle": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/01/middle.md",
             "senior": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/01/senior.md"
           },
-          "source_labels": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json",
-          "labels_sha256": "2d0694b7d816904656ee34bce3c131d84bb23ebba79f832d75f03ca7e972e448",
-          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/tuning-seniority-error-injection-01",
           "assessments": [
             {
               "seniority": "Middle",
@@ -122,56 +146,13 @@
               "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/0/expected_4_1"
             }
           ],
-          "level_error_review": [],
-          "additional_wrong_level_citations": [],
-          "wrong_error_cause_citations": [],
-          "metrics": {
-            "strict_direct_error_detection": {
-              "detected": 0,
-              "total": 0,
-              "percentage": null
-            },
-            "inherited_effect_detection": {
-              "detected": 0,
-              "total": 0,
-              "percentage": null
-            },
-            "all_level_error_detection": {
-              "detected": 0,
-              "total": 0,
-              "percentage": null
-            },
-            "criterion_error_detection": {
-              "detected": 0,
-              "total": 0,
-              "percentage": null
-            },
-            "pair_error_detection": {
-              "detected": 0,
-              "total": 0,
-              "percentage": null
-            },
-            "normal_item_acceptance": {
-              "matched": 9,
-              "total": 9,
-              "percentage": 100.0
-            },
-            "verdict_agreement": {
-              "matched": 9,
-              "total": 9,
-              "percentage": 100.0
-            }
-          }
+          "level_error_review": []
         },
         "02": {
-          "case_id": "02",
           "source_rubrics": {
             "middle": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/middle.md",
             "senior": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/02/senior.md"
           },
-          "source_labels": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json",
-          "labels_sha256": "2d0694b7d816904656ee34bce3c131d84bb23ebba79f832d75f03ca7e972e448",
-          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/tuning-seniority-error-injection-02",
           "assessments": [
             {
               "seniority": "Middle",
@@ -310,56 +291,13 @@
               "detected": true,
               "review_note": "실제 근거가 해당 점수의 주입 오류를 지적한다."
             }
-          ],
-          "additional_wrong_level_citations": [],
-          "wrong_error_cause_citations": [],
-          "metrics": {
-            "strict_direct_error_detection": {
-              "detected": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "inherited_effect_detection": {
-              "detected": 0,
-              "total": 1,
-              "percentage": 0.0
-            },
-            "all_level_error_detection": {
-              "detected": 4,
-              "total": 5,
-              "percentage": 80.0
-            },
-            "criterion_error_detection": {
-              "detected": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "pair_error_detection": {
-              "detected": 1,
-              "total": 1,
-              "percentage": 100.0
-            },
-            "normal_item_acceptance": {
-              "matched": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "verdict_agreement": {
-              "matched": 9,
-              "total": 9,
-              "percentage": 100.0
-            }
-          }
+          ]
         },
         "03": {
-          "case_id": "03",
           "source_rubrics": {
             "middle": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/03/middle.md",
             "senior": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/03/senior.md"
           },
-          "source_labels": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json",
-          "labels_sha256": "2d0694b7d816904656ee34bce3c131d84bb23ebba79f832d75f03ca7e972e448",
-          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/tuning-seniority-error-injection-03",
           "assessments": [
             {
               "seniority": "Middle",
@@ -489,56 +427,13 @@
               "detected": true,
               "review_note": "실제 근거가 해당 점수의 주입 오류를 지적한다."
             }
-          ],
-          "additional_wrong_level_citations": [],
-          "wrong_error_cause_citations": [],
-          "metrics": {
-            "strict_direct_error_detection": {
-              "detected": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "inherited_effect_detection": {
-              "detected": 0,
-              "total": 0,
-              "percentage": null
-            },
-            "all_level_error_detection": {
-              "detected": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "criterion_error_detection": {
-              "detected": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "pair_error_detection": {
-              "detected": 1,
-              "total": 1,
-              "percentage": 100.0
-            },
-            "normal_item_acceptance": {
-              "matched": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "verdict_agreement": {
-              "matched": 9,
-              "total": 9,
-              "percentage": 100.0
-            }
-          }
+          ]
         },
         "04": {
-          "case_id": "04",
           "source_rubrics": {
             "middle": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/04/middle.md",
             "senior": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/04/senior.md"
           },
-          "source_labels": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json",
-          "labels_sha256": "2d0694b7d816904656ee34bce3c131d84bb23ebba79f832d75f03ca7e972e448",
-          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/tuning-seniority-error-injection-04",
           "assessments": [
             {
               "seniority": "Middle",
@@ -631,56 +526,13 @@
               "source_label": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json#/cases/3/expected_4_1"
             }
           ],
-          "level_error_review": [],
-          "additional_wrong_level_citations": [],
-          "wrong_error_cause_citations": [],
-          "metrics": {
-            "strict_direct_error_detection": {
-              "detected": 0,
-              "total": 0,
-              "percentage": null
-            },
-            "inherited_effect_detection": {
-              "detected": 0,
-              "total": 0,
-              "percentage": null
-            },
-            "all_level_error_detection": {
-              "detected": 0,
-              "total": 0,
-              "percentage": null
-            },
-            "criterion_error_detection": {
-              "detected": 0,
-              "total": 0,
-              "percentage": null
-            },
-            "pair_error_detection": {
-              "detected": 0,
-              "total": 0,
-              "percentage": null
-            },
-            "normal_item_acceptance": {
-              "matched": 9,
-              "total": 9,
-              "percentage": 100.0
-            },
-            "verdict_agreement": {
-              "matched": 9,
-              "total": 9,
-              "percentage": 100.0
-            }
-          }
+          "level_error_review": []
         },
         "05": {
-          "case_id": "05",
           "source_rubrics": {
             "middle": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/05/middle.md",
             "senior": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/05/senior.md"
           },
-          "source_labels": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json",
-          "labels_sha256": "2d0694b7d816904656ee34bce3c131d84bb23ebba79f832d75f03ca7e972e448",
-          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/tuning-seniority-error-injection-05",
           "assessments": [
             {
               "seniority": "Middle",
@@ -810,56 +662,13 @@
               "detected": true,
               "review_note": "실제 근거가 해당 점수의 주입 오류를 지적한다."
             }
-          ],
-          "additional_wrong_level_citations": [],
-          "wrong_error_cause_citations": [],
-          "metrics": {
-            "strict_direct_error_detection": {
-              "detected": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "inherited_effect_detection": {
-              "detected": 0,
-              "total": 0,
-              "percentage": null
-            },
-            "all_level_error_detection": {
-              "detected": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "criterion_error_detection": {
-              "detected": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "pair_error_detection": {
-              "detected": 1,
-              "total": 1,
-              "percentage": 100.0
-            },
-            "normal_item_acceptance": {
-              "matched": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "verdict_agreement": {
-              "matched": 9,
-              "total": 9,
-              "percentage": 100.0
-            }
-          }
+          ]
         },
         "06": {
-          "case_id": "06",
           "source_rubrics": {
             "middle": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/middle.md",
             "senior": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/06/senior.md"
           },
-          "source_labels": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json",
-          "labels_sha256": "2d0694b7d816904656ee34bce3c131d84bb23ebba79f832d75f03ca7e972e448",
-          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/tuning-seniority-error-injection-06",
           "assessments": [
             {
               "seniority": "Middle",
@@ -998,56 +807,13 @@
               "detected": true,
               "review_note": "실제 근거가 해당 점수의 주입 오류를 지적한다."
             }
-          ],
-          "additional_wrong_level_citations": [],
-          "wrong_error_cause_citations": [],
-          "metrics": {
-            "strict_direct_error_detection": {
-              "detected": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "inherited_effect_detection": {
-              "detected": 0,
-              "total": 1,
-              "percentage": 0.0
-            },
-            "all_level_error_detection": {
-              "detected": 4,
-              "total": 5,
-              "percentage": 80.0
-            },
-            "criterion_error_detection": {
-              "detected": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "pair_error_detection": {
-              "detected": 1,
-              "total": 1,
-              "percentage": 100.0
-            },
-            "normal_item_acceptance": {
-              "matched": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "verdict_agreement": {
-              "matched": 9,
-              "total": 9,
-              "percentage": 100.0
-            }
-          }
+          ]
         },
         "07": {
-          "case_id": "07",
           "source_rubrics": {
             "middle": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/middle.md",
             "senior": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/07/senior.md"
           },
-          "source_labels": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json",
-          "labels_sha256": "2d0694b7d816904656ee34bce3c131d84bb23ebba79f832d75f03ca7e972e448",
-          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/tuning-seniority-error-injection-07",
           "assessments": [
             {
               "seniority": "Middle",
@@ -1177,56 +943,13 @@
               "detected": true,
               "review_note": "실제 근거가 해당 점수의 주입 오류를 지적한다."
             }
-          ],
-          "additional_wrong_level_citations": [],
-          "wrong_error_cause_citations": [],
-          "metrics": {
-            "strict_direct_error_detection": {
-              "detected": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "inherited_effect_detection": {
-              "detected": 0,
-              "total": 0,
-              "percentage": null
-            },
-            "all_level_error_detection": {
-              "detected": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "criterion_error_detection": {
-              "detected": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "pair_error_detection": {
-              "detected": 1,
-              "total": 1,
-              "percentage": 100.0
-            },
-            "normal_item_acceptance": {
-              "matched": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "verdict_agreement": {
-              "matched": 9,
-              "total": 9,
-              "percentage": 100.0
-            }
-          }
+          ]
         },
         "08": {
-          "case_id": "08",
           "source_rubrics": {
             "middle": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/08/middle.md",
             "senior": "resources/evaluator/datasets/tuning/seniority-error-injection/cases/08/senior.md"
           },
-          "source_labels": "resources/evaluator/datasets/tuning/seniority-error-injection/review/expected_labels.json",
-          "labels_sha256": "2d0694b7d816904656ee34bce3c131d84bb23ebba79f832d75f03ca7e972e448",
-          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/tuning-seniority-error-injection-08",
           "assessments": [
             {
               "seniority": "Middle",
@@ -1365,97 +1088,19 @@
               "detected": true,
               "review_note": "실제 근거가 해당 점수의 주입 오류를 지적한다."
             }
-          ],
-          "additional_wrong_level_citations": [],
-          "wrong_error_cause_citations": [],
-          "metrics": {
-            "strict_direct_error_detection": {
-              "detected": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "inherited_effect_detection": {
-              "detected": 0,
-              "total": 1,
-              "percentage": 0.0
-            },
-            "all_level_error_detection": {
-              "detected": 4,
-              "total": 5,
-              "percentage": 80.0
-            },
-            "criterion_error_detection": {
-              "detected": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "pair_error_detection": {
-              "detected": 1,
-              "total": 1,
-              "percentage": 100.0
-            },
-            "normal_item_acceptance": {
-              "matched": 4,
-              "total": 4,
-              "percentage": 100.0
-            },
-            "verdict_agreement": {
-              "matched": 9,
-              "total": 9,
-              "percentage": 100.0
-            }
-          }
-        }
-      },
-      "metrics": {
-        "strict_direct_error_detection": {
-          "detected": 24,
-          "total": 24,
-          "percentage": 100.0
-        },
-        "inherited_effect_detection": {
-          "detected": 0,
-          "total": 3,
-          "percentage": 0.0
-        },
-        "all_level_error_detection": {
-          "detected": 24,
-          "total": 27,
-          "percentage": 88.89
-        },
-        "criterion_error_detection": {
-          "detected": 24,
-          "total": 24,
-          "percentage": 100.0
-        },
-        "pair_error_detection": {
-          "detected": 6,
-          "total": 6,
-          "percentage": 100.0
-        },
-        "normal_item_acceptance": {
-          "matched": 42,
-          "total": 42,
-          "percentage": 100.0
-        },
-        "verdict_agreement": {
-          "matched": 72,
-          "total": 72,
-          "percentage": 100.0
+          ]
         }
       }
     },
     "ticket-rubric-review": {
+      "labels": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels.json",
+      "labels_sha256": "6a0cfbcc0c62d0b954722023e0223566c4bd557b97f10da3550eba648d4587a3",
       "cases": {
         "ticket_uploaded": {
-          "case_id": "ticket_uploaded",
           "source_rubrics": {
             "middle": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/middle/nfr_rubric.md",
             "senior": "resources/evaluator/datasets/tuning/ticket-rubric-review/inputs/ticket/senior/nfr_rubric.md"
           },
-          "source_labels": "resources/evaluator/datasets/tuning/ticket-rubric-review/review/expected_labels.json",
-          "labels_sha256": "6a0cfbcc0c62d0b954722023e0223566c4bd557b97f10da3550eba648d4587a3",
-          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/tuning-ticket-rubric-review-ticket_uploaded",
           "assessments": [
             {
               "seniority": "Middle",
@@ -1658,126 +1303,9 @@
               "assessment_index": 5,
               "reason": "실제 근거는 정상으로 제공된 1점의 재시작 후 복구 대상 식별 부족을 지적했다. 정답이 요구한 오류는 2점의 구체적 복구·중복 제어 원리 부족이므로 해당 직접 오류의 검출로 세지 않았다."
             }
-          ],
-          "wrong_error_cause_citations": [],
-          "metrics": {
-            "strict_direct_error_detection": {
-              "detected": 4,
-              "total": 8,
-              "percentage": 50.0
-            },
-            "inherited_effect_detection": {
-              "detected": 0,
-              "total": 3,
-              "percentage": 0.0
-            },
-            "all_level_error_detection": {
-              "detected": 4,
-              "total": 11,
-              "percentage": 36.36
-            },
-            "criterion_error_detection": {
-              "detected": 5,
-              "total": 6,
-              "percentage": 83.33
-            },
-            "pair_error_detection": {
-              "detected": 1,
-              "total": 1,
-              "percentage": 100.0
-            },
-            "normal_item_acceptance": {
-              "matched": 2,
-              "total": 2,
-              "percentage": 100.0
-            },
-            "verdict_agreement": {
-              "matched": 8,
-              "total": 9,
-              "percentage": 88.89
-            }
-          }
-        }
-      },
-      "metrics": {
-        "strict_direct_error_detection": {
-          "detected": 4,
-          "total": 8,
-          "percentage": 50.0
-        },
-        "inherited_effect_detection": {
-          "detected": 0,
-          "total": 3,
-          "percentage": 0.0
-        },
-        "all_level_error_detection": {
-          "detected": 4,
-          "total": 11,
-          "percentage": 36.36
-        },
-        "criterion_error_detection": {
-          "detected": 5,
-          "total": 6,
-          "percentage": 83.33
-        },
-        "pair_error_detection": {
-          "detected": 1,
-          "total": 1,
-          "percentage": 100.0
-        },
-        "normal_item_acceptance": {
-          "matched": 2,
-          "total": 2,
-          "percentage": 100.0
-        },
-        "verdict_agreement": {
-          "matched": 8,
-          "total": 9,
-          "percentage": 88.89
+          ]
         }
       }
     }
-  },
-  "metrics": {
-    "strict_direct_error_detection": {
-      "detected": 28,
-      "total": 32,
-      "percentage": 87.5
-    },
-    "inherited_effect_detection": {
-      "detected": 0,
-      "total": 6,
-      "percentage": 0.0
-    },
-    "all_level_error_detection": {
-      "detected": 28,
-      "total": 38,
-      "percentage": 73.68
-    },
-    "criterion_error_detection": {
-      "detected": 29,
-      "total": 30,
-      "percentage": 96.67
-    },
-    "pair_error_detection": {
-      "detected": 7,
-      "total": 7,
-      "percentage": 100.0
-    },
-    "normal_item_acceptance": {
-      "matched": 44,
-      "total": 44,
-      "percentage": 100.0
-    },
-    "verdict_agreement": {
-      "matched": 80,
-      "total": 81,
-      "percentage": 98.77
-    }
-  },
-  "semantic_review_method": "assistant_semantic_review",
-  "cost_estimate_usd": 0.424215,
-  "cumulative_upper_usd": 49.739682200000026,
-  "budget_usd": 55,
-  "reused_previous_results": false
+  }
 }
