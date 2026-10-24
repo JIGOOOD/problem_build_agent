@@ -1,0 +1,146 @@
+{
+  "experiment": "generator_baseline",
+  "topic": "공연 좌석 티켓 예매",
+  "generation_prompt_modified": false,
+  "input_controls": {
+    "source": ".archgen/m7-followup/three-topic-validation-20261019/validation/ticket/middle/1",
+    "shared_research_and_selection": true,
+    "changed_between_tiers": [
+      "brief.seniority"
+    ],
+    "new_research": false,
+    "new_selection": false,
+    "few_shot": false,
+    "application_judge_enabled": false
+  },
+  "generation_model": "gpt-6.1-sol",
+  "generation_effort": "medium",
+  "evaluator_model": "gpt-6.1-sol",
+  "evaluator_effort": "high",
+  "evaluation_rules": [
+    "3-5",
+    "4-1"
+  ],
+  "criteria_sha256": "a36bb3c5a210e0d7b363dbfdad3874a3a8446388f5250e62d34c6125f654c300",
+  "seniority_sha256": "ac4aabeb05f45606afe6e1a3e526832147fdd705fc4fa53d23b459f28fc6c07d",
+  "generator_prompt_sha256": "abbcdde41c3f303e33ce3da0236e6d032bbfaac1d8bff1e3354a73ca4746c30c",
+  "outputs": {
+    "middle": {
+      "file": "docs/evaluator/experiments/generator/baseline/middle.md",
+      "sha256": "6dc816b028ae0784ec123ec8ee26633bccbe036afa63255099ab9723055192c4",
+      "generation_calls": 1,
+      "harness_findings": [],
+      "post_render_findings": []
+    },
+    "senior": {
+      "file": "docs/evaluator/experiments/generator/baseline/senior.md",
+      "sha256": "5e292a264ccd678d3c2824b17545d8aea201535fa4fb00da71ac231c1515e905",
+      "generation_calls": 1,
+      "harness_findings": [],
+      "post_render_findings": []
+    }
+  },
+  "assessments": [
+    {
+      "seniority": "middle",
+      "metric": "3-5",
+      "target_id": "C1",
+      "verdict": "Pass",
+      "applied_rule": "중간 연차의 2점은 기본 처리 흐름을, 3점은 대표적인 한계와 개선을 요구해야 한다.",
+      "reason": "2점의 '소유권과 유효성을 확인'하고 '허용된 전이만 반영'하는 흐름은 좌석 정합성을 성립시키는 기본 보장 조건이며, 구체적인 동시성 제어 구현까지 요구하지 않는다. 3점의 오래된 만료 작업·지연 결제 응답에 대한 반영 시 재검증도 대표적인 상태 변경 문제와 개선 수준이다."
+    },
+    {
+      "seniority": "middle",
+      "metric": "3-5",
+      "target_id": "C2",
+      "verdict": "Fail",
+      "applied_rule": "중간 연차의 2점에서 여러 독립적인 장애 상황의 대응을 함께 필수화하면 안 된다.",
+      "reason": "2점은 '중단된 작업을 찾아 재처리'하는 기본 복구뿐 아니라 요청·결제 이벤트 중복 방지와 '불확실한 주문을 미결로 추적하여 외부 상태와 대사'하는 대응까지 요구한다. 처리 중단 복구에 중복 전달과 결제 결과 불확실성의 대응을 모두 결합해 기본 복구 흐름을 넘어선다."
+    },
+    {
+      "seniority": "middle",
+      "metric": "3-5",
+      "target_id": "C3",
+      "verdict": "Pass",
+      "applied_rule": "기본 과부하 제어에 필요한 구성요소는 허용하며, 3점은 대표적인 한계와 개선 수준이어야 한다.",
+      "reason": "2점의 수용 한계 설정, 유입 제어, 초과 요청 처리와 내부 적체 제한은 접수 작업을 보호하는 하나의 기본 과부하 제어 흐름을 구성한다. 3점은 '고정된 유입 한도'의 한계를 설명하고 관측 상태에 따라 조정하는 개선을 요구하므로 복잡한 장애 분석이나 선택의 비용 비교까지 필수화하지 않는다."
+    },
+    {
+      "seniority": "middle",
+      "metric": "3-5",
+      "target_id": "C4",
+      "verdict": "Fail",
+      "applied_rule": "중간 연차의 2점에서 기본 설계에 추가적인 한계 분석과 검증까지 필수화하면 안 된다.",
+      "reason": "2점은 자원 추가와 요청 분산, 인기 공연 내부의 분산 단위를 설명하는 데 더해 '추가 자원의 효과와 남는 병목을 부하 검증으로 확인'하도록 요구한다. 기본 확장 흐름을 넘어 잔여 한계의 식별과 검증까지 필수화하므로 중간 연차 2점의 범위가 과도하다."
+    },
+    {
+      "seniority": "senior",
+      "metric": "3-5",
+      "target_id": "C1",
+      "verdict": "Fail",
+      "applied_rule": "상위 연차의 1점은 핵심 상태 전이의 정상 처리 흐름을 갖춘 기본 설계를 요구해야 한다.",
+      "reason": "1점의 '중복 점유를 막는 기본 설계와 점유 만료'만으로는 결제 결과를 어떤 좌석 소유권과 상태에 연결해 확정·해제하는지 설명하지 않아도 된다. 경합 처리의 상세함과 별개로, 평가 대상인 점유부터 결제 결과 반영까지의 기본 흐름이 필수로 보장되지 않는다."
+    },
+    {
+      "seniority": "senior",
+      "metric": "3-5",
+      "target_id": "C2",
+      "verdict": "Fail",
+      "applied_rule": "상위 연차의 1점은 접수된 주문을 실제로 복구할 수 있는 기본 처리 연결을 요구해야 한다.",
+      "reason": "1점은 '주문 저장과 재시도로 복구하는 기본 설계'를 요구하지만, 접수 성공 전에 무엇을 보존하고 어떤 미완료 작업을 다시 처리하는지 연결하는 조건은 명시하지 않는다. 따라서 저장·재시도 제안만으로도 충족될 수 있어 접수된 주문의 지속성과 복구를 성립시키는 기본 흐름이 부족하다."
+    },
+    {
+      "seniority": "senior",
+      "metric": "3-5",
+      "target_id": "C3",
+      "verdict": "Fail",
+      "applied_rule": "상위 연차의 1점은 단순한 제한 제안이 아니라 접수 작업 보호로 연결되는 기본 설계를 요구해야 한다.",
+      "reason": "1점은 '초과 요청의 대기나 제한 응답'을 제시하면 충족될 수 있고, 이를 어느 처리 경로에 적용해 이미 접수된 작업의 진행을 유지하는지 기본 연결을 요구하지 않는다. 이는 구체적인 병목 대응의 부족을 넘어 핵심인 유입 제어와 내부 처리 보호의 기본 흐름이 빠진 경우까지 허용한다."
+    },
+    {
+      "seniority": "senior",
+      "metric": "3-5",
+      "target_id": "C4",
+      "verdict": "Fail",
+      "applied_rule": "상위 연차의 1점은 해당 항목의 핵심 확장 문제를 해결하는 기본 설계를 요구해야 한다.",
+      "reason": "1점의 '처리 자원 추가나 공연별 분산의 기본 설계'는 단일 인기 공연 내부의 요청을 추가 자원에 나누는 흐름 없이도 충족된다. 따라서 인기 공연이 하나의 고정된 처리 단위에 계속 묶이는 설계까지 허용해 핵심 확장 요구를 충족하지 못한다."
+    },
+    {
+      "seniority": "comparison",
+      "metric": "4-1",
+      "target_id": "pair",
+      "verdict": "Fail",
+      "applied_rule": "비교 가능한 핵심 항목의 2점에서 실질적인 기술적 깊이 차이가 있어야 하며, 3점의 차이로 상쇄할 수 없다.",
+      "reason": "C4의 두 2점은 모두 인기 공연 내부 분산, 동일 좌석 충돌 판정 유지, 잔여 병목과 추가 자원 효과의 부하 검증을 요구하며, 상위 연차의 '확장 메커니즘'이라는 표현 외에 추가 동작 조건이 드러나지 않는다. C2의 두 2점도 성공 응답 전 진행 상태 보존·재처리·중복 방지·미결 대사로 사실상 같아, 3점의 선택 근거 추가만으로 2점의 차이 부족을 상쇄할 수 없다."
+    }
+  ],
+  "metrics": {
+    "middle": {
+      "passed": 2,
+      "total": 4,
+      "percentage": 50.0
+    },
+    "senior": {
+      "passed": 0,
+      "total": 4,
+      "percentage": 0.0
+    },
+    "comparison": {
+      "passed": 0,
+      "total": 1,
+      "percentage": 0.0
+    },
+    "overall": {
+      "passed": 2,
+      "total": 9,
+      "percentage": 22.22
+    }
+  },
+  "actual_generation_calls": 2,
+  "actual_evaluation_calls": 1,
+  "accuracy_not_measured": true,
+  "cost_estimate_usd": 0.16140749999999998,
+  "cumulative_upper_usd": 49.90108970000003,
+  "budget_usd": 55,
+  "raw_run": ".archgen/m7-followup/generator-baseline-ticket-20261024"
+}
