@@ -1,0 +1,1697 @@
+{
+  "partition": "validation",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "high",
+  "rules": [
+    "3-5",
+    "4-1"
+  ],
+  "evaluation_head": "d052b8e1f4c309e790d8799c6e7b7318a4aefc91",
+  "user_edited_criteria": true,
+  "criteria_sha256": "fca6261866bdcdf811def742e61343f4cf8a4ff844cf35dd4d6835e08b2af574",
+  "full_criteria_sha256": "a36bb3c5a210e0d7b363dbfdad3874a3a8446388f5250e62d34c6125f654c300",
+  "seniority_sha256": "ac4aabeb05f45606afe6e1a3e526832147fdd705fc4fa53d23b459f28fc6c07d",
+  "evaluator_sha256": "5a3535fa9012e4f7c4e27865ccdc341190c0b0eface2a61bed7fd74efd6f929a",
+  "labels_in_model_input": false,
+  "external_policy_injected": false,
+  "actual_model_calls": 8,
+  "labeled_pairs": 8,
+  "unlabeled_pairs": 0,
+  "unscorable": 0,
+  "datasets": {
+    "injected-errors": {
+      "cases": {
+        "01": {
+          "case_id": "01",
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/validation/injected-errors/cases/01/middle.md",
+            "senior": "resources/evaluator/datasets/validation/injected-errors/cases/01/senior.md"
+          },
+          "source_labels": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json",
+          "labels_sha256": "7a7af32f50889fc7200b86dbffc2381de085da8cc1b404cb596ac986a9da4a98",
+          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/validation-injected-errors-01",
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급은 1점에서 기본 방향, 2점에서 주요 구성요소와 기본 흐름, 3점에서 대표적 한계와 개선을 요구해야 한다.",
+              "reason": "1점은 저장·조회 제안에 머물고, 2점은 '수집 서버가 센서별 최근 측정값을 저장'한 뒤 조회 서버가 화면으로 전달하는 역할과 흐름을 요구한다. 3점은 오래된 값의 오인과 '마지막 수신 시간을 표시'하는 개선을 요구하므로 중급의 대표적 문제 해결 수준에 맞는다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/0/expected_3_5/0"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "중급 1점은 문제 인식과 기본 해결 방향 수준이어야 하며, 2점에서 주요 구성요소와 기본 처리 흐름을 요구해야 한다.",
+              "reason": "1점은 수집 서버가 '큐에 기록하면 여러 작업자가 이를 읽어' 저장소를 갱신하고 조회 서버가 결과를 제공하는 완성된 기본 흐름을 요구한다. 2점은 같은 수집·큐·작업자·저장 흐름에서 조회 설명만 빠져 있어, 1점의 요구 수준이 과도하고 점수 상승에 따른 역량 차이도 성립하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/0/expected_3_5/1"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급은 기본 전달 구조를 설명하고, 상위 점수에서 대표적인 문제와 개선 방안을 제시하는 수준이어야 한다.",
+              "reason": "1점은 푸시 제안에 머물지만, 2점은 '센서 구독을 전달 서버가 관리'하고 해당 사용자 연결에 새 측정값을 보내는 기본 흐름을 요구한다. 3점의 '끊어진 구독을 정리'하는 개선은 대표적인 자원 낭비 문제에 대한 대응으로, 복잡한 장애 분석이나 기술적 상충 판단까지 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/0/expected_3_5/2"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급 2점은 복구의 기본 처리 흐름을, 3점은 대표적인 한계와 개선 방안을 요구해야 한다.",
+              "reason": "2점의 '보관된 현재 측정값을 다시 조회한 뒤 실시간 수신을 이어가는 흐름'은 저장 위치와 재접속 후 복구 경로를 연결한다. 3점은 구독 갱신 지연으로 화면이 오래될 수 있음을 설명하고 현재값을 재확인하는 개선만 요구하므로 중급 수준에 적합하다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/0/expected_3_5/3"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "고급 0점은 핵심 설계 문제를 고려하지 않는 수준이어야 한다.",
+              "reason": "0점이 '늦게 도착한 측정값이 최근 측정값을 덮어쓸 위험'을 지적하고 '오래된 이벤트를 무시하는 해결 방향'까지 제시하도록 요구한다. 이는 핵심 문제를 인식하고 해결 방향을 제안하는 수준이므로, 문제를 고려하지 않아야 하는 0점 기준에 맞지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/0/expected_3_5/4"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "고급은 1점에서 기본 설계, 2점에서 구체적 처리와 병목 대응, 3점에서 한계·상충·선택 근거를 요구해야 한다.",
+              "reason": "1점은 수집·비동기 전달·저장의 기본 경로를, 2점은 '센서 식별자로 측정값 이벤트를 분할'하는 순서 유지와 큐 지연에 따른 제한·병합을 요구한다. 3점은 특정 분할에 갱신이 집중되는 문제와 과도한 병합의 한계를 분석하고 지연·손실 위험·운영 비용으로 선택을 설명하게 하므로 고급 수준에 맞는다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/0/expected_3_5/5"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "고급은 기본 전달 흐름에서 시작해 구체적인 부하 대응과 기술적 선택의 비용·근거까지 요구해야 한다.",
+              "reason": "1점은 구독 유지와 변경 전달의 기본 경로를, 2점은 '여러 전달 서버에 분산'하는 구조와 '연결별 버퍼나 최신값 교체'를 통한 느린 연결 격리를 요구한다. 3점은 복제에 따른 네트워크·메모리 한계를 분석하고 묶음 전송과 즉시 푸시의 지연·비용을 비교해 선택 근거를 제시하게 한다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/0/expected_3_5/6"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "고급 1점은 기본 설계 수준이어야 하며, 상위 점수로 갈수록 처리 메커니즘과 설계 판단의 깊이가 높아져야 한다.",
+              "reason": "1점부터 '스냅샷과 실시간 스트림 전환의 원자성'과 만료 이력의 복구 보장뿐 아니라 '재생 비용·저장 비용을 비교해 선택 근거'까지 요구한다. 이는 기본 설계를 넘어 상위 점수의 복구 보장과 비용 판단까지 필수화하며, 2점보다도 요구 범위가 넓어 단계별 역량 상승이 성립하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/0/expected_3_5/7"
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "대응되는 핵심 항목마다 고급 2점의 구체적 메커니즘·문제 대응과 3점의 한계·상충·선택 근거가 중급보다 실질적으로 높아야 한다.",
+              "reason": "중급 2점의 저장·큐 처리·구독 전달·재조회 흐름에 비해, 고급 2점은 각각 '조건부 갱신', 센서별 분할과 역압, 다중 서버 분산과 연결 격리, 갱신 번호 기반 재전송과 전환 누락 방지를 추가로 요구한다. 중급 3점의 시간 표시·묶음 저장·구독 정리·현재값 재확인과 달리, 고급 3점은 번호 초기화·분할 집중·전송 복제·이력 보관의 한계를 분석하고 정확성·지연·저장·대역폭 비용에 따른 선택 근거까지 요구하므로 모든 대응 항목에서 실질적인 차이가 있다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/0/expected_4_1"
+            }
+          ],
+          "level_error_review": [
+            {
+              "issue_id": "Middle:C2:L1",
+              "reference_error_id": "H01",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/0/expected_3_5/1/levels/1",
+              "assessment_index": 1,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "실제 3-5 근거가 해당 점수의 완성된 기본 흐름·과도한 깊이·기본 흐름 부족 또는 구체적 처리 원리/설계 판단 누락이라는 주입 오류를 지적한다."
+            },
+            {
+              "issue_id": "Senior:C1:L0",
+              "reference_error_id": "H02",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/0/expected_3_5/4/levels/0",
+              "assessment_index": 4,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "실제 3-5 근거가 해당 점수의 완성된 기본 흐름·과도한 깊이·기본 흐름 부족 또는 구체적 처리 원리/설계 판단 누락이라는 주입 오류를 지적한다."
+            },
+            {
+              "issue_id": "Senior:C4:L1",
+              "reference_error_id": "H03",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/0/expected_3_5/7/levels/1",
+              "assessment_index": 7,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "실제 3-5 근거가 해당 점수의 완성된 기본 흐름·과도한 깊이·기본 흐름 부족 또는 구체적 처리 원리/설계 판단 누락이라는 주입 오류를 지적한다."
+            }
+          ],
+          "additional_wrong_level_citations": [],
+          "wrong_error_cause_citations": [],
+          "metrics": {
+            "strict_direct_error_detection": {
+              "detected": 3,
+              "total": 3,
+              "percentage": 100.0
+            },
+            "inherited_effect_detection": {
+              "detected": 0,
+              "total": 0,
+              "percentage": null
+            },
+            "all_level_error_detection": {
+              "detected": 3,
+              "total": 3,
+              "percentage": 100.0
+            },
+            "criterion_error_detection": {
+              "detected": 3,
+              "total": 3,
+              "percentage": 100.0
+            },
+            "pair_error_detection": {
+              "detected": 0,
+              "total": 0,
+              "percentage": null
+            },
+            "normal_item_acceptance": {
+              "matched": 6,
+              "total": 6,
+              "percentage": 100.0
+            },
+            "verdict_agreement": {
+              "matched": 9,
+              "total": 9,
+              "percentage": 100.0
+            }
+          }
+        },
+        "02": {
+          "case_id": "02",
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/validation/injected-errors/cases/02/middle.md",
+            "senior": "resources/evaluator/datasets/validation/injected-errors/cases/02/senior.md"
+          },
+          "source_labels": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json",
+          "labels_sha256": "7a7af32f50889fc7200b86dbffc2381de085da8cc1b404cb596ac986a9da4a98",
+          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/validation-injected-errors-02",
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "중급 2점은 기본 처리 흐름을 넘어 복합 장애 분석과 기술적 선택의 상충까지 필수화하지 않아야 한다.",
+              "reason": "2점은 '장치 시계 오류, 재시작 후 번호 초기화, 순서가 뒤바뀐 재전송이 함께 발생할 때'의 정합성 분석을 요구한다. 여기에 대안의 '지연·오판 위험·처리 비용' 비교와 선택 근거까지 필수화하여 중급 2점의 기본 설계 범위를 크게 초과한다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/1/expected_3_5/0"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급은 해결 방향, 구성요소의 기본 흐름, 대표적인 한계와 개선 순으로 심화되어야 한다.",
+              "reason": "1점은 비동기 처리 제안에 머물고, 2점은 '큐에 전달'한 이벤트를 '여러 작업자'가 읽어 저장하는 역할과 흐름을 요구한다. 3점은 큐 적체로 인한 반영 지연과 동일 센서 갱신을 묶는 개선을 요구하므로 중급에 적합하다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/1/expected_3_5/1"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급 2점은 기본 전달 흐름을, 3점은 대표적인 한계와 개선 방안을 요구해야 한다.",
+              "reason": "2점의 '센서 구독을 전달 서버가 관리'하고 해당 사용자 연결에 전송하는 설명은 구성요소의 역할과 기본 흐름에 해당한다. 3점의 '끊어진 구독을 정리'하는 개선도 종료된 연결이 남는 대표적인 한계에 대한 대응으로, 복잡한 장애 분석을 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/1/expected_3_5/2"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급은 기본 복구 흐름과 대표적인 복구 한계의 개선을 요구하되 복잡한 복구 메커니즘은 필수화하지 않아야 한다.",
+              "reason": "1점의 재조회 제안에서 2점의 '보관된 현재 측정값을 다시 조회한 뒤 실시간 수신을 이어가는 흐름'으로 구체화된다. 3점은 구독 갱신 지연으로 화면이 오래되는 한계와 현재 측정값 재확인이라는 개선을 요구하여 중급 범위에 부합한다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/1/expected_3_5/3"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "고급은 기본 처리 흐름에서 구체적 정합성 제어와 한계 분석·선택 근거로 심화되어야 한다.",
+              "reason": "1점은 측정값 수집·저장·조회 흐름을 설명하고, 2점은 '저장된 번호보다 오래된 이벤트'를 조건부 갱신으로 차단하는 구체적인 메커니즘을 요구한다. 3점은 재시작에 따른 번호 초기화 위험을 분석하고 세션별 번호와 관측 시각을 시계 오류·비용·정확성 측면에서 비교하여 선택 근거까지 요구한다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/1/expected_3_5/4"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "고급 2점은 구체적인 처리 메커니즘과 주요 부하·병목 대응 방안을 필수로 요구해야 한다.",
+              "reason": "2점의 '수평 확장'과 '비동기 작업자 기반의 유연한 처리 파이프라인'은 구성 방향만 제시하며, '적체를 관리하고 병목을 최소화'하는 실제 처리 방식은 명시하지 않는다. 따라서 기본 구성과 추상적인 부하 분산 설명만으로 충족될 수 있어 고급 2점에 필요한 구체성이 부족하다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/1/expected_3_5/5"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "고급 3점은 구체적인 한계와 기술적 선택의 이점·비용 또는 위험 및 선택 근거를 요구해야 한다.",
+              "reason": "3점의 '다양한 문제를 심층 분석'하고 '트레이드오프를 종합적으로 고려'한다는 문구에는 분석할 한계와 비교할 이점·비용·위험이 구체적으로 제시되지 않는다. '최적의 전달 구조를 선택'한다는 추상적 요구만 있어 고급 3점의 필수 설명이 누락되어 있다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/1/expected_3_5/6"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "고급은 기본 복구 흐름, 구체적인 누락 방지 메커니즘, 복구 방식의 비용과 선택 판단을 단계적으로 요구해야 한다.",
+              "reason": "1점은 저장된 측정값 조회와 재구독을, 2점은 '마지막 수신 갱신 번호'에 따른 재전송과 기준 번호를 이용한 스냅샷·구독 전환의 누락 방지를 요구한다. 3점은 이력 보관 기간과 스냅샷 주기를 저장 비용·복구 대역폭·복구 지연 측면에서 비교하므로 구체적인 한계 분석과 설계 판단을 요구한다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/1/expected_3_5/7"
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "비교 가능한 핵심 항목마다 고급이 처리 메커니즘과 상위 수준의 설계 판단에서 실질적으로 높은 역량을 요구해야 한다.",
+              "reason": "최신 측정값 조회에서 중급 2점이 이미 복합 오류 상황의 정합성 분석과 세션별 번호·관측 시각 대안의 비용 및 선택 근거를 요구하며, 이를 상속한 중급 3점과 고급 3점의 대안 비교 사이에 실질적인 역량 상승이 드러나지 않는다. 수집 항목에서도 중급 2점의 큐·작업자 흐름에 비해 고급 2점의 '유연한 처리 파이프라인'과 '적체를 관리'한다는 표현은 구체적인 적체 제어 메커니즘을 추가로 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/1/expected_4_1"
+            }
+          ],
+          "level_error_review": [
+            {
+              "issue_id": "Middle:C1:L2",
+              "reference_error_id": "H04",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/1/expected_3_5/0/levels/2",
+              "assessment_index": 0,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "실제 3-5 근거가 해당 점수의 완성된 기본 흐름·과도한 깊이·기본 흐름 부족 또는 구체적 처리 원리/설계 판단 누락이라는 주입 오류를 지적한다."
+            },
+            {
+              "issue_id": "Middle:C1:L3",
+              "reference_error_id": "H04",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/1/expected_3_5/0/levels/3",
+              "assessment_index": 0,
+              "causal_role": "inherited_effect",
+              "detected": false,
+              "review_note": "해당 3-5 판단 근거에서 이 Level의 정답 오류 원인을 별도로 지적하지 않았다."
+            },
+            {
+              "issue_id": "Senior:C2:L2",
+              "reference_error_id": "H05",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/1/expected_3_5/5/levels/2",
+              "assessment_index": 5,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "실제 3-5 근거가 해당 점수의 완성된 기본 흐름·과도한 깊이·기본 흐름 부족 또는 구체적 처리 원리/설계 판단 누락이라는 주입 오류를 지적한다."
+            },
+            {
+              "issue_id": "Senior:C3:L3",
+              "reference_error_id": "H06",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/1/expected_3_5/6/levels/3",
+              "assessment_index": 6,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "실제 3-5 근거가 해당 점수의 완성된 기본 흐름·과도한 깊이·기본 흐름 부족 또는 구체적 처리 원리/설계 판단 누락이라는 주입 오류를 지적한다."
+            }
+          ],
+          "additional_wrong_level_citations": [],
+          "wrong_error_cause_citations": [],
+          "metrics": {
+            "strict_direct_error_detection": {
+              "detected": 3,
+              "total": 3,
+              "percentage": 100.0
+            },
+            "inherited_effect_detection": {
+              "detected": 0,
+              "total": 1,
+              "percentage": 0.0
+            },
+            "all_level_error_detection": {
+              "detected": 3,
+              "total": 4,
+              "percentage": 75.0
+            },
+            "criterion_error_detection": {
+              "detected": 3,
+              "total": 3,
+              "percentage": 100.0
+            },
+            "pair_error_detection": {
+              "detected": 1,
+              "total": 1,
+              "percentage": 100.0
+            },
+            "normal_item_acceptance": {
+              "matched": 5,
+              "total": 5,
+              "percentage": 100.0
+            },
+            "verdict_agreement": {
+              "matched": 9,
+              "total": 9,
+              "percentage": 100.0
+            }
+          }
+        },
+        "03": {
+          "case_id": "03",
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/validation/injected-errors/cases/03/middle.md",
+            "senior": "resources/evaluator/datasets/validation/injected-errors/cases/03/senior.md"
+          },
+          "source_labels": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json",
+          "labels_sha256": "7a7af32f50889fc7200b86dbffc2381de085da8cc1b404cb596ac986a9da4a98",
+          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/validation-injected-errors-03",
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급은 기본 저장·복원 흐름과 대표적인 문제의 개선 방안을 요구한다.",
+              "reason": "2점은 브라우저의 저장 요청, 응시자별 지속 저장, 재접속 시 조회·복원이라는 기본 흐름을 요구한다. 3점도 여러 탭의 오래된 초안 저장 문제를 인식하고 시각이나 버전으로 충돌을 알리는 개선 수준이므로 연차에 적합하다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/2/expected_3_5/0"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "중급 2점에서 복잡한 경합·장애 대응과 기술 선택 비교를 필수화하면 부적합하다.",
+              "reason": "2점이 '동시 제출·응답 유실·처리 도중 장애가 겹치는 상황'에서 멱등 키·원자적 상태 전환·중복 요청 보관의 결합을 요구한다. 여기에 중복 제거 방식의 경합 비용과 복구 위험 비교 및 선택 근거까지 필수화하여 기본 설계와 처리 흐름을 넘어선다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/2/expected_3_5/1"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급은 기본 판정 흐름을 설명하고 대표적인 한계의 개선 방안을 제시한다.",
+              "reason": "2점은 서버 기준 마감 시각과 요청 접수 시각을 비교하여 저장 또는 거절하는 기본 흐름을 요구한다. 3점은 기기 시각 차이로 생기는 오해와 서버 기준 남은 시간 안내를 다루므로 복잡한 경계 처리나 기술 선택 분석을 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/2/expected_3_5/2"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "기본 흐름에 필요한 분산·보존 조건은 허용하며, 중급 3점은 대표적인 부하 개선을 요구한다.",
+              "reason": "2점의 요청 분산과 '지속 저장소 또는 내구성 있는 작업 큐에 기록한 뒤 성공을 반환'하는 흐름은 저장 요청을 안전하게 수용하기 위한 기본 구성이다. 3점도 불필요한 쓰기를 줄이기 위한 저장 주기 조정이나 변경 묶기를 요구하여 중급 범위에 적합하다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/2/expected_3_5/3"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "고급은 기본 경로에서 구체적 경합 제어로 발전하고, 상위 점수에서 한계와 선택 근거를 요구한다.",
+              "reason": "1점은 지속 저장 후 성공 응답과 버전 조회·복원을 연결하고, 2점은 버전 기반 조건부 쓰기와 불일치 시 재조회로 오래된 요청의 덮어쓰기를 막는다. 3점은 동기 확인의 지연·쓰기 부하를 분석하고 유실 위험·응답 지연·저장 비용을 비교하여 선택하도록 요구한다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/2/expected_3_5/4"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "고급 1점도 핵심 요구사항을 충족하는 기본 설계와 처리 흐름을 요구해야 한다.",
+              "reason": "1점은 '멱등 키를 도입하거나 재시도를 제한하는 방안'만 제안하고, 답안·완료 상태의 저장 순서와 성공 여부 확인 경로를 설명하지 못해도 충족된다. 중복 결과 방지와 제출 상태 재확인을 연결하는 기본 설계 없이 기술 제안만으로 점수를 부여하므로 부적합하다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/2/expected_3_5/5"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "고급 2점은 주요 동시성 문제를 해결하는 구체적인 처리 메커니즘을 명시해야 한다.",
+              "reason": "2점의 '트랜잭션 구조를 채택'하고 '공정하게 승인하거나 거절하도록 관리'한다는 문구는 일관성이라는 목표를 반복할 뿐, 판정 기준 시각과 동시 요청의 승인 상태를 어떻게 일관되게 확정하는지 구체화하지 않는다. 따라서 기본 마감 비교 흐름을 넘어서는 경계 요청 처리 메커니즘이 필수 기준에 충분히 명시되지 않았다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/2/expected_3_5/6"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "고급은 구체적 부하 제어와 보존 조건을 설명하고 대안의 비용·위험 및 선택 근거를 요구한다.",
+              "reason": "1점은 내구성 있는 기록 후 응답하고 작업자가 반영하는 기본 흐름이며, 2점은 응시자 키 분할과 큐 길이·저장 지연에 따른 요청률 제한 또는 재시도 지시를 요구한다. 3점은 특정 분할 영역의 집중과 과도한 역압을 분석하고 지연·자원 비용·보존 보장에 따른 선택 근거까지 요구한다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/2/expected_3_5/7"
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "비교 가능한 핵심 항목 하나라도 고급의 실질적 역량 차이가 부족하면 부적합하다.",
+              "reason": "최종 제출 항목에서 중급 2점은 '멱등 키·원자적 상태 전환·중복 요청 보관을 결합'하도록 요구하지만, 고급 2점은 '유일성 제약 또는 원자적 상태 전환'과 동일 결과 반환을 요구하여 더 높은 처리 역량이 확인되지 않는다. 중급 2점이 이미 경합 비용·복구 위험 비교와 선택 근거까지 요구하므로, 고급 3점의 중복 기록 방식 비교와 정합성·쓰기 경합·보관 비용에 따른 선택도 실질적인 연차 차이를 만들지 못한다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/2/expected_4_1"
+            }
+          ],
+          "level_error_review": [
+            {
+              "issue_id": "Middle:C2:L2",
+              "reference_error_id": "H07",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/2/expected_3_5/1/levels/2",
+              "assessment_index": 1,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "실제 3-5 근거가 해당 점수의 완성된 기본 흐름·과도한 깊이·기본 흐름 부족 또는 구체적 처리 원리/설계 판단 누락이라는 주입 오류를 지적한다."
+            },
+            {
+              "issue_id": "Middle:C2:L3",
+              "reference_error_id": "H07",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/2/expected_3_5/1/levels/3",
+              "assessment_index": 1,
+              "causal_role": "inherited_effect",
+              "detected": false,
+              "review_note": "해당 3-5 판단 근거에서 이 Level의 정답 오류 원인을 별도로 지적하지 않았다."
+            },
+            {
+              "issue_id": "Senior:C2:L1",
+              "reference_error_id": "H08",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/2/expected_3_5/5/levels/1",
+              "assessment_index": 5,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "실제 3-5 근거가 해당 점수의 완성된 기본 흐름·과도한 깊이·기본 흐름 부족 또는 구체적 처리 원리/설계 판단 누락이라는 주입 오류를 지적한다."
+            },
+            {
+              "issue_id": "Senior:C3:L2",
+              "reference_error_id": "H09",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/2/expected_3_5/6/levels/2",
+              "assessment_index": 6,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "실제 3-5 근거가 해당 점수의 완성된 기본 흐름·과도한 깊이·기본 흐름 부족 또는 구체적 처리 원리/설계 판단 누락이라는 주입 오류를 지적한다."
+            }
+          ],
+          "additional_wrong_level_citations": [],
+          "wrong_error_cause_citations": [],
+          "metrics": {
+            "strict_direct_error_detection": {
+              "detected": 3,
+              "total": 3,
+              "percentage": 100.0
+            },
+            "inherited_effect_detection": {
+              "detected": 0,
+              "total": 1,
+              "percentage": 0.0
+            },
+            "all_level_error_detection": {
+              "detected": 3,
+              "total": 4,
+              "percentage": 75.0
+            },
+            "criterion_error_detection": {
+              "detected": 3,
+              "total": 3,
+              "percentage": 100.0
+            },
+            "pair_error_detection": {
+              "detected": 1,
+              "total": 1,
+              "percentage": 100.0
+            },
+            "normal_item_acceptance": {
+              "matched": 5,
+              "total": 5,
+              "percentage": 100.0
+            },
+            "verdict_agreement": {
+              "matched": 9,
+              "total": 9,
+              "percentage": 100.0
+            }
+          }
+        },
+        "04": {
+          "case_id": "04",
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/validation/injected-errors/cases/04/middle.md",
+            "senior": "resources/evaluator/datasets/validation/injected-errors/cases/04/senior.md"
+          },
+          "source_labels": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json",
+          "labels_sha256": "7a7af32f50889fc7200b86dbffc2381de085da8cc1b404cb596ac986a9da4a98",
+          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/validation-injected-errors-04",
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "중급 1점은 문제 인식과 기본 방향, 2점은 주요 컴포넌트와 처리 흐름으로 구분되어야 한다.",
+              "reason": "1점과 2점이 모두 '응시자별 초안을 지속 저장'하고 재접속 시 화면을 복원하는 동일한 기본 흐름을 요구한다. 1점부터 완성된 기본 흐름을 요구하여 2점으로 올라갈 때 요구 역량이 높아지지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/3/expected_3_5/0"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급은 기본 방향에서 저장·조회 흐름으로 발전하고, 3점에서 대표적 문제와 개선을 요구한다.",
+              "reason": "1점은 서버 보관 제안에 그치고, 2점은 '최종 답안과 응시자의 제출 완료 상태를 저장한 뒤 성공을 응답'하는 흐름과 결과 조회를 연결한다. 3점은 응답 지연에 따른 재시도 문제와 이미 완료된 제출 결과를 보여 주는 기본 개선을 요구하므로 중급 범위에 적합하다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/3/expected_3_5/1"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급 2점은 핵심 판정 흐름을, 3점은 대표적 한계와 개선 방안을 요구한다.",
+              "reason": "0점의 문제 미고려와 1점의 제출 차단 제안에서, 2점의 '마감 시각과 요청 접수 시각을 비교'하여 저장하거나 거절하는 기본 흐름으로 발전한다. 3점은 사용자 기기 시각 차이라는 대표적 문제와 서버 기준 남은 시간 안내만 요구하여 과도한 동시성 처리를 필수화하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/3/expected_3_5/2"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급은 분산 저장의 기본 경로와 대표적인 부하 개선을 요구하되 복잡한 대응까지 필수화하지 않는다.",
+              "reason": "1점은 서버 증설이나 큐 사용 제안이고, 2점은 요청 분산 후 '지속 저장소 또는 내구성 있는 작업 큐에 기록한 뒤 성공을 반환'하는 기본 경로를 설명한다. 3점의 불필요한 쓰기 증가와 저장 주기 조정·변경 묶기는 대표적 한계와 개선 수준에 해당한다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/3/expected_3_5/3"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "고급 1점은 기본 설계, 2점은 구체적 메커니즘, 3점은 한계와 기술적 절충 분석으로 구분되어야 한다.",
+              "reason": "1점부터 '버전별 조건부 갱신'으로 동시 쓰기를 중재하고 '유실 위험·응답 지연·쓰기 비용'을 비교하여 정책 선택 근거까지 제시하도록 요구한다. 이는 2점의 처리 메커니즘과 3점의 기술적 판단을 이미 포함하므로 1점의 기본 설계 수준을 벗어나며 단계 간 상승 구조도 성립하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/3/expected_3_5/4"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "고급은 정상 흐름에서 동시 중복 처리 메커니즘으로 발전하고, 상위 단계에서 한계와 선택 근거를 요구한다.",
+              "reason": "1점은 답안·상태 저장과 결과 조회를 연결하고, 2점은 '유일성 제약 또는 원자적 상태 전환'과 재시도 시 동일 결과 반환으로 동시 중복 요청에 대응한다. 3점은 강한 쓰기 조정의 대기 증가를 분석하고 두 기록 방식을 정합성·쓰기 경합·보관 비용으로 비교하여 선택하도록 요구한다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/3/expected_3_5/5"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "고급은 기본 판정 흐름, 경계 요청의 구체적 처리, 정책 대안의 영향과 선택 근거를 단계적으로 요구한다.",
+              "reason": "1점은 마감 전 저장·마감 후 거절의 기본 흐름이며, 2점은 일관된 시간 기록과 '하나의 원자적 판정 경계'로 동시 요청의 일관성을 확보한다. 3점은 접수·완료 시각 차이와 시계 오차를 분석하고 엄격한 접수 기준과 제한적 유예를 공정성·처리량·운영 복잡도로 비교하므로 구체적인 설계 판단을 요구한다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/3/expected_3_5/6"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "0점은 핵심 설계 문제를 고려하지 않는 수준이어야 한다.",
+              "reason": "0점이 '큐와 DB 쓰기가 병목이 될 수 있음을 인식'하고 저장 서버 증설이나 작업 큐 사용이라는 해결 방향까지 제시하도록 되어 있다. 핵심 문제를 고려하지 않는 수준이 아니라 문제 인식과 기본 개선 제안 수준을 요구하므로 0점 기준에 맞지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/3/expected_3_5/7"
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "대응되는 핵심 항목의 2점에서 처리 메커니즘이, 3점에서 한계 분석과 선택 근거가 실질적으로 심화되어야 한다.",
+              "reason": "2점에서 중급의 저장·복원, 제출 상태 저장·조회, 접수 시각 비교, 분산 저장 경로에 비해 고급은 각각 '조건부 쓰기', '유일성 제약 또는 원자적 상태 전환', '하나의 원자적 판정 경계', 응시자별 분할과 역압을 추가로 요구한다. 3점에서도 중급의 충돌 안내·기존 결과 표시·남은 시간 안내·저장 주기 조정과 달리, 고급은 각 설계의 한계를 분석하고 유실 위험·쓰기 경합·공정성·자원 비용 등 구체적인 상충과 대안 선택 근거를 요구한다.",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/3/expected_4_1"
+            }
+          ],
+          "level_error_review": [
+            {
+              "issue_id": "Middle:C1:L1",
+              "reference_error_id": "H10",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/3/expected_3_5/0/levels/1",
+              "assessment_index": 0,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "실제 3-5 근거가 해당 점수의 완성된 기본 흐름·과도한 깊이·기본 흐름 부족 또는 구체적 처리 원리/설계 판단 누락이라는 주입 오류를 지적한다."
+            },
+            {
+              "issue_id": "Senior:C1:L1",
+              "reference_error_id": "H11",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/3/expected_3_5/4/levels/1",
+              "assessment_index": 4,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "실제 3-5 근거가 해당 점수의 완성된 기본 흐름·과도한 깊이·기본 흐름 부족 또는 구체적 처리 원리/설계 판단 누락이라는 주입 오류를 지적한다."
+            },
+            {
+              "issue_id": "Senior:C4:L0",
+              "reference_error_id": "H12",
+              "source_label": "resources/evaluator/datasets/validation/injected-errors/review/expected_labels.json#/cases/3/expected_3_5/7/levels/0",
+              "assessment_index": 7,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "실제 3-5 근거가 해당 점수의 완성된 기본 흐름·과도한 깊이·기본 흐름 부족 또는 구체적 처리 원리/설계 판단 누락이라는 주입 오류를 지적한다."
+            }
+          ],
+          "additional_wrong_level_citations": [],
+          "wrong_error_cause_citations": [],
+          "metrics": {
+            "strict_direct_error_detection": {
+              "detected": 3,
+              "total": 3,
+              "percentage": 100.0
+            },
+            "inherited_effect_detection": {
+              "detected": 0,
+              "total": 0,
+              "percentage": null
+            },
+            "all_level_error_detection": {
+              "detected": 3,
+              "total": 3,
+              "percentage": 100.0
+            },
+            "criterion_error_detection": {
+              "detected": 3,
+              "total": 3,
+              "percentage": 100.0
+            },
+            "pair_error_detection": {
+              "detected": 0,
+              "total": 0,
+              "percentage": null
+            },
+            "normal_item_acceptance": {
+              "matched": 6,
+              "total": 6,
+              "percentage": 100.0
+            },
+            "verdict_agreement": {
+              "matched": 9,
+              "total": 9,
+              "percentage": 100.0
+            }
+          }
+        }
+      },
+      "metrics": {
+        "strict_direct_error_detection": {
+          "detected": 12,
+          "total": 12,
+          "percentage": 100.0
+        },
+        "inherited_effect_detection": {
+          "detected": 0,
+          "total": 2,
+          "percentage": 0.0
+        },
+        "all_level_error_detection": {
+          "detected": 12,
+          "total": 14,
+          "percentage": 85.71
+        },
+        "criterion_error_detection": {
+          "detected": 12,
+          "total": 12,
+          "percentage": 100.0
+        },
+        "pair_error_detection": {
+          "detected": 2,
+          "total": 2,
+          "percentage": 100.0
+        },
+        "normal_item_acceptance": {
+          "matched": 22,
+          "total": 22,
+          "percentage": 100.0
+        },
+        "verdict_agreement": {
+          "matched": 36,
+          "total": 36,
+          "percentage": 100.0
+        }
+      }
+    },
+    "dropbox": {
+      "cases": {
+        "dropbox_uploaded": {
+          "case_id": "dropbox_uploaded",
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/validation/dropbox/inputs/dropbox/middle/nfr_rubric.md",
+            "senior": "resources/evaluator/datasets/validation/dropbox/inputs/dropbox/senior/nfr_rubric.md"
+          },
+          "source_labels": "resources/evaluator/datasets/validation/dropbox/review/expected_labels.json",
+          "labels_sha256": "6342f2ec2afef3ae6c0a34ea7854bc505247eb97b5efccf753d1ecd3979f2ac3",
+          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/validation-dropbox-dropbox_uploaded",
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급은 기본 방향, 구성요소와 처리 흐름, 대표적 한계와 개선 순으로 수준을 높여야 한다.",
+              "reason": "0·1점은 문제 미고려와 저장 후 공개라는 기본 방향을 구분하고, 2점은 ‘전체 내용 확보와 검증 후 완료 상태를 공개’하는 기본 저장·조회 흐름을 요구한다. 3점은 ‘내용 저장 후 메타데이터 갱신이 실패’하는 대표적 한계와 재확인 개선에 한정되어 복잡한 복구나 기술 선택의 절충 분석을 강제하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/dropbox/review/expected_labels.json#/cases/0/expected_3_5/0"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급 2점은 안전한 재개의 기본 흐름을, 3점은 대표적인 재개 문제와 개선을 요구해야 한다.",
+              "reason": "1점은 분할 전송과 재시도라는 기본 방향이며, 2점의 대상 버전·진행 상태 식별, 완료 부분 재사용, 원래 버전 확인은 재개 흐름을 성립시키는 기본 조건이다. 3점은 ‘완료 응답 유실’에 따른 기록 차이와 완료 부분 재확인이라는 대표 문제와 개선만 요구한다.",
+              "source_label": "resources/evaluator/datasets/validation/dropbox/review/expected_labels.json#/cases/0/expected_3_5/1"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급은 충돌 조정의 기본 흐름과 대표적 한계 개선을 요구하되 복잡한 동시성 분석을 필수화하지 않아야 한다.",
+              "reason": "0·1점은 충돌 미고려와 기본 정책 제시를 구분하며, 2점의 ‘기준 버전’ 비교, 수정·삭제 규칙, 결과 전파와 수렴은 충돌 조정의 기본 흐름에 해당한다. 3점도 ‘늦게 도착한 과거 변경’이라는 대표 한계와 선후 관계 확인을 통한 개선을 요구할 뿐 복잡한 장애 분석이나 선택 비용 비교를 강제하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/dropbox/review/expected_labels.json#/cases/0/expected_3_5/2"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중급의 기본 흐름에 필요한 여러 부하 보장 조건만으로 과도한 요구로 판단하지 않는다.",
+              "reason": "2점의 ‘실행량·재시도·임시 데이터 증가’ 제어는 변경 탐지부터 대기 작업 처리까지 이어지는 기본 부하 관리의 조건이며, 별도의 복잡한 장애 대응이나 한계 분석을 요구하지 않는다. 3점은 ‘여러 기기가 동시에 재연결’하는 대표적 집중 상황과 요청 분산·유입 조절이라는 개선을 요구하므로 중급 범위에 맞는다.",
+              "source_label": "resources/evaluator/datasets/validation/dropbox/review/expected_labels.json#/cases/0/expected_3_5/3"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "상급 1점에서도 버전 공개와 충돌 조정의 기본 처리 흐름이 성립해야 한다.",
+              "reason": "1점의 ‘내용 저장 후 버전을 공개’는 공개 흐름을 제시하지만, 충돌 조정은 ‘충돌을 처리하는 기본 설계’라는 표현에 머문다. 수정·삭제 충돌에서 어떤 변경을 선택·보존하고 결과를 기기에 반영하는지 요구하지 않아, 핵심인 충돌 조정의 정상 흐름이 부족해도 충족될 수 있다.",
+              "source_label": "resources/evaluator/datasets/validation/dropbox/review/expected_labels.json#/cases/0/expected_3_5/4"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Fail",
+              "applied_rule": "상급 1점은 진행 기록 제안을 넘어 완료 부분을 재사용하는 기본 재개 흐름을 요구해야 한다.",
+              "reason": "1점의 ‘진행 위치를 기록하고 재시도’만으로는 기록된 위치를 이용해 미완료 부분만 이어 보내고 원래 전송 대상의 완료로 연결하는 흐름이 필수화되지 않는다. 응답 유실이나 만료 상태의 상세 복구가 부족해서가 아니라, 부분 전송 재사용이라는 핵심 기본 흐름의 연결이 빠져 있어 부적합하다.",
+              "source_label": "resources/evaluator/datasets/validation/dropbox/review/expected_labels.json#/cases/0/expected_3_5/5"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "상급 1점은 탐지 수단의 제안이 아니라 정상적인 증분 변경 추적 흐름을 요구해야 한다.",
+              "reason": "1점은 ‘증분 조회와 알림 등으로 변경을 탐지’하는 기본 설계라고만 하여, 기준 상태에서 필요한 변경분을 조회하고 그 결과를 후속 추적에 반영하는 연결을 요구하지 않는다. 감시 연결 분산이나 만료 복구의 정교함 이전에, 정상적인 변경 추적 흐름 없이 탐지 수단의 제안만으로 충족될 여지가 있다.",
+              "source_label": "resources/evaluator/datasets/validation/dropbox/review/expected_labels.json#/cases/0/expected_3_5/6"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Fail",
+              "applied_rule": "상급 1점에서도 자원 한계 안에서 동기화 작업을 처리하는 기본 설계가 필요하다.",
+              "reason": "1점의 ‘병렬 처리나 작업 대기열을 사용하는 기본 설계’는 처리 수단만 제시하며, 자원 한계에 맞게 실행량을 정하고 대기 작업을 계속 진행시키는 기본 연결을 요구하지 않는다. 상세한 병목 대응의 부족이 아니라, 제한 없는 병렬 실행이나 대기열 증가도 배제하지 못해 핵심 요구를 충족하는 기본 설계가 보장되지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/dropbox/review/expected_labels.json#/cases/0/expected_3_5/7"
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "대응하는 핵심 설계 문제의 비교 수준에서 실질적 차이가 없으면 다른 수준이나 항목의 강화로 상쇄할 수 없다.",
+              "reason": "중급 C3 2점의 기준 버전에 의한 충돌 판정, 수정·삭제 규칙, 결과 전파·수렴은 상급 C1 2점의 충돌 판정·조정 정책·수렴과 실질적으로 같다. 상급의 ‘조용한 변경 소실을 막고’는 결과 보장을 추가할 뿐 충돌 처리 메커니즘이나 동작 조건을 구체화하지 않으므로, 공개 경계의 심화나 3점의 비용 절충 요구로 이 차이 부족을 상쇄할 수 없다.",
+              "source_label": "resources/evaluator/datasets/validation/dropbox/review/expected_labels.json#/cases/0/expected_4_1"
+            }
+          ],
+          "level_error_review": [
+            {
+              "issue_id": "Middle:C4:L2",
+              "reference_error_id": null,
+              "source_label": "resources/evaluator/datasets/validation/dropbox/review/expected_labels.json#/cases/0/expected_3_5/3/levels/2",
+              "assessment_index": 3,
+              "causal_role": "direct_cause",
+              "detected": false,
+              "review_note": "해당 3-5 판단 근거에서 이 Level의 정답 오류 원인을 별도로 지적하지 않았다."
+            },
+            {
+              "issue_id": "Middle:C4:L3",
+              "reference_error_id": null,
+              "source_label": "resources/evaluator/datasets/validation/dropbox/review/expected_labels.json#/cases/0/expected_3_5/3/levels/3",
+              "assessment_index": 3,
+              "causal_role": "inherited_effect",
+              "detected": false,
+              "review_note": "해당 3-5 판단 근거에서 이 Level의 정답 오류 원인을 별도로 지적하지 않았다."
+            },
+            {
+              "issue_id": "Senior:C1:L1",
+              "reference_error_id": null,
+              "source_label": "resources/evaluator/datasets/validation/dropbox/review/expected_labels.json#/cases/0/expected_3_5/4/levels/1",
+              "assessment_index": 4,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "충돌 처리라는 표현만 있고 어떤 변경을 선택·보존해 기기에 반영하는지 기본 경로가 없어도 허용한다는 정답 오류를 지적했다."
+            },
+            {
+              "issue_id": "Senior:C3:L1",
+              "reference_error_id": null,
+              "source_label": "resources/evaluator/datasets/validation/dropbox/review/expected_labels.json#/cases/0/expected_3_5/6/levels/1",
+              "assessment_index": 6,
+              "causal_role": "direct_cause",
+              "detected": false,
+              "review_note": "Fail은 일치하지만 평가기는 변경분 조회→후속 추적 반영 연결을 지적했다. 정답 오류는 감시 연결·변경 처리 부하의 기본 집계·분산 경로 부족이므로 같은 원인 검출로 세지 않았다."
+            }
+          ],
+          "additional_wrong_level_citations": [
+            {
+              "seniority": "Senior",
+              "target_id": "C2",
+              "level": 1,
+              "reference_expected": "Pass",
+              "assessment_index": 5,
+              "reason": "정답은 진행 위치 기록·재시도가 기본 재개 경로로 충분하다고 보나 평가기는 미완료 부분 전송과 완료로 연결하는 추가 흐름을 요구했다."
+            },
+            {
+              "seniority": "Senior",
+              "target_id": "C4",
+              "level": 1,
+              "reference_expected": "Pass",
+              "assessment_index": 7,
+              "reason": "정답은 병렬 처리·대기열의 기본 구성을 인정하나 평가기는 실행량 제한·계속 처리하는 경로가 빠졌다고 보았다."
+            }
+          ],
+          "wrong_error_cause_citations": [
+            {
+              "seniority": "Senior",
+              "target_id": "C3",
+              "level": 1,
+              "reference_expected": "Fail",
+              "assessment_index": 6,
+              "reason": "정답은 감시 연결·변경 처리 부하의 기본 확장 경로 부족이며, 실제 근거는 변경 조회 결과를 후속 추적에 반영하는 연결 부족이다. 원인이 달라 직접 검출에 포함하지 않았다."
+            }
+          ],
+          "metrics": {
+            "strict_direct_error_detection": {
+              "detected": 1,
+              "total": 3,
+              "percentage": 33.33
+            },
+            "inherited_effect_detection": {
+              "detected": 0,
+              "total": 1,
+              "percentage": 0.0
+            },
+            "all_level_error_detection": {
+              "detected": 1,
+              "total": 4,
+              "percentage": 25.0
+            },
+            "criterion_error_detection": {
+              "detected": 2,
+              "total": 3,
+              "percentage": 66.67
+            },
+            "pair_error_detection": {
+              "detected": 1,
+              "total": 1,
+              "percentage": 100.0
+            },
+            "normal_item_acceptance": {
+              "matched": 3,
+              "total": 5,
+              "percentage": 60.0
+            },
+            "verdict_agreement": {
+              "matched": 6,
+              "total": 9,
+              "percentage": 66.67
+            }
+          }
+        }
+      },
+      "metrics": {
+        "strict_direct_error_detection": {
+          "detected": 1,
+          "total": 3,
+          "percentage": 33.33
+        },
+        "inherited_effect_detection": {
+          "detected": 0,
+          "total": 1,
+          "percentage": 0.0
+        },
+        "all_level_error_detection": {
+          "detected": 1,
+          "total": 4,
+          "percentage": 25.0
+        },
+        "criterion_error_detection": {
+          "detected": 2,
+          "total": 3,
+          "percentage": 66.67
+        },
+        "pair_error_detection": {
+          "detected": 1,
+          "total": 1,
+          "percentage": 100.0
+        },
+        "normal_item_acceptance": {
+          "matched": 3,
+          "total": 5,
+          "percentage": 60.0
+        },
+        "verdict_agreement": {
+          "matched": 6,
+          "total": 9,
+          "percentage": 66.67
+        }
+      }
+    },
+    "slack": {
+      "cases": {
+        "slack_uploaded": {
+          "case_id": "slack_uploaded",
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/validation/slack/inputs/slack/middle/nfr_rubric.md",
+            "senior": "resources/evaluator/datasets/validation/slack/inputs/slack/senior/nfr_rubric.md"
+          },
+          "source_labels": "resources/evaluator/datasets/validation/slack/review/expected_labels.json",
+          "labels_sha256": "86923b9caaa435604a904960dda1e41b43e71870e365a7c8a4164d5bf409ba76",
+          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/validation-slack-slack_uploaded",
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 기본 보존·복구 흐름을 2점, 대표 한계와 개선을 3점으로 요구해야 한다.",
+              "reason": "1점은 저장·재시도·이력 조회의 방향을, 2점은 ‘보존을 담당하는 구성요소와 기록·응답 흐름’ 및 누락 복구를 요구하여 기본 설계 수준에 부합한다. 3점도 기록 확인에 따른 대기라는 대표 한계와 개선을 요구하며, 복잡한 장애 복구나 기술 선택의 절충 분석까지 필수화하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/0"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "핵심 순서·중복 처리의 기본 흐름은 중간 연차 2점에 포함할 수 있으며, 3점은 대표 경계 문제의 개선 수준이어야 한다.",
+              "reason": "2점의 ‘채널별 확정 순서를 정하는 역할과 기준’과 식별값 기반 중복 방지는 해당 요구사항을 성립시키는 기본 구성과 흐름이다. 3점의 이력 조회 중 실시간 도착에 대한 경계 조정·재정렬도 대표적인 병합 한계와 개선에 해당하며, 상세한 경합 제어나 복잡한 장애 분석을 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/1"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차는 전달 구성요소와 기본 흐름을 설명하고, 대표적인 지연 원인에 개선안을 제시하는 수준이어야 한다.",
+              "reason": "2점은 전달 대상·측정 구간과 ‘저장·큐잉·팬아웃 구성요소의 역할과 전달 흐름’을 요구하므로 기본 설계 수준에 맞는다. 3점은 느린 수신자나 큐 적체의 영향을 확인하고 대기를 분리·완화하는 개선을 요구할 뿐, 상세 제어 메커니즘이나 복잡한 성능 분석까지 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/2"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "중간 연차의 확장 설계는 분산 구조와 흐름을 중심으로 하며, 상위 수준에서도 대표 병목과 개선 범위를 넘지 않아야 한다.",
+              "reason": "2점의 분할 기준·구성요소 역할·전달 흐름과 기존 순서·복구 경로 유지는 핵심 확장 설계를 성립시키는 요구이며, 별도의 복잡한 장애 처리를 추가하지 않는다. 3점의 ‘개선과 그에 따른 부담’은 대표 병목 개선의 영향을 설명하는 수준으로, 대안별 절충 비교와 선택 근거까지 필수화하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/3"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "상급 연차는 기본 보존·복구 설계에서 시작하여 영속화 메커니즘과 장애 대응, 절충 분석으로 발전해야 한다.",
+              "reason": "1점의 ‘저장 후 성공 응답하고 재접속 시 이력을 조회’는 정상 처리 흐름을 갖추며, 2점은 영속화 확인 메커니즘과 저장·전달 사이 장애 및 연결 복원 실패에 대한 대응을 요구한다. 3점은 영속화 확인 대기와 접수 응답 시간의 절충 및 수신 지연 영향을 근거로 선택을 설명하게 하므로 구체적인 설계 판단을 평가한다.",
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/4"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "상급 연차 1점은 기술 제안만이 아니라 핵심 중복 방지·병합 문제의 정상 처리 흐름을 요구해야 한다.",
+              "reason": "1점의 ‘메시지 식별과 채널 정렬을 이용하는 기본 설계’는 식별값으로 중복을 걸러 저장·표시에 반영하고 이력·실시간 수신을 합치는 기본 흐름까지 명시적으로 요구하지 않는다. 따라서 구체적인 동시성 대응의 부족을 넘어, 핵심 처리의 대상·방식·결과 연결이 부족한 설계도 1점을 받을 수 있다.",
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/5"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "상급 연차는 기본 전달 경로에서 시작하여 구체적인 대기 대응과 지연·자원 비용의 절충 분석을 요구해야 한다.",
+              "reason": "1점은 ‘실시간 전달 경로와 지연을 줄이는 기본 방안’을 요구하고, 2점은 단계별 대기와 부하별 꼬리 지연의 원인을 짚어 구체적인 완화·격리 메커니즘을 제시하게 한다. 3점은 부하 쏠림·느린 수신자에서의 한계와 대기 감소·자원 사용·처리 효율의 절충 및 개선 근거를 요구한다.",
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/6"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Fail",
+              "verdict": "Fail",
+              "applied_rule": "상급 연차 1점에서도 단일 대규모 채널의 전달 작업을 분산하는 기본 흐름이 성립해야 한다.",
+              "reason": "1점은 ‘채널이나 연결을 여러 처리 주체에 나누는 기본 설계’로 충족되어, 채널별 분할만 제시하고 단일 대규모 채널의 전달 작업을 여러 자원으로 나누는 기본 흐름을 빠뜨려도 인정될 수 있다. 이는 단순히 상태 이동의 상세 메커니즘이 부족한 경우와 달리, 평가 항목의 핵심 확장 요구를 해결하는 기본 설계를 보장하지 못한다.",
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/7"
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Fail",
+              "verdict": "Pass",
+              "applied_rule": "대응되는 핵심 항목마다 2점의 처리 깊이와 3점의 한계 분석·절충·선택 근거에 실질적인 차이가 있어야 한다.",
+              "reason": "중간 연차의 기본 기록·병합 흐름에 비해 상급 연차 2점은 C1의 ‘영속화 확인과 연결하는 메커니즘’과 저장·전달 사이 장애 대응, C2의 식별 범위 및 중복 저장·표시 방지 메커니즘을 추가한다. C3은 부하별 꼬리 지연에 대한 구체적인 대기 완화·격리, C4는 자원 추가 시 구독 상태 이동·작업 재배치 병목 대응을 요구하며, 각 3점도 응답 시간·상태 유지·자원 사용·조정 비용 등의 절충과 선택 근거로 대표 문제의 개선을 넘어선다.",
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_4_1"
+            }
+          ],
+          "level_error_review": [
+            {
+              "issue_id": "Middle:C1:L2",
+              "reference_error_id": null,
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/0/levels/2",
+              "assessment_index": 0,
+              "causal_role": "direct_cause",
+              "detected": false,
+              "review_note": "해당 3-5 판단 근거에서 이 Level의 정답 오류 원인을 별도로 지적하지 않았다."
+            },
+            {
+              "issue_id": "Middle:C1:L3",
+              "reference_error_id": null,
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/0/levels/3",
+              "assessment_index": 0,
+              "causal_role": "inherited_effect",
+              "detected": false,
+              "review_note": "해당 3-5 판단 근거에서 이 Level의 정답 오류 원인을 별도로 지적하지 않았다."
+            },
+            {
+              "issue_id": "Middle:C2:L2",
+              "reference_error_id": null,
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/1/levels/2",
+              "assessment_index": 1,
+              "causal_role": "direct_cause",
+              "detected": false,
+              "review_note": "해당 3-5 판단 근거에서 이 Level의 정답 오류 원인을 별도로 지적하지 않았다."
+            },
+            {
+              "issue_id": "Middle:C2:L3",
+              "reference_error_id": null,
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/1/levels/3",
+              "assessment_index": 1,
+              "causal_role": "inherited_effect",
+              "detected": false,
+              "review_note": "해당 3-5 판단 근거에서 이 Level의 정답 오류 원인을 별도로 지적하지 않았다."
+            },
+            {
+              "issue_id": "Middle:C4:L2",
+              "reference_error_id": null,
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/3/levels/2",
+              "assessment_index": 3,
+              "causal_role": "direct_cause",
+              "detected": false,
+              "review_note": "해당 3-5 판단 근거에서 이 Level의 정답 오류 원인을 별도로 지적하지 않았다."
+            },
+            {
+              "issue_id": "Middle:C4:L3",
+              "reference_error_id": null,
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/3/levels/3",
+              "assessment_index": 3,
+              "causal_role": "inherited_effect",
+              "detected": false,
+              "review_note": "해당 3-5 판단 근거에서 이 Level의 정답 오류 원인을 별도로 지적하지 않았다."
+            },
+            {
+              "issue_id": "Senior:C2:L1",
+              "reference_error_id": null,
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/5/levels/1",
+              "assessment_index": 5,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "기본 설계라는 표현만으로 식별값을 적용한 기본 반영·순서 처리 흐름이 보장되지 않고 처리 대상·방식·결과 연결이 부족하다고 지적했다."
+            },
+            {
+              "issue_id": "Senior:C3:L1",
+              "reference_error_id": null,
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/6/levels/1",
+              "assessment_index": 6,
+              "causal_role": "direct_cause",
+              "detected": false,
+              "review_note": "해당 3-5 판단 근거에서 이 Level의 정답 오류 원인을 별도로 지적하지 않았다."
+            },
+            {
+              "issue_id": "Senior:C4:L1",
+              "reference_error_id": null,
+              "source_label": "resources/evaluator/datasets/validation/slack/review/expected_labels.json#/cases/0/expected_3_5/7/levels/1",
+              "assessment_index": 7,
+              "causal_role": "direct_cause",
+              "detected": true,
+              "review_note": "채널별 분산만으로 점수를 받고 단일 대규모 채널의 전달 작업을 여러 자원에 분산하는 핵심 기본 경로가 없어도 허용된다는 결함을 지적했다."
+            }
+          ],
+          "additional_wrong_level_citations": [],
+          "wrong_error_cause_citations": [],
+          "metrics": {
+            "strict_direct_error_detection": {
+              "detected": 2,
+              "total": 6,
+              "percentage": 33.33
+            },
+            "inherited_effect_detection": {
+              "detected": 0,
+              "total": 3,
+              "percentage": 0.0
+            },
+            "all_level_error_detection": {
+              "detected": 2,
+              "total": 9,
+              "percentage": 22.22
+            },
+            "criterion_error_detection": {
+              "detected": 2,
+              "total": 6,
+              "percentage": 33.33
+            },
+            "pair_error_detection": {
+              "detected": 0,
+              "total": 1,
+              "percentage": 0.0
+            },
+            "normal_item_acceptance": {
+              "matched": 2,
+              "total": 2,
+              "percentage": 100.0
+            },
+            "verdict_agreement": {
+              "matched": 4,
+              "total": 9,
+              "percentage": 44.44
+            }
+          }
+        }
+      },
+      "metrics": {
+        "strict_direct_error_detection": {
+          "detected": 2,
+          "total": 6,
+          "percentage": 33.33
+        },
+        "inherited_effect_detection": {
+          "detected": 0,
+          "total": 3,
+          "percentage": 0.0
+        },
+        "all_level_error_detection": {
+          "detected": 2,
+          "total": 9,
+          "percentage": 22.22
+        },
+        "criterion_error_detection": {
+          "detected": 2,
+          "total": 6,
+          "percentage": 33.33
+        },
+        "pair_error_detection": {
+          "detected": 0,
+          "total": 1,
+          "percentage": 0.0
+        },
+        "normal_item_acceptance": {
+          "matched": 2,
+          "total": 2,
+          "percentage": 100.0
+        },
+        "verdict_agreement": {
+          "matched": 4,
+          "total": 9,
+          "percentage": 44.44
+        }
+      }
+    },
+    "youtube": {
+      "cases": {
+        "youtube_v5": {
+          "case_id": "youtube_v5",
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/validation/youtube/inputs/youtube/middle/nfr_rubric.md",
+            "senior": "resources/evaluator/datasets/validation/youtube/inputs/youtube/senior/nfr_rubric.md"
+          },
+          "source_labels": "resources/evaluator/datasets/validation/youtube/review/expected_labels.json",
+          "labels_sha256": "9da1861b9a01d56365b787619cbc427f57721f4b2858033de12e6d57edeb506b",
+          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/validation-youtube-youtube_v5",
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "미들은 문제 인식에서 기본 처리 흐름, 대표적인 한계와 개선으로 발전해야 한다.",
+              "reason": "1점은 세그먼트 분할이라는 해결 방향을, 2점은 세그먼트 저장·순차 재생과 네트워크에 맞는 화질 선택이라는 기본 흐름을 요구한다. 3점의 '전환이 잦아질 수 있음'과 '최소 유지 시간'은 대표적인 문제와 개선에 해당하며, 복잡한 제어나 기술적 선택의 상충 분석을 필수화하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/youtube/review/expected_labels.json#/cases/0/expected_3_5/0"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "미들 2점은 기본 변환 흐름을, 3점은 대표적인 처리 한계와 개선을 요구해야 한다.",
+              "reason": "1점은 업로드와 변환의 분리 방향을 제시하고, 2점은 '원본 영상을 저장한 뒤 별도 처리 서비스가 여러 화질·형식으로 변환해 보관'하는 기본 경로를 요구한다. 3점은 긴 영상의 작업 적체를 세그먼트 병렬 처리로 개선하는 수준이며, 작업 의존성이나 복잡한 실패 복구까지 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/youtube/review/expected_labels.json#/cases/0/expected_3_5/1"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "미들에서는 업로드 재개의 기본 흐름과 대표적인 상태 불일치 개선까지 요구할 수 있다.",
+              "reason": "2점의 '각 부분의 완료 여부를 기록'하고 '남은 부분부터 다시 전송'하는 요구는 업로드 재개를 성립시키는 기본 흐름이다. 3점의 '저장소에서 완료된 부분을 확인'하는 개선은 클라이언트 기록 불일치라는 대표적인 한계에 대응하며, 복잡한 동시성 제어나 복구 분석을 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/youtube/review/expected_labels.json#/cases/0/expected_3_5/2"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "미들 2점은 기본 전달 경로를, 3점은 대표적인 원본 부하 문제의 개선을 요구해야 한다.",
+              "reason": "1점은 캐시 활용 방향을 제시하고, 2점은 가까운 캐시에서 제공하되 '없는 세그먼트만 원본 저장소에서 가져오는' 기본 전달 흐름을 요구한다. 3점의 '자주 시청하는 영상의 세그먼트를 캐시에 유지'하는 방안은 캐시 미스로 남는 원본 부하를 개선하는 수준으로 연차에 적합하다.",
+              "source_label": "resources/evaluator/datasets/validation/youtube/review/expected_labels.json#/cases/0/expected_3_5/3"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "시니어는 기본 재생 경로에서 구체적인 적응 제어, 한계와 선택 근거로 발전해야 한다.",
+              "reason": "1점은 화질별 매니페스트 제공과 플레이어의 순차 요청·재생 및 화질 선택이라는 기본 경로를 요구하고, 2점은 '전송 속도와 남은 버퍼'에 따른 화질 전환으로 대역폭 하락에 대응한다. 3점은 잦은 전환과 짧은 세그먼트의 요청 오버헤드를 분석하고, 화질·지연·전환 빈도·저장 비용을 비교해 선택을 정당화하므로 구체적인 설계 판단까지 요구한다.",
+              "source_label": "resources/evaluator/datasets/validation/youtube/review/expected_labels.json#/cases/0/expected_3_5/4"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "시니어 1점은 기본 변환 경로, 2점은 분산 처리와 실패 대응, 3점은 작업 단위 선택의 근거를 요구해야 한다.",
+              "reason": "1점은 원본 저장부터 비동기 전달·워커 변환·결과 저장까지 연결하며, 2점은 형식·화질별 분산과 '작업 상태를 기록'하고 '실패한 변환을 재실행'하는 구체적인 대응을 요구한다. 3점은 작업자 장기 점유의 한계를 분석하고 작업 의존성·부분 실패 재실행·관리 오버헤드와 처리량을 비교해 작업 단위 선택을 설명하므로 시니어 수준에 적합하다.",
+              "source_label": "resources/evaluator/datasets/validation/youtube/review/expected_labels.json#/cases/0/expected_3_5/5"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "시니어는 기본 재개 경로에 구체적인 상태 확인·검증과 위험 및 비용에 근거한 선택을 추가해야 한다.",
+              "reason": "1점은 업로드 식별자와 부분 번호를 이용해 같은 세션에서 미완료 부분을 전송하는 기본 복구 경로를 요구하고, 2점은 '완료 목록과 ETag' 확인 및 누락분 전송·검증·조립으로 구체화한다. 3점은 중복 완료에 따른 상태 불일치 위험과 멱등성·세션 정리를 다루며, 재전송량·요청 오버헤드·관리 복잡성을 비교해 부분 크기를 선택하도록 요구한다.",
+              "source_label": "resources/evaluator/datasets/validation/youtube/review/expected_labels.json#/cases/0/expected_3_5/6"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "시니어는 기본 캐시 경로를 넘어 동시 요청 대응과 캐시 정책의 구체적인 선택 근거를 요구해야 한다.",
+              "reason": "1점은 세그먼트 식별과 캐시 적중·미스에 따른 전달 및 채움 경로를 설명하고, 2점은 동시 캐시 미스에 대해 '원본 조회를 합치고 결과를 공유'하는 대응을 요구한다. 3점은 인기·비인기 영상의 적중률과 보관 비용 차이를 분석하고 원본 부하·지역별 지연·전송 비용에 근거해 캐시 유지 정책을 정당화하므로 추상적인 분석 요구에 그치지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/youtube/review/expected_labels.json#/cases/0/expected_3_5/7"
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "대응하는 모든 핵심 항목에서 시니어 2점의 처리 구체성과 3점의 분석·선택 근거가 실질적으로 높아야 한다.",
+              "reason": "2점에서 미들의 기본 흐름보다 시니어는 C1의 '전송 속도와 남은 버퍼' 기반 전환, C2의 작업 상태 기록·실패 재실행, C3의 완료 목록·ETag 확인과 검증·조립, C4의 동시 미스 요청 병합을 추가로 요구한다. 3점에서도 미들의 전환 안정화·세그먼트 병렬화·저장 상태 확인·인기 영상 유지라는 개선 제시를 넘어, 시니어는 각각 세그먼트 길이와 화질·지연·비용, 작업 의존성과 처리량, 중복 완료 위험과 부분 크기, 캐시 정책과 지역별 지연·비용을 분석하고 선택 근거를 설명하도록 요구한다.",
+              "source_label": "resources/evaluator/datasets/validation/youtube/review/expected_labels.json#/cases/0/expected_4_1"
+            }
+          ],
+          "level_error_review": [],
+          "additional_wrong_level_citations": [],
+          "wrong_error_cause_citations": [],
+          "metrics": {
+            "strict_direct_error_detection": {
+              "detected": 0,
+              "total": 0,
+              "percentage": null
+            },
+            "inherited_effect_detection": {
+              "detected": 0,
+              "total": 0,
+              "percentage": null
+            },
+            "all_level_error_detection": {
+              "detected": 0,
+              "total": 0,
+              "percentage": null
+            },
+            "criterion_error_detection": {
+              "detected": 0,
+              "total": 0,
+              "percentage": null
+            },
+            "pair_error_detection": {
+              "detected": 0,
+              "total": 0,
+              "percentage": null
+            },
+            "normal_item_acceptance": {
+              "matched": 9,
+              "total": 9,
+              "percentage": 100.0
+            },
+            "verdict_agreement": {
+              "matched": 9,
+              "total": 9,
+              "percentage": 100.0
+            }
+          }
+        }
+      },
+      "metrics": {
+        "strict_direct_error_detection": {
+          "detected": 0,
+          "total": 0,
+          "percentage": null
+        },
+        "inherited_effect_detection": {
+          "detected": 0,
+          "total": 0,
+          "percentage": null
+        },
+        "all_level_error_detection": {
+          "detected": 0,
+          "total": 0,
+          "percentage": null
+        },
+        "criterion_error_detection": {
+          "detected": 0,
+          "total": 0,
+          "percentage": null
+        },
+        "pair_error_detection": {
+          "detected": 0,
+          "total": 0,
+          "percentage": null
+        },
+        "normal_item_acceptance": {
+          "matched": 9,
+          "total": 9,
+          "percentage": 100.0
+        },
+        "verdict_agreement": {
+          "matched": 9,
+          "total": 9,
+          "percentage": 100.0
+        }
+      }
+    },
+    "uber": {
+      "cases": {
+        "uber": {
+          "case_id": "uber",
+          "source_rubrics": {
+            "middle": "resources/evaluator/datasets/validation/uber/uber_middle.md",
+            "senior": "resources/evaluator/datasets/validation/uber/uber_senior.md"
+          },
+          "source_labels": "resources/evaluator/datasets/validation/uber/review/expected_labels.json",
+          "labels_sha256": "49a3b87ea66a3bfb2be02b71189bd7c72b8f4d5d585fb5fba204efe50467c6d6",
+          "raw_run": ".archgen/m7-followup/rubric-criteria-round4-20261024/validation-uber",
+          "assessments": [
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급은 기본 처리 흐름과 대표적인 문제의 개선을 요구하며, 필수 보장 조건만으로 과도하다고 판정하지 않는다.",
+              "reason": "2점의 '가용 여부 확인과 요청 대기 상태 변경을 한 번에 처리'는 중복 배정을 막는 기본 흐름의 필수 조건이며, 수락·거절에 따른 상태 전환도 설명한다. 3점은 무응답 상태가 남는 대표 문제와 대기 상태일 때만 해제하는 타임아웃 개선을 요구하여 중급에 적합하다.",
+              "source_label": "resources/evaluator/datasets/validation/uber/review/expected_labels.json#/cases/0/expected_3_5/0"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급 2점은 구성요소의 역할과 기본 흐름을, 3점은 대표적인 한계와 개선을 요구한다.",
+              "reason": "1점은 위치 저장이나 공간 인덱스 제안에 머물고, 2점은 위치 반영부터 공간 인덱스를 이용한 주변 운전자 조회까지 연결한다. 3점의 '필요한 수만 조회'는 후보가 많을 때 검색이 느려지는 대표적인 한계의 기본 개선으로, 심층 구현이나 복잡한 분석을 요구하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/uber/review/expected_labels.json#/cases/0/expected_3_5/1"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급은 요청 보존·처리의 기본 흐름과 대표적인 장애 문제의 기본 개선을 요구한다.",
+              "reason": "2점은 '내구성 있는 큐'에 보관하고 매칭 서비스가 처리한 뒤 완료를 표시하며 미완료 요청을 다시 처리하는 기본 흐름을 요구한다. 3점은 처리 중단과 완료 기록 전 종료에 대해 완료 여부를 확인하는 기본 개선만 요구하고, 복잡한 복구 메커니즘이나 선택의 상충관계까지 필수화하지 않는다.",
+              "source_label": "resources/evaluator/datasets/validation/uber/review/expected_labels.json#/cases/0/expected_3_5/2"
+            },
+            {
+              "seniority": "Middle",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "중급은 주요 구성요소의 작업 분담과 기본 흐름, 대표적인 부하 문제의 개선을 요구한다.",
+              "reason": "2점은 위치 업데이트를 여러 서버에 나누어 전달하고 저장소에 반영하는 흐름과 서버 증설의 역할을 설명하도록 한다. 3점은 '불필요한 위치 전송 자체는 줄지 않는 한계'와 거리 변화에 따른 전송 제한을 요구하여 대표 문제의 기본 개선 수준에 해당한다.",
+              "source_label": "resources/evaluator/datasets/validation/uber/review/expected_labels.json#/cases/0/expected_3_5/3"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C1",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "시니어는 기본 설계에서 구체적인 경합·장애 대응으로 발전하고, 상위 수준에서 한계와 선택 근거를 요구한다.",
+              "reason": "1점은 가용 운전자 선택부터 요청 대기·호출 전달·배정 확정까지 연결하고, 2점은 'DB 트랜잭션'과 만료 시각의 주기적 확인으로 원자성과 타이머 유실을 다룬다. 3점은 주기적 검사의 해제 지연·DB 부하와 자동 만료 방식의 장애 의존성·운영 비용을 비교하여 구체적인 선택 판단을 요구한다.",
+              "source_label": "resources/evaluator/datasets/validation/uber/review/expected_labels.json#/cases/0/expected_3_5/4"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C2",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "시니어 2점은 구체적인 처리와 병목 대응을, 3점은 한계·비용·위험 및 선택 근거를 요구한다.",
+              "reason": "1점은 위치 기록과 공간 인덱스 검색의 기본 설계를 제시하고, 2점은 '배치 처리해 DB 쓰기를 줄이고' 갱신 간격으로 오래된 위치 문제를 완화하는 구체적인 대응을 요구한다. 3점은 배치 갱신의 최신성·쓰기 부하 상충을 분석하고 인메모리 검색의 위치 유실 위험·메모리 비용·장애 대응 부담을 비교하도록 한다.",
+              "source_label": "resources/evaluator/datasets/validation/uber/review/expected_labels.json#/cases/0/expected_3_5/5"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C3",
+              "expected": "Pass",
+              "verdict": "Fail",
+              "applied_rule": "시니어 1점도 핵심 요구사항을 충족하는 기본 설계가 필요하며, 필수 처리 연결의 누락은 실패로 판정한다.",
+              "reason": "1점의 '큐를 통한 요청 보관과 처리 흐름'만으로는 접수 완료된 요청의 지속 보존과 장애 후 미완료 요청의 재처리까지 연결되는 기본 설계를 요구하지 않는다. 이는 정교한 중복 방지 메커니즘의 부족이 아니라, 해당 항목의 핵심인 보존·복구 흐름의 필수 설명 누락이다.",
+              "source_label": "resources/evaluator/datasets/validation/uber/review/expected_labels.json#/cases/0/expected_3_5/6"
+            },
+            {
+              "seniority": "Senior",
+              "metric": "3-5",
+              "target_id": "C4",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "시니어는 구체적인 부하 제어와 처리 조건을 요구하고, 상위 수준에서 정확도·비용의 상충과 선택 근거를 분석한다.",
+              "reason": "1점은 분산 수신부터 검색용 저장소 반영까지 연결하고, 2점은 운전자별 파티션·오래된 갱신 제외·최신 위치 병합·최대 반영 간격이라는 구체적인 처리 조건을 요구한다. 3점은 급격한 이동에서 병합의 정확도 한계를 분석하고 쓰기량·위치 최신성·처리 지연·운영 복잡도를 비교하여 선택을 설명하도록 한다.",
+              "source_label": "resources/evaluator/datasets/validation/uber/review/expected_labels.json#/cases/0/expected_3_5/7"
+            },
+            {
+              "seniority": "comparison",
+              "metric": "4-1",
+              "target_id": "pair",
+              "expected": "Pass",
+              "verdict": "Pass",
+              "applied_rule": "대응되는 핵심 항목마다 시니어의 처리 메커니즘·문제 대응·설계 판단이 중급보다 실질적으로 깊어야 한다.",
+              "reason": "2점에서 중급의 기본 흐름에 비해 시니어는 C1의 만료 시각 기반 복구, C2의 배치 갱신·최신성 조절, C3의 저장 후 완료 확인·조건부 배정, C4의 운전자별 파티션·최신 갱신 병합을 추가로 요구한다. 3점도 각각 자동 만료의 장애 의존성과 비용, 인메모리 검색의 유실 위험과 메모리 비용, 멱등 보장 범위와 재시도 비용, 위치 최신성과 운영 복잡도를 비교하고 선택 근거를 요구하여 중급의 대표 문제 개선과 구별된다.",
+              "source_label": "resources/evaluator/datasets/validation/uber/review/expected_labels.json#/cases/0/expected_4_1"
+            }
+          ],
+          "level_error_review": [],
+          "additional_wrong_level_citations": [
+            {
+              "seniority": "Senior",
+              "target_id": "C3",
+              "level": 1,
+              "reference_expected": "Pass",
+              "assessment_index": 6,
+              "reason": "사용자 확인 정상 기준이나 평가기는 지속 보존·재처리의 기본 흐름이 부족하다고 보아 Fail했다."
+            }
+          ],
+          "wrong_error_cause_citations": [],
+          "metrics": {
+            "strict_direct_error_detection": {
+              "detected": 0,
+              "total": 0,
+              "percentage": null
+            },
+            "inherited_effect_detection": {
+              "detected": 0,
+              "total": 0,
+              "percentage": null
+            },
+            "all_level_error_detection": {
+              "detected": 0,
+              "total": 0,
+              "percentage": null
+            },
+            "criterion_error_detection": {
+              "detected": 0,
+              "total": 0,
+              "percentage": null
+            },
+            "pair_error_detection": {
+              "detected": 0,
+              "total": 0,
+              "percentage": null
+            },
+            "normal_item_acceptance": {
+              "matched": 8,
+              "total": 9,
+              "percentage": 88.89
+            },
+            "verdict_agreement": {
+              "matched": 8,
+              "total": 9,
+              "percentage": 88.89
+            }
+          }
+        }
+      },
+      "metrics": {
+        "strict_direct_error_detection": {
+          "detected": 0,
+          "total": 0,
+          "percentage": null
+        },
+        "inherited_effect_detection": {
+          "detected": 0,
+          "total": 0,
+          "percentage": null
+        },
+        "all_level_error_detection": {
+          "detected": 0,
+          "total": 0,
+          "percentage": null
+        },
+        "criterion_error_detection": {
+          "detected": 0,
+          "total": 0,
+          "percentage": null
+        },
+        "pair_error_detection": {
+          "detected": 0,
+          "total": 0,
+          "percentage": null
+        },
+        "normal_item_acceptance": {
+          "matched": 8,
+          "total": 9,
+          "percentage": 88.89
+        },
+        "verdict_agreement": {
+          "matched": 8,
+          "total": 9,
+          "percentage": 88.89
+        }
+      }
+    }
+  },
+  "metrics": {
+    "strict_direct_error_detection": {
+      "detected": 15,
+      "total": 21,
+      "percentage": 71.43
+    },
+    "inherited_effect_detection": {
+      "detected": 0,
+      "total": 6,
+      "percentage": 0.0
+    },
+    "all_level_error_detection": {
+      "detected": 15,
+      "total": 27,
+      "percentage": 55.56
+    },
+    "criterion_error_detection": {
+      "detected": 16,
+      "total": 21,
+      "percentage": 76.19
+    },
+    "pair_error_detection": {
+      "detected": 3,
+      "total": 4,
+      "percentage": 75.0
+    },
+    "normal_item_acceptance": {
+      "matched": 44,
+      "total": 47,
+      "percentage": 93.62
+    },
+    "verdict_agreement": {
+      "matched": 63,
+      "total": 72,
+      "percentage": 87.5
+    }
+  },
+  "semantic_review_method": "assistant_semantic_review",
+  "cost_estimate_usd": 0.49866750000000004,
+  "cumulative_upper_usd": 49.739682200000026,
+  "budget_usd": 55,
+  "reused_previous_results": false,
+  "label_confirmation_after_evaluation": {
+    "dataset": "uber",
+    "expected_all_pass": true,
+    "user_confirmed": true,
+    "actual_judgments_unchanged": true,
+    "additional_model_calls": 0
+  }
+}
