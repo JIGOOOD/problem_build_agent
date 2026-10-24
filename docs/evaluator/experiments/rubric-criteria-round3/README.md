@@ -1,20 +1,5 @@
 # 4-1 점수별 비교와 상쇄 금지 규칙 검증
 
-실행일: 2026-10-24. 비교 대상은 [2차 실험](../rubric-criteria-round2/README.md)이다.
-
-사용자 지시대로 검증된 2차 기준과 결과를 먼저 `2edd4be`에 커밋했다.
-그 커밋에는 최신 판정 방법 2·3번을 포함하지 않았다. 커밋 직후 보존한 사용자 수정본을 그대로 재적용했다.
-
-이번 변경은 4-1 판정 방법의 두 문장이다.
-
-- 2번: Middle·Senior의 2점을 메커니즘·동작 조건·주요 문제 대응으로, 3점을 한계 분석·Trade-off·선택 근거로 각각 비교한다.
-- 3번: 핵심 Criterion의 비교 대상 Level에서 차이가 부족하면 Fail하며, 다른 Level·Criterion의 높은 요구로 상쇄하지 않는다.
-
-9개 실제 전송 메시지를 대조하여 이 두 문장만 바뀌었음을 확인했다.
-3-5, 평가 시스템 지시·코드, 입력 경로·원문, 데이터셋별 연차 정책, 모델 설정, 정답표는 고정했다.
-모델은 `gpt-6.1-sol`, 추론 수준 high이며 기존 9쌍을 각 1회 평가했다.
-3-5·4-1만 검사하고 정답표·검토 자료는 모델에 전달하지 않았다.
-
 ## 이번 결과
 
 | 측정 항목 | 오류 주입 데이터 · 8쌍 | 실제 티켓 · 1쌍 | 합산 |
@@ -63,18 +48,6 @@ Senior C4는 1점 오류로 Criterion Fail이지만 2점 오류 T11은 근거에
 정상 Level 오지적 수는 저장된 근거와 정답표의 대조이며 32개 Level 전체의 독립 판정 정확도는 아니다.
 3-5의 판단 변화는 단일 실행의 관측값이므로 4-1 변경의 단독 효과나 반복 안정성으로 확정하지 않는다.
 
-## 기록과 비용
+[상세 결과](summary.json)
 
-- [전체 요약](summary.json), [실행 조건·해시](conditions.json), [실제 적용 기준](evaluation-criteria.md)
-- 오류 주입: [요약](seniority-error-injection/summary.json), [오류별 근거](seniority-error-injection/injected-error-review.json), [판정 대조](seniority-error-injection/verdict-comparison.json)
-- 실제 티켓: [요약](ticket-rubric-review/summary.json), [오류별 근거](ticket-rubric-review/issue-review.json), [판정 대조](ticket-rubric-review/verdict-comparison.json), [평가 응답](ticket-rubric-review/01/quality.json)
-- [원본 데이터셋·정답표](../../../../resources/evaluator/README.md)
-
-원본 본문과 정답 설명은 결과에 복사하지 않았다. `source_rubric`·`source_label`로 resources의 원본을 참조한다.
-원시 API 요청·응답·사용량·실행 코드는 `.archgen/m7-followup/rubric-criteria-round3-20261024/`에 보존하며 Git에서 제외한다.
-API 9회·판정81개·판단불가0·추가 Judge/생성/재평가0. 명확한 대상 ID만 정규화하고 판정·근거는 보존했다.
-보수적 추가 비용 추정 $0.47944, 누적 상한 추정 $47.8871647/$50다.
-
-각 사례 1회·단일 티켓 주제·같은 데이터셋에서 튜닝한 결과다. 독립된 새 주제와 반복 안정성은 검증하지 않았다.
-데이터셋별 연차 정책은 전후 동일하며 데이터셋 간에는 다르므로 합산은 관측 건수 요약이다.
-정답표는 사용자 확인, 모델 근거와 오류 원인의 의미 대조는 보조자 검토다.
+각 사례 1회·제공 정답표 기준의 결과다. 데이터셋별 전후 정책은 같지만 데이터셋 간 정책은 다르다.

@@ -1,16 +1,5 @@
 # 3-5 평가 기준 구체화 실험
 
-실행일: 2026-10-24. 비교 기준 커밋: `186cf9b`.
-
-사용자가 수정한 `docs/evaluator/rubric.md`의 3-5만 교체했다.
-Level별 Middle·Senior 요구를 표로 나누고, 과도한 Middle 요구와 부족한 Senior 요구의 Fail 조건을 명시했다.
-4-1, 평가 시스템 프롬프트, 코드, 입력 경로·원문, 데이터셋별 연차 정책, 모델 설정은 이전과 동일하다.
-실제 전송 메시지를 대조해 3-5 외 내용이 완전히 일치함을 확인했다.
-
-오류 주입 8쌍과 실제 티켓 1쌍을 각각 1회 평가했다. 모델은 `gpt-6.1-sol`, 추론 수준 high다.
-3-5·4-1만 검사했으며 정답표·검토 자료는 모델에 전달하지 않았다.
-정답은 사용자가 확인한 전체 라벨을 적용했고, 원본의 검토 필요 플래그 때문에 제외한 항목은 없다.
-
 ## 데이터셋별 결과
 
 | 데이터셋 | 직접 오류 검출 · 수정 전 | 직접 오류 검출 · 수정 후 | 판정 일치율 · 수정 전 | 판정 일치율 · 수정 후 |
@@ -50,21 +39,6 @@ Level별 Middle·Senior 요구를 표로 나누고, 과도한 Middle 요구와 �
 - **4-1은 오류가 있는 7쌍을 모두 Pass 처리했다.** 근거는 일부 단계의 부적합이 있어도 전체적으로
   Senior의 깊이가 높다는 설명이었다. 3-5 구체화만으로 이 문제는 해결되지 않았다.
 
-## 기록
+[상세 결과](summary.json)
 
-원본 본문·정답 설명은 resources의 데이터셋에서만 관리한다.
-결과의 `source_rubric`·`source_label`로 원본 루브릭과 정답 항목을 참조한다.
-평가 판정·근거·검출 여부와 비교 결과의 기대 Pass/Fail은 유지했다.
-
-- [전체 요약](summary.json), [실행 조건·입력 해시](conditions.json), [실제 사용한 평가 기준](evaluation-criteria.md)
-- 오류 주입: [요약](seniority-error-injection/summary.json), [오류별 근거](seniority-error-injection/injected-error-review.json), [판정 대조](seniority-error-injection/verdict-comparison.json)
-- 실제 티켓: [요약](ticket-rubric-review/summary.json), [오류별 근거](ticket-rubric-review/issue-review.json), [판정 대조](ticket-rubric-review/verdict-comparison.json), [평가 원문](ticket-rubric-review/01/quality.json)
-- [수정 전 결과](../error-detection-before-tuning/README.md), [데이터셋·정답표](../../../../resources/evaluator/README.md)
-
-API 호출은 9회이며 추가 재평가·Judge·생성은 없다. 명확한 대상 ID 표기만 정규화했고 판정·근거는 보존했다.
-보수적인 추가 비용 추정은 $0.437135, 누적 상한 추정은 $46.9046822/$50다.
-원시 요청·응답·사용량·실행 코드와 고정 연차 정책은 `.archgen/m7-followup/rubric-criteria-round1-20261024/`에 보존한다.
-
-각 사례 1회·단일 티켓 주제의 결과다. 두 데이터셋의 연차 정책은 서로 다르지만 각 데이터셋의 전후 정책은 동일하다.
-합산은 관측 건수의 요약이며 일반적인 정확도나 반복 안정성을 입증하지 않는다.
-정답표는 사용자 확인, 모델 근거와 오류 원인의 의미 대조는 보조자 검토다.
+각 사례 1회·제공 정답표 기준의 결과다. 데이터셋별 전후 정책은 같지만 데이터셋 간 정책은 다르다.

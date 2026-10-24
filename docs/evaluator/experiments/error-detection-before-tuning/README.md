@@ -1,14 +1,5 @@
 # 튜닝 전 평가기 오류 검출 검사
 
-실행일: 2026-10-24
-
-평가기 코드는 커밋 `e33b730`을 사용했다. 입력 쌍마다 한 번씩 총 9회 호출했으며,
-정답·검토 자료를 모델에 전달하지 않았다. 생성기와 프로젝트 평가·연차 기준은 변경하지 않았다.
-
-사용자가 두 정답표를 확인했으므로 기존 검토 필요 항목도 모두 포함했다.
-원본 정답표는 유지하고 [확인 기록](../../../../resources/evaluator/label-approval.json)을 별도로 보존했다.
-연차 오류 주입 데이터는 프로젝트 `e33b730`의 연차 MD, 실제 티켓은 동봉 채점표를 사용했다.
-
 | 항목 | 연차 오류 주입 데이터 · 8쌍 | 실제 티켓 루브릭 · 1쌍 | 합산 |
 |---|---|---|---|
 | 직접 오류 원인 검출 | 75% · 18/24 | 25% · 2/8 | 62.50% · 20/32 |
@@ -40,19 +31,6 @@ Senior C3·C4는 Criterion이 Fail이어도 모든 하위 오류를 잡은 것�
 이는 **정상 Level에 대한 잘못된 지적 1건**이며, Criterion 자체의 오탐과 구분한다.
 이 때문에 전체 판정 일치율만으로 원인을 올바르게 검출했다고 판단할 수 없다.
 
-## 보존한 결과
+[상세 결과](summary.json)
 
-- 연차 오류 주입 데이터: [요약](seniority-error-injection/summary.json), [오류별 근거](seniority-error-injection/injected-error-review.json), [기대 판정 대조](seniority-error-injection/verdict-comparison.json)
-- 실제 티켓 루브릭: [요약](ticket-rubric-review/summary.json), [후보별 근거](ticket-rubric-review/issue-review.json), [평가 원문](ticket-rubric-review/quality.json)
-- 전체 합산: [요약](summary.json)
-- 입력·정답표: [resources/evaluator](../../../../resources/evaluator/README.md)
-
-평가 판정·근거와 원본 정답표는 유지했다. 요약·오류별 대조에는 사용자 확인 상태와 재집계를 반영했다.
-결과에 복사했던 원본 본문·정답 설명은 제거했다. `source_rubric`은 resources의 원본 루브릭을,
-`source_label`은 원본 정답 파일의 해당 항목을 참조한다. 비교 결과의 기대 Pass/Fail은 유지한다.
-포함된 로컬 절대 경로는 실행 당시의 출처 정보다.
-원시 API 메시지·사용량·전체 추적 자료는 `.archgen/`에 보관하며 Git 추적 대상에서 제외한다.
-
-두 실행의 연차 정책이 다르므로 합산은 관측 건수의 요약이며 같은 조건의 전후 개선으로 해석하지 않는다.
-단일 티켓 주제·각 사례 1회·사용자 확인 정답표 기준이며, 모델 근거와 오류의 의미 대조는 보조자 검토다.
-정답표 확인과 별도로 이 의미 대조에 대한 독립 검증은 수행하지 않았다.
+각 사례 1회·제공 정답표 기준의 결과다. 데이터셋 간 연차 정책이 달라 합산은 관측 건수 요약이다.

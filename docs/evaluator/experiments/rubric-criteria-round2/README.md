@@ -1,15 +1,5 @@
 # 4-1 평가 기준 구체화 실험
 
-실행일: 2026-10-24. 비교 대상은 [1차 실험](../rubric-criteria-round1/README.md)이다.
-
-사용자가 수정한 4-1의 기술적 깊이·문제 해결 범위·설계 판단 구분, 핵심 Criterion별 Fail 조건과 판정 방법을 적용했다.
-1차의 3-5 문구, 평가 코드·시스템 지시, 입력 경로·원문, 데이터셋별 연차 정책, 모델 설정은 고정했다.
-사용자가 정리한 3-5의 들여쓰기는 내용이 같음을 확인한 뒤 실험 변수에서 제외하고 1차 원문을 사용했다.
-실제 전송 메시지가 4-1 외에는 완전히 일치함을 확인했다. 운영 문서의 사용자 편집은 유지했다.
-
-오류 주입 8쌍과 실제 티켓 1쌍을 각각 1회 평가했다. 모델은 `gpt-6.1-sol`, 추론 수준 high다.
-3-5·4-1만 검사했으며 사용자 확인 정답표와 검토 자료는 모델에 전달하지 않았다.
-
 ## 이번 결과
 
 | 측정 항목 | 오류 주입 데이터 · 8쌍 | 실제 티켓 · 1쌍 | 합산 |
@@ -59,18 +49,6 @@
 Senior C2는 Criterion Fail 자체는 맞지만 실제 결함인 2점 대신 정상 1점을 지적하므로 올바른 원인 검출로 세지 않는다.
 3-5가 고정되어도 응답은 변할 수 있어 T09 재검출을 4-1 수정의 단독 효과로 확정하지 않는다.
 
-## 기록과 비용
+[상세 결과](summary.json)
 
-- [전체 요약](summary.json), [실행 조건·해시](conditions.json), [실제 적용 기준](evaluation-criteria.md)
-- 오류 주입: [요약](seniority-error-injection/summary.json), [오류별 근거](seniority-error-injection/injected-error-review.json), [판정 대조](seniority-error-injection/verdict-comparison.json)
-- 실제 티켓: [요약](ticket-rubric-review/summary.json), [오류별 근거](ticket-rubric-review/issue-review.json), [판정 대조](ticket-rubric-review/verdict-comparison.json), [평가 원문](ticket-rubric-review/01/quality.json)
-- [원본 데이터셋·정답표](../../../../resources/evaluator/README.md)
-
-원본 본문과 정답 설명은 결과에 복사하지 않았다. `source_rubric`·`source_label`로 resources의 원본을 참조한다.
-원시 요청·응답·사용량·실행 코드는 `.archgen/m7-followup/rubric-criteria-round2-20261024/`에 보존한다.
-API 9회, 추가 Judge·생성·재평가 호출 없음. 명확한 대상 ID만 정규화했고 판정과 근거는 유지했다.
-보수적 추가 비용 추정 $0.5030425, 세트당 평균 $0.0558936, 누적 상한 추정 $47.4077247/$50다.
-
-각 사례 1회·단일 티켓 주제의 결과다. 데이터셋 간 연차 정책은 다르지만 각 데이터셋의 전후 정책은 동일하다.
-합산은 관측 건수 요약이며 반복 안정성과 일반적인 정확도는 검증하지 않았다.
-정답표는 사용자 확인, 모델 근거와 원인의 의미 대조는 보조자 검토다.
+각 사례 1회·제공 정답표 기준의 결과다. 데이터셋별 전후 정책은 같지만 데이터셋 간 정책은 다르다.
